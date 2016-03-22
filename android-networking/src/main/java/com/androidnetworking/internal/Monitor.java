@@ -16,7 +16,7 @@ public class Monitor {
 
     public Monitor(Context mContext) {
         this.mContext = mContext;
-        mExecutorSupplier = new DefaultExecutorSupplier();
+        this.mExecutorSupplier = new DefaultExecutorSupplier();
     }
 
     public static void initialize(Context context) {

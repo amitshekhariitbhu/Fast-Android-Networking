@@ -18,12 +18,12 @@ public class MainActivity extends AppCompatActivity {
     public void makeRequests(View view) {
         for (int i = 0; i < 20; i++) {
             Request request = new Request("www.google.com", Priority.LOW, this);
-            MyApplication.getInstance().getRequestManager().addRequest(request);
+            MyApplication.getInstance().getAndroidNetworking().addRequest(request);
         }
     }
 
     public void cancelAllRequests(View view){
-        MyApplication.getInstance().getRequestManager().cancelAll(this);
+        MyApplication.getInstance().getAndroidNetworking().cancelAll(this);
     }
 
 }

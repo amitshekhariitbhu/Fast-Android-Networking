@@ -17,7 +17,7 @@ public class Request {
     private Object tag;
     private int sequenceNumber;
     private Future<?> future;
-    private RequestManager mRequestManager;
+    private AndroidNetworking mAndroidNetworking;
 
     public Request(String url, Priority priority, Object tag) {
         this.url = url;
@@ -74,13 +74,13 @@ public class Request {
         this.future = future;
     }
 
-    public void setRequestQueue(RequestManager requestManager) {
-        mRequestManager = requestManager;
+    public void setRequestQueue(AndroidNetworking androidNetworking) {
+        mAndroidNetworking = androidNetworking;
     }
 
     public void finish(){
-        if (mRequestManager != null) {
-            mRequestManager.finish(this);
+        if (mAndroidNetworking != null) {
+            mAndroidNetworking.finish(this);
         }
     }
 }

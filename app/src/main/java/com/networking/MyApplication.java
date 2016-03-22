@@ -2,7 +2,7 @@ package com.networking;
 
 import android.app.Application;
 
-import com.androidnetworking.internal.RequestManager;
+import com.androidnetworking.internal.AndroidNetworking;
 
 /**
  * Created by amitshekhar on 22/03/16.
@@ -10,7 +10,7 @@ import com.androidnetworking.internal.RequestManager;
 public class MyApplication extends Application {
 
     public static MyApplication appInstance = null;
-    private RequestManager requestManager;
+    private AndroidNetworking androidNetworking;
 
     public static MyApplication getInstance() {
         if (appInstance == null) {
@@ -25,10 +25,10 @@ public class MyApplication extends Application {
         appInstance = this;
     }
 
-    public RequestManager getRequestManager() {
-        if (requestManager == null) {
-            requestManager = new RequestManager(getApplicationContext());
+    public AndroidNetworking getAndroidNetworking() {
+        if (androidNetworking == null) {
+            androidNetworking = new AndroidNetworking(getApplicationContext());
         }
-        return requestManager;
+        return androidNetworking;
     }
 }
