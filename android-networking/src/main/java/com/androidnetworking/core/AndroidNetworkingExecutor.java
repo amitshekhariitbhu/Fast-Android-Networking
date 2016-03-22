@@ -5,7 +5,7 @@ import android.net.NetworkInfo;
 import android.telephony.TelephonyManager;
 
 import com.androidnetworking.common.Priority;
-import com.androidnetworking.runnable.DataHunter;
+import com.androidnetworking.runnables.DataHunter;
 
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;

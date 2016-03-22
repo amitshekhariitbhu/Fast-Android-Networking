@@ -1,9 +1,9 @@
-package com.androidnetworking.runnable;
+package com.androidnetworking.runnables;
 
 import android.util.Log;
 
 import com.androidnetworking.common.Priority;
-import com.androidnetworking.internal.Request;
+import com.androidnetworking.requests.AndroidNetworkingRequest;
 
 /**
  * Created by amitshekhar on 22/03/16.
@@ -13,9 +13,9 @@ public class DataHunter implements Runnable {
     private static final String TAG = DataHunter.class.getSimpleName();
     private final Priority priority;
     public final int sequence;
-    public final Request request;
+    public final AndroidNetworkingRequest<?> request;
 
-    public DataHunter(Request request) {
+    public DataHunter(AndroidNetworkingRequest<?> request) {
         this.request = request;
         this.sequence = request.getSequenceNumber();
         this.priority = request.getPriority();
