@@ -14,11 +14,13 @@ public class DefaultExecutorSupplier implements ExecutorSupplier {
     public static final int DEFAULT_MAX_NUM_THREADS = Runtime.getRuntime().availableProcessors();
     private final Executor mBackgroundExecutor;
     private final Executor mNetworkExecutor;
+    private final Executor mMainThreadExecutor;
 
     public DefaultExecutorSupplier() {
         ThreadFactory backgroundPriorityThreadFactory = new PriorityThreadFactory(Process.THREAD_PRIORITY_BACKGROUND);
         mBackgroundExecutor = Executors.newFixedThreadPool(DEFAULT_MAX_NUM_THREADS, backgroundPriorityThreadFactory);
-        mNetworkExecutor = Executors.newFixedThreadPool(DEFAULT_MAX_NUM_THREADS, backgroundPriorityThreadFactory);
+        mNetworkExecutor = new AndroidNetworkingExecutor(DEFAULT_MAX_NUM_THREADS,backgroundPriorityThreadFactory);
+        mMainThreadExecutor = new MainThreadExecutor();
     }
 
     @Override
@@ -29,5 +31,10 @@ public class DefaultExecutorSupplier implements ExecutorSupplier {
     @Override
     public Executor forBackgroundTasks() {
         return mBackgroundExecutor;
+    }
+
+    @Override
+    public Executor forMainThreadTasks() {
+        return mMainThreadExecutor;
     }
 }

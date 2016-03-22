@@ -10,4 +10,6 @@ public interface ExecutorSupplier {
     Executor forNetworkTasks();
 
     Executor forBackgroundTasks();
+
+    Executor forMainThreadTasks();
 }
