@@ -2,6 +2,8 @@ package com.androidnetworking.internal;
 
 import android.content.Context;
 
+import com.androidnetworking.cache.CacheManager;
+import com.androidnetworking.core.Core;
 import com.androidnetworking.runnable.DataHunter;
 
 import java.util.HashSet;
@@ -18,7 +20,6 @@ public class AndroidNetworking {
     private AtomicInteger mSequenceGenerator = new AtomicInteger();
 
     public AndroidNetworking(Context context) {
-        Monitor.initialize(context);
         CacheManager.initialize(context);
     }
 
@@ -58,7 +59,7 @@ public class AndroidNetworking {
         }
         request.setRequestQueue(this);
         request.setSequenceNumber(getSequenceNumber());
-        request.setFuture(Monitor.getInstance().getExecutorSupplier().forNetworkTasks().submit(new DataHunter(request)));
+        request.setFuture(Core.getInstance().getExecutorSupplier().forNetworkTasks().submit(new DataHunter(request)));
     }
 
     public void finish(Request request) {

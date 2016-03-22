@@ -1,4 +1,4 @@
-package com.androidnetworking.internal;
+package com.androidnetworking.cache;
 
 import android.content.Context;
 
