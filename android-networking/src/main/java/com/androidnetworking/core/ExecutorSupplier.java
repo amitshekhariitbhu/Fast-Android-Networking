@@ -7,7 +7,7 @@ import java.util.concurrent.Executor;
  */
 public interface ExecutorSupplier {
 
-    Executor forNetworkTasks();
+    AndroidNetworkingExecutor forNetworkTasks();
 
     Executor forBackgroundTasks();
 

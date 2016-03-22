@@ -13,7 +13,7 @@ public class DefaultExecutorSupplier implements ExecutorSupplier {
 
     public static final int DEFAULT_MAX_NUM_THREADS = Runtime.getRuntime().availableProcessors();
     private final Executor mBackgroundExecutor;
-    private final Executor mNetworkExecutor;
+    private final AndroidNetworkingExecutor mNetworkExecutor;
     private final Executor mMainThreadExecutor;
 
     public DefaultExecutorSupplier() {
@@ -24,7 +24,7 @@ public class DefaultExecutorSupplier implements ExecutorSupplier {
     }
 
     @Override
-    public Executor forNetworkTasks() {
+    public AndroidNetworkingExecutor forNetworkTasks() {
         return mNetworkExecutor;
     }
 

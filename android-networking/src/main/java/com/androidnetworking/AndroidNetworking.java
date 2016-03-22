@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.androidnetworking.internal.CacheManager;
 import com.androidnetworking.internal.Monitor;
+import com.androidnetworking.internal.RequestManager;
 
 /**
  * Created by amitshekhar on 21/03/16.

@@ -23,7 +23,7 @@ public class Monitor {
         sInstance = new Monitor(context);
     }
 
-    public Monitor getInstance() {
+    public static Monitor getInstance() {
         return sInstance;
     }
 
