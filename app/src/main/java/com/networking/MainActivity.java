@@ -11,7 +11,6 @@ import com.androidnetworking.error.AndroidNetworkingError;
 import com.androidnetworking.requests.AndroidNetworkingArrayRequest;
 import com.androidnetworking.requests.AndroidNetworkingObjectRequest;
 import com.androidnetworking.requests.AndroidNetworkingRequest;
-import com.androidnetworking.requests.AndroidNetworkingStringRequest;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
