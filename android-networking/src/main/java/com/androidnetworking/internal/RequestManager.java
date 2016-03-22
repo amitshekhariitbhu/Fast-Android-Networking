@@ -1,7 +1,6 @@
 package com.androidnetworking.internal;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.runnable.DataHunter;
@@ -57,7 +56,14 @@ public class RequestManager {
         synchronized (mCurrentRequests) {
             mCurrentRequests.add(request);
         }
+        request.setRequestQueue(this);
         request.setSequenceNumber(getSequenceNumber());
         request.setFuture(Monitor.getInstance().getExecutorSupplier().forNetworkTasks().submit(new DataHunter(request)));
+    }
+
+    public void finish(Request request) {
+        synchronized (mCurrentRequests) {
+            mCurrentRequests.remove(request);
+        }
     }
 }

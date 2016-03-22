@@ -23,8 +23,14 @@ public class DataHunter implements Runnable {
 
     @Override
     public void run() {
-        Log.d(TAG, "getUrl : "+request.getUrl());
-        Log.d(TAG, "getSequenceNumber : " + request.getSequenceNumber());
+        Log.d(TAG, "execution started for sequenceNumber: " + request.getSequenceNumber());
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        request.finish();
+        Log.d(TAG, "execution done for sequenceNumber: " + request.getSequenceNumber());
     }
 
     public Priority getPriority() {
