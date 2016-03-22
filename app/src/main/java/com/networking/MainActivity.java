@@ -11,6 +11,7 @@ import com.androidnetworking.error.AndroidNetworkingError;
 import com.androidnetworking.requests.AndroidNetworkingArrayRequest;
 import com.androidnetworking.requests.AndroidNetworkingObjectRequest;
 import com.androidnetworking.requests.AndroidNetworkingRequest;
+import com.androidnetworking.requests.AndroidNetworkingStringRequest;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -20,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final String URL_JSON_ARRAY = "http://api.androidhive.info/volley/person_array.json";
     private static final String URL_JSON_OBJECT = "http://api.androidhive.info/volley/person_object.json";
+    private static final String URL_STRING = "http://api.androidhive.info/volley/string_response.html";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +56,19 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
             MyApplication.getInstance().getAndroidNetworkingRequestQueue().addRequest(androidNetworkingObjectRequest);
+
+//            AndroidNetworkingStringRequest androidNetworkingStringRequest = new AndroidNetworkingStringRequest(AndroidNetworkingRequest.Method.GET, URL_STRING, Priority.LOW, this, new AndroidNetworkingResponse.SuccessListener<String>() {
+//                @Override
+//                public void onResponse(String response) {
+//                    Log.d(TAG, "onResponse string : " + response);
+//                }
+//            }, new AndroidNetworkingResponse.ErrorListener() {
+//                @Override
+//                public void onError(AndroidNetworkingError error) {
+//                    Log.d(TAG, "onError : " + error.toString());
+//                }
+//            });
+//            MyApplication.getInstance().getAndroidNetworkingRequestQueue().addRequest(androidNetworkingStringRequest);
         }
     }
 

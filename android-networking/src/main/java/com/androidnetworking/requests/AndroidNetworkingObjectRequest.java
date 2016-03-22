@@ -17,7 +17,6 @@ import okio.Okio;
  */
 public class AndroidNetworkingObjectRequest extends AndroidNetworkingRequest<JSONObject> {
 
-
     public AndroidNetworkingObjectRequest(@MethodRes int method, String url, Priority priority, Object tag, AndroidNetworkingResponse.SuccessListener<JSONObject> successListener, AndroidNetworkingResponse.ErrorListener errorListener) {
         super(method, url, priority, tag, successListener, errorListener);
     }
