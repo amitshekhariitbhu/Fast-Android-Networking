@@ -90,9 +90,6 @@ public class AndroidNetworkingExecutor extends ThreadPoolExecutor {
         public int compareTo(AndroidNetworkingFutureTask other) {
             Priority p1 = hunter.getPriority();
             Priority p2 = other.hunter.getPriority();
-
-            // High-priority requests are "lesser" so they are sorted to the front.
-            // Equal priorities are sorted by sequence number to provide FIFO ordering.
             return (p1 == p2 ? hunter.sequence - other.hunter.sequence : p2.ordinal() - p1.ordinal());
         }
     }

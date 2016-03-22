@@ -18,7 +18,7 @@ public class AndroidNetworkingRawBytesRequest extends AndroidNetworkingRequest<b
         super(method, url, priority, tag, successListener, errorListener);
     }
 
-    protected AndroidNetworkingResponse<byte[]> parseResponse(AndroidNetworkingData data) {
+    public AndroidNetworkingResponse<byte[]> parseResponse(AndroidNetworkingData data) {
         try {
             return AndroidNetworkingResponse.success(Okio.buffer(data.source).readByteArray());
         } catch (IOException e) {

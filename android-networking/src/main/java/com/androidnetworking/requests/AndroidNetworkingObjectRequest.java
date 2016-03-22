@@ -22,7 +22,7 @@ public class AndroidNetworkingObjectRequest extends AndroidNetworkingRequest<JSO
         super(method, url, priority, tag, successListener, errorListener);
     }
 
-    protected AndroidNetworkingResponse<JSONObject> parseResponse(AndroidNetworkingData data) {
+    public AndroidNetworkingResponse<JSONObject> parseResponse(AndroidNetworkingData data) {
         try {
             JSONObject json = new JSONObject(Okio.buffer(data.source).readUtf8());
             return AndroidNetworkingResponse.success(json);

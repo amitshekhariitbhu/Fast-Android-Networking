@@ -99,9 +99,6 @@ public abstract class AndroidNetworkingRequest<T> {
         }
     }
 
-    /**
-     * Notifies the request queue that this request has finished (successfully or with error).
-     */
     public void finish() {
         mErrorListener = null;
         mSuccessListener = null;
@@ -111,7 +108,7 @@ public abstract class AndroidNetworkingRequest<T> {
         }
     }
 
-    protected BufferedSource getBody() {
+    public BufferedSource getBody() {
         Map<String, String> params = getParams();
         if (params != null && params.size() > 0) {
             Buffer buffer = new Buffer();
@@ -134,7 +131,7 @@ public abstract class AndroidNetworkingRequest<T> {
     }
 
     @MethodRes
-    int getMethod() {
+    public int getMethod() {
         return mMethod;
     }
 
@@ -146,7 +143,7 @@ public abstract class AndroidNetworkingRequest<T> {
         return PARAMS_ENCODING;
     }
 
-    protected boolean isFollowingRedirects() {
+    public boolean isFollowingRedirects() {
         return true;
     }
 
@@ -154,7 +151,7 @@ public abstract class AndroidNetworkingRequest<T> {
         return mResponseDelivered;
     }
 
-    protected AndroidNetworkingError parseNetworkError(AndroidNetworkingError error) {
+    public AndroidNetworkingError parseNetworkError(AndroidNetworkingError error) {
         try {
             if (error.getData() != null && error.getData().source != null) {
                 error.setContent(Okio.buffer(error.getData().source).readUtf8());
@@ -166,7 +163,7 @@ public abstract class AndroidNetworkingRequest<T> {
         return error;
     }
 
-    protected abstract AndroidNetworkingResponse<T> parseResponse(AndroidNetworkingData data);
+    public abstract AndroidNetworkingResponse<T> parseResponse(AndroidNetworkingData data);
 
     public void setHeaders(Headers headers) {
         this.mHeaders = headers;

@@ -19,7 +19,7 @@ public class AndroidNetworkingStringRequest extends AndroidNetworkingRequest<Str
         super(method, url, priority, tag, successListener, errorListener);
     }
 
-    protected AndroidNetworkingResponse<String> parseResponse(AndroidNetworkingData data) {
+    public AndroidNetworkingResponse<String> parseResponse(AndroidNetworkingData data) {
         try {
             return AndroidNetworkingResponse.success(Okio.buffer(data.source).readUtf8());
         } catch (IOException e) {

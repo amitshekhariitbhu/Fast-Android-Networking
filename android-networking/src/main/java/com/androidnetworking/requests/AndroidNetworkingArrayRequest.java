@@ -22,7 +22,7 @@ public class AndroidNetworkingArrayRequest extends AndroidNetworkingRequest<JSON
         super(method, url, priority, tag, successListener, errorListener);
     }
 
-    protected AndroidNetworkingResponse<JSONArray> parseResponse(AndroidNetworkingData data) {
+    public AndroidNetworkingResponse<JSONArray> parseResponse(AndroidNetworkingData data) {
         try {
             JSONArray json = new JSONArray(Okio.buffer(data.source).readUtf8());
             return AndroidNetworkingResponse.success(json);
