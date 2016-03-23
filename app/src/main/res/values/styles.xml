@@ -8,4 +8,9 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="PhotoGridLayout">
+        <item name="android:drawSelectorOnTop">true</item>
+        <item name="android:listSelector">@drawable/photogrid_list_selector</item>
+    </style>
+
 </resources>

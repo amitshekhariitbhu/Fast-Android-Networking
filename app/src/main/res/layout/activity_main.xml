@@ -46,9 +46,17 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_gravity="center" />
+
+    <Button
+        android:id="@+id/startGridActivityButton"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_margin="8dp"
+        android:onClick="startGridActivity"
+        android:text="StartGridActivity" />
 
 
 </LinearLayout>

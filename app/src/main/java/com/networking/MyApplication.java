@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.androidnetworking.internal.AndroidNetworkingImageLoader;
 import com.androidnetworking.internal.AndroidNetworkingRequestQueue;
+import com.networking.utils.LruBitmapCache;
 
 /**
  * Created by amitshekhar on 22/03/16.

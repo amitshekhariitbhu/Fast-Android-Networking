@@ -1,5 +1,6 @@
 package com.networking;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -117,6 +118,10 @@ public class MainActivity extends AppCompatActivity {
     public void loadImageFromImageLoader(View view) {
         MyApplication.getInstance().getImageLoader().get(URL_IMAGE_LOADER, AndroidNetworkingImageLoader.getImageListener(imageView,
                 R.mipmap.ic_launcher, R.mipmap.ic_launcher));
+    }
+
+    public void startGridActivity(View view) {
+        startActivity(new Intent(MainActivity.this,ImageGridActivity.class));
     }
 
 }

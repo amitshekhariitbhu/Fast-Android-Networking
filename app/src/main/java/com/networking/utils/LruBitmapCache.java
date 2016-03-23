@@ -1,4 +1,4 @@
-package com.networking;
+package com.networking.utils;
 
 /**
  * Created by amitshekhar on 23/03/16.
