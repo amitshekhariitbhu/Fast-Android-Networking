@@ -69,6 +69,20 @@ public class MainActivity extends AppCompatActivity {
 //            });
 //            MyApplication.getInstance().getAndroidNetworkingRequestQueue().addRequest(androidNetworkingStringRequest);
         }
+        AndroidNetworkingArrayRequest androidNetworkingArrayRequest = new AndroidNetworkingArrayRequest(AndroidNetworkingRequest.Method.GET, URL_JSON_ARRAY, Priority.HIGH, this, new AndroidNetworkingResponse.SuccessListener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                Log.d(TAG, "onResponse array : " + response.toString());
+            }
+        }, new AndroidNetworkingResponse.ErrorListener() {
+            @Override
+            public void onError(AndroidNetworkingError error) {
+                Log.d(TAG, "onError : " + error.toString());
+            }
+        });
+        MyApplication.getInstance().getAndroidNetworkingRequestQueue().addRequest(androidNetworkingArrayRequest);
+
+
     }
 
     public void cancelAllRequests(View view) {
