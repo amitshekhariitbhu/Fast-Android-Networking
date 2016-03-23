@@ -16,22 +16,39 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_margin="8dp"
-        android:text="Make Some Requests"
-        android:onClick="makeRequests"/>
+        android:onClick="makeRequests"
+        android:text="Make Some Requests" />
 
     <Button
         android:id="@+id/cancelButton"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_margin="8dp"
-        android:text="Cancel All Request"
-        android:onClick="cancelAllRequests"/>
+        android:onClick="cancelAllRequests"
+        android:text="Cancel All Request" />
 
+    <Button
+        android:id="@+id/loadImageButton"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_margin="8dp"
+        android:onClick="loadImageDirect"
+        android:text="Load Image Direct" />
+
+
+    <Button
+        android:id="@+id/loadImageFromImageLoaderButton"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_margin="8dp"
+        android:onClick="loadImageFromImageLoader"
+        android:text="Load Image From ImageLoader" />
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center" />
+
 
 </LinearLayout>

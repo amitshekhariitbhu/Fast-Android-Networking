@@ -2,6 +2,7 @@ package com.networking;
 
 import android.app.Application;
 
+import com.androidnetworking.internal.AndroidNetworkingImageLoader;
 import com.androidnetworking.internal.AndroidNetworkingRequestQueue;
 
 /**
@@ -11,6 +12,7 @@ public class MyApplication extends Application {
 
     public static MyApplication appInstance = null;
     private AndroidNetworkingRequestQueue androidNetworkingRequestQueue;
+    private AndroidNetworkingImageLoader androidNetworkingImageLoader;
 
     public static MyApplication getInstance() {
         if (appInstance == null) {
@@ -30,5 +32,14 @@ public class MyApplication extends Application {
             androidNetworkingRequestQueue = new AndroidNetworkingRequestQueue(getApplicationContext());
         }
         return androidNetworkingRequestQueue;
+    }
+
+    public AndroidNetworkingImageLoader getImageLoader() {
+        getAndroidNetworkingRequestQueue();
+        if (androidNetworkingImageLoader == null) {
+            androidNetworkingImageLoader = new AndroidNetworkingImageLoader(this.androidNetworkingRequestQueue,
+                    new LruBitmapCache());
+        }
+        return this.androidNetworkingImageLoader;
     }
 }
