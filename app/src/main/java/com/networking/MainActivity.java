@@ -16,6 +16,8 @@ import com.androidnetworking.requests.AndroidNetworkingArrayRequest;
 import com.androidnetworking.requests.AndroidNetworkingImageRequest;
 import com.androidnetworking.requests.AndroidNetworkingObjectRequest;
 import com.androidnetworking.requests.AndroidNetworkingRequest;
+import com.androidnetworking.widget.GreatImageView;
+import com.networking.provider.Images;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -30,12 +32,15 @@ public class MainActivity extends AppCompatActivity {
     private static final String URL_IMAGE_LOADER = "http://i.imgur.com/52md06W.jpg";
 
     private ImageView imageView;
+    private GreatImageView greatImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         imageView = (ImageView) findViewById(R.id.imageView);
+        greatImageView = (GreatImageView) findViewById(R.id.greatImageView);
+        greatImageView.setImageUrl(Images.imageThumbUrls[0], MyApplication.getInstance().getImageLoader());
     }
 
     public void makeRequests(View view) {
@@ -121,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void startGridActivity(View view) {
-        startActivity(new Intent(MainActivity.this,ImageGridActivity.class));
+        startActivity(new Intent(MainActivity.this, ImageGridActivity.class));
     }
 
 }
