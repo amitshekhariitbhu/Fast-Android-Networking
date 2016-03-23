@@ -85,7 +85,6 @@ public class DataHunter implements Runnable {
         });
     }
 
-    @SuppressWarnings("unchecked")
     private void deliverResponse(final AndroidNetworkingRequest request, final AndroidNetworkingResponse response) {
         Log.d(TAG, "Delivering success response for " + request.getSequenceNumber());
         Core.getInstance().getExecutorSupplier().forMainThreadTasks().execute(new Runnable() {
