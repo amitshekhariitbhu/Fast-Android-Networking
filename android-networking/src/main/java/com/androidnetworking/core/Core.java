@@ -8,7 +8,7 @@ public class Core {
     private static Core sInstance = null;
     private final ExecutorSupplier mExecutorSupplier;
 
-    public Core() {
+    private Core() {
         this.mExecutorSupplier = new DefaultExecutorSupplier();
     }
 
