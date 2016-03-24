@@ -16,9 +16,7 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
-import com.androidnetworking.internal.AndroidNetworkingImageLoader;
 import com.androidnetworking.widget.GreatImageView;
-import com.networking.MyApplication;
 import com.networking.R;
 import com.networking.provider.Images;
 
@@ -31,7 +29,6 @@ public class ImageGridFragment extends Fragment implements AdapterView.OnItemCli
     private int mImageThumbSize;
     private int mImageThumbSpacing;
     private ImageAdapter mAdapter;
-    private AndroidNetworkingImageLoader androidNetworkingImageLoader;
 
     public ImageGridFragment() {
     }
@@ -43,7 +40,6 @@ public class ImageGridFragment extends Fragment implements AdapterView.OnItemCli
 
         mImageThumbSize = getResources().getDimensionPixelSize(R.dimen.image_thumbnail_size);
         mImageThumbSpacing = getResources().getDimensionPixelSize(R.dimen.image_thumbnail_spacing);
-        androidNetworkingImageLoader = MyApplication.getInstance().getImageLoader();
         mAdapter = new ImageAdapter(getActivity());
 
     }
@@ -188,7 +184,7 @@ public class ImageGridFragment extends Fragment implements AdapterView.OnItemCli
                 imageView.setLayoutParams(mImageViewLayoutParams);
             }
             imageView.setDefaultImageResId(R.mipmap.ic_launcher);
-            imageView.setImageUrl(Images.imageThumbUrls[position - mNumColumns], androidNetworkingImageLoader);
+            imageView.setImageUrl(Images.imageThumbUrls[position - mNumColumns]);
 
             return imageView;
         }

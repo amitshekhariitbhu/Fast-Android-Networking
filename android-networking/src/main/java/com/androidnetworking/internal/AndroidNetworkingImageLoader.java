@@ -5,6 +5,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.widget.ImageView;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.cache.LruBitmapCache;
 import com.androidnetworking.common.AndroidNetworkingResponse;
 import com.androidnetworking.error.AndroidNetworkingError;
 import com.androidnetworking.requests.AndroidNetworkingImageRequest;
@@ -32,6 +34,21 @@ public class AndroidNetworkingImageLoader {
     private final Handler mHandler = new Handler(Looper.getMainLooper());
 
     private Runnable mRunnable;
+
+    private static AndroidNetworkingImageLoader sInstance;
+
+    public static void initialize() {
+        getInstance();
+    }
+
+    public static AndroidNetworkingImageLoader getInstance() {
+        if (sInstance == null) {
+            synchronized (AndroidNetworkingImageLoader.class) {
+                sInstance = new AndroidNetworkingImageLoader(AndroidNetworkingRequestQueue.getInstance(), new LruBitmapCache(LruBitmapCache.getCacheSize(AndroidNetworking.getContext())));
+            }
+        }
+        return sInstance;
+    }
 
     public interface ImageCache {
         public Bitmap getBitmap(String url);

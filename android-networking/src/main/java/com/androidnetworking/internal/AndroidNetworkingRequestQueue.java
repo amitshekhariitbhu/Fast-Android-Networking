@@ -1,8 +1,5 @@
 package com.androidnetworking.internal;
 
-import android.content.Context;
-
-import com.androidnetworking.cache.CacheManager;
 import com.androidnetworking.core.Core;
 import com.androidnetworking.requests.AndroidNetworkingRequest;
 import com.androidnetworking.runnables.DataHunter;
@@ -19,10 +16,21 @@ public class AndroidNetworkingRequestQueue {
     private final static String TAG = AndroidNetworkingRequestQueue.class.getSimpleName();
     private final Set<AndroidNetworkingRequest<?>> mCurrentRequests = new HashSet<AndroidNetworkingRequest<?>>();
     private AtomicInteger mSequenceGenerator = new AtomicInteger();
+    private static AndroidNetworkingRequestQueue sInstance = null;
 
-    public AndroidNetworkingRequestQueue(Context context) {
-        CacheManager.initialize(context);
+    public static void initialize() {
+        getInstance();
     }
+
+    public static AndroidNetworkingRequestQueue getInstance() {
+        if (sInstance == null) {
+            synchronized (AndroidNetworkingRequestQueue.class) {
+                sInstance = new AndroidNetworkingRequestQueue();
+            }
+        }
+        return sInstance;
+    }
+
 
     public interface RequestFilter {
         public boolean apply(AndroidNetworkingRequest<?> request);

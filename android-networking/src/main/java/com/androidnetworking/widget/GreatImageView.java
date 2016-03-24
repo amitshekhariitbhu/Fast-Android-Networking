@@ -18,10 +18,7 @@ public class GreatImageView extends ImageView {
 
     private int mDefaultImageId;
 
-
     private int mErrorImageId;
-
-    private AndroidNetworkingImageLoader mImageLoader;
 
     private AndroidNetworkingImageLoader.ImageContainer mImageContainer;
 
@@ -37,9 +34,8 @@ public class GreatImageView extends ImageView {
         super(context, attrs, defStyle);
     }
 
-    public void setImageUrl(String url, AndroidNetworkingImageLoader imageLoader) {
+    public void setImageUrl(String url) {
         mUrl = url;
-        mImageLoader = imageLoader;
         loadImageIfNecessary(false);
     }
 
@@ -88,7 +84,7 @@ public class GreatImageView extends ImageView {
         int maxWidth = wrapWidth ? 0 : width;
         int maxHeight = wrapHeight ? 0 : height;
 
-        AndroidNetworkingImageLoader.ImageContainer newContainer = mImageLoader.get(mUrl,
+        AndroidNetworkingImageLoader.ImageContainer newContainer = AndroidNetworkingImageLoader.getInstance().get(mUrl,
                 new AndroidNetworkingImageLoader.ImageListener() {
                     @Override
                     public void onError(AndroidNetworkingError error) {

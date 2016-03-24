@@ -12,6 +12,7 @@ import com.androidnetworking.common.AndroidNetworkingResponse;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.AndroidNetworkingError;
 import com.androidnetworking.internal.AndroidNetworkingImageLoader;
+import com.androidnetworking.internal.AndroidNetworkingRequestQueue;
 import com.androidnetworking.requests.AndroidNetworkingArrayRequest;
 import com.androidnetworking.requests.AndroidNetworkingImageRequest;
 import com.androidnetworking.requests.AndroidNetworkingObjectRequest;
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         imageView = (ImageView) findViewById(R.id.imageView);
         greatImageView = (GreatImageView) findViewById(R.id.greatImageView);
-        greatImageView.setImageUrl(Images.imageThumbUrls[0], MyApplication.getInstance().getImageLoader());
+        greatImageView.setImageUrl(Images.imageThumbUrls[0]);
     }
 
     public void makeRequests(View view) {
@@ -56,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.d(TAG, "onError : " + error.toString());
                 }
             });
-            MyApplication.getInstance().getAndroidNetworkingRequestQueue().addRequest(androidNetworkingArrayRequest);
+            AndroidNetworkingRequestQueue.getInstance().addRequest(androidNetworkingArrayRequest);
 
             AndroidNetworkingObjectRequest androidNetworkingObjectRequest = new AndroidNetworkingObjectRequest(AndroidNetworkingRequest.Method.GET, URL_JSON_OBJECT, Priority.LOW, this, new AndroidNetworkingResponse.SuccessListener<JSONObject>() {
                 @Override
@@ -69,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.d(TAG, "onError : " + error.toString());
                 }
             });
-            MyApplication.getInstance().getAndroidNetworkingRequestQueue().addRequest(androidNetworkingObjectRequest);
+            AndroidNetworkingRequestQueue.getInstance().addRequest(androidNetworkingObjectRequest);
 
 //            AndroidNetworkingStringRequest androidNetworkingStringRequest = new AndroidNetworkingStringRequest(AndroidNetworkingRequest.Method.GET, URL_STRING, Priority.LOW, this, new AndroidNetworkingResponse.SuccessListener<String>() {
 //                @Override
@@ -82,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
 //                    Log.d(TAG, "onError : " + error.toString());
 //                }
 //            });
-//            MyApplication.getInstance().getAndroidNetworkingRequestQueue().addRequest(androidNetworkingStringRequest);
+//            AndroidNetworkingRequestQueue.getInstance().addRequest(androidNetworkingStringRequest);
         }
         AndroidNetworkingArrayRequest androidNetworkingArrayRequest = new AndroidNetworkingArrayRequest(AndroidNetworkingRequest.Method.GET, URL_JSON_ARRAY, Priority.HIGH, this, new AndroidNetworkingResponse.SuccessListener<JSONArray>() {
             @Override
@@ -95,12 +96,12 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "onError : " + error.toString());
             }
         });
-        MyApplication.getInstance().getAndroidNetworkingRequestQueue().addRequest(androidNetworkingArrayRequest);
+        AndroidNetworkingRequestQueue.getInstance().addRequest(androidNetworkingArrayRequest);
 
     }
 
     public void cancelAllRequests(View view) {
-        MyApplication.getInstance().getAndroidNetworkingRequestQueue().cancelAll(this);
+        AndroidNetworkingRequestQueue.getInstance().cancelAll(this);
     }
 
     public void loadImageDirect(View view) {
@@ -116,12 +117,12 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "onError : " + error.toString());
             }
         });
-        MyApplication.getInstance().getAndroidNetworkingRequestQueue().addRequest(androidNetworkingImageRequest);
+        AndroidNetworkingRequestQueue.getInstance().addRequest(androidNetworkingImageRequest);
 
     }
 
     public void loadImageFromImageLoader(View view) {
-        MyApplication.getInstance().getImageLoader().get(URL_IMAGE_LOADER, AndroidNetworkingImageLoader.getImageListener(imageView,
+        AndroidNetworkingImageLoader.getInstance().get(URL_IMAGE_LOADER, AndroidNetworkingImageLoader.getImageListener(imageView,
                 R.mipmap.ic_launcher, R.mipmap.ic_launcher));
     }
 

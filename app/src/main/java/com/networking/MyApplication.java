@@ -2,18 +2,14 @@ package com.networking;
 
 import android.app.Application;
 
-import com.androidnetworking.internal.AndroidNetworkingImageLoader;
-import com.androidnetworking.internal.AndroidNetworkingRequestQueue;
-import com.networking.utils.LruBitmapCache;
+import com.androidnetworking.AndroidNetworking;
 
 /**
  * Created by amitshekhar on 22/03/16.
  */
 public class MyApplication extends Application {
 
-    public static MyApplication appInstance = null;
-    private AndroidNetworkingRequestQueue androidNetworkingRequestQueue;
-    private AndroidNetworkingImageLoader androidNetworkingImageLoader;
+    private static MyApplication appInstance = null;
 
     public static MyApplication getInstance() {
         if (appInstance == null) {
@@ -26,21 +22,6 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         appInstance = this;
-    }
-
-    public AndroidNetworkingRequestQueue getAndroidNetworkingRequestQueue() {
-        if (androidNetworkingRequestQueue == null) {
-            androidNetworkingRequestQueue = new AndroidNetworkingRequestQueue(getApplicationContext());
-        }
-        return androidNetworkingRequestQueue;
-    }
-
-    public AndroidNetworkingImageLoader getImageLoader() {
-        getAndroidNetworkingRequestQueue();
-        if (androidNetworkingImageLoader == null) {
-            androidNetworkingImageLoader = new AndroidNetworkingImageLoader(this.androidNetworkingRequestQueue,
-                    new LruBitmapCache());
-        }
-        return this.androidNetworkingImageLoader;
+        AndroidNetworking.initialize(getApplicationContext());
     }
 }
