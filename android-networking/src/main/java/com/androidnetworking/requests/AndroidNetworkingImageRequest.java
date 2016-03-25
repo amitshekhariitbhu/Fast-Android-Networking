@@ -6,6 +6,7 @@ import android.widget.ImageView;
 
 import com.androidnetworking.common.AndroidNetworkingData;
 import com.androidnetworking.common.AndroidNetworkingResponse;
+import com.androidnetworking.common.Method;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.AndroidNetworkingError;
 

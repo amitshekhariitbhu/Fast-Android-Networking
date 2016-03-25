@@ -1,19 +1,17 @@
 package com.androidnetworking.requests;
 
-import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.androidnetworking.common.AndroidNetworkingData;
 import com.androidnetworking.common.AndroidNetworkingResponse;
+import com.androidnetworking.common.MethodRes;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.AndroidNetworkingError;
 import com.androidnetworking.internal.AndroidNetworkingRequestQueue;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.net.URLEncoder;
 import java.util.Map;
 import java.util.concurrent.Future;
@@ -31,20 +29,6 @@ public abstract class AndroidNetworkingRequest<T> {
     private final static String TAG = AndroidNetworkingRequest.class.getSimpleName();
 
     private static final String PARAMS_ENCODING = "UTF-8";
-
-    public interface Method {
-        int GET = 0;
-        int POST = 1;
-        int PUT = 2;
-        int DELETE = 3;
-        int HEAD = 4;
-        int PATCH = 5;
-    }
-
-    @Retention(RetentionPolicy.SOURCE)
-    @IntDef({Method.GET, Method.POST, Method.PUT, Method.DELETE, Method.HEAD, Method.PATCH})
-    public @interface MethodRes {
-    }
 
     private Headers mHeaders;
 

@@ -2,6 +2,7 @@ package com.androidnetworking.requests;
 
 import com.androidnetworking.common.AndroidNetworkingData;
 import com.androidnetworking.common.AndroidNetworkingResponse;
+import com.androidnetworking.common.MethodRes;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.AndroidNetworkingError;
 

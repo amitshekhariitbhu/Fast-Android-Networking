@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.androidnetworking.common.AndroidNetworkingResponse;
+import com.androidnetworking.common.Method;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.AndroidNetworkingError;
 import com.androidnetworking.internal.AndroidNetworkingImageLoader;
@@ -16,7 +17,6 @@ import com.androidnetworking.internal.AndroidNetworkingRequestQueue;
 import com.androidnetworking.requests.AndroidNetworkingArrayRequest;
 import com.androidnetworking.requests.AndroidNetworkingImageRequest;
 import com.androidnetworking.requests.AndroidNetworkingObjectRequest;
-import com.androidnetworking.requests.AndroidNetworkingRequest;
 import com.androidnetworking.widget.GreatImageView;
 import com.networking.provider.Images;
 
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void makeRequests(View view) {
         for (int i = 0; i < 10; i++) {
-            AndroidNetworkingArrayRequest androidNetworkingArrayRequest = new AndroidNetworkingArrayRequest(AndroidNetworkingRequest.Method.GET, URL_JSON_ARRAY, Priority.LOW, this, new AndroidNetworkingResponse.SuccessListener<JSONArray>() {
+            AndroidNetworkingArrayRequest androidNetworkingArrayRequest = new AndroidNetworkingArrayRequest(Method.GET, URL_JSON_ARRAY, Priority.LOW, this, new AndroidNetworkingResponse.SuccessListener<JSONArray>() {
                 @Override
                 public void onResponse(JSONArray response) {
                     Log.d(TAG, "onResponse array : " + response.toString());
@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
             });
             AndroidNetworkingRequestQueue.getInstance().addRequest(androidNetworkingArrayRequest);
 
-            AndroidNetworkingObjectRequest androidNetworkingObjectRequest = new AndroidNetworkingObjectRequest(AndroidNetworkingRequest.Method.GET, URL_JSON_OBJECT, Priority.LOW, this, new AndroidNetworkingResponse.SuccessListener<JSONObject>() {
+            AndroidNetworkingObjectRequest androidNetworkingObjectRequest = new AndroidNetworkingObjectRequest(Method.GET, URL_JSON_OBJECT, Priority.LOW, this, new AndroidNetworkingResponse.SuccessListener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     Log.d(TAG, "onResponse object : " + response.toString());
@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
 //            });
 //            AndroidNetworkingRequestQueue.getInstance().addRequest(androidNetworkingStringRequest);
         }
-        AndroidNetworkingArrayRequest androidNetworkingArrayRequest = new AndroidNetworkingArrayRequest(AndroidNetworkingRequest.Method.GET, URL_JSON_ARRAY, Priority.HIGH, this, new AndroidNetworkingResponse.SuccessListener<JSONArray>() {
+        AndroidNetworkingArrayRequest androidNetworkingArrayRequest = new AndroidNetworkingArrayRequest(Method.GET, URL_JSON_ARRAY, Priority.HIGH, this, new AndroidNetworkingResponse.SuccessListener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 Log.d(TAG, "onResponse array : " + response.toString());
@@ -128,6 +128,19 @@ public class MainActivity extends AppCompatActivity {
 
     public void startGridActivity(View view) {
         startActivity(new Intent(MainActivity.this, ImageGridActivity.class));
+        com.androidnetworking.common.AndroidNetworkingRequest androidNetworkingRequest = new com.androidnetworking.common.AndroidNetworkingRequest.Builder()
+                .addBodyParameter("", "").build();
+        androidNetworkingRequest.addRequest(new AndroidNetworkingResponse.SuccessListener() {
+            @Override
+            public void onResponse(Object response) {
+
+            }
+        }, new AndroidNetworkingResponse.ErrorListener() {
+            @Override
+            public void onError(AndroidNetworkingError error) {
+
+            }
+        });
     }
 
 }

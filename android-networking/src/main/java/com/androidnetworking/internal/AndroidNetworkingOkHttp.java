@@ -23,12 +23,12 @@ import okhttp3.Response;
 import okio.Buffer;
 import okio.BufferedSource;
 
-import static com.androidnetworking.requests.AndroidNetworkingRequest.Method.DELETE;
-import static com.androidnetworking.requests.AndroidNetworkingRequest.Method.GET;
-import static com.androidnetworking.requests.AndroidNetworkingRequest.Method.HEAD;
-import static com.androidnetworking.requests.AndroidNetworkingRequest.Method.PATCH;
-import static com.androidnetworking.requests.AndroidNetworkingRequest.Method.POST;
-import static com.androidnetworking.requests.AndroidNetworkingRequest.Method.PUT;
+import static com.androidnetworking.common.Method.DELETE;
+import static com.androidnetworking.common.Method.GET;
+import static com.androidnetworking.common.Method.HEAD;
+import static com.androidnetworking.common.Method.PATCH;
+import static com.androidnetworking.common.Method.POST;
+import static com.androidnetworking.common.Method.PUT;
 
 public class AndroidNetworkingOkHttp {
 
