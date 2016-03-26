@@ -1,5 +1,8 @@
 package com.androidnetworking.common;
 
+import android.graphics.Bitmap;
+import android.widget.ImageView;
+
 import java.io.File;
 
 /**
@@ -9,11 +12,21 @@ public interface RequestBuilder {
 
     RequestBuilder setMethod(int method);
 
+    RequestBuilder setResponseAs(RESPONSE responseAs);
+
     RequestBuilder setPriority(Priority priority);
 
     RequestBuilder setUrl(String url);
 
     RequestBuilder setTag(Object tag);
+
+    RequestBuilder setBitmapConfig(Bitmap.Config bitmapConfig);
+
+    RequestBuilder setBitmapMaxHeight(int maxHeight);
+
+    RequestBuilder setBitmapMaxWidth(int maxWidth);
+
+    RequestBuilder setImageScaleType(ImageView.ScaleType imageScaleType);
 
     RequestBuilder addHeaders(String key, String value);
 

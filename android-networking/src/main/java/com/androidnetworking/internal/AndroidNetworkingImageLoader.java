@@ -7,10 +7,11 @@ import android.widget.ImageView;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.cache.LruBitmapCache;
+import com.androidnetworking.common.AndroidNetworkingRequest;
 import com.androidnetworking.common.AndroidNetworkingResponse;
+import com.androidnetworking.common.Method;
+import com.androidnetworking.common.RESPONSE;
 import com.androidnetworking.error.AndroidNetworkingError;
-import com.androidnetworking.requests.AndroidNetworkingImageRequest;
-import com.androidnetworking.requests.AndroidNetworkingRequest;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -19,7 +20,6 @@ import java.util.LinkedList;
  * Created by amitshekhar on 23/03/16.
  */
 public class AndroidNetworkingImageLoader {
-    private final AndroidNetworkingRequestQueue mRequestQueue;
 
     private int mBatchResponseDelayMs = 100;
 
@@ -44,7 +44,7 @@ public class AndroidNetworkingImageLoader {
     public static AndroidNetworkingImageLoader getInstance() {
         if (sInstance == null) {
             synchronized (AndroidNetworkingImageLoader.class) {
-                sInstance = new AndroidNetworkingImageLoader(AndroidNetworkingRequestQueue.getInstance(), new LruBitmapCache(LruBitmapCache.getCacheSize(AndroidNetworking.getContext())));
+                sInstance = new AndroidNetworkingImageLoader(new LruBitmapCache(LruBitmapCache.getCacheSize(AndroidNetworking.getContext())));
             }
         }
         return sInstance;
@@ -56,8 +56,7 @@ public class AndroidNetworkingImageLoader {
         public void putBitmap(String url, Bitmap bitmap);
     }
 
-    public AndroidNetworkingImageLoader(AndroidNetworkingRequestQueue queue, ImageCache imageCache) {
-        mRequestQueue = queue;
+    public AndroidNetworkingImageLoader(ImageCache imageCache) {
         mCache = imageCache;
     }
 
@@ -133,29 +132,39 @@ public class AndroidNetworkingImageLoader {
             return imageContainer;
         }
 
-        AndroidNetworkingRequest<Bitmap> newRequest = makeImageRequest(requestUrl, maxWidth, maxHeight, scaleType,
+        AndroidNetworkingRequest newRequest = makeImageRequest(requestUrl, maxWidth, maxHeight, scaleType,
                 cacheKey);
 
-        mRequestQueue.addRequest(newRequest);
         mInFlightRequests.put(cacheKey,
                 new BatchedImageRequest(newRequest, imageContainer));
         return imageContainer;
     }
 
-    protected AndroidNetworkingRequest<Bitmap> makeImageRequest(String requestUrl, int maxWidth, int maxHeight,
-                                                                ImageView.ScaleType scaleType, final String cacheKey) {
-        return new AndroidNetworkingImageRequest(requestUrl, "ImageRequestTag", new AndroidNetworkingResponse.SuccessListener<Bitmap>() {
+    protected AndroidNetworkingRequest makeImageRequest(String requestUrl, int maxWidth, int maxHeight,
+                                                        ImageView.ScaleType scaleType, final String cacheKey) {
+        AndroidNetworkingRequest androidNetworkingRequest = new AndroidNetworkingRequest.Builder()
+                .setUrl(requestUrl)
+                .setTag("ImageRequestTag")
+                .setMethod(Method.GET)
+                .setBitmapMaxHeight(maxHeight)
+                .setBitmapMaxWidth(maxWidth)
+                .setImageScaleType(scaleType)
+                .setBitmapConfig(Bitmap.Config.RGB_565)
+                .setResponseAs(RESPONSE.BITMAP).build();
+
+        androidNetworkingRequest.addRequest(new AndroidNetworkingResponse.SuccessListener<Bitmap>() {
             @Override
             public void onResponse(Bitmap response) {
                 onGetImageSuccess(cacheKey, response);
             }
-        }, maxWidth, maxHeight, scaleType, Bitmap.Config.RGB_565, new AndroidNetworkingResponse.ErrorListener() {
+        }, new AndroidNetworkingResponse.ErrorListener() {
             @Override
             public void onError(AndroidNetworkingError error) {
                 onGetImageError(cacheKey, error);
             }
         });
 
+        return androidNetworkingRequest;
 
     }
 
@@ -238,7 +247,7 @@ public class AndroidNetworkingImageLoader {
 
     private class BatchedImageRequest {
 
-        private final AndroidNetworkingRequest<?> mRequest;
+        private final AndroidNetworkingRequest mRequest;
 
         private Bitmap mResponseBitmap;
 
@@ -246,7 +255,7 @@ public class AndroidNetworkingImageLoader {
 
         private final LinkedList<ImageContainer> mContainers = new LinkedList<ImageContainer>();
 
-        public BatchedImageRequest(AndroidNetworkingRequest<?> request, ImageContainer container) {
+        public BatchedImageRequest(AndroidNetworkingRequest request, ImageContainer container) {
             mRequest = request;
             mContainers.add(container);
         }

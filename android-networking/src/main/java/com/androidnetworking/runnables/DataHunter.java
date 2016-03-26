@@ -3,12 +3,12 @@ package com.androidnetworking.runnables;
 import android.util.Log;
 
 import com.androidnetworking.common.AndroidNetworkingData;
+import com.androidnetworking.common.AndroidNetworkingRequest;
 import com.androidnetworking.common.AndroidNetworkingResponse;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.core.Core;
 import com.androidnetworking.error.AndroidNetworkingError;
 import com.androidnetworking.internal.AndroidNetworkingOkHttp;
-import com.androidnetworking.requests.AndroidNetworkingRequest;
 
 import java.io.IOException;
 
@@ -20,9 +20,9 @@ public class DataHunter implements Runnable {
     private static final String TAG = DataHunter.class.getSimpleName();
     private final Priority priority;
     public final int sequence;
-    public final AndroidNetworkingRequest<?> request;
+    public final AndroidNetworkingRequest request;
 
-    public DataHunter(AndroidNetworkingRequest<?> request) {
+    public DataHunter(AndroidNetworkingRequest request) {
         this.request = request;
         this.sequence = request.getSequenceNumber();
         this.priority = request.getPriority();
@@ -46,7 +46,7 @@ public class DataHunter implements Runnable {
                 return;
             }
 
-            AndroidNetworkingResponse<?> response = request.parseResponse(data);
+            AndroidNetworkingResponse response = request.parseResponse(data);
             if (!response.isSuccess()) {
                 deliverError(request, response.getError());
                 return;

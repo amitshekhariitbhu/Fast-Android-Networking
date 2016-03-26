@@ -8,7 +8,7 @@ import android.support.annotation.NonNull;
 
 import com.androidnetworking.common.AndroidNetworkingData;
 import com.androidnetworking.error.AndroidNetworkingError;
-import com.androidnetworking.requests.AndroidNetworkingRequest;
+import com.androidnetworking.common.AndroidNetworkingRequest;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -70,7 +70,7 @@ public class AndroidNetworkingOkHttp {
     }
 
 
-    public static AndroidNetworkingData performNetworkRequest(AndroidNetworkingRequest<?> request) throws AndroidNetworkingError {
+    public static AndroidNetworkingData performNetworkRequest(AndroidNetworkingRequest request) throws AndroidNetworkingError {
         AndroidNetworkingData data = new AndroidNetworkingData();
         Request okRequest = null;
 

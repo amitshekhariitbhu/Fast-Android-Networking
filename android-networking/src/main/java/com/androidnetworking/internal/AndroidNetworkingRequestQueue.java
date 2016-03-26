@@ -1,7 +1,7 @@
 package com.androidnetworking.internal;
 
+import com.androidnetworking.common.AndroidNetworkingRequest;
 import com.androidnetworking.core.Core;
-import com.androidnetworking.requests.AndroidNetworkingRequest;
 import com.androidnetworking.runnables.DataHunter;
 
 import java.util.HashSet;
@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class AndroidNetworkingRequestQueue {
 
     private final static String TAG = AndroidNetworkingRequestQueue.class.getSimpleName();
-    private final Set<AndroidNetworkingRequest<?>> mCurrentRequests = new HashSet<AndroidNetworkingRequest<?>>();
+    private final Set<AndroidNetworkingRequest> mCurrentRequests = new HashSet<AndroidNetworkingRequest>();
     private AtomicInteger mSequenceGenerator = new AtomicInteger();
     private static AndroidNetworkingRequestQueue sInstance = null;
 
@@ -33,13 +33,13 @@ public class AndroidNetworkingRequestQueue {
 
 
     public interface RequestFilter {
-        public boolean apply(AndroidNetworkingRequest<?> request);
+        public boolean apply(AndroidNetworkingRequest request);
     }
 
 
     public void cancelAll(RequestFilter filter) {
         synchronized (mCurrentRequests) {
-            for (AndroidNetworkingRequest<?> request : mCurrentRequests) {
+            for (AndroidNetworkingRequest request : mCurrentRequests) {
                 if (filter.apply(request)) {
                     request.cancel();
                 }
@@ -53,7 +53,7 @@ public class AndroidNetworkingRequestQueue {
         }
         cancelAll(new RequestFilter() {
             @Override
-            public boolean apply(AndroidNetworkingRequest<?> request) {
+            public boolean apply(AndroidNetworkingRequest request) {
                 return request.getTag() == tag;
             }
         });
@@ -63,17 +63,16 @@ public class AndroidNetworkingRequestQueue {
         return mSequenceGenerator.incrementAndGet();
     }
 
-    public <T> AndroidNetworkingRequest<T> addRequest(AndroidNetworkingRequest<T> request) {
+    public AndroidNetworkingRequest addRequest(AndroidNetworkingRequest request) {
         synchronized (mCurrentRequests) {
             mCurrentRequests.add(request);
         }
-        request.setRequestQueue(this);
         request.setSequenceNumber(getSequenceNumber());
         request.setFuture(Core.getInstance().getExecutorSupplier().forNetworkTasks().submit(new DataHunter(request)));
         return request;
     }
 
-    public <T> void finish(AndroidNetworkingRequest<T> request) {
+    public void finish(AndroidNetworkingRequest request) {
         synchronized (mCurrentRequests) {
             mCurrentRequests.remove(request);
         }
