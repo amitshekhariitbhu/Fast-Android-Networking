@@ -147,4 +147,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(MainActivity.this, ImageGridActivity.class));
     }
 
+    public void startApiTestActivity(View view) {
+        startActivity(new Intent(MainActivity.this, ApiTestActivity.class));
+    }
 }

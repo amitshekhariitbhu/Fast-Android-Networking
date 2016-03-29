@@ -74,5 +74,13 @@
         android:onClick="startGridActivity"
         android:text="StartGridActivity" />
 
+    <Button
+        android:id="@+id/startApiTestActivityButton"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_margin="8dp"
+        android:onClick="startApiTestActivity"
+        android:text="StartApiTestActivity" />
+
 
 </LinearLayout>

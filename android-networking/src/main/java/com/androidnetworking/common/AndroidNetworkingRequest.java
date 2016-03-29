@@ -91,7 +91,11 @@ public class AndroidNetworkingRequest {
     }
 
     public String getUrl() {
-        HttpUrl.Builder urlBuilder = HttpUrl.parse(mUrl).newBuilder();
+        String tempUrl = mUrl;
+        for (HashMap.Entry<String, String> entry : mPathParameterMap.entrySet()) {
+            tempUrl = tempUrl.replace("{" + entry.getKey() + "}", String.valueOf(entry.getValue()));
+        }
+        HttpUrl.Builder urlBuilder = HttpUrl.parse(tempUrl).newBuilder();
         for (HashMap.Entry<String, String> entry : mQueryParameterMap.entrySet()) {
             urlBuilder.addQueryParameter(entry.getKey(), entry.getValue());
         }

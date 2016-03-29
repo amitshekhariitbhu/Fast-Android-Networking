@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.networking.MainActivity">
+
+
+    <Button
+        android:id="@+id/getAllUsers"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_margin="8dp"
+        android:onClick="getAllUsers"
+        android:text="/getAllUsers/{pageNumber}" />
+
+    <Button
+        android:id="@+id/getAnUser"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_margin="8dp"
+        android:onClick="getAnUser"
+        android:text="/getAnUser/{userId}" />
+
+    <Button
+        android:id="@+id/checkForHeaderGet"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_margin="8dp"
+        android:onClick="checkForHeaderGet"
+        android:text="GET : checkForHeader" />
+
+    <Button
+        android:id="@+id/checkForHeaderPost"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_margin="8dp"
+        android:onClick="checkForHeaderPost"
+        android:text="POST : checkForHeader" />
+
+
+    <Button
+        android:id="@+id/createAnUser"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_margin="8dp"
+        android:onClick="createAnUser"
+        android:text="/createAnUser" />
+
+
+</LinearLayout>
