@@ -256,7 +256,7 @@ public class AndroidNetworkingRequest {
     }
 
     protected Map<String, String> getParams() {
-        return null;
+        return mBodyParameterMap;
     }
 
     public BufferedSource getBody() {

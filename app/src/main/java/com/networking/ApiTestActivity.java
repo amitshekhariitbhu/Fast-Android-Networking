@@ -77,7 +77,7 @@ public class ApiTestActivity extends AppCompatActivity {
         AndroidNetworkingRequest androidNetworkingRequest = new AndroidNetworkingRequest.Builder()
                 .setUrl(ApiEndPoint.BASE_URL + ApiEndPoint.CHECK_FOR_HEADER)
                 .setMethod(Method.GET)
-                .addHeaders("token","1234")
+                .addHeaders("token", "1234")
                 .setTag(this)
                 .setPriority(Priority.LOW)
                 .setResponseAs(RESPONSE.JSON_OBJECT).build();
@@ -99,7 +99,7 @@ public class ApiTestActivity extends AppCompatActivity {
         AndroidNetworkingRequest androidNetworkingRequest = new AndroidNetworkingRequest.Builder()
                 .setUrl(ApiEndPoint.BASE_URL + ApiEndPoint.CHECK_FOR_HEADER)
                 .setMethod(Method.POST)
-                .addHeaders("token","1234")
+                .addHeaders("token", "1234")
                 .setTag(this)
                 .setPriority(Priority.LOW)
                 .setResponseAs(RESPONSE.JSON_OBJECT).build();
@@ -118,6 +118,25 @@ public class ApiTestActivity extends AppCompatActivity {
     }
 
     public void createAnUser(View view) {
+        AndroidNetworkingRequest androidNetworkingRequest = new AndroidNetworkingRequest.Builder()
+                .setUrl(ApiEndPoint.BASE_URL + ApiEndPoint.POST_CREATE_AN_USER)
+                .setMethod(Method.POST)
+                .addBodyParameter("firstname", "Ramesh")
+                .addBodyParameter("lastname", "Kumar")
+                .setTag(this)
+                .setPriority(Priority.LOW)
+                .setResponseAs(RESPONSE.JSON_OBJECT).build();
 
+        androidNetworkingRequest.addRequest(new AndroidNetworkingResponse.SuccessListener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d(TAG, "onResponse object : " + response.toString());
+            }
+        }, new AndroidNetworkingResponse.ErrorListener() {
+            @Override
+            public void onError(AndroidNetworkingError error) {
+                Log.d(TAG, "onError : " + error.getContent());
+            }
+        });
     }
 }
