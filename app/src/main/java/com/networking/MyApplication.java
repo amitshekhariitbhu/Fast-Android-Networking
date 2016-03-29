@@ -12,9 +12,6 @@ public class MyApplication extends Application {
     private static MyApplication appInstance = null;
 
     public static MyApplication getInstance() {
-        if (appInstance == null) {
-            appInstance = new MyApplication();
-        }
         return appInstance;
     }
 
@@ -23,5 +20,8 @@ public class MyApplication extends Application {
         super.onCreate();
         appInstance = this;
         AndroidNetworking.initialize(getApplicationContext());
+        //For testing purpose only: network interceptor : enable it only for non-images request checking
+//        Stetho.initializeWithDefaults(getApplicationContext());
+//        AndroidNetworkingOkHttp.addNetworkInterceptor(new StethoInterceptor());
     }
 }
