@@ -3,6 +3,7 @@ package com.androidnetworking;
 import android.content.Context;
 
 import com.androidnetworking.internal.AndroidNetworkingImageLoader;
+import com.androidnetworking.internal.AndroidNetworkingOkHttp;
 import com.androidnetworking.internal.AndroidNetworkingRequestQueue;
 
 /**

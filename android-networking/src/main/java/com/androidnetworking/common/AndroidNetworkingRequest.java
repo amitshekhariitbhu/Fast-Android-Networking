@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.concurrent.Future;
 
 import okhttp3.Headers;
+import okhttp3.HttpUrl;
 import okio.Buffer;
 import okio.BufferedSource;
 import okio.Okio;
@@ -90,7 +91,11 @@ public class AndroidNetworkingRequest {
     }
 
     public String getUrl() {
-        return mUrl;
+        HttpUrl.Builder urlBuilder = HttpUrl.parse(mUrl).newBuilder();
+        for (HashMap.Entry<String, String> entry : mQueryParameterMap.entrySet()) {
+            urlBuilder.addQueryParameter(entry.getKey(), entry.getValue());
+        }
+        return urlBuilder.build().toString();
     }
 
     public int getSequenceNumber() {
@@ -279,7 +284,11 @@ public class AndroidNetworkingRequest {
     }
 
     public Headers getHeaders() {
-        return null;
+        Headers.Builder builder = new Headers.Builder();
+        for (HashMap.Entry<String, String> entry : mHeadersMap.entrySet()) {
+            builder.add(entry.getKey(), entry.getValue());
+        }
+        return builder.build();
     }
 
 

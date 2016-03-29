@@ -6,13 +6,17 @@ package com.androidnetworking.internal;
 
 import android.support.annotation.NonNull;
 
+import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.AndroidNetworkingData;
-import com.androidnetworking.error.AndroidNetworkingError;
 import com.androidnetworking.common.AndroidNetworkingRequest;
+import com.androidnetworking.common.Constants;
+import com.androidnetworking.error.AndroidNetworkingError;
+import com.androidnetworking.utils.Utils;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.Cache;
 import okhttp3.Headers;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
@@ -35,16 +39,11 @@ public class AndroidNetworkingOkHttp {
     public static final String HEADER_USER_AGENT = "User-Agent";
 
     private static OkHttpClient sHttpClient = new OkHttpClient().newBuilder()
+            .cache(Utils.getCache(AndroidNetworking.getContext(), Constants.MAX_CACHE_SIZE, Constants.CACHE_DIR_NAME))
             .connectTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
             .build();
-
-    public static void addNetworkInterceptor(@NonNull Interceptor interceptor) {
-        sHttpClient = sHttpClient.newBuilder()
-                .addNetworkInterceptor(interceptor)
-                .build();
-    }
 
     private static RequestBody convertBody(AndroidNetworkingRequest request, BufferedSource body) throws AndroidNetworkingError {
         if (body == null && request.getMethod() == DELETE) {
@@ -89,6 +88,7 @@ public class AndroidNetworkingOkHttp {
 //                .build();
 
         try {
+
             Request.Builder okBuilder = new Request.Builder().url(request.getUrl());
             okBuilder.addHeader(HEADER_USER_AGENT, "Android");
 
@@ -162,6 +162,12 @@ public class AndroidNetworkingOkHttp {
         }
 
         return data;
+    }
+
+    public static void addNetworkInterceptor(@NonNull Interceptor interceptor) {
+        sHttpClient = sHttpClient.newBuilder()
+                .addNetworkInterceptor(interceptor)
+                .build();
     }
 
     public static void removeNetworkInterceptor(@NonNull Interceptor interceptor) {
