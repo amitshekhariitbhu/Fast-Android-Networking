@@ -3,9 +3,6 @@ package com.networking;
 import android.app.Application;
 
 import com.androidnetworking.AndroidNetworking;
-import com.androidnetworking.internal.AndroidNetworkingOkHttp;
-import com.facebook.stetho.Stetho;
-import com.facebook.stetho.okhttp3.StethoInterceptor;
 
 /**
  * Created by amitshekhar on 22/03/16.
@@ -24,7 +21,7 @@ public class MyApplication extends Application {
         appInstance = this;
         AndroidNetworking.initialize(getApplicationContext());
         //For testing purpose only: network interceptor : enable it only for non-images request checking
-        Stetho.initializeWithDefaults(getApplicationContext());
-        AndroidNetworkingOkHttp.addNetworkInterceptor(new StethoInterceptor());
+//        Stetho.initializeWithDefaults(getApplicationContext());
+//        AndroidNetworkingOkHttp.addNetworkInterceptor(new StethoInterceptor());
     }
 }

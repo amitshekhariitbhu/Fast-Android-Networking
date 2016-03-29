@@ -20,8 +20,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Future;
 
+import okhttp3.FormBody;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
+import okhttp3.RequestBody;
 import okio.Buffer;
 import okio.BufferedSource;
 import okio.Okio;
@@ -247,44 +249,12 @@ public class AndroidNetworkingRequest {
         mSuccessListener.onResponse(response.getResult());
     }
 
-    protected String getParamsEncoding() {
-        return PARAMS_ENCODING;
-    }
-
-    public String getBodyContentType() {
-        return "application/x-www-form-urlencoded; charset=" + getParamsEncoding();
-    }
-
-    protected Map<String, String> getParams() {
-        return mBodyParameterMap;
-    }
-
-    public BufferedSource getBody() {
-        Map<String, String> params = getParams();
-        if (params != null && params.size() > 0) {
-            Buffer buffer = new Buffer();
-            buffer.writeUtf8(encodeParameters(params, getParamsEncoding()));
-
-            return buffer;
+    public RequestBody getRequestBody() {
+        FormBody.Builder builder = new FormBody.Builder();
+        for (HashMap.Entry<String, String> entry : mBodyParameterMap.entrySet()) {
+            builder.add(entry.getKey(), entry.getValue());
         }
-
-        return null;
-    }
-
-    private String encodeParameters(Map<String, String> params, String paramsEncoding) {
-        StringBuilder encodedParams = new StringBuilder();
-
-        try {
-            for (Map.Entry<String, String> entry : params.entrySet()) {
-                encodedParams.append(URLEncoder.encode(entry.getKey(), paramsEncoding));
-                encodedParams.append('=');
-                encodedParams.append(URLEncoder.encode(entry.getValue(), paramsEncoding));
-                encodedParams.append('&');
-            }
-            return encodedParams.toString();
-        } catch (UnsupportedEncodingException uee) {
-            throw new RuntimeException("Encoding not supported: " + paramsEncoding, uee);
-        }
+        return builder.build();
     }
 
     public Headers getHeaders() {

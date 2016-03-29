@@ -16,16 +16,11 @@ import com.androidnetworking.utils.Utils;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-import okhttp3.Cache;
 import okhttp3.Headers;
 import okhttp3.Interceptor;
-import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
-import okio.Buffer;
-import okio.BufferedSource;
 
 import static com.androidnetworking.common.Method.DELETE;
 import static com.androidnetworking.common.Method.GET;
@@ -45,47 +40,9 @@ public class AndroidNetworkingOkHttp {
             .writeTimeout(60, TimeUnit.SECONDS)
             .build();
 
-    private static RequestBody convertBody(AndroidNetworkingRequest request, BufferedSource body) throws AndroidNetworkingError {
-        if (body == null && request.getMethod() == DELETE) {
-            return RequestBody.create(null, new byte[0]);
-        }
-
-        try {
-            if (body == null) {
-                body = new Buffer();
-            }
-
-            return RequestBody.create(MediaType.parse(request.getBodyContentType()), body.readByteArray());
-        } catch (IOException ioe) {
-            throw new AndroidNetworkingError(ioe);
-        }
-    }
-
-    private static BufferedSource getBody(AndroidNetworkingRequest request) {
-        if (request.getMethod() == GET || request.getMethod() == HEAD) {
-            return null;
-        }
-        return request.getBody();
-    }
-
-
     public static AndroidNetworkingData performNetworkRequest(AndroidNetworkingRequest request) throws AndroidNetworkingError {
         AndroidNetworkingData data = new AndroidNetworkingData();
         Request okRequest = null;
-
-//        sHttpClient = sHttpClient.newBuilder()
-//                .cookieJar(new CookieJar() {
-//                    @Override
-//                    public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
-//
-//                    }
-//
-//                    @Override
-//                    public List<Cookie> loadForRequest(HttpUrl url) {
-//                        return null;
-//                    }
-//                })
-//                .build();
 
         try {
 
@@ -100,22 +57,21 @@ public class AndroidNetworkingOkHttp {
                 }
             }
 
-            BufferedSource body = getBody(request);
             switch (request.getMethod()) {
                 case GET: {
                     okBuilder = okBuilder.get();
                     break;
                 }
                 case POST: {
-                    okBuilder = okBuilder.post(convertBody(request, body));
+                    okBuilder = okBuilder.post(request.getRequestBody());
                     break;
                 }
                 case PUT: {
-                    okBuilder = okBuilder.put(convertBody(request, body));
+                    okBuilder = okBuilder.put(request.getRequestBody());
                     break;
                 }
                 case DELETE: {
-                    okBuilder = okBuilder.delete(convertBody(request, body));
+                    okBuilder = okBuilder.delete(request.getRequestBody());
                     break;
                 }
                 case HEAD: {
@@ -123,7 +79,7 @@ public class AndroidNetworkingOkHttp {
                     break;
                 }
                 case PATCH: {
-                    okBuilder = okBuilder.patch(convertBody(request, body));
+                    okBuilder = okBuilder.patch(request.getRequestBody());
                     break;
                 }
             }
@@ -137,10 +93,6 @@ public class AndroidNetworkingOkHttp {
 
             okRequest = okBuilder.build();
             Response okResponse = sHttpClient.newCall(okRequest).execute();
-
-            if (body != null) {
-                body.close();
-            }
 
             if (previousFollowing != sHttpClient.followRedirects()) {
                 sHttpClient = sHttpClient.newBuilder()

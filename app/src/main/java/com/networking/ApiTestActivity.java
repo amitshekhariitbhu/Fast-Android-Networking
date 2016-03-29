@@ -121,8 +121,8 @@ public class ApiTestActivity extends AppCompatActivity {
         AndroidNetworkingRequest androidNetworkingRequest = new AndroidNetworkingRequest.Builder()
                 .setUrl(ApiEndPoint.BASE_URL + ApiEndPoint.POST_CREATE_AN_USER)
                 .setMethod(Method.POST)
-                .addBodyParameter("firstname", "Ramesh")
-                .addBodyParameter("lastname", "Kumar")
+                .addBodyParameter("firstname", "Suman")
+                .addBodyParameter("lastname", "Shekhar")
                 .setTag(this)
                 .setPriority(Priority.LOW)
                 .setResponseAs(RESPONSE.JSON_OBJECT).build();
