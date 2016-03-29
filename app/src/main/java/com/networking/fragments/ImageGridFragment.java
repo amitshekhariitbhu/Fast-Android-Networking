@@ -183,7 +183,8 @@ public class ImageGridFragment extends Fragment implements AdapterView.OnItemCli
             if (imageView.getLayoutParams().height != mItemHeight) {
                 imageView.setLayoutParams(mImageViewLayoutParams);
             }
-            imageView.setDefaultImageResId(R.mipmap.ic_launcher);
+            imageView.setDefaultImageResId(R.drawable.ic_toys_black_24dp);
+            imageView.setErrorImageResId(R.drawable.ic_error_outline_black_24dp);
             imageView.setImageUrl(Images.imageThumbUrls[position - mNumColumns]);
 
             return imageView;

@@ -40,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         imageView = (ImageView) findViewById(R.id.imageView);
         greatImageView = (GreatImageView) findViewById(R.id.greatImageView);
+        greatImageView.setDefaultImageResId(R.drawable.ic_toys_black_24dp);
+        greatImageView.setErrorImageResId(R.drawable.ic_error_outline_black_24dp);
         greatImageView.setImageUrl(Images.imageThumbUrls[0]);
     }
 
@@ -140,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void loadImageFromImageLoader(View view) {
         AndroidNetworkingImageLoader.getInstance().get(URL_IMAGE_LOADER, AndroidNetworkingImageLoader.getImageListener(imageView,
-                R.mipmap.ic_launcher, R.mipmap.ic_launcher));
+                R.drawable.ic_toys_black_24dp, R.drawable.ic_error_outline_black_24dp));
     }
 
     public void startGridActivity(View view) {
