@@ -12,6 +12,9 @@ import com.androidnetworking.internal.AndroidNetworkingOkHttp;
 
 import java.io.IOException;
 
+import static com.androidnetworking.common.RequestType.DOWNLOAD;
+import static com.androidnetworking.common.RequestType.SIMPLE;
+
 /**
  * Created by amitshekhar on 22/03/16.
  */
@@ -31,9 +34,21 @@ public class DataHunter implements Runnable {
     @Override
     public void run() {
         Log.d(TAG, "execution started for sequenceNumber: " + request.getSequenceNumber());
+        switch (request.getRequestType()) {
+            case SIMPLE:
+                goForSimpleRequest();
+                break;
+            case DOWNLOAD:
+                goForDownloadRequest();
+                break;
+        }
+        Log.d(TAG, "execution done for sequenceNumber: " + request.getSequenceNumber());
+    }
+
+    private void goForSimpleRequest() {
         AndroidNetworkingData data = null;
         try {
-            data = AndroidNetworkingOkHttp.performNetworkRequest(request);
+            data = AndroidNetworkingOkHttp.performSimpleRequest(request);
             if (data.isNotModified() && request.isResponseDelivered()) {
                 request.finish();
                 return;
@@ -68,7 +83,26 @@ public class DataHunter implements Runnable {
                 }
             }
         }
-        Log.d(TAG, "execution done for sequenceNumber: " + request.getSequenceNumber());
+    }
+
+    private void goForDownloadRequest() {
+        AndroidNetworkingData data = null;
+        try {
+            data = AndroidNetworkingOkHttp.performDownloadRequest(request);
+            request.setResponseDelivered(true);
+            if (data.code >= 400) {
+                AndroidNetworkingError error = new AndroidNetworkingError();
+                error.setContent("errorCode more than equal to 400");
+                deliverDownloadError(request, error);
+            }
+        } catch (AndroidNetworkingError se) {
+            se.setContent("some error occurred one");
+            deliverDownloadError(request, se);
+        } catch (Exception e) {
+            AndroidNetworkingError se = new AndroidNetworkingError(e);
+            se.setContent("some error occurred two");
+            deliverDownloadError(request, se);
+        }
     }
 
     public Priority getPriority() {
@@ -80,6 +114,16 @@ public class DataHunter implements Runnable {
         Core.getInstance().getExecutorSupplier().forMainThreadTasks().execute(new Runnable() {
             public void run() {
                 request.deliverError(error);
+                request.finish();
+            }
+        });
+    }
+
+    private void deliverDownloadError(final AndroidNetworkingRequest request, final AndroidNetworkingError error) {
+        Log.d(TAG, "Delivering failed response for " + request.getSequenceNumber());
+        Core.getInstance().getExecutorSupplier().forMainThreadTasks().execute(new Runnable() {
+            public void run() {
+                request.deliverDownloadError(error);
                 request.finish();
             }
         });

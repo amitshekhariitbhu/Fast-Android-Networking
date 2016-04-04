@@ -11,50 +11,41 @@ public class AndroidNetworkingResponse<T> {
 
     private final AndroidNetworkingError mError;
 
-    public interface SuccessListener<T>
-    {
+    public interface SuccessListener<T> {
         void onResponse(T response);
     }
 
-    public interface ErrorListener
-    {
+    public interface ErrorListener {
         void onError(AndroidNetworkingError error);
     }
 
-    public static <T> AndroidNetworkingResponse<T> success(T result)
-    {
+    public static <T> AndroidNetworkingResponse<T> success(T result) {
         return new AndroidNetworkingResponse<>(result);
     }
 
-    public static <T> AndroidNetworkingResponse<T> failed(AndroidNetworkingError error)
-    {
+    public static <T> AndroidNetworkingResponse<T> failed(AndroidNetworkingError error) {
         return new AndroidNetworkingResponse<>(error);
     }
 
-    private AndroidNetworkingResponse(T result)
-    {
+    private AndroidNetworkingResponse(T result) {
         this.mResult = result;
         this.mError = null;
     }
 
-    private AndroidNetworkingResponse(AndroidNetworkingError error)
-    {
+    private AndroidNetworkingResponse(AndroidNetworkingError error) {
         this.mResult = null;
         this.mError = error;
     }
 
-    public T getResult()
-    {
+    public T getResult() {
         return mResult;
     }
 
-    public boolean isSuccess()
-    {
+    public boolean isSuccess() {
         return mError == null;
     }
 
-    public AndroidNetworkingError getError()
-    {
+    public AndroidNetworkingError getError() {
         return mError;
     }
 

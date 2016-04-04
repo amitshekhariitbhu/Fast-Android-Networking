@@ -6,6 +6,7 @@ import android.util.Log;
 import android.widget.ImageView;
 
 import com.androidnetworking.error.AndroidNetworkingError;
+import com.androidnetworking.interfaces.DownloadProgressListener;
 import com.androidnetworking.internal.AndroidNetworkingRequestQueue;
 
 import org.json.JSONArray;
@@ -14,18 +15,13 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.Future;
 
 import okhttp3.FormBody;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
 import okhttp3.RequestBody;
-import okio.Buffer;
-import okio.BufferedSource;
 import okio.Okio;
 
 /**
@@ -37,6 +33,7 @@ public class AndroidNetworkingRequest {
 
     private int mMethod;
     private Priority mPriority;
+    private int mRequestType;
     private String mUrl;
     private int sequenceNumber;
     private Object mTag;
@@ -47,13 +44,15 @@ public class AndroidNetworkingRequest {
     private HashMap<String, String> mQueryParameterMap = new HashMap<String, String>();
     private HashMap<String, String> mPathParameterMap = new HashMap<String, String>();
     private HashMap<String, File> mMultiPartFileMap = new HashMap<String, File>();
+    private String mDirPath;
+    private String mFileName;
     private static final Object sDecodeLock = new Object();
 
     private boolean mResponseDelivered = false;
     private Future<?> future;
     private AndroidNetworkingResponse.SuccessListener mSuccessListener;
     private AndroidNetworkingResponse.ErrorListener mErrorListener;
-    private static final String PARAMS_ENCODING = "UTF-8";
+    private DownloadProgressListener mDownloadProgressListener;
 
     private Bitmap.Config mDecodeConfig;
     private int mMaxWidth;
@@ -61,6 +60,7 @@ public class AndroidNetworkingRequest {
     private ImageView.ScaleType mScaleType;
 
     private AndroidNetworkingRequest(Builder builder) {
+        this.mRequestType = RequestType.SIMPLE;
         this.mMethod = builder.mMethod;
         this.mPriority = builder.mPriority;
         this.mUrl = builder.mUrl;
@@ -78,9 +78,27 @@ public class AndroidNetworkingRequest {
         this.mMultiPartFileMap = builder.mMultiPartFileMap;
     }
 
+    private AndroidNetworkingRequest(DownloadBuilder builder) {
+        this.mRequestType = RequestType.DOWNLOAD;
+        this.mMethod = Method.GET;
+        this.mPriority = builder.mPriority;
+        this.mUrl = builder.mUrl;
+        this.mTag = builder.mTag;
+        this.mDirPath = builder.mDirPath;
+        this.mFileName = builder.mFileName;
+        this.mHeadersMap = builder.mHeadersMap;
+        this.mQueryParameterMap = builder.mQueryParameterMap;
+        this.mPathParameterMap = builder.mPathParameterMap;
+    }
+
     public void addRequest(AndroidNetworkingResponse.SuccessListener successListener, AndroidNetworkingResponse.ErrorListener errorListener) {
         this.mSuccessListener = successListener;
         this.mErrorListener = errorListener;
+        AndroidNetworkingRequestQueue.getInstance().addRequest(this);
+    }
+
+    public void download(DownloadProgressListener downloadProgressListener) {
+        this.mDownloadProgressListener = downloadProgressListener;
         AndroidNetworkingRequestQueue.getInstance().addRequest(this);
     }
 
@@ -114,6 +132,14 @@ public class AndroidNetworkingRequest {
 
     public Object getTag() {
         return mTag;
+    }
+
+    public int getRequestType() {
+        return mRequestType;
+    }
+
+    public DownloadProgressListener getDownloadProgressListener() {
+        return mDownloadProgressListener;
     }
 
     public RESPONSE getResponseAs() {
@@ -156,6 +182,14 @@ public class AndroidNetworkingRequest {
         return mMaxHeight;
     }
 
+    public String getDirPath() {
+        return mDirPath;
+    }
+
+    public String getFileName() {
+        return mFileName;
+    }
+
     public ImageView.ScaleType getScaleType() {
         return mScaleType;
     }
@@ -192,6 +226,7 @@ public class AndroidNetworkingRequest {
     public void finish() {
         mErrorListener = null;
         mSuccessListener = null;
+        mDownloadProgressListener = null;
         AndroidNetworkingRequestQueue.getInstance().finish(this);
     }
 
@@ -243,6 +278,10 @@ public class AndroidNetworkingRequest {
 
     public void deliverError(AndroidNetworkingError error) {
         mErrorListener.onError(error);
+    }
+
+    public void deliverDownloadError(AndroidNetworkingError error) {
+        mDownloadProgressListener.onError(error);
     }
 
     public void deliverResponse(AndroidNetworkingResponse response) {
@@ -382,17 +421,12 @@ public class AndroidNetworkingRequest {
         private HashMap<String, File> mMultiPartFileMap = new HashMap<String, File>();
 
         public Builder() {
+
         }
 
         @Override
-        public Builder setMethod(int method) {
-            this.mMethod = method;
-            return this;
-        }
-
-        @Override
-        public Builder setResponseAs(RESPONSE responseAs) {
-            this.mResponseAs = responseAs;
+        public Builder setUrl(String url) {
+            this.mUrl = url;
             return this;
         }
 
@@ -403,74 +437,8 @@ public class AndroidNetworkingRequest {
         }
 
         @Override
-        public Builder setUrl(String url) {
-            this.mUrl = url;
-            return this;
-        }
-
-        @Override
         public Builder setTag(Object tag) {
             this.mTag = tag;
-            return this;
-        }
-
-        @Override
-        public Builder setBitmapConfig(Bitmap.Config bitmapConfig) {
-            this.mDecodeConfig = bitmapConfig;
-            return this;
-        }
-
-        @Override
-        public Builder setBitmapMaxHeight(int maxHeight) {
-            this.mMaxHeight = maxHeight;
-            return this;
-        }
-
-        @Override
-        public Builder setBitmapMaxWidth(int maxWidth) {
-            this.mMaxWidth = maxWidth;
-            return this;
-        }
-
-        @Override
-        public Builder setImageScaleType(ImageView.ScaleType imageScaleType) {
-            this.mScaleType = imageScaleType;
-            return this;
-        }
-
-        @Override
-        public Builder addHeaders(String key, String value) {
-            mHeadersMap.put(key, value);
-            return this;
-        }
-
-        @Override
-        public Builder addBodyParameter(String key, String value) {
-            mBodyParameterMap.put(key, value);
-            return this;
-        }
-
-        @Override
-        public Builder addMultipartFile(String key, String value) {
-            mMultiPartParameterMap.put(key, value);
-            return this;
-        }
-
-        @Override
-        public Builder addMultipartFile(String key, File file) {
-            mMultiPartFileMap.put(key, file);
-            return this;
-        }
-
-        @Override
-        public Builder addMultipartFile(String key, String contentType, File file) {
-            mMultiPartFileMap.put(key, file);
-            return this;
-        }
-
-        @Override
-        public Builder addMultipartFile(String key, String fileName, String contentType, File file) {
-            mMultiPartFileMap.put(key, file);
             return this;
         }
 
@@ -483,6 +451,135 @@ public class AndroidNetworkingRequest {
         @Override
         public Builder addPathParameter(String key, String value) {
             mPathParameterMap.put(key, value);
+            return this;
+        }
+
+        @Override
+        public Builder addHeaders(String key, String value) {
+            mHeadersMap.put(key, value);
+            return this;
+        }
+
+        public Builder setMethod(int method) {
+            this.mMethod = method;
+            return this;
+        }
+
+        public Builder setResponseAs(RESPONSE responseAs) {
+            this.mResponseAs = responseAs;
+            return this;
+        }
+
+        public Builder setBitmapConfig(Bitmap.Config bitmapConfig) {
+            this.mDecodeConfig = bitmapConfig;
+            return this;
+        }
+
+        public Builder setBitmapMaxHeight(int maxHeight) {
+            this.mMaxHeight = maxHeight;
+            return this;
+        }
+
+        public Builder setBitmapMaxWidth(int maxWidth) {
+            this.mMaxWidth = maxWidth;
+            return this;
+        }
+
+        public Builder setImageScaleType(ImageView.ScaleType imageScaleType) {
+            this.mScaleType = imageScaleType;
+            return this;
+        }
+
+        public Builder addBodyParameter(String key, String value) {
+            mBodyParameterMap.put(key, value);
+            return this;
+        }
+
+        public Builder addMultipartFile(String key, String value) {
+            mMultiPartParameterMap.put(key, value);
+            return this;
+        }
+
+        public Builder addMultipartFile(String key, File file) {
+            mMultiPartFileMap.put(key, file);
+            return this;
+        }
+
+        public Builder addMultipartFile(String key, String contentType, File file) {
+            mMultiPartFileMap.put(key, file);
+            return this;
+        }
+
+        public Builder addMultipartFile(String key, String fileName, String contentType, File file) {
+            mMultiPartFileMap.put(key, file);
+            return this;
+        }
+
+
+        public AndroidNetworkingRequest build() {
+            AndroidNetworkingRequest androidNetworkingRequest = new AndroidNetworkingRequest(this);
+            return androidNetworkingRequest;
+        }
+    }
+
+    public static class DownloadBuilder implements RequestBuilder {
+
+        private Priority mPriority;
+        private String mUrl;
+        private Object mTag;
+        private HashMap<String, String> mHeadersMap = new HashMap<String, String>();
+        private HashMap<String, String> mQueryParameterMap = new HashMap<String, String>();
+        private HashMap<String, String> mPathParameterMap = new HashMap<String, String>();
+        private String mDirPath;
+        private String mFileName;
+
+        public DownloadBuilder() {
+
+        }
+
+        @Override
+        public DownloadBuilder setPriority(Priority priority) {
+            this.mPriority = priority;
+            return this;
+        }
+
+        @Override
+        public DownloadBuilder setUrl(String url) {
+            this.mUrl = url;
+            return this;
+        }
+
+        @Override
+        public DownloadBuilder setTag(Object tag) {
+            this.mTag = tag;
+            return this;
+        }
+
+        @Override
+        public DownloadBuilder addHeaders(String key, String value) {
+            mHeadersMap.put(key, value);
+            return this;
+        }
+
+        @Override
+        public DownloadBuilder addQueryParameter(String key, String value) {
+            mQueryParameterMap.put(key, value);
+            return this;
+        }
+
+        @Override
+        public DownloadBuilder addPathParameter(String key, String value) {
+            mPathParameterMap.put(key, value);
+            return this;
+        }
+
+        public DownloadBuilder setDirPath(String path) {
+            this.mDirPath = path;
+            return this;
+        }
+
+        public DownloadBuilder setFileName(String fileName) {
+            this.mFileName = fileName;
             return this;
         }
 
