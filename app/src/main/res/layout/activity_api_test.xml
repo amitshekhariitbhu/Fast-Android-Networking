@@ -53,4 +53,21 @@
         android:text="/createAnUser" />
 
 
+    <Button
+        android:id="@+id/downloadFile"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_margin="8dp"
+        android:onClick="downloadFile"
+        android:text="downloadFile" />
+
+
+    <Button
+        android:id="@+id/downloadImage"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_margin="8dp"
+        android:onClick="downloadImage"
+        android:text="downloadImage" />
+
 </LinearLayout>
