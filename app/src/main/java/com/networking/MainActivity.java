@@ -125,10 +125,11 @@ public class MainActivity extends AppCompatActivity {
                 .setBitmapMaxWidth(0)
                 .setBitmapConfig(Bitmap.Config.ARGB_8888)
                 .setResponseAs(RESPONSE.BITMAP).build();
-
+        final long startTime = System.currentTimeMillis();
         androidNetworkingRequest.addRequest(new AndroidNetworkingResponse.SuccessListener<Bitmap>() {
             @Override
             public void onResponse(Bitmap response) {
+                Log.d(TAG, "timeTaken : " + ((System.currentTimeMillis() - startTime) / 1000));
                 Log.d(TAG, "onResponse Bitmap");
                 imageView.setImageBitmap(response);
             }
