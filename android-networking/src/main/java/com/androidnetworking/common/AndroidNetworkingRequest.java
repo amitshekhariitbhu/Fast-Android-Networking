@@ -7,6 +7,7 @@ import android.widget.ImageView;
 
 import com.androidnetworking.error.AndroidNetworkingError;
 import com.androidnetworking.interfaces.DownloadProgressListener;
+import com.androidnetworking.interfaces.RequestListener;
 import com.androidnetworking.internal.AndroidNetworkingRequestQueue;
 
 import org.json.JSONArray;
@@ -49,9 +50,8 @@ public class AndroidNetworkingRequest {
     private static final Object sDecodeLock = new Object();
 
     private boolean mResponseDelivered = false;
-    private Future<?> future;
-    private AndroidNetworkingResponse.SuccessListener mSuccessListener;
-    private AndroidNetworkingResponse.ErrorListener mErrorListener;
+    private Future future;
+    private RequestListener mRequestListener;
     private DownloadProgressListener mDownloadProgressListener;
 
     private Bitmap.Config mDecodeConfig;
@@ -91,9 +91,8 @@ public class AndroidNetworkingRequest {
         this.mPathParameterMap = builder.mPathParameterMap;
     }
 
-    public void addRequest(AndroidNetworkingResponse.SuccessListener successListener, AndroidNetworkingResponse.ErrorListener errorListener) {
-        this.mSuccessListener = successListener;
-        this.mErrorListener = errorListener;
+    public void addRequest(RequestListener requestListener) {
+        this.mRequestListener = requestListener;
         AndroidNetworkingRequestQueue.getInstance().addRequest(this);
     }
 
@@ -224,8 +223,7 @@ public class AndroidNetworkingRequest {
     }
 
     public void finish() {
-        mErrorListener = null;
-        mSuccessListener = null;
+        mRequestListener = null;
         mDownloadProgressListener = null;
         AndroidNetworkingRequestQueue.getInstance().finish(this);
     }
@@ -272,12 +270,11 @@ public class AndroidNetworkingRequest {
         } catch (IOException ioe) {
             throw new RuntimeException("Unable to parse error response", ioe);
         }
-
         return error;
     }
 
     public void deliverError(AndroidNetworkingError error) {
-        mErrorListener.onError(error);
+        mRequestListener.onError(error);
     }
 
     public void deliverDownloadError(AndroidNetworkingError error) {
@@ -285,7 +282,7 @@ public class AndroidNetworkingRequest {
     }
 
     public void deliverResponse(AndroidNetworkingResponse response) {
-        mSuccessListener.onResponse(response.getResult());
+        mRequestListener.onResponse(response.getResult());
     }
 
     public RequestBody getRequestBody() {

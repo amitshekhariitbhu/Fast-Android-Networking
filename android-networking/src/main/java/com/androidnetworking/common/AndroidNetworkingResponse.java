@@ -11,14 +11,6 @@ public class AndroidNetworkingResponse<T> {
 
     private final AndroidNetworkingError mError;
 
-    public interface SuccessListener<T> {
-        void onResponse(T response);
-    }
-
-    public interface ErrorListener {
-        void onError(AndroidNetworkingError error);
-    }
-
     public static <T> AndroidNetworkingResponse<T> success(T result) {
         return new AndroidNetworkingResponse<>(result);
     }

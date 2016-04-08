@@ -6,12 +6,12 @@ import android.util.Log;
 import android.view.View;
 
 import com.androidnetworking.common.AndroidNetworkingRequest;
-import com.androidnetworking.common.AndroidNetworkingResponse;
 import com.androidnetworking.common.Method;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.common.RESPONSE;
 import com.androidnetworking.error.AndroidNetworkingError;
 import com.androidnetworking.interfaces.DownloadProgressListener;
+import com.androidnetworking.interfaces.RequestListener;
 import com.networking.utils.Utils;
 
 import org.json.JSONArray;
@@ -40,12 +40,12 @@ public class ApiTestActivity extends AppCompatActivity {
                 .setPriority(Priority.LOW)
                 .setResponseAs(RESPONSE.JSON_ARRAY).build();
 
-        androidNetworkingRequest.addRequest(new AndroidNetworkingResponse.SuccessListener<JSONArray>() {
+        androidNetworkingRequest.addRequest(new RequestListener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 Log.d(TAG, "onResponse array : " + response.toString());
             }
-        }, new AndroidNetworkingResponse.ErrorListener() {
+
             @Override
             public void onError(AndroidNetworkingError error) {
                 Log.d(TAG, "onError : " + error.getContent());
@@ -62,12 +62,12 @@ public class ApiTestActivity extends AppCompatActivity {
                 .setPriority(Priority.LOW)
                 .setResponseAs(RESPONSE.JSON_OBJECT).build();
 
-        androidNetworkingRequest.addRequest(new AndroidNetworkingResponse.SuccessListener<JSONObject>() {
+        androidNetworkingRequest.addRequest(new RequestListener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 Log.d(TAG, "onResponse object : " + response.toString());
             }
-        }, new AndroidNetworkingResponse.ErrorListener() {
+
             @Override
             public void onError(AndroidNetworkingError error) {
                 Log.d(TAG, "onError : " + error.getContent());
@@ -84,12 +84,12 @@ public class ApiTestActivity extends AppCompatActivity {
                 .setPriority(Priority.LOW)
                 .setResponseAs(RESPONSE.JSON_OBJECT).build();
 
-        androidNetworkingRequest.addRequest(new AndroidNetworkingResponse.SuccessListener<JSONObject>() {
+        androidNetworkingRequest.addRequest(new RequestListener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 Log.d(TAG, "onResponse object : " + response.toString());
             }
-        }, new AndroidNetworkingResponse.ErrorListener() {
+
             @Override
             public void onError(AndroidNetworkingError error) {
                 Log.d(TAG, "onError : " + error.getContent());
@@ -106,12 +106,12 @@ public class ApiTestActivity extends AppCompatActivity {
                 .setPriority(Priority.LOW)
                 .setResponseAs(RESPONSE.JSON_OBJECT).build();
 
-        androidNetworkingRequest.addRequest(new AndroidNetworkingResponse.SuccessListener<JSONObject>() {
+        androidNetworkingRequest.addRequest(new RequestListener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 Log.d(TAG, "onResponse object : " + response.toString());
             }
-        }, new AndroidNetworkingResponse.ErrorListener() {
+
             @Override
             public void onError(AndroidNetworkingError error) {
                 Log.d(TAG, "onError : " + error.getContent());
@@ -129,12 +129,12 @@ public class ApiTestActivity extends AppCompatActivity {
                 .setPriority(Priority.LOW)
                 .setResponseAs(RESPONSE.JSON_OBJECT).build();
 
-        androidNetworkingRequest.addRequest(new AndroidNetworkingResponse.SuccessListener<JSONObject>() {
+        androidNetworkingRequest.addRequest(new RequestListener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 Log.d(TAG, "onResponse object : " + response.toString());
             }
-        }, new AndroidNetworkingResponse.ErrorListener() {
+
             @Override
             public void onError(AndroidNetworkingError error) {
                 Log.d(TAG, "onError : " + error.getContent());

@@ -9,11 +9,11 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.androidnetworking.common.AndroidNetworkingRequest;
-import com.androidnetworking.common.AndroidNetworkingResponse;
 import com.androidnetworking.common.Method;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.common.RESPONSE;
 import com.androidnetworking.error.AndroidNetworkingError;
+import com.androidnetworking.interfaces.RequestListener;
 import com.androidnetworking.internal.AndroidNetworkingImageLoader;
 import com.androidnetworking.internal.AndroidNetworkingRequestQueue;
 import com.androidnetworking.widget.GreatImageView;
@@ -54,13 +54,12 @@ public class MainActivity extends AppCompatActivity {
                     .setPriority(Priority.LOW)
                     .setResponseAs(RESPONSE.JSON_ARRAY).build();
 
-            androidNetworkingRequest.addRequest(new AndroidNetworkingResponse.SuccessListener<JSONArray>() {
+            androidNetworkingRequest.addRequest(new RequestListener<JSONArray>() {
                 @Override
                 public void onResponse(JSONArray response) {
                     Log.d(TAG, "onResponse array : " + response.toString());
-
                 }
-            }, new AndroidNetworkingResponse.ErrorListener() {
+
                 @Override
                 public void onError(AndroidNetworkingError error) {
                     Log.d(TAG, "onError : " + error.toString());
@@ -74,13 +73,12 @@ public class MainActivity extends AppCompatActivity {
                     .setPriority(Priority.HIGH)
                     .setResponseAs(RESPONSE.JSON_OBJECT).build();
 
-            androidNetworkingObjRequest.addRequest(new AndroidNetworkingResponse.SuccessListener<JSONObject>() {
+            androidNetworkingObjRequest.addRequest(new RequestListener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    Log.d(TAG, "onResponse array : " + response.toString());
-
+                    Log.d(TAG, "onResponse object : " + response.toString());
                 }
-            }, new AndroidNetworkingResponse.ErrorListener() {
+
                 @Override
                 public void onError(AndroidNetworkingError error) {
                     Log.d(TAG, "onError : " + error.toString());
@@ -96,13 +94,12 @@ public class MainActivity extends AppCompatActivity {
                 .setPriority(Priority.HIGH)
                 .setResponseAs(RESPONSE.JSON_ARRAY).build();
 
-        androidNetworkingRequest.addRequest(new AndroidNetworkingResponse.SuccessListener<JSONArray>() {
+        androidNetworkingRequest.addRequest(new RequestListener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 Log.d(TAG, "onResponse array : " + response.toString());
-
             }
-        }, new AndroidNetworkingResponse.ErrorListener() {
+
             @Override
             public void onError(AndroidNetworkingError error) {
                 Log.d(TAG, "onError : " + error.toString());
@@ -126,14 +123,14 @@ public class MainActivity extends AppCompatActivity {
                 .setBitmapConfig(Bitmap.Config.ARGB_8888)
                 .setResponseAs(RESPONSE.BITMAP).build();
         final long startTime = System.currentTimeMillis();
-        androidNetworkingRequest.addRequest(new AndroidNetworkingResponse.SuccessListener<Bitmap>() {
+        androidNetworkingRequest.addRequest(new RequestListener<Bitmap>() {
             @Override
             public void onResponse(Bitmap response) {
                 Log.d(TAG, "timeTaken : " + ((System.currentTimeMillis() - startTime) / 1000));
                 Log.d(TAG, "onResponse Bitmap");
                 imageView.setImageBitmap(response);
             }
-        }, new AndroidNetworkingResponse.ErrorListener() {
+
             @Override
             public void onError(AndroidNetworkingError error) {
                 Log.d(TAG, "onError : " + error.toString());

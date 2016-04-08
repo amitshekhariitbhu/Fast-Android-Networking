@@ -87,15 +87,7 @@ public class GreatImageView extends ImageView {
         AndroidNetworkingImageLoader.ImageContainer newContainer = AndroidNetworkingImageLoader.getInstance().get(mUrl,
                 new AndroidNetworkingImageLoader.ImageListener() {
                     @Override
-                    public void onError(AndroidNetworkingError error) {
-                        if (mErrorImageId != 0) {
-                            setImageResource(mErrorImageId);
-                        }
-                    }
-
-                    @Override
                     public void onResponse(final AndroidNetworkingImageLoader.ImageContainer response, boolean isImmediate) {
-
                         if (isImmediate && isInLayoutPass) {
                             post(new Runnable() {
                                 @Override
@@ -110,6 +102,18 @@ public class GreatImageView extends ImageView {
                             setImageBitmap(response.getBitmap());
                         } else if (mDefaultImageId != 0) {
                             setImageResource(mDefaultImageId);
+                        }
+                    }
+
+                    @Override
+                    public void onResponse(Object response) {
+
+                    }
+
+                    @Override
+                    public void onError(AndroidNetworkingError error) {
+                        if (mErrorImageId != 0) {
+                            setImageResource(mErrorImageId);
                         }
                     }
                 }, maxWidth, maxHeight, scaleType);

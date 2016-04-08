@@ -8,10 +8,10 @@ import android.widget.ImageView;
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.cache.LruBitmapCache;
 import com.androidnetworking.common.AndroidNetworkingRequest;
-import com.androidnetworking.common.AndroidNetworkingResponse;
 import com.androidnetworking.common.Method;
 import com.androidnetworking.common.RESPONSE;
 import com.androidnetworking.error.AndroidNetworkingError;
+import com.androidnetworking.interfaces.RequestListener;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -64,13 +64,6 @@ public class AndroidNetworkingImageLoader {
                                                  final int defaultImageResId, final int errorImageResId) {
         return new ImageListener() {
             @Override
-            public void onError(AndroidNetworkingError error) {
-                if (errorImageResId != 0) {
-                    view.setImageResource(errorImageResId);
-                }
-            }
-
-            @Override
             public void onResponse(ImageContainer response, boolean isImmediate) {
                 if (response.getBitmap() != null) {
                     view.setImageBitmap(response.getBitmap());
@@ -78,10 +71,22 @@ public class AndroidNetworkingImageLoader {
                     view.setImageResource(defaultImageResId);
                 }
             }
+
+            @Override
+            public void onResponse(Object response) {
+
+            }
+
+            @Override
+            public void onError(AndroidNetworkingError error) {
+                if (errorImageResId != 0) {
+                    view.setImageResource(errorImageResId);
+                }
+            }
         };
     }
 
-    public interface ImageListener extends AndroidNetworkingResponse.ErrorListener {
+    public interface ImageListener extends RequestListener {
 
         public void onResponse(ImageContainer response, boolean isImmediate);
     }
@@ -152,12 +157,12 @@ public class AndroidNetworkingImageLoader {
                 .setBitmapConfig(Bitmap.Config.RGB_565)
                 .setResponseAs(RESPONSE.BITMAP).build();
 
-        androidNetworkingRequest.addRequest(new AndroidNetworkingResponse.SuccessListener<Bitmap>() {
+        androidNetworkingRequest.addRequest(new RequestListener<Bitmap>() {
             @Override
             public void onResponse(Bitmap response) {
                 onGetImageSuccess(cacheKey, response);
             }
-        }, new AndroidNetworkingResponse.ErrorListener() {
+
             @Override
             public void onError(AndroidNetworkingError error) {
                 onGetImageError(cacheKey, error);
