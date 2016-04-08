@@ -106,11 +106,6 @@ public class GreatImageView extends ImageView {
                     }
 
                     @Override
-                    public void onResponse(Object response) {
-
-                    }
-
-                    @Override
                     public void onError(AndroidNetworkingError error) {
                         if (mErrorImageId != 0) {
                             setImageResource(mErrorImageId);

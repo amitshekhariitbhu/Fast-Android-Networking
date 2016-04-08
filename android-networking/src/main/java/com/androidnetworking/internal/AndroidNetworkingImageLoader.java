@@ -73,11 +73,6 @@ public class AndroidNetworkingImageLoader {
             }
 
             @Override
-            public void onResponse(Object response) {
-
-            }
-
-            @Override
             public void onError(AndroidNetworkingError error) {
                 if (errorImageResId != 0) {
                     view.setImageResource(errorImageResId);
@@ -86,9 +81,11 @@ public class AndroidNetworkingImageLoader {
         };
     }
 
-    public interface ImageListener extends RequestListener {
+    public interface ImageListener {
 
-        public void onResponse(ImageContainer response, boolean isImmediate);
+        void onResponse(ImageContainer response, boolean isImmediate);
+
+        void onError(AndroidNetworkingError error);
     }
 
     public boolean isCached(String requestUrl, int maxWidth, int maxHeight) {
