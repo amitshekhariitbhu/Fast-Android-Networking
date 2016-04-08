@@ -214,11 +214,11 @@ public class AndroidNetworkingRequest {
         return future.isCancelled();
     }
 
-    public Future<?> getFuture() {
+    public Future getFuture() {
         return future;
     }
 
-    public void setFuture(Future<?> future) {
+    public void setFuture(Future future) {
         this.future = future;
     }
 
@@ -228,7 +228,7 @@ public class AndroidNetworkingRequest {
         AndroidNetworkingRequestQueue.getInstance().finish(this);
     }
 
-    public AndroidNetworkingResponse<?> parseResponse(AndroidNetworkingData data) {
+    public AndroidNetworkingResponse parseResponse(AndroidNetworkingData data) {
         switch (mResponseAs) {
             case JSON_ARRAY:
                 try {
