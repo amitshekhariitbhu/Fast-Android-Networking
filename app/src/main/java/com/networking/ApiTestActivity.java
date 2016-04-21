@@ -1,6 +1,7 @@
 package com.networking;
 
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -201,7 +202,8 @@ public class ApiTestActivity extends AppCompatActivity {
         AndroidNetworkingRequest request = new AndroidNetworkingRequest.MultiPartBuilder()
                 .setUrl(ApiEndPoint.UPLOAD_IMAGE_URL)
                 .setPriority(Priority.MEDIUM)
-                .addMultipartFile("", new File(""))
+                .setResponseAs(RESPONSE.JSON_OBJECT)
+                .addMultipartFile("image", new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "test.png"))
                 .setTag(this)
                 .build();
 
