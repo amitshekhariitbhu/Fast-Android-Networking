@@ -70,4 +70,12 @@
         android:onClick="downloadImage"
         android:text="downloadImage" />
 
+    <Button
+        android:id="@+id/uploadImage"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_margin="8dp"
+        android:onClick="uploadImage"
+        android:text="uploadImage" />
+
 </LinearLayout>

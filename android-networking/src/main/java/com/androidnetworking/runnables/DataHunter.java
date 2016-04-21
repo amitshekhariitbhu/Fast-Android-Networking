@@ -13,6 +13,7 @@ import com.androidnetworking.internal.AndroidNetworkingOkHttp;
 import java.io.IOException;
 
 import static com.androidnetworking.common.RequestType.DOWNLOAD;
+import static com.androidnetworking.common.RequestType.MULTIPART;
 import static com.androidnetworking.common.RequestType.SIMPLE;
 
 /**
@@ -40,6 +41,9 @@ public class DataHunter implements Runnable {
                 break;
             case DOWNLOAD:
                 goForDownloadRequest();
+                break;
+            case MULTIPART:
+                goForUploadRequest();
                 break;
         }
         Log.d(TAG, "execution done for sequenceNumber: " + request.getSequenceNumber());
@@ -93,15 +97,55 @@ public class DataHunter implements Runnable {
             if (data.code >= 400) {
                 AndroidNetworkingError error = new AndroidNetworkingError();
                 error.setContent("errorCode more than equal to 400");
-                deliverDownloadError(request, error);
+                deliverError(request, error);
             }
         } catch (AndroidNetworkingError se) {
             se.setContent("some error occurred one");
-            deliverDownloadError(request, se);
+            deliverError(request, se);
         } catch (Exception e) {
             AndroidNetworkingError se = new AndroidNetworkingError(e);
             se.setContent("some error occurred two");
-            deliverDownloadError(request, se);
+            deliverError(request, se);
+        }
+    }
+
+    private void goForUploadRequest() {
+        AndroidNetworkingData data = null;
+        try {
+            data = AndroidNetworkingOkHttp.performUploadRequest(request);
+            if (data.isNotModified() && request.isResponseDelivered()) {
+                request.finish();
+                return;
+            }
+            request.setResponseDelivered(true);
+            if (data.code >= 400) {
+                AndroidNetworkingError error = new AndroidNetworkingError(data);
+                error = request.parseNetworkError(error);
+                deliverError(request, error);
+                return;
+            }
+
+            AndroidNetworkingResponse response = request.parseResponse(data);
+            if (!response.isSuccess()) {
+                deliverError(request, response.getError());
+                return;
+            }
+            deliverResponse(request, response);
+        } catch (AndroidNetworkingError se) {
+            se = request.parseNetworkError(se);
+            deliverError(request, se);
+        } catch (Exception e) {
+            AndroidNetworkingError se = new AndroidNetworkingError(e);
+            deliverError(request, se);
+
+        } finally {
+            if (data != null && data.source != null) {
+                try {
+                    data.source.close();
+                } catch (IOException ignored) {
+                    Log.d(TAG, "Unable to close source data");
+                }
+            }
         }
     }
 
@@ -114,16 +158,6 @@ public class DataHunter implements Runnable {
         Core.getInstance().getExecutorSupplier().forMainThreadTasks().execute(new Runnable() {
             public void run() {
                 request.deliverError(error);
-                request.finish();
-            }
-        });
-    }
-
-    private void deliverDownloadError(final AndroidNetworkingRequest request, final AndroidNetworkingError error) {
-        Log.d(TAG, "Delivering failed response for " + request.getSequenceNumber());
-        Core.getInstance().getExecutorSupplier().forMainThreadTasks().execute(new Runnable() {
-            public void run() {
-                request.deliverDownloadError(error);
                 request.finish();
             }
         });

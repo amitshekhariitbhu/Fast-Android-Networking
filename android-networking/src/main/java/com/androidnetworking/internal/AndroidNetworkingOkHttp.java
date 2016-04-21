@@ -169,6 +169,40 @@ public class AndroidNetworkingOkHttp {
         return data;
     }
 
+    public static AndroidNetworkingData performUploadRequest(AndroidNetworkingRequest request) throws AndroidNetworkingError {
+        AndroidNetworkingData data = new AndroidNetworkingData();
+        Request okRequest = null;
+        try {
+            Request.Builder okBuilder = new Request.Builder().url(request.getUrl());
+            okBuilder.addHeader(HEADER_USER_AGENT, "Android");
+
+            Headers requestHeaders = request.getHeaders();
+            if (requestHeaders != null) {
+                okBuilder.headers(requestHeaders);
+                if (!requestHeaders.names().contains(HEADER_USER_AGENT)) {
+                    okBuilder.addHeader(HEADER_USER_AGENT, "Android");
+                }
+            }
+            okBuilder = okBuilder.post(new RequestProgressBody(request.getMultiPartRequestBody(), request.getUploadProgressListener()));
+            okRequest = okBuilder.build();
+            Response okResponse = sHttpClient.newCall(okRequest).execute();
+
+            data.url = okResponse.request().url();
+            data.code = okResponse.code();
+            data.headers = okResponse.headers();
+            data.source = okResponse.body().source();
+            data.length = okResponse.body().contentLength();
+        } catch (IOException ioe) {
+            if (okRequest != null) {
+                data.url = okRequest.url();
+            }
+
+            throw new AndroidNetworkingError(data, ioe);
+        }
+        return data;
+    }
+
+
     public static void updateProgress(final long bytesDownloaded, final long totalBytes, final DownloadProgressListener downloadProgressListener) {
         if (downloadProgressListener != null) {
             Core.getInstance().getExecutorSupplier().forMainThreadTasks().execute(new Runnable() {

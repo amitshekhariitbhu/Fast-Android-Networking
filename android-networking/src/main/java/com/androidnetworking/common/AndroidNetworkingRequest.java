@@ -8,7 +8,9 @@ import android.widget.ImageView;
 import com.androidnetworking.error.AndroidNetworkingError;
 import com.androidnetworking.interfaces.DownloadProgressListener;
 import com.androidnetworking.interfaces.RequestListener;
+import com.androidnetworking.interfaces.UploadProgressListener;
 import com.androidnetworking.internal.AndroidNetworkingRequestQueue;
+import com.androidnetworking.utils.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,6 +24,8 @@ import java.util.concurrent.Future;
 import okhttp3.FormBody;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okio.Okio;
 
@@ -53,6 +57,7 @@ public class AndroidNetworkingRequest {
     private Future future;
     private RequestListener mRequestListener;
     private DownloadProgressListener mDownloadProgressListener;
+    private UploadProgressListener mUploadProgressListener;
 
     private Bitmap.Config mDecodeConfig;
     private int mMaxWidth;
@@ -72,10 +77,8 @@ public class AndroidNetworkingRequest {
         this.mMaxWidth = builder.mMaxWidth;
         this.mScaleType = builder.mScaleType;
         this.mBodyParameterMap = builder.mBodyParameterMap;
-        this.mMultiPartParameterMap = builder.mMultiPartParameterMap;
         this.mQueryParameterMap = builder.mQueryParameterMap;
         this.mPathParameterMap = builder.mPathParameterMap;
-        this.mMultiPartFileMap = builder.mMultiPartFileMap;
     }
 
     private AndroidNetworkingRequest(DownloadBuilder builder) {
@@ -91,6 +94,20 @@ public class AndroidNetworkingRequest {
         this.mPathParameterMap = builder.mPathParameterMap;
     }
 
+    private AndroidNetworkingRequest(MultiPartBuilder builder) {
+        this.mRequestType = RequestType.MULTIPART;
+        this.mMethod = Method.POST;
+        this.mPriority = builder.mPriority;
+        this.mUrl = builder.mUrl;
+        this.mTag = builder.mTag;
+        this.mResponseAs = builder.mResponseAs;
+        this.mHeadersMap = builder.mHeadersMap;
+        this.mQueryParameterMap = builder.mQueryParameterMap;
+        this.mPathParameterMap = builder.mPathParameterMap;
+        this.mMultiPartParameterMap = builder.mMultiPartParameterMap;
+        this.mMultiPartFileMap = builder.mMultiPartFileMap;
+    }
+
     public void addRequest(RequestListener requestListener) {
         this.mRequestListener = requestListener;
         AndroidNetworkingRequestQueue.getInstance().addRequest(this);
@@ -98,6 +115,11 @@ public class AndroidNetworkingRequest {
 
     public void download(DownloadProgressListener downloadProgressListener) {
         this.mDownloadProgressListener = downloadProgressListener;
+        AndroidNetworkingRequestQueue.getInstance().addRequest(this);
+    }
+
+    public void upload(UploadProgressListener uploadProgressListener) {
+        this.mUploadProgressListener = uploadProgressListener;
         AndroidNetworkingRequestQueue.getInstance().addRequest(this);
     }
 
@@ -139,6 +161,10 @@ public class AndroidNetworkingRequest {
 
     public DownloadProgressListener getDownloadProgressListener() {
         return mDownloadProgressListener;
+    }
+
+    public UploadProgressListener getUploadProgressListener() {
+        return mUploadProgressListener;
     }
 
     public RESPONSE getResponseAs() {
@@ -274,21 +300,40 @@ public class AndroidNetworkingRequest {
     }
 
     public void deliverError(AndroidNetworkingError error) {
-        mRequestListener.onError(error);
-    }
-
-    public void deliverDownloadError(AndroidNetworkingError error) {
-        mDownloadProgressListener.onError(error);
+        if (mRequestListener != null) {
+            mRequestListener.onError(error);
+        } else if (mDownloadProgressListener != null) {
+            mDownloadProgressListener.onError(error);
+        } else if (mUploadProgressListener != null) {
+            mUploadProgressListener.onError(error);
+        }
     }
 
     public void deliverResponse(AndroidNetworkingResponse response) {
-        mRequestListener.onResponse(response.getResult());
+        if (mRequestListener != null) {
+            mRequestListener.onResponse(response.getResult());
+        } else if (mUploadProgressListener != null) {
+            mUploadProgressListener.onResponse(response.getResult());
+        }
     }
 
     public RequestBody getRequestBody() {
         FormBody.Builder builder = new FormBody.Builder();
         for (HashMap.Entry<String, String> entry : mBodyParameterMap.entrySet()) {
             builder.add(entry.getKey(), entry.getValue());
+        }
+        return builder.build();
+    }
+
+    public RequestBody getMultiPartRequestBody() {
+        MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
+        for (HashMap.Entry<String, String> entry : mMultiPartParameterMap.entrySet()) {
+            builder.addPart(Headers.of("Content-Disposition", "form-data; name=\"" + entry.getKey() + "\""), RequestBody.create(null, entry.getValue()));
+        }
+        for (HashMap.Entry<String, File> entry : mMultiPartFileMap.entrySet()) {
+            String fileName = entry.getValue().getName();
+            RequestBody fileBody = RequestBody.create(MediaType.parse(Utils.getMimeType(fileName)), entry.getValue());
+            builder.addPart(Headers.of("Content-Disposition", "form-data; name=\"" + entry.getKey() + "\"; filename=\"" + fileName + "\""), fileBody);
         }
         return builder.build();
     }
@@ -412,10 +457,8 @@ public class AndroidNetworkingRequest {
         private ImageView.ScaleType mScaleType;
         private HashMap<String, String> mHeadersMap = new HashMap<String, String>();
         private HashMap<String, String> mBodyParameterMap = new HashMap<String, String>();
-        private HashMap<String, String> mMultiPartParameterMap = new HashMap<String, String>();
         private HashMap<String, String> mQueryParameterMap = new HashMap<String, String>();
         private HashMap<String, String> mPathParameterMap = new HashMap<String, String>();
-        private HashMap<String, File> mMultiPartFileMap = new HashMap<String, File>();
 
         public Builder() {
 
@@ -492,27 +535,6 @@ public class AndroidNetworkingRequest {
             return this;
         }
 
-        public Builder addMultipartFile(String key, String value) {
-            mMultiPartParameterMap.put(key, value);
-            return this;
-        }
-
-        public Builder addMultipartFile(String key, File file) {
-            mMultiPartFileMap.put(key, file);
-            return this;
-        }
-
-        public Builder addMultipartFile(String key, String contentType, File file) {
-            mMultiPartFileMap.put(key, file);
-            return this;
-        }
-
-        public Builder addMultipartFile(String key, String fileName, String contentType, File file) {
-            mMultiPartFileMap.put(key, file);
-            return this;
-        }
-
-
         public AndroidNetworkingRequest build() {
             AndroidNetworkingRequest androidNetworkingRequest = new AndroidNetworkingRequest(this);
             return androidNetworkingRequest;
@@ -577,6 +599,79 @@ public class AndroidNetworkingRequest {
 
         public DownloadBuilder setFileName(String fileName) {
             this.mFileName = fileName;
+            return this;
+        }
+
+        public AndroidNetworkingRequest build() {
+            AndroidNetworkingRequest androidNetworkingRequest = new AndroidNetworkingRequest(this);
+            return androidNetworkingRequest;
+        }
+    }
+
+    public static class MultiPartBuilder implements RequestBuilder {
+
+        private Priority mPriority;
+        private String mUrl;
+        private Object mTag;
+        private RESPONSE mResponseAs;
+        private HashMap<String, String> mHeadersMap = new HashMap<String, String>();
+        private HashMap<String, String> mMultiPartParameterMap = new HashMap<String, String>();
+        private HashMap<String, String> mQueryParameterMap = new HashMap<String, String>();
+        private HashMap<String, String> mPathParameterMap = new HashMap<String, String>();
+        private HashMap<String, File> mMultiPartFileMap = new HashMap<String, File>();
+
+        public MultiPartBuilder() {
+
+        }
+
+        @Override
+        public MultiPartBuilder setUrl(String url) {
+            this.mUrl = url;
+            return this;
+        }
+
+        @Override
+        public MultiPartBuilder setPriority(Priority priority) {
+            this.mPriority = priority;
+            return this;
+        }
+
+        @Override
+        public MultiPartBuilder setTag(Object tag) {
+            this.mTag = tag;
+            return this;
+        }
+
+        @Override
+        public MultiPartBuilder addQueryParameter(String key, String value) {
+            mQueryParameterMap.put(key, value);
+            return this;
+        }
+
+        @Override
+        public MultiPartBuilder addPathParameter(String key, String value) {
+            mPathParameterMap.put(key, value);
+            return this;
+        }
+
+        @Override
+        public MultiPartBuilder addHeaders(String key, String value) {
+            mHeadersMap.put(key, value);
+            return this;
+        }
+
+        public MultiPartBuilder setResponseAs(RESPONSE responseAs) {
+            this.mResponseAs = responseAs;
+            return this;
+        }
+
+        public MultiPartBuilder addMultipartParameter(String key, String value) {
+            mMultiPartParameterMap.put(key, value);
+            return this;
+        }
+
+        public MultiPartBuilder addMultipartFile(String key, File file) {
+            mMultiPartFileMap.put(key, file);
             return this;
         }
 

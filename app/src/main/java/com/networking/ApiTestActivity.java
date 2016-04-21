@@ -12,10 +12,13 @@ import com.androidnetworking.common.RESPONSE;
 import com.androidnetworking.error.AndroidNetworkingError;
 import com.androidnetworking.interfaces.DownloadProgressListener;
 import com.androidnetworking.interfaces.RequestListener;
+import com.androidnetworking.interfaces.UploadProgressListener;
 import com.networking.utils.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.io.File;
 
 /**
  * Created by amitshekhar on 30/03/16.
@@ -192,6 +195,37 @@ public class ApiTestActivity extends AppCompatActivity {
                 Log.d(TAG, "onError : " + error.getContent());
             }
         });
-
     }
+
+    public void uploadImage(final View view) {
+        AndroidNetworkingRequest request = new AndroidNetworkingRequest.MultiPartBuilder()
+                .setUrl(ApiEndPoint.UPLOAD_IMAGE_URL)
+                .setPriority(Priority.MEDIUM)
+                .addMultipartFile("", new File(""))
+                .setTag(this)
+                .build();
+
+        request.upload(new UploadProgressListener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d(TAG, "onResponse object : " + response.toString());
+            }
+
+
+            @Override
+            public void onProgress(long bytesDownloaded, long totalBytes, boolean isCompleted) {
+                Log.d(TAG, "bytesDownloaded : " + bytesDownloaded + " totalBytes : " + totalBytes);
+                if (isCompleted) {
+                    Log.d(TAG, "Image download Completed");
+                }
+            }
+
+            @Override
+            public void onError(AndroidNetworkingError error) {
+                Log.d(TAG, "onError : " + error.getContent());
+            }
+        });
+    }
+
 }
