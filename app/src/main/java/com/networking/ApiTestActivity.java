@@ -214,10 +214,10 @@ public class ApiTestActivity extends AppCompatActivity {
 
 
             @Override
-            public void onProgress(long bytesDownloaded, long totalBytes, boolean isCompleted) {
-                Log.d(TAG, "bytesDownloaded : " + bytesDownloaded + " totalBytes : " + totalBytes);
+            public void onProgress(long bytesUploaded, long totalBytes, boolean isCompleted) {
+                Log.d(TAG, "bytesUploaded : " + bytesUploaded + " totalBytes : " + totalBytes);
                 if (isCompleted) {
-                    Log.d(TAG, "Image download Completed");
+                    Log.d(TAG, "Image upload Completed");
                 }
             }
 
