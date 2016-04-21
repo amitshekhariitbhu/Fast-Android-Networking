@@ -227,10 +227,6 @@ public class AndroidNetworkingRequest {
         this.mResponseDelivered = responseDelivered;
     }
 
-    public boolean isFollowingRedirects() {
-        return true;
-    }
-
     public void cancel() {
         Log.d(TAG, "cancelling request for sequenceNumber : " + sequenceNumber);
         future.cancel(true);

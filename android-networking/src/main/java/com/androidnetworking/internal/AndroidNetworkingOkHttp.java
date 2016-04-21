@@ -50,63 +50,50 @@ public class AndroidNetworkingOkHttp {
 
     public static AndroidNetworkingData performSimpleRequest(AndroidNetworkingRequest request) throws AndroidNetworkingError {
         AndroidNetworkingData data = new AndroidNetworkingData();
-        Request okRequest = null;
+        Request okHttpRequest = null;
 
         try {
 
-            Request.Builder okBuilder = new Request.Builder().url(request.getUrl());
-            okBuilder.addHeader(HEADER_USER_AGENT, "Android");
+            Request.Builder builder = new Request.Builder().url(request.getUrl());
+            builder.addHeader(HEADER_USER_AGENT, "Android");
 
             Headers requestHeaders = request.getHeaders();
             if (requestHeaders != null) {
-                okBuilder.headers(requestHeaders);
+                builder.headers(requestHeaders);
                 if (!requestHeaders.names().contains(HEADER_USER_AGENT)) {
-                    okBuilder.addHeader(HEADER_USER_AGENT, "Android");
+                    builder.addHeader(HEADER_USER_AGENT, "Android");
                 }
             }
 
             switch (request.getMethod()) {
                 case GET: {
-                    okBuilder = okBuilder.get();
+                    builder = builder.get();
                     break;
                 }
                 case POST: {
-                    okBuilder = okBuilder.post(request.getRequestBody());
+                    builder = builder.post(request.getRequestBody());
                     break;
                 }
                 case PUT: {
-                    okBuilder = okBuilder.put(request.getRequestBody());
+                    builder = builder.put(request.getRequestBody());
                     break;
                 }
                 case DELETE: {
-                    okBuilder = okBuilder.delete(request.getRequestBody());
+                    builder = builder.delete(request.getRequestBody());
                     break;
                 }
                 case HEAD: {
-                    okBuilder = okBuilder.head();
+                    builder = builder.head();
                     break;
                 }
                 case PATCH: {
-                    okBuilder = okBuilder.patch(request.getRequestBody());
+                    builder = builder.patch(request.getRequestBody());
                     break;
                 }
             }
 
-            boolean previousFollowing = sHttpClient.followRedirects();
-            if (previousFollowing != request.isFollowingRedirects()) {
-                sHttpClient = sHttpClient.newBuilder()
-                        .followRedirects(request.isFollowingRedirects())
-                        .build();
-            }
-
-            okRequest = okBuilder.build();
-            Response okResponse = sHttpClient.newCall(okRequest).execute();
-
-            if (previousFollowing != sHttpClient.followRedirects()) {
-                sHttpClient = sHttpClient.newBuilder()
-                        .followRedirects(request.isFollowingRedirects())
-                        .build();
-            }
+            okHttpRequest = builder.build();
+            Response okResponse = sHttpClient.newCall(okHttpRequest).execute();
 
             data.url = okResponse.request().url();
             data.code = okResponse.code();
@@ -114,8 +101,8 @@ public class AndroidNetworkingOkHttp {
             data.source = okResponse.body().source();
             data.length = okResponse.body().contentLength();
         } catch (IOException ioe) {
-            if (okRequest != null) {
-                data.url = okRequest.url();
+            if (okHttpRequest != null) {
+                data.url = okHttpRequest.url();
             }
 
             throw new AndroidNetworkingError(data, ioe);
@@ -126,21 +113,21 @@ public class AndroidNetworkingOkHttp {
 
     public static AndroidNetworkingData performDownloadRequest(AndroidNetworkingRequest request) throws AndroidNetworkingError {
         AndroidNetworkingData data = new AndroidNetworkingData();
-        Request okRequest = null;
+        Request okHttpRequest = null;
         try {
-            Request.Builder okBuilder = new Request.Builder().url(request.getUrl());
-            okBuilder.addHeader(HEADER_USER_AGENT, "Android");
+            Request.Builder builder = new Request.Builder().url(request.getUrl());
+            builder.addHeader(HEADER_USER_AGENT, "Android");
 
             Headers requestHeaders = request.getHeaders();
             if (requestHeaders != null) {
-                okBuilder.headers(requestHeaders);
+                builder.headers(requestHeaders);
                 if (!requestHeaders.names().contains(HEADER_USER_AGENT)) {
-                    okBuilder.addHeader(HEADER_USER_AGENT, "Android");
+                    builder.addHeader(HEADER_USER_AGENT, "Android");
                 }
             }
-            okBuilder = okBuilder.get();
-            okRequest = okBuilder.build();
-            Response okResponse = sHttpClient.newCall(okRequest).execute();
+            builder = builder.get();
+            okHttpRequest = builder.build();
+            Response okResponse = sHttpClient.newCall(okHttpRequest).execute();
 
             data.url = okResponse.request().url();
             data.code = okResponse.code();
@@ -160,8 +147,8 @@ public class AndroidNetworkingOkHttp {
             sink.close();
             updateCompletion(data.length, request.getDownloadProgressListener());
         } catch (IOException ioe) {
-            if (okRequest != null) {
-                data.url = okRequest.url();
+            if (okHttpRequest != null) {
+                data.url = okHttpRequest.url();
             }
             throw new AndroidNetworkingError(data, ioe);
         }
@@ -171,21 +158,21 @@ public class AndroidNetworkingOkHttp {
 
     public static AndroidNetworkingData performUploadRequest(AndroidNetworkingRequest request) throws AndroidNetworkingError {
         AndroidNetworkingData data = new AndroidNetworkingData();
-        Request okRequest = null;
+        Request okHttpRequest = null;
         try {
-            Request.Builder okBuilder = new Request.Builder().url(request.getUrl());
-            okBuilder.addHeader(HEADER_USER_AGENT, "Android");
+            Request.Builder builder = new Request.Builder().url(request.getUrl());
+            builder.addHeader(HEADER_USER_AGENT, "Android");
 
             Headers requestHeaders = request.getHeaders();
             if (requestHeaders != null) {
-                okBuilder.headers(requestHeaders);
+                builder.headers(requestHeaders);
                 if (!requestHeaders.names().contains(HEADER_USER_AGENT)) {
-                    okBuilder.addHeader(HEADER_USER_AGENT, "Android");
+                    builder.addHeader(HEADER_USER_AGENT, "Android");
                 }
             }
-            okBuilder = okBuilder.post(new RequestProgressBody(request.getMultiPartRequestBody(), request.getUploadProgressListener()));
-            okRequest = okBuilder.build();
-            Response okResponse = sHttpClient.newCall(okRequest).execute();
+            builder = builder.post(new RequestProgressBody(request.getMultiPartRequestBody(), request.getUploadProgressListener()));
+            okHttpRequest = builder.build();
+            Response okResponse = sHttpClient.newCall(okHttpRequest).execute();
 
             data.url = okResponse.request().url();
             data.code = okResponse.code();
@@ -193,8 +180,8 @@ public class AndroidNetworkingOkHttp {
             data.source = okResponse.body().source();
             data.length = okResponse.body().contentLength();
         } catch (IOException ioe) {
-            if (okRequest != null) {
-                data.url = okRequest.url();
+            if (okHttpRequest != null) {
+                data.url = okHttpRequest.url();
             }
 
             throw new AndroidNetworkingError(data, ioe);
