@@ -433,8 +433,8 @@ public class AndroidNetworkingRequest {
 
     public static class Builder implements RequestBuilder {
 
+        private Priority mPriority = Priority.MEDIUM;
         private int mMethod;
-        private Priority mPriority;
         private String mUrl;
         private Object mTag;
         private RESPONSE mResponseAs;
@@ -447,14 +447,10 @@ public class AndroidNetworkingRequest {
         private HashMap<String, String> mQueryParameterMap = new HashMap<String, String>();
         private HashMap<String, String> mPathParameterMap = new HashMap<String, String>();
 
-        public Builder() {
-
-        }
-
-        @Override
-        public Builder setUrl(String url) {
+        public Builder(String url, int method, RESPONSE responseAs) {
             this.mUrl = url;
-            return this;
+            this.mMethod = method;
+            this.mResponseAs = responseAs;
         }
 
         @Override
@@ -484,16 +480,6 @@ public class AndroidNetworkingRequest {
         @Override
         public Builder addHeaders(String key, String value) {
             mHeadersMap.put(key, value);
-            return this;
-        }
-
-        public Builder setMethod(int method) {
-            this.mMethod = method;
-            return this;
-        }
-
-        public Builder setResponseAs(RESPONSE responseAs) {
-            this.mResponseAs = responseAs;
             return this;
         }
 
@@ -530,7 +516,7 @@ public class AndroidNetworkingRequest {
 
     public static class DownloadBuilder implements RequestBuilder {
 
-        private Priority mPriority;
+        private Priority mPriority = Priority.MEDIUM;
         private String mUrl;
         private Object mTag;
         private HashMap<String, String> mHeadersMap = new HashMap<String, String>();
@@ -539,19 +525,15 @@ public class AndroidNetworkingRequest {
         private String mDirPath;
         private String mFileName;
 
-        public DownloadBuilder() {
-
+        public DownloadBuilder(String url, String dirPath, String fileName) {
+            this.mUrl = url;
+            this.mDirPath = dirPath;
+            this.mFileName = fileName;
         }
 
         @Override
         public DownloadBuilder setPriority(Priority priority) {
             this.mPriority = priority;
-            return this;
-        }
-
-        @Override
-        public DownloadBuilder setUrl(String url) {
-            this.mUrl = url;
             return this;
         }
 
@@ -579,16 +561,6 @@ public class AndroidNetworkingRequest {
             return this;
         }
 
-        public DownloadBuilder setDirPath(String path) {
-            this.mDirPath = path;
-            return this;
-        }
-
-        public DownloadBuilder setFileName(String fileName) {
-            this.mFileName = fileName;
-            return this;
-        }
-
         public AndroidNetworkingRequest build() {
             AndroidNetworkingRequest androidNetworkingRequest = new AndroidNetworkingRequest(this);
             return androidNetworkingRequest;
@@ -597,7 +569,7 @@ public class AndroidNetworkingRequest {
 
     public static class MultiPartBuilder implements RequestBuilder {
 
-        private Priority mPriority;
+        private Priority mPriority = Priority.MEDIUM;
         private String mUrl;
         private Object mTag;
         private RESPONSE mResponseAs;
@@ -607,14 +579,9 @@ public class AndroidNetworkingRequest {
         private HashMap<String, String> mPathParameterMap = new HashMap<String, String>();
         private HashMap<String, File> mMultiPartFileMap = new HashMap<String, File>();
 
-        public MultiPartBuilder() {
-
-        }
-
-        @Override
-        public MultiPartBuilder setUrl(String url) {
+        public MultiPartBuilder(String url, RESPONSE responseAs) {
             this.mUrl = url;
-            return this;
+            this.mResponseAs = responseAs;
         }
 
         @Override
@@ -644,11 +611,6 @@ public class AndroidNetworkingRequest {
         @Override
         public MultiPartBuilder addHeaders(String key, String value) {
             mHeadersMap.put(key, value);
-            return this;
-        }
-
-        public MultiPartBuilder setResponseAs(RESPONSE responseAs) {
-            this.mResponseAs = responseAs;
             return this;
         }
 

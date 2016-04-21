@@ -7,8 +7,6 @@ public interface RequestBuilder {
 
     RequestBuilder setPriority(Priority priority);
 
-    RequestBuilder setUrl(String url);
-
     RequestBuilder setTag(Object tag);
 
     RequestBuilder addHeaders(String key, String value);

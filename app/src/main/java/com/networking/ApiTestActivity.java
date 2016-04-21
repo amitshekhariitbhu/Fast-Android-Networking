@@ -35,14 +35,12 @@ public class ApiTestActivity extends AppCompatActivity {
     }
 
     public void getAllUsers(View view) {
-        AndroidNetworkingRequest androidNetworkingRequest = new AndroidNetworkingRequest.Builder()
-                .setUrl(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_ARRAY)
-                .setMethod(Method.GET)
+        AndroidNetworkingRequest androidNetworkingRequest = new AndroidNetworkingRequest.Builder(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_ARRAY, Method.GET, RESPONSE.JSON_ARRAY)
                 .addPathParameter("pageNumber", "0")
                 .addQueryParameter("limit", "3")
                 .setTag(this)
                 .setPriority(Priority.LOW)
-                .setResponseAs(RESPONSE.JSON_ARRAY).build();
+                .build();
 
         androidNetworkingRequest.addRequest(new RequestListener<JSONArray>() {
             @Override
@@ -62,13 +60,11 @@ public class ApiTestActivity extends AppCompatActivity {
     }
 
     public void getAnUser(View view) {
-        AndroidNetworkingRequest androidNetworkingRequest = new AndroidNetworkingRequest.Builder()
-                .setUrl(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_OBJECT)
-                .setMethod(Method.GET)
+        AndroidNetworkingRequest androidNetworkingRequest = new AndroidNetworkingRequest.Builder(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_OBJECT, Method.GET, RESPONSE.JSON_OBJECT)
                 .addPathParameter("userId", "1")
                 .setTag(this)
                 .setPriority(Priority.LOW)
-                .setResponseAs(RESPONSE.JSON_OBJECT).build();
+                .build();
 
         androidNetworkingRequest.addRequest(new RequestListener<JSONObject>() {
             @Override
@@ -88,13 +84,11 @@ public class ApiTestActivity extends AppCompatActivity {
     }
 
     public void checkForHeaderGet(View view) {
-        AndroidNetworkingRequest androidNetworkingRequest = new AndroidNetworkingRequest.Builder()
-                .setUrl(ApiEndPoint.BASE_URL + ApiEndPoint.CHECK_FOR_HEADER)
-                .setMethod(Method.GET)
+        AndroidNetworkingRequest androidNetworkingRequest = new AndroidNetworkingRequest.Builder(ApiEndPoint.BASE_URL + ApiEndPoint.CHECK_FOR_HEADER, Method.GET, RESPONSE.JSON_OBJECT)
                 .addHeaders("token", "1234")
                 .setTag(this)
                 .setPriority(Priority.LOW)
-                .setResponseAs(RESPONSE.JSON_OBJECT).build();
+                .build();
 
         androidNetworkingRequest.addRequest(new RequestListener<JSONObject>() {
             @Override
@@ -114,13 +108,11 @@ public class ApiTestActivity extends AppCompatActivity {
     }
 
     public void checkForHeaderPost(View view) {
-        AndroidNetworkingRequest androidNetworkingRequest = new AndroidNetworkingRequest.Builder()
-                .setUrl(ApiEndPoint.BASE_URL + ApiEndPoint.CHECK_FOR_HEADER)
-                .setMethod(Method.POST)
+        AndroidNetworkingRequest androidNetworkingRequest = new AndroidNetworkingRequest.Builder(ApiEndPoint.BASE_URL + ApiEndPoint.CHECK_FOR_HEADER, Method.POST, RESPONSE.JSON_OBJECT)
                 .addHeaders("token", "1234")
                 .setTag(this)
                 .setPriority(Priority.LOW)
-                .setResponseAs(RESPONSE.JSON_OBJECT).build();
+                .build();
 
         androidNetworkingRequest.addRequest(new RequestListener<JSONObject>() {
             @Override
@@ -140,14 +132,12 @@ public class ApiTestActivity extends AppCompatActivity {
     }
 
     public void createAnUser(View view) {
-        AndroidNetworkingRequest androidNetworkingRequest = new AndroidNetworkingRequest.Builder()
-                .setUrl(ApiEndPoint.BASE_URL + ApiEndPoint.POST_CREATE_AN_USER)
-                .setMethod(Method.POST)
+        AndroidNetworkingRequest androidNetworkingRequest = new AndroidNetworkingRequest.Builder(ApiEndPoint.BASE_URL + ApiEndPoint.POST_CREATE_AN_USER, Method.POST, RESPONSE.JSON_OBJECT)
                 .addBodyParameter("firstname", "Suman")
                 .addBodyParameter("lastname", "Shekhar")
                 .setTag(this)
                 .setPriority(Priority.LOW)
-                .setResponseAs(RESPONSE.JSON_OBJECT).build();
+                .build();
 
         androidNetworkingRequest.addRequest(new RequestListener<JSONObject>() {
             @Override
@@ -168,10 +158,7 @@ public class ApiTestActivity extends AppCompatActivity {
 
     public void downloadFile(final View view) {
         String url = "http://www.colorado.edu/conflict/peace/download/peace_problem.ZIP";
-        AndroidNetworkingRequest request = new AndroidNetworkingRequest.DownloadBuilder()
-                .setUrl(url)
-                .setDirPath(Utils.getRootDirPath(getApplicationContext()))
-                .setFileName("file1.zip")
+        AndroidNetworkingRequest request = new AndroidNetworkingRequest.DownloadBuilder(url, Utils.getRootDirPath(getApplicationContext()), "file1.zip")
                 .setPriority(Priority.MEDIUM)
                 .setTag(this)
                 .build();
@@ -198,10 +185,7 @@ public class ApiTestActivity extends AppCompatActivity {
 
     public void downloadImage(final View view) {
         String url = "http://i.imgur.com/AtbX9iX.png";
-        AndroidNetworkingRequest request = new AndroidNetworkingRequest.DownloadBuilder()
-                .setUrl(url)
-                .setDirPath(Utils.getRootDirPath(getApplicationContext()))
-                .setFileName("image1.png")
+        AndroidNetworkingRequest request = new AndroidNetworkingRequest.DownloadBuilder(url, Utils.getRootDirPath(getApplicationContext()), "image1.png")
                 .setPriority(Priority.MEDIUM)
                 .setTag(this)
                 .build();
@@ -227,10 +211,8 @@ public class ApiTestActivity extends AppCompatActivity {
     }
 
     public void uploadImage(final View view) {
-        AndroidNetworkingRequest request = new AndroidNetworkingRequest.MultiPartBuilder()
-                .setUrl(ApiEndPoint.UPLOAD_IMAGE_URL)
+        AndroidNetworkingRequest request = new AndroidNetworkingRequest.MultiPartBuilder(ApiEndPoint.UPLOAD_IMAGE_URL, RESPONSE.JSON_OBJECT)
                 .setPriority(Priority.MEDIUM)
-                .setResponseAs(RESPONSE.JSON_OBJECT)
                 .addMultipartFile("image", new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "test.png"))
                 .setTag(this)
                 .build();

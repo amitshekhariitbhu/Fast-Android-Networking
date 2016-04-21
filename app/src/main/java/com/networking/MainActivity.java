@@ -47,12 +47,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void makeRequests(View view) {
         for (int i = 0; i < 10; i++) {
-            AndroidNetworkingRequest androidNetworkingRequest = new AndroidNetworkingRequest.Builder()
-                    .setUrl(URL_JSON_ARRAY)
-                    .setMethod(Method.GET)
+            AndroidNetworkingRequest androidNetworkingRequest = new AndroidNetworkingRequest.Builder(URL_JSON_ARRAY, Method.GET, RESPONSE.JSON_ARRAY)
                     .setTag(this)
                     .setPriority(Priority.LOW)
-                    .setResponseAs(RESPONSE.JSON_ARRAY).build();
+                    .build();
 
             androidNetworkingRequest.addRequest(new RequestListener<JSONArray>() {
                 @Override
@@ -70,12 +68,10 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-            AndroidNetworkingRequest androidNetworkingObjRequest = new AndroidNetworkingRequest.Builder()
-                    .setUrl(URL_JSON_OBJECT)
-                    .setMethod(Method.GET)
+            AndroidNetworkingRequest androidNetworkingObjRequest = new AndroidNetworkingRequest.Builder(URL_JSON_OBJECT, Method.GET, RESPONSE.JSON_OBJECT)
                     .setTag(this)
                     .setPriority(Priority.HIGH)
-                    .setResponseAs(RESPONSE.JSON_OBJECT).build();
+                    .build();
 
             androidNetworkingObjRequest.addRequest(new RequestListener<JSONObject>() {
                 @Override
@@ -95,12 +91,10 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-        AndroidNetworkingRequest androidNetworkingRequest = new AndroidNetworkingRequest.Builder()
-                .setUrl(URL_JSON_ARRAY)
-                .setMethod(Method.GET)
+        AndroidNetworkingRequest androidNetworkingRequest = new AndroidNetworkingRequest.Builder(URL_JSON_ARRAY, Method.GET, RESPONSE.JSON_ARRAY)
                 .setTag(this)
                 .setPriority(Priority.HIGH)
-                .setResponseAs(RESPONSE.JSON_ARRAY).build();
+                .build();
 
         androidNetworkingRequest.addRequest(new RequestListener<JSONArray>() {
             @Override
@@ -124,16 +118,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void loadImageDirect(View view) {
-        AndroidNetworkingRequest androidNetworkingRequest = new AndroidNetworkingRequest.Builder()
-                .setUrl(URL_IMAGE)
-                .setMethod(Method.GET)
+        AndroidNetworkingRequest androidNetworkingRequest = new AndroidNetworkingRequest.Builder(URL_IMAGE, Method.GET, RESPONSE.BITMAP)
                 .setTag("ImageRequestTag")
                 .setPriority(Priority.MEDIUM)
                 .setImageScaleType(null)
                 .setBitmapMaxHeight(0)
                 .setBitmapMaxWidth(0)
                 .setBitmapConfig(Bitmap.Config.ARGB_8888)
-                .setResponseAs(RESPONSE.BITMAP).build();
+                .build();
         final long startTime = System.currentTimeMillis();
         androidNetworkingRequest.addRequest(new RequestListener<Bitmap>() {
             @Override

@@ -144,15 +144,13 @@ public class AndroidNetworkingImageLoader {
 
     protected AndroidNetworkingRequest makeImageRequest(String requestUrl, int maxWidth, int maxHeight,
                                                         ImageView.ScaleType scaleType, final String cacheKey) {
-        AndroidNetworkingRequest androidNetworkingRequest = new AndroidNetworkingRequest.Builder()
-                .setUrl(requestUrl)
+        AndroidNetworkingRequest androidNetworkingRequest = new AndroidNetworkingRequest.Builder(requestUrl, Method.GET, RESPONSE.BITMAP)
                 .setTag("ImageRequestTag")
-                .setMethod(Method.GET)
                 .setBitmapMaxHeight(maxHeight)
                 .setBitmapMaxWidth(maxWidth)
                 .setImageScaleType(scaleType)
                 .setBitmapConfig(Bitmap.Config.RGB_565)
-                .setResponseAs(RESPONSE.BITMAP).build();
+                .build();
 
         androidNetworkingRequest.addRequest(new RequestListener<Bitmap>() {
             @Override
