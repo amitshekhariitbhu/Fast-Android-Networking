@@ -5,6 +5,7 @@ import android.util.Log;
 import com.androidnetworking.common.AndroidNetworkingData;
 import com.androidnetworking.common.AndroidNetworkingRequest;
 import com.androidnetworking.common.AndroidNetworkingResponse;
+import com.androidnetworking.common.Constants;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.core.Core;
 import com.androidnetworking.error.AndroidNetworkingError;
@@ -53,14 +54,14 @@ public class DataHunter implements Runnable {
         AndroidNetworkingData data = null;
         try {
             data = AndroidNetworkingOkHttp.performSimpleRequest(request);
-            if (data.isNotModified() && request.isResponseDelivered()) {
+            if (data.code == 304) {
                 request.finish();
                 return;
             }
-            request.setResponseDelivered(true);
             if (data.code >= 400) {
                 AndroidNetworkingError error = new AndroidNetworkingError(data);
                 error = request.parseNetworkError(error);
+                error.setHasErrorFromServer();
                 deliverError(request, error);
                 return;
             }
@@ -73,9 +74,11 @@ public class DataHunter implements Runnable {
             deliverResponse(request, response);
         } catch (AndroidNetworkingError se) {
             se = request.parseNetworkError(se);
+            se.setError(Constants.CONNECTION_ERROR);
             deliverError(request, se);
         } catch (Exception e) {
             AndroidNetworkingError se = new AndroidNetworkingError(e);
+            se.setError(Constants.CONNECTION_ERROR);
             deliverError(request, se);
 
         } finally {
@@ -93,18 +96,18 @@ public class DataHunter implements Runnable {
         AndroidNetworkingData data = null;
         try {
             data = AndroidNetworkingOkHttp.performDownloadRequest(request);
-            request.setResponseDelivered(true);
             if (data.code >= 400) {
                 AndroidNetworkingError error = new AndroidNetworkingError();
-                error.setContent("errorCode more than equal to 400");
+                error = request.parseNetworkError(error);
+                error.setHasErrorFromServer();
                 deliverError(request, error);
             }
         } catch (AndroidNetworkingError se) {
-            se.setContent("some error occurred one");
+            se.setError(Constants.CONNECTION_ERROR);
             deliverError(request, se);
         } catch (Exception e) {
             AndroidNetworkingError se = new AndroidNetworkingError(e);
-            se.setContent("some error occurred two");
+            se.setError(Constants.CONNECTION_ERROR);
             deliverError(request, se);
         }
     }
@@ -113,18 +116,17 @@ public class DataHunter implements Runnable {
         AndroidNetworkingData data = null;
         try {
             data = AndroidNetworkingOkHttp.performUploadRequest(request);
-            if (data.isNotModified() && request.isResponseDelivered()) {
+            if (data.code == 304) {
                 request.finish();
                 return;
             }
-            request.setResponseDelivered(true);
             if (data.code >= 400) {
                 AndroidNetworkingError error = new AndroidNetworkingError(data);
                 error = request.parseNetworkError(error);
+                error.setHasErrorFromServer();
                 deliverError(request, error);
                 return;
             }
-
             AndroidNetworkingResponse response = request.parseResponse(data);
             if (!response.isSuccess()) {
                 deliverError(request, response.getError());
@@ -133,11 +135,12 @@ public class DataHunter implements Runnable {
             deliverResponse(request, response);
         } catch (AndroidNetworkingError se) {
             se = request.parseNetworkError(se);
+            se.setError(Constants.CONNECTION_ERROR);
             deliverError(request, se);
         } catch (Exception e) {
             AndroidNetworkingError se = new AndroidNetworkingError(e);
+            se.setError(Constants.CONNECTION_ERROR);
             deliverError(request, se);
-
         } finally {
             if (data != null && data.source != null) {
                 try {

@@ -1,6 +1,7 @@
 package com.androidnetworking.error;
 
 import com.androidnetworking.common.AndroidNetworkingData;
+import com.androidnetworking.common.Constants;
 
 /**
  * Created by amitshekhar on 22/03/16.
@@ -10,6 +11,10 @@ public class AndroidNetworkingError extends Exception {
     private AndroidNetworkingData data;
 
     private String content;
+
+    private boolean hasErrorFromServer = false;
+
+    private String error;
 
     public AndroidNetworkingError() {
     }
@@ -51,6 +56,23 @@ public class AndroidNetworkingError extends Exception {
 
     public String getContent() {
         return content;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
+
+    public String getError() {
+        return this.error;
+    }
+
+    public void setHasErrorFromServer() {
+        this.hasErrorFromServer = true;
+        this.error = Constants.ERROR_RESPONSE_FROM_SERVER;
+    }
+
+    public boolean hasErrorFromServer() {
+        return this.hasErrorFromServer;
     }
 
     public void setContent(String content) {

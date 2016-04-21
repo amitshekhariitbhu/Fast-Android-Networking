@@ -27,6 +27,7 @@ public class AndroidNetworkingResponse<T> {
     private AndroidNetworkingResponse(AndroidNetworkingError error) {
         this.mResult = null;
         this.mError = error;
+        this.mError.setError(Constants.PARSE_ERROR);
     }
 
     public T getResult() {

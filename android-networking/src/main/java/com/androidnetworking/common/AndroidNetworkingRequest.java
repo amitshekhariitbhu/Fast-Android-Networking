@@ -53,7 +53,6 @@ public class AndroidNetworkingRequest {
     private String mFileName;
     private static final Object sDecodeLock = new Object();
 
-    private boolean mResponseDelivered = false;
     private Future future;
     private RequestListener mRequestListener;
     private DownloadProgressListener mDownloadProgressListener;
@@ -219,14 +218,6 @@ public class AndroidNetworkingRequest {
         return mScaleType;
     }
 
-    public boolean isResponseDelivered() {
-        return mResponseDelivered;
-    }
-
-    public void setResponseDelivered(boolean responseDelivered) {
-        this.mResponseDelivered = responseDelivered;
-    }
-
     public void cancel() {
         Log.d(TAG, "cancelling request for sequenceNumber : " + sequenceNumber);
         future.cancel(true);
@@ -289,8 +280,8 @@ public class AndroidNetworkingRequest {
             if (error.getData() != null && error.getData().source != null) {
                 error.setContent(Okio.buffer(error.getData().source).readUtf8());
             }
-        } catch (IOException ioe) {
-            throw new RuntimeException("Unable to parse error response", ioe);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return error;
     }

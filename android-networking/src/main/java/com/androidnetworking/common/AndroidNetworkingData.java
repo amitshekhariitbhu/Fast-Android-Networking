@@ -19,8 +19,4 @@ public class AndroidNetworkingData {
 
     public HttpUrl url;
 
-    public boolean isNotModified()
-    {
-        return code == 304;
-    }
 }

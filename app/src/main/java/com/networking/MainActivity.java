@@ -62,7 +62,11 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onError(AndroidNetworkingError error) {
-                    Log.d(TAG, "onError : " + error.toString());
+                    if (error.hasErrorFromServer()) {
+                        Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
+                    } else {
+                        Log.d(TAG, "onError : " + error.getError());
+                    }
                 }
             });
 
@@ -81,7 +85,11 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onError(AndroidNetworkingError error) {
-                    Log.d(TAG, "onError : " + error.toString());
+                    if (error.hasErrorFromServer()) {
+                        Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
+                    } else {
+                        Log.d(TAG, "onError : " + error.getError());
+                    }
                 }
             });
 
@@ -102,7 +110,11 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onError(AndroidNetworkingError error) {
-                Log.d(TAG, "onError : " + error.toString());
+                if (error.hasErrorFromServer()) {
+                    Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
+                } else {
+                    Log.d(TAG, "onError : " + error.getError());
+                }
             }
         });
     }
@@ -133,7 +145,11 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onError(AndroidNetworkingError error) {
-                Log.d(TAG, "onError : " + error.toString());
+                if (error.hasErrorFromServer()) {
+                    Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
+                } else {
+                    Log.d(TAG, "onError : " + error.getError());
+                }
             }
         });
     }

@@ -52,7 +52,11 @@ public class ApiTestActivity extends AppCompatActivity {
 
             @Override
             public void onError(AndroidNetworkingError error) {
-                Log.d(TAG, "onError : " + error.getContent());
+                if (error.hasErrorFromServer()) {
+                    Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
+                } else {
+                    Log.d(TAG, "onError : " + error.getError());
+                }
             }
         });
     }
@@ -74,7 +78,11 @@ public class ApiTestActivity extends AppCompatActivity {
 
             @Override
             public void onError(AndroidNetworkingError error) {
-                Log.d(TAG, "onError : " + error.getContent());
+                if (error.hasErrorFromServer()) {
+                    Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
+                } else {
+                    Log.d(TAG, "onError : " + error.getError());
+                }
             }
         });
     }
@@ -96,7 +104,11 @@ public class ApiTestActivity extends AppCompatActivity {
 
             @Override
             public void onError(AndroidNetworkingError error) {
-                Log.d(TAG, "onError : " + error.getContent());
+                if (error.hasErrorFromServer()) {
+                    Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
+                } else {
+                    Log.d(TAG, "onError : " + error.getError());
+                }
             }
         });
     }
@@ -118,7 +130,11 @@ public class ApiTestActivity extends AppCompatActivity {
 
             @Override
             public void onError(AndroidNetworkingError error) {
-                Log.d(TAG, "onError : " + error.getContent());
+                if (error.hasErrorFromServer()) {
+                    Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
+                } else {
+                    Log.d(TAG, "onError : " + error.getError());
+                }
             }
         });
     }
@@ -141,7 +157,11 @@ public class ApiTestActivity extends AppCompatActivity {
 
             @Override
             public void onError(AndroidNetworkingError error) {
-                Log.d(TAG, "onError : " + error.getContent());
+                if (error.hasErrorFromServer()) {
+                    Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
+                } else {
+                    Log.d(TAG, "onError : " + error.getError());
+                }
             }
         });
     }
@@ -167,7 +187,11 @@ public class ApiTestActivity extends AppCompatActivity {
 
             @Override
             public void onError(AndroidNetworkingError error) {
-                Log.d(TAG, "onError : " + error.getContent());
+                if (error.hasErrorFromServer()) {
+                    Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
+                } else {
+                    Log.d(TAG, "onError : " + error.getError());
+                }
             }
         });
     }
@@ -193,7 +217,11 @@ public class ApiTestActivity extends AppCompatActivity {
 
             @Override
             public void onError(AndroidNetworkingError error) {
-                Log.d(TAG, "onError : " + error.getContent());
+                if (error.hasErrorFromServer()) {
+                    Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
+                } else {
+                    Log.d(TAG, "onError : " + error.getError());
+                }
             }
         });
     }
@@ -225,7 +253,11 @@ public class ApiTestActivity extends AppCompatActivity {
 
             @Override
             public void onError(AndroidNetworkingError error) {
-                Log.d(TAG, "onError : " + error.getContent());
+                if (error.hasErrorFromServer()) {
+                    Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
+                } else {
+                    Log.d(TAG, "onError : " + error.getError());
+                }
             }
         });
     }
