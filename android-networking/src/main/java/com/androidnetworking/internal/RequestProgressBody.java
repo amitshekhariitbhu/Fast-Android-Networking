@@ -1,5 +1,6 @@
 package com.androidnetworking.internal;
 
+import com.androidnetworking.core.Core;
 import com.androidnetworking.interfaces.UploadProgressListener;
 
 import java.io.IOException;
@@ -56,7 +57,12 @@ public class RequestProgressBody extends RequestBody {
                 }
                 bytesWritten += byteCount;
                 if (uploadProgressListener != null) {
-                    uploadProgressListener.onProgress(bytesWritten, contentLength, bytesWritten == contentLength);
+                    Core.getInstance().getExecutorSupplier().forMainThreadTasks().execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            uploadProgressListener.onProgress(bytesWritten, contentLength, bytesWritten == contentLength);
+                        }
+                    });
                 }
             }
         };
