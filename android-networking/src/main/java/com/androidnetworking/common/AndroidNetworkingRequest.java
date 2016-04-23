@@ -45,6 +45,7 @@ public class AndroidNetworkingRequest {
     private RESPONSE mResponseAs;
     private HashMap<String, String> mHeadersMap = new HashMap<String, String>();
     private HashMap<String, String> mBodyParameterMap = new HashMap<String, String>();
+    private HashMap<String, String> mUrlEncodedFormBodyParameterMap = new HashMap<String, String>();
     private HashMap<String, String> mMultiPartParameterMap = new HashMap<String, String>();
     private HashMap<String, String> mQueryParameterMap = new HashMap<String, String>();
     private HashMap<String, String> mPathParameterMap = new HashMap<String, String>();
@@ -93,6 +94,7 @@ public class AndroidNetworkingRequest {
         this.mTag = builder.mTag;
         this.mHeadersMap = builder.mHeadersMap;
         this.mBodyParameterMap = builder.mBodyParameterMap;
+        this.mUrlEncodedFormBodyParameterMap = builder.mUrlEncodedFormBodyParameterMap;
         this.mQueryParameterMap = builder.mQueryParameterMap;
         this.mPathParameterMap = builder.mPathParameterMap;
         this.mJsonObject = builder.mJsonObject;
@@ -219,46 +221,6 @@ public class AndroidNetworkingRequest {
         return mUploadProgressListener;
     }
 
-    public RESPONSE getResponseAs() {
-        return mResponseAs;
-    }
-
-    public HashMap<String, String> getHeadersMap() {
-        return mHeadersMap;
-    }
-
-    public HashMap<String, String> getBodyParameterMap() {
-        return mBodyParameterMap;
-    }
-
-    public HashMap<String, String> getMultiPartParameterMap() {
-        return mMultiPartParameterMap;
-    }
-
-    public HashMap<String, File> getMultiPartFileMap() {
-        return mMultiPartFileMap;
-    }
-
-    public HashMap<String, String> getQueryParameterMap() {
-        return mQueryParameterMap;
-    }
-
-    public HashMap<String, String> getPathParameterMap() {
-        return mPathParameterMap;
-    }
-
-    public Bitmap.Config getDecodeConfig() {
-        return mDecodeConfig;
-    }
-
-    public int getMaxWidth() {
-        return mMaxWidth;
-    }
-
-    public int getMaxHeight() {
-        return mMaxHeight;
-    }
-
     public String getDirPath() {
         return mDirPath;
     }
@@ -372,6 +334,9 @@ public class AndroidNetworkingRequest {
             FormBody.Builder builder = new FormBody.Builder();
             for (HashMap.Entry<String, String> entry : mBodyParameterMap.entrySet()) {
                 builder.add(entry.getKey(), entry.getValue());
+            }
+            for (HashMap.Entry<String, String> entry : mUrlEncodedFormBodyParameterMap.entrySet()) {
+                builder.addEncoded(entry.getKey(), entry.getValue());
             }
             return builder.build();
         }
@@ -580,6 +545,7 @@ public class AndroidNetworkingRequest {
         private File mFile = null;
         private HashMap<String, String> mHeadersMap = new HashMap<String, String>();
         private HashMap<String, String> mBodyParameterMap = new HashMap<String, String>();
+        private HashMap<String, String> mUrlEncodedFormBodyParameterMap = new HashMap<String, String>();
         private HashMap<String, String> mQueryParameterMap = new HashMap<String, String>();
         private HashMap<String, String> mPathParameterMap = new HashMap<String, String>();
 
@@ -619,6 +585,29 @@ public class AndroidNetworkingRequest {
 
         public PostRequestBuilder addBodyParameter(String key, String value) {
             mBodyParameterMap.put(key, value);
+            return this;
+        }
+
+        public PostRequestBuilder addUrlEncodeFormBodyParameter(String key, String value) {
+            mUrlEncodedFormBodyParameterMap.put(key, value);
+            return this;
+        }
+
+        public PostRequestBuilder addBodyParameter(HashMap<String, String> bodyParameterMap) {
+            if (bodyParameterMap != null) {
+                for (HashMap.Entry<String, String> entry : bodyParameterMap.entrySet()) {
+                    mBodyParameterMap.put(entry.getKey(), entry.getValue());
+                }
+            }
+            return this;
+        }
+
+        public PostRequestBuilder addUrlEncodeFormBodyParameter(HashMap<String, String> bodyParameterMap) {
+            if (bodyParameterMap != null) {
+                for (HashMap.Entry<String, String> entry : bodyParameterMap.entrySet()) {
+                    mUrlEncodedFormBodyParameterMap.put(entry.getKey(), entry.getValue());
+                }
+            }
             return this;
         }
 
