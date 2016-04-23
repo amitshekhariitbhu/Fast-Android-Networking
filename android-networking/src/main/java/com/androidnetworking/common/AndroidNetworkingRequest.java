@@ -63,18 +63,28 @@ public class AndroidNetworkingRequest {
     private int mMaxHeight;
     private ImageView.ScaleType mScaleType;
 
-    private AndroidNetworkingRequest(Builder builder) {
+    private AndroidNetworkingRequest(GetRequestBuilder builder) {
         this.mRequestType = RequestType.SIMPLE;
-        this.mMethod = builder.mMethod;
+        this.mMethod = Method.GET;
         this.mPriority = builder.mPriority;
         this.mUrl = builder.mUrl;
         this.mTag = builder.mTag;
         this.mHeadersMap = builder.mHeadersMap;
-        this.mResponseAs = builder.mResponseAs;
         this.mDecodeConfig = builder.mDecodeConfig;
         this.mMaxHeight = builder.mMaxHeight;
         this.mMaxWidth = builder.mMaxWidth;
         this.mScaleType = builder.mScaleType;
+        this.mQueryParameterMap = builder.mQueryParameterMap;
+        this.mPathParameterMap = builder.mPathParameterMap;
+    }
+
+    private AndroidNetworkingRequest(PostRequestBuilder builder) {
+        this.mRequestType = RequestType.SIMPLE;
+        this.mMethod = Method.POST;
+        this.mPriority = builder.mPriority;
+        this.mUrl = builder.mUrl;
+        this.mTag = builder.mTag;
+        this.mHeadersMap = builder.mHeadersMap;
         this.mBodyParameterMap = builder.mBodyParameterMap;
         this.mQueryParameterMap = builder.mQueryParameterMap;
         this.mPathParameterMap = builder.mPathParameterMap;
@@ -99,7 +109,6 @@ public class AndroidNetworkingRequest {
         this.mPriority = builder.mPriority;
         this.mUrl = builder.mUrl;
         this.mTag = builder.mTag;
-        this.mResponseAs = builder.mResponseAs;
         this.mHeadersMap = builder.mHeadersMap;
         this.mQueryParameterMap = builder.mQueryParameterMap;
         this.mPathParameterMap = builder.mPathParameterMap;
@@ -107,17 +116,49 @@ public class AndroidNetworkingRequest {
         this.mMultiPartFileMap = builder.mMultiPartFileMap;
     }
 
-    public void addRequest(RequestListener requestListener) {
+    public void getAsJsonObject(RequestListener requestListener) {
+        this.mResponseAs = RESPONSE.JSON_OBJECT;
         this.mRequestListener = requestListener;
         AndroidNetworkingRequestQueue.getInstance().addRequest(this);
     }
 
-    public void download(DownloadProgressListener downloadProgressListener) {
+    public void getAsJsonArray(RequestListener requestListener) {
+        this.mResponseAs = RESPONSE.JSON_ARRAY;
+        this.mRequestListener = requestListener;
+        AndroidNetworkingRequestQueue.getInstance().addRequest(this);
+    }
+
+    public void getAsString(RequestListener requestListener) {
+        this.mResponseAs = RESPONSE.STRING;
+        this.mRequestListener = requestListener;
+        AndroidNetworkingRequestQueue.getInstance().addRequest(this);
+    }
+
+    public void getAsBitmap(RequestListener requestListener) {
+        this.mResponseAs = RESPONSE.BITMAP;
+        this.mRequestListener = requestListener;
+        AndroidNetworkingRequestQueue.getInstance().addRequest(this);
+    }
+
+    public void startDownload(DownloadProgressListener downloadProgressListener) {
         this.mDownloadProgressListener = downloadProgressListener;
         AndroidNetworkingRequestQueue.getInstance().addRequest(this);
     }
 
-    public void upload(UploadProgressListener uploadProgressListener) {
+    public void getAsJsonObject(UploadProgressListener uploadProgressListener) {
+        this.mResponseAs = RESPONSE.JSON_OBJECT;
+        this.mUploadProgressListener = uploadProgressListener;
+        AndroidNetworkingRequestQueue.getInstance().addRequest(this);
+    }
+
+    public void getAsJsonArray(UploadProgressListener uploadProgressListener) {
+        this.mResponseAs = RESPONSE.JSON_ARRAY;
+        this.mUploadProgressListener = uploadProgressListener;
+        AndroidNetworkingRequestQueue.getInstance().addRequest(this);
+    }
+
+    public void getAsString(UploadProgressListener uploadProgressListener) {
+        this.mResponseAs = RESPONSE.STRING;
         this.mUploadProgressListener = uploadProgressListener;
         AndroidNetworkingRequestQueue.getInstance().addRequest(this);
     }
@@ -431,79 +472,123 @@ public class AndroidNetworkingRequest {
         return (int) n;
     }
 
-    public static class Builder implements RequestBuilder {
-
+    public static class GetRequestBuilder implements RequestBuilder {
         private Priority mPriority = Priority.MEDIUM;
-        private int mMethod;
         private String mUrl;
         private Object mTag;
-        private RESPONSE mResponseAs;
         private Bitmap.Config mDecodeConfig;
         private int mMaxWidth;
         private int mMaxHeight;
         private ImageView.ScaleType mScaleType;
         private HashMap<String, String> mHeadersMap = new HashMap<String, String>();
-        private HashMap<String, String> mBodyParameterMap = new HashMap<String, String>();
         private HashMap<String, String> mQueryParameterMap = new HashMap<String, String>();
         private HashMap<String, String> mPathParameterMap = new HashMap<String, String>();
 
-        public Builder(String url, int method, RESPONSE responseAs) {
+        public GetRequestBuilder(String url) {
             this.mUrl = url;
-            this.mMethod = method;
-            this.mResponseAs = responseAs;
         }
 
         @Override
-        public Builder setPriority(Priority priority) {
+        public GetRequestBuilder setPriority(Priority priority) {
             this.mPriority = priority;
             return this;
         }
 
         @Override
-        public Builder setTag(Object tag) {
+        public GetRequestBuilder setTag(Object tag) {
             this.mTag = tag;
             return this;
         }
 
         @Override
-        public Builder addQueryParameter(String key, String value) {
+        public GetRequestBuilder addQueryParameter(String key, String value) {
             mQueryParameterMap.put(key, value);
             return this;
         }
 
         @Override
-        public Builder addPathParameter(String key, String value) {
+        public GetRequestBuilder addPathParameter(String key, String value) {
             mPathParameterMap.put(key, value);
             return this;
         }
 
         @Override
-        public Builder addHeaders(String key, String value) {
+        public GetRequestBuilder addHeaders(String key, String value) {
             mHeadersMap.put(key, value);
             return this;
         }
 
-        public Builder setBitmapConfig(Bitmap.Config bitmapConfig) {
+        public GetRequestBuilder setBitmapConfig(Bitmap.Config bitmapConfig) {
             this.mDecodeConfig = bitmapConfig;
             return this;
         }
 
-        public Builder setBitmapMaxHeight(int maxHeight) {
+        public GetRequestBuilder setBitmapMaxHeight(int maxHeight) {
             this.mMaxHeight = maxHeight;
             return this;
         }
 
-        public Builder setBitmapMaxWidth(int maxWidth) {
+        public GetRequestBuilder setBitmapMaxWidth(int maxWidth) {
             this.mMaxWidth = maxWidth;
             return this;
         }
 
-        public Builder setImageScaleType(ImageView.ScaleType imageScaleType) {
+        public GetRequestBuilder setImageScaleType(ImageView.ScaleType imageScaleType) {
             this.mScaleType = imageScaleType;
             return this;
         }
 
-        public Builder addBodyParameter(String key, String value) {
+        public AndroidNetworkingRequest build() {
+            AndroidNetworkingRequest androidNetworkingRequest = new AndroidNetworkingRequest(this);
+            return androidNetworkingRequest;
+        }
+    }
+
+    public static class PostRequestBuilder implements RequestBuilder {
+
+        private Priority mPriority = Priority.MEDIUM;
+        private String mUrl;
+        private Object mTag;
+        private HashMap<String, String> mHeadersMap = new HashMap<String, String>();
+        private HashMap<String, String> mBodyParameterMap = new HashMap<String, String>();
+        private HashMap<String, String> mQueryParameterMap = new HashMap<String, String>();
+        private HashMap<String, String> mPathParameterMap = new HashMap<String, String>();
+
+        public PostRequestBuilder(String url) {
+            this.mUrl = url;
+        }
+
+        @Override
+        public PostRequestBuilder setPriority(Priority priority) {
+            this.mPriority = priority;
+            return this;
+        }
+
+        @Override
+        public PostRequestBuilder setTag(Object tag) {
+            this.mTag = tag;
+            return this;
+        }
+
+        @Override
+        public PostRequestBuilder addQueryParameter(String key, String value) {
+            mQueryParameterMap.put(key, value);
+            return this;
+        }
+
+        @Override
+        public PostRequestBuilder addPathParameter(String key, String value) {
+            mPathParameterMap.put(key, value);
+            return this;
+        }
+
+        @Override
+        public PostRequestBuilder addHeaders(String key, String value) {
+            mHeadersMap.put(key, value);
+            return this;
+        }
+
+        public PostRequestBuilder addBodyParameter(String key, String value) {
             mBodyParameterMap.put(key, value);
             return this;
         }
@@ -572,16 +657,14 @@ public class AndroidNetworkingRequest {
         private Priority mPriority = Priority.MEDIUM;
         private String mUrl;
         private Object mTag;
-        private RESPONSE mResponseAs;
         private HashMap<String, String> mHeadersMap = new HashMap<String, String>();
         private HashMap<String, String> mMultiPartParameterMap = new HashMap<String, String>();
         private HashMap<String, String> mQueryParameterMap = new HashMap<String, String>();
         private HashMap<String, String> mPathParameterMap = new HashMap<String, String>();
         private HashMap<String, File> mMultiPartFileMap = new HashMap<String, File>();
 
-        public MultiPartBuilder(String url, RESPONSE responseAs) {
+        public MultiPartBuilder(String url) {
             this.mUrl = url;
-            this.mResponseAs = responseAs;
         }
 
         @Override

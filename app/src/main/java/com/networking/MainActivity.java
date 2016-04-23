@@ -8,10 +8,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.androidnetworking.common.AndroidNetworkingRequest;
-import com.androidnetworking.common.Method;
+import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
-import com.androidnetworking.common.RESPONSE;
 import com.androidnetworking.error.AndroidNetworkingError;
 import com.androidnetworking.interfaces.RequestListener;
 import com.androidnetworking.internal.AndroidNetworkingImageLoader;
@@ -47,70 +45,69 @@ public class MainActivity extends AppCompatActivity {
 
     public void makeRequests(View view) {
         for (int i = 0; i < 10; i++) {
-            AndroidNetworkingRequest androidNetworkingRequest = new AndroidNetworkingRequest.Builder(URL_JSON_ARRAY, Method.GET, RESPONSE.JSON_ARRAY)
+            AndroidNetworking.get(URL_JSON_ARRAY)
                     .setTag(this)
                     .setPriority(Priority.LOW)
-                    .build();
+                    .build()
+                    .getAsJsonArray(new RequestListener<JSONArray>() {
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            Log.d(TAG, "onResponse array : " + response.toString());
+                        }
 
-            androidNetworkingRequest.addRequest(new RequestListener<JSONArray>() {
-                @Override
-                public void onResponse(JSONArray response) {
-                    Log.d(TAG, "onResponse array : " + response.toString());
-                }
+                        @Override
+                        public void onError(AndroidNetworkingError error) {
+                            if (error.hasErrorFromServer()) {
+                                Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
+                            } else {
+                                Log.d(TAG, "onError : " + error.getError());
+                            }
+                        }
+                    });
 
-                @Override
-                public void onError(AndroidNetworkingError error) {
-                    if (error.hasErrorFromServer()) {
-                        Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
-                    } else {
-                        Log.d(TAG, "onError : " + error.getError());
-                    }
-                }
-            });
 
-            AndroidNetworkingRequest androidNetworkingObjRequest = new AndroidNetworkingRequest.Builder(URL_JSON_OBJECT, Method.GET, RESPONSE.JSON_OBJECT)
+            AndroidNetworking.get(URL_JSON_OBJECT)
                     .setTag(this)
                     .setPriority(Priority.HIGH)
-                    .build();
+                    .build()
+                    .getAsJsonObject(new RequestListener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            Log.d(TAG, "onResponse object : " + response.toString());
+                        }
 
-            androidNetworkingObjRequest.addRequest(new RequestListener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    Log.d(TAG, "onResponse object : " + response.toString());
-                }
-
-                @Override
-                public void onError(AndroidNetworkingError error) {
-                    if (error.hasErrorFromServer()) {
-                        Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
-                    } else {
-                        Log.d(TAG, "onError : " + error.getError());
-                    }
-                }
-            });
+                        @Override
+                        public void onError(AndroidNetworkingError error) {
+                            if (error.hasErrorFromServer()) {
+                                Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
+                            } else {
+                                Log.d(TAG, "onError : " + error.getError());
+                            }
+                        }
+                    });
 
         }
 
-        AndroidNetworkingRequest androidNetworkingRequest = new AndroidNetworkingRequest.Builder(URL_JSON_ARRAY, Method.GET, RESPONSE.JSON_ARRAY)
+        AndroidNetworking.get(URL_JSON_ARRAY)
                 .setTag(this)
                 .setPriority(Priority.HIGH)
-                .build();
+                .build()
+                .getAsJsonArray(new RequestListener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Log.d(TAG, "onResponse array : " + response.toString());
+                    }
 
-        androidNetworkingRequest.addRequest(new RequestListener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                Log.d(TAG, "onResponse array : " + response.toString());
-            }
+                    @Override
+                    public void onError(AndroidNetworkingError error) {
+                        if (error.hasErrorFromServer()) {
+                            Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
+                        } else {
+                            Log.d(TAG, "onError : " + error.getError());
+                        }
+                    }
+                });
 
-            @Override
-            public void onError(AndroidNetworkingError error) {
-                if (error.hasErrorFromServer()) {
-                    Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
-                } else {
-                    Log.d(TAG, "onError : " + error.getError());
-                }
-            }
-        });
     }
 
     public void cancelAllRequests(View view) {
@@ -118,32 +115,30 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void loadImageDirect(View view) {
-        AndroidNetworkingRequest androidNetworkingRequest = new AndroidNetworkingRequest.Builder(URL_IMAGE, Method.GET, RESPONSE.BITMAP)
+        AndroidNetworking.get(URL_IMAGE)
                 .setTag("ImageRequestTag")
                 .setPriority(Priority.MEDIUM)
                 .setImageScaleType(null)
                 .setBitmapMaxHeight(0)
                 .setBitmapMaxWidth(0)
                 .setBitmapConfig(Bitmap.Config.ARGB_8888)
-                .build();
-        final long startTime = System.currentTimeMillis();
-        androidNetworkingRequest.addRequest(new RequestListener<Bitmap>() {
-            @Override
-            public void onResponse(Bitmap response) {
-                Log.d(TAG, "timeTaken : " + ((System.currentTimeMillis() - startTime) / 1000));
-                Log.d(TAG, "onResponse Bitmap");
-                imageView.setImageBitmap(response);
-            }
+                .build()
+                .getAsBitmap(new RequestListener<Bitmap>() {
+                    @Override
+                    public void onResponse(Bitmap response) {
+                        Log.d(TAG, "onResponse Bitmap");
+                        imageView.setImageBitmap(response);
+                    }
 
-            @Override
-            public void onError(AndroidNetworkingError error) {
-                if (error.hasErrorFromServer()) {
-                    Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
-                } else {
-                    Log.d(TAG, "onError : " + error.getError());
-                }
-            }
-        });
+                    @Override
+                    public void onError(AndroidNetworkingError error) {
+                        if (error.hasErrorFromServer()) {
+                            Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
+                        } else {
+                            Log.d(TAG, "onError : " + error.getError());
+                        }
+                    }
+                });
     }
 
     public void loadImageFromImageLoader(View view) {

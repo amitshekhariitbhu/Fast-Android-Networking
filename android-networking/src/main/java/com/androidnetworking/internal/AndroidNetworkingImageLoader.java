@@ -8,8 +8,6 @@ import android.widget.ImageView;
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.cache.LruBitmapCache;
 import com.androidnetworking.common.AndroidNetworkingRequest;
-import com.androidnetworking.common.Method;
-import com.androidnetworking.common.RESPONSE;
 import com.androidnetworking.error.AndroidNetworkingError;
 import com.androidnetworking.interfaces.RequestListener;
 
@@ -144,7 +142,7 @@ public class AndroidNetworkingImageLoader {
 
     protected AndroidNetworkingRequest makeImageRequest(String requestUrl, int maxWidth, int maxHeight,
                                                         ImageView.ScaleType scaleType, final String cacheKey) {
-        AndroidNetworkingRequest androidNetworkingRequest = new AndroidNetworkingRequest.Builder(requestUrl, Method.GET, RESPONSE.BITMAP)
+        AndroidNetworkingRequest androidNetworkingRequest = AndroidNetworking.get(requestUrl)
                 .setTag("ImageRequestTag")
                 .setBitmapMaxHeight(maxHeight)
                 .setBitmapMaxWidth(maxWidth)
@@ -152,7 +150,7 @@ public class AndroidNetworkingImageLoader {
                 .setBitmapConfig(Bitmap.Config.RGB_565)
                 .build();
 
-        androidNetworkingRequest.addRequest(new RequestListener<Bitmap>() {
+        androidNetworkingRequest.getAsBitmap(new RequestListener<Bitmap>() {
             @Override
             public void onResponse(Bitmap response) {
                 onGetImageSuccess(cacheKey, response);
@@ -165,7 +163,6 @@ public class AndroidNetworkingImageLoader {
         });
 
         return androidNetworkingRequest;
-
     }
 
 
