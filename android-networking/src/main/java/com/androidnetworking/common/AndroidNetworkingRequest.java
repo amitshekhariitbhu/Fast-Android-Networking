@@ -54,6 +54,7 @@ public class AndroidNetworkingRequest {
     private JSONObject mJsonObject = null;
     private JSONArray mJsonArray = null;
     private String mStringBody = null;
+    private byte[] mByte = null;
     private File mFile = null;
     private static final MediaType JSON_MEDIA_TYPE = MediaType.parse("application/json; charset=utf-8");
     private static final MediaType MEDIA_TYPE_MARKDOWN = MediaType.parse("text/x-markdown; charset=utf-8");
@@ -98,6 +99,7 @@ public class AndroidNetworkingRequest {
         this.mJsonArray = builder.mJsonArray;
         this.mStringBody = builder.mStringBody;
         this.mFile = builder.mFile;
+        this.mByte = builder.mByte;
     }
 
     private AndroidNetworkingRequest(DownloadBuilder builder) {
@@ -364,6 +366,8 @@ public class AndroidNetworkingRequest {
             return RequestBody.create(MEDIA_TYPE_MARKDOWN, mStringBody);
         } else if (mFile != null) {
             return RequestBody.create(MEDIA_TYPE_MARKDOWN, mFile);
+        } else if (mByte != null) {
+            return RequestBody.create(MEDIA_TYPE_MARKDOWN, mByte);
         } else {
             FormBody.Builder builder = new FormBody.Builder();
             for (HashMap.Entry<String, String> entry : mBodyParameterMap.entrySet()) {
@@ -572,6 +576,7 @@ public class AndroidNetworkingRequest {
         private JSONObject mJsonObject = null;
         private JSONArray mJsonArray = null;
         private String mStringBody = null;
+        private byte[] mByte = null;
         private File mFile = null;
         private HashMap<String, String> mHeadersMap = new HashMap<String, String>();
         private HashMap<String, String> mBodyParameterMap = new HashMap<String, String>();
@@ -634,6 +639,11 @@ public class AndroidNetworkingRequest {
 
         public PostRequestBuilder addFileBody(File file) {
             mFile = file;
+            return this;
+        }
+
+        public PostRequestBuilder addByteBody(byte[] bytes) {
+            mByte = bytes;
             return this;
         }
 
