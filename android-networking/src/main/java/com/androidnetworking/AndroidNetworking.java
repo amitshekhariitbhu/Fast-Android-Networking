@@ -11,7 +11,7 @@ import com.androidnetworking.internal.AndroidNetworkingRequestQueue;
  */
 public class AndroidNetworking {
 
-    public static Context mContext;
+    private static Context mContext;
 
     private AndroidNetworking() {
     }

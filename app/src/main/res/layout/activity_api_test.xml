@@ -1,81 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.networking.MainActivity">
+    android:layout_height="match_parent">
 
-
-    <Button
-        android:id="@+id/getAllUsers"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_margin="8dp"
-        android:onClick="getAllUsers"
-        android:text="/getAllUsers/{pageNumber}" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin">
 
-    <Button
-        android:id="@+id/getAnUser"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_margin="8dp"
-        android:onClick="getAnUser"
-        android:text="/getAnUser/{userId}" />
+        <Button
+            android:id="@+id/getAllUsers"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_margin="8dp"
+            android:onClick="getAllUsers"
+            android:text="/getAllUsers/{pageNumber}" />
 
-    <Button
-        android:id="@+id/checkForHeaderGet"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_margin="8dp"
-        android:onClick="checkForHeaderGet"
-        android:text="GET : checkForHeader" />
+        <Button
+            android:id="@+id/getAnUser"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_margin="8dp"
+            android:onClick="getAnUser"
+            android:text="/getAnUser/{userId}" />
 
-    <Button
-        android:id="@+id/checkForHeaderPost"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_margin="8dp"
-        android:onClick="checkForHeaderPost"
-        android:text="POST : checkForHeader" />
+        <Button
+            android:id="@+id/checkForHeaderGet"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_margin="8dp"
+            android:onClick="checkForHeaderGet"
+            android:text="GET : checkForHeader" />
 
+        <Button
+            android:id="@+id/checkForHeaderPost"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_margin="8dp"
+            android:onClick="checkForHeaderPost"
+            android:text="POST : checkForHeader" />
 
-    <Button
-        android:id="@+id/createAnUser"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_margin="8dp"
-        android:onClick="createAnUser"
-        android:text="/createAnUser" />
+        <Button
+            android:id="@+id/createAnUser"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_margin="8dp"
+            android:onClick="createAnUser"
+            android:text="/createAnUser" />
 
+        <Button
+            android:id="@+id/createAnUserJSONObject"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_margin="8dp"
+            android:onClick="createAnUserJSONObject"
+            android:text="/createAnUserJSONObject" />
 
-    <Button
-        android:id="@+id/downloadFile"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_margin="8dp"
-        android:onClick="downloadFile"
-        android:text="downloadFile" />
+        <Button
+            android:id="@+id/downloadFile"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_margin="8dp"
+            android:onClick="downloadFile"
+            android:text="downloadFile" />
 
+        <Button
+            android:id="@+id/downloadImage"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_margin="8dp"
+            android:onClick="downloadImage"
+            android:text="downloadImage" />
 
-    <Button
-        android:id="@+id/downloadImage"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_margin="8dp"
-        android:onClick="downloadImage"
-        android:text="downloadImage" />
+        <Button
+            android:id="@+id/uploadImage"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_margin="8dp"
+            android:onClick="uploadImage"
+            android:text="uploadImage" />
 
-    <Button
-        android:id="@+id/uploadImage"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_margin="8dp"
-        android:onClick="uploadImage"
-        android:text="uploadImage" />
+    </LinearLayout>
 
-</LinearLayout>
+</ScrollView>

@@ -15,6 +15,7 @@ import com.androidnetworking.interfaces.UploadProgressListener;
 import com.networking.utils.Utils;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -129,6 +130,37 @@ public class ApiTestActivity extends AppCompatActivity {
         AndroidNetworking.post(ApiEndPoint.BASE_URL + ApiEndPoint.POST_CREATE_AN_USER)
                 .addBodyParameter("firstname", "Suman")
                 .addBodyParameter("lastname", "Shekhar")
+                .setTag(this)
+                .setPriority(Priority.LOW)
+                .build()
+                .getAsJsonObject(new RequestListener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, "onResponse object : " + response.toString());
+                    }
+
+                    @Override
+                    public void onError(AndroidNetworkingError error) {
+                        if (error.hasErrorFromServer()) {
+                            Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
+                        } else {
+                            Log.d(TAG, "onError : " + error.getError());
+                        }
+                    }
+                });
+    }
+
+
+    public void createAnUserJSONObject(View view) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("firstname", "Rohit");
+            jsonObject.put("lastname", "Kumar");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        AndroidNetworking.post(ApiEndPoint.BASE_URL + ApiEndPoint.POST_CREATE_AN_USER)
+                .addJSONObject(jsonObject)
                 .setTag(this)
                 .setPriority(Priority.LOW)
                 .build()

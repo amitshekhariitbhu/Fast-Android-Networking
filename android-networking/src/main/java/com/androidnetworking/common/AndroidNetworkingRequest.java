@@ -51,6 +51,8 @@ public class AndroidNetworkingRequest {
     private HashMap<String, File> mMultiPartFileMap = new HashMap<String, File>();
     private String mDirPath;
     private String mFileName;
+    private JSONObject mJsonObject = null;
+    private static final MediaType JSON_MEDIA_TYPE = MediaType.parse("application/json; charset=utf-8");
     private static final Object sDecodeLock = new Object();
 
     private Future future;
@@ -88,6 +90,7 @@ public class AndroidNetworkingRequest {
         this.mBodyParameterMap = builder.mBodyParameterMap;
         this.mQueryParameterMap = builder.mQueryParameterMap;
         this.mPathParameterMap = builder.mPathParameterMap;
+        this.mJsonObject = builder.mJsonObject;
     }
 
     private AndroidNetworkingRequest(DownloadBuilder builder) {
@@ -346,11 +349,15 @@ public class AndroidNetworkingRequest {
     }
 
     public RequestBody getRequestBody() {
-        FormBody.Builder builder = new FormBody.Builder();
-        for (HashMap.Entry<String, String> entry : mBodyParameterMap.entrySet()) {
-            builder.add(entry.getKey(), entry.getValue());
+        if (mJsonObject != null) {
+            return RequestBody.create(JSON_MEDIA_TYPE, mJsonObject.toString());
+        } else {
+            FormBody.Builder builder = new FormBody.Builder();
+            for (HashMap.Entry<String, String> entry : mBodyParameterMap.entrySet()) {
+                builder.add(entry.getKey(), entry.getValue());
+            }
+            return builder.build();
         }
-        return builder.build();
     }
 
     public RequestBody getMultiPartRequestBody() {
@@ -549,6 +556,7 @@ public class AndroidNetworkingRequest {
         private Priority mPriority = Priority.MEDIUM;
         private String mUrl;
         private Object mTag;
+        private JSONObject mJsonObject = null;
         private HashMap<String, String> mHeadersMap = new HashMap<String, String>();
         private HashMap<String, String> mBodyParameterMap = new HashMap<String, String>();
         private HashMap<String, String> mQueryParameterMap = new HashMap<String, String>();
@@ -590,6 +598,11 @@ public class AndroidNetworkingRequest {
 
         public PostRequestBuilder addBodyParameter(String key, String value) {
             mBodyParameterMap.put(key, value);
+            return this;
+        }
+
+        public PostRequestBuilder addJSONObject(JSONObject jsonObject) {
+            mJsonObject = jsonObject;
             return this;
         }
 

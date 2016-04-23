@@ -1,86 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.networking.MainActivity">
-
-
-    <Button
-        android:id="@+id/makeRequestButton"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_margin="8dp"
-        android:onClick="makeRequests"
-        android:text="Make Some Requests" />
-
-    <Button
-        android:id="@+id/cancelButton"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_margin="8dp"
-        android:onClick="cancelAllRequests"
-        android:text="Cancel All Request" />
-
-    <Button
-        android:id="@+id/loadImageButton"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_margin="8dp"
-        android:onClick="loadImageDirect"
-        android:text="Load Image Direct" />
-
-
-    <Button
-        android:id="@+id/loadImageFromImageLoaderButton"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_margin="8dp"
-        android:onClick="loadImageFromImageLoader"
-        android:text="Load Image From ImageLoader" />
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin">
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_gravity="center"
-            android:layout_marginRight="8dp" />
+        <Button
+            android:id="@+id/makeRequestButton"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_margin="8dp"
+            android:onClick="makeRequests"
+            android:text="Make Some Requests" />
 
-        <com.androidnetworking.widget.GreatImageView
-            android:id="@+id/greatImageView"
-            android:layout_width="100dp"
+        <Button
+            android:id="@+id/cancelButton"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_margin="8dp"
+            android:onClick="cancelAllRequests"
+            android:text="Cancel All Request" />
+
+        <Button
+            android:id="@+id/loadImageButton"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_margin="8dp"
+            android:onClick="loadImageDirect"
+            android:text="Load Image Direct" />
+
+
+        <Button
+            android:id="@+id/loadImageFromImageLoaderButton"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_margin="8dp"
+            android:onClick="loadImageFromImageLoader"
+            android:text="Load Image From ImageLoader" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:layout_gravity="center" />
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:layout_marginRight="8dp" />
+
+            <com.androidnetworking.widget.GreatImageView
+                android:id="@+id/greatImageView"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center" />
+
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/startGridActivityButton"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_margin="8dp"
+            android:onClick="startGridActivity"
+            android:text="StartGridActivity" />
+
+        <Button
+            android:id="@+id/startApiTestActivityButton"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_margin="8dp"
+            android:onClick="startApiTestActivity"
+            android:text="StartApiTestActivity" />
 
     </LinearLayout>
 
-
-    <Button
-        android:id="@+id/startGridActivityButton"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_margin="8dp"
-        android:onClick="startGridActivity"
-        android:text="StartGridActivity" />
-
-    <Button
-        android:id="@+id/startApiTestActivityButton"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_margin="8dp"
-        android:onClick="startApiTestActivity"
-        android:text="StartApiTestActivity" />
-
-
-</LinearLayout>
+</ScrollView>
