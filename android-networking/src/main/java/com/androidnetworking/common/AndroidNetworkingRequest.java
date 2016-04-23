@@ -52,7 +52,11 @@ public class AndroidNetworkingRequest {
     private String mDirPath;
     private String mFileName;
     private JSONObject mJsonObject = null;
+    private JSONArray mJsonArray = null;
+    private String mStringBody = null;
+    private File mFile = null;
     private static final MediaType JSON_MEDIA_TYPE = MediaType.parse("application/json; charset=utf-8");
+    private static final MediaType MEDIA_TYPE_MARKDOWN = MediaType.parse("text/x-markdown; charset=utf-8");
     private static final Object sDecodeLock = new Object();
 
     private Future future;
@@ -91,6 +95,9 @@ public class AndroidNetworkingRequest {
         this.mQueryParameterMap = builder.mQueryParameterMap;
         this.mPathParameterMap = builder.mPathParameterMap;
         this.mJsonObject = builder.mJsonObject;
+        this.mJsonArray = builder.mJsonArray;
+        this.mStringBody = builder.mStringBody;
+        this.mFile = builder.mFile;
     }
 
     private AndroidNetworkingRequest(DownloadBuilder builder) {
@@ -351,6 +358,12 @@ public class AndroidNetworkingRequest {
     public RequestBody getRequestBody() {
         if (mJsonObject != null) {
             return RequestBody.create(JSON_MEDIA_TYPE, mJsonObject.toString());
+        } else if (mJsonArray != null) {
+            return RequestBody.create(JSON_MEDIA_TYPE, mJsonArray.toString());
+        } else if (mStringBody != null) {
+            return RequestBody.create(MEDIA_TYPE_MARKDOWN, mStringBody);
+        } else if (mFile != null) {
+            return RequestBody.create(MEDIA_TYPE_MARKDOWN, mFile);
         } else {
             FormBody.Builder builder = new FormBody.Builder();
             for (HashMap.Entry<String, String> entry : mBodyParameterMap.entrySet()) {
@@ -557,6 +570,9 @@ public class AndroidNetworkingRequest {
         private String mUrl;
         private Object mTag;
         private JSONObject mJsonObject = null;
+        private JSONArray mJsonArray = null;
+        private String mStringBody = null;
+        private File mFile = null;
         private HashMap<String, String> mHeadersMap = new HashMap<String, String>();
         private HashMap<String, String> mBodyParameterMap = new HashMap<String, String>();
         private HashMap<String, String> mQueryParameterMap = new HashMap<String, String>();
@@ -601,8 +617,23 @@ public class AndroidNetworkingRequest {
             return this;
         }
 
-        public PostRequestBuilder addJSONObject(JSONObject jsonObject) {
+        public PostRequestBuilder addJSONObjectBody(JSONObject jsonObject) {
             mJsonObject = jsonObject;
+            return this;
+        }
+
+        public PostRequestBuilder addJSONArrayBody(JSONArray jsonArray) {
+            mJsonArray = jsonArray;
+            return this;
+        }
+
+        public PostRequestBuilder addStringBody(String stringBody) {
+            mStringBody = stringBody;
+            return this;
+        }
+
+        public PostRequestBuilder addFileBody(File file) {
+            mFile = file;
             return this;
         }
 

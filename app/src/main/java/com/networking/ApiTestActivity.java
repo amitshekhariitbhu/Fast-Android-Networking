@@ -160,7 +160,7 @@ public class ApiTestActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         AndroidNetworking.post(ApiEndPoint.BASE_URL + ApiEndPoint.POST_CREATE_AN_USER)
-                .addJSONObject(jsonObject)
+                .addJSONObjectBody(jsonObject)
                 .setTag(this)
                 .setPriority(Priority.LOW)
                 .build()
@@ -236,7 +236,7 @@ public class ApiTestActivity extends AppCompatActivity {
     }
 
     public void uploadImage(final View view) {
-        AndroidNetworking.uploadMultipart(ApiEndPoint.UPLOAD_IMAGE_URL)
+        AndroidNetworking.upload(ApiEndPoint.UPLOAD_IMAGE_URL)
                 .setPriority(Priority.MEDIUM)
                 .addMultipartFile("image", new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "test.png"))
                 .setTag(this)

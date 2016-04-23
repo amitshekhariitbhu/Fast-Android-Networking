@@ -38,7 +38,7 @@ public class AndroidNetworking {
         return new AndroidNetworkingRequest.DownloadBuilder(url, dirPath, fileName);
     }
 
-    public static AndroidNetworkingRequest.MultiPartBuilder uploadMultipart(String url) {
+    public static AndroidNetworkingRequest.MultiPartBuilder upload(String url) {
         return new AndroidNetworkingRequest.MultiPartBuilder(url);
     }
 }
