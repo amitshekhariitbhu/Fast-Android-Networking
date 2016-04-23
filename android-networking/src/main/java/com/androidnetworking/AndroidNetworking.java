@@ -41,4 +41,8 @@ public class AndroidNetworking {
     public static AndroidNetworkingRequest.MultiPartBuilder upload(String url) {
         return new AndroidNetworkingRequest.MultiPartBuilder(url);
     }
+
+    public static void cancel(Object tag) {
+        AndroidNetworkingRequestQueue.getInstance().cancelRequestWithGivenTag(tag);
+    }
 }

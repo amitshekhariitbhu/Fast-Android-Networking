@@ -33,11 +33,11 @@ public class AndroidNetworkingRequestQueue {
 
 
     public interface RequestFilter {
-        public boolean apply(AndroidNetworkingRequest request);
+        boolean apply(AndroidNetworkingRequest request);
     }
 
 
-    public void cancelAll(RequestFilter filter) {
+    private void cancel(RequestFilter filter) {
         synchronized (mCurrentRequests) {
             for (AndroidNetworkingRequest request : mCurrentRequests) {
                 if (filter.apply(request)) {
@@ -47,11 +47,11 @@ public class AndroidNetworkingRequestQueue {
         }
     }
 
-    public void cancelAll(final Object tag) {
+    public void cancelRequestWithGivenTag(final Object tag) {
         if (tag == null) {
             throw new IllegalArgumentException("Cannot cancelAll with a null tag");
         }
-        cancelAll(new RequestFilter() {
+        cancel(new RequestFilter() {
             @Override
             public boolean apply(AndroidNetworkingRequest request) {
                 return request.getTag() == tag;

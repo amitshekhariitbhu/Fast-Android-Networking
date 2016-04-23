@@ -13,7 +13,6 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.AndroidNetworkingError;
 import com.androidnetworking.interfaces.RequestListener;
 import com.androidnetworking.internal.AndroidNetworkingImageLoader;
-import com.androidnetworking.internal.AndroidNetworkingRequestQueue;
 import com.androidnetworking.widget.GreatImageView;
 import com.networking.provider.Images;
 
@@ -111,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void cancelAllRequests(View view) {
-        AndroidNetworkingRequestQueue.getInstance().cancelAll(this);
+        AndroidNetworking.cancel(this);
     }
 
     public void loadImageDirect(View view) {
