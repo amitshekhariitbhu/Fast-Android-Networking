@@ -35,7 +35,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
     public void testGetRequest() throws InterruptedException {
 
-        server.enqueue(new MockResponse().setBody("getRequest"));
+        server.enqueue(new MockResponse().setBody("getResponse"));
 
         final AtomicReference<String> responseRef = new AtomicReference<>();
         final CountDownLatch latch = new CountDownLatch(1);
@@ -57,8 +57,102 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
         assertTrue(latch.await(2, SECONDS));
 
-        String response = responseRef.get();
-        assertEquals("getRequest", response);
+        assertEquals("getResponse", responseRef.get());
     }
+
+    public void testGetRequest404() throws InterruptedException {
+
+        server.enqueue(new MockResponse().setResponseCode(404).setBody("getResponse"));
+
+        final AtomicReference<String> errorRef = new AtomicReference<>();
+        final AtomicReference<Boolean> hasErrorFromServerRef = new AtomicReference<>();
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        AndroidNetworking.get(server.url("/").toString())
+                .build()
+                .getAsString(new RequestListener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        assertTrue(false);
+                    }
+
+                    @Override
+                    public void onError(AndroidNetworkingError error) {
+                        hasErrorFromServerRef.set(error.hasErrorFromServer());
+                        errorRef.set(error.getError());
+                        latch.countDown();
+                    }
+                });
+
+        assertTrue(latch.await(2, SECONDS));
+
+        assertEquals("errorResponseFromServer", errorRef.get());
+
+        assertTrue(hasErrorFromServerRef.get());
+    }
+
+    public void testPostRequest() throws InterruptedException {
+
+        server.enqueue(new MockResponse().setBody("postResponse"));
+
+        final AtomicReference<String> responseRef = new AtomicReference<>();
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        AndroidNetworking.post(server.url("/").toString())
+                .addBodyParameter("fistName", "Amit")
+                .addBodyParameter("lastName", "Shekhar")
+                .build()
+                .getAsString(new RequestListener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        responseRef.set(response);
+                        latch.countDown();
+                    }
+
+                    @Override
+                    public void onError(AndroidNetworkingError error) {
+                        assertTrue(false);
+                    }
+                });
+
+        assertTrue(latch.await(2, SECONDS));
+
+        assertEquals("postResponse", responseRef.get());
+    }
+
+
+    public void testPostRequest404() throws InterruptedException {
+
+        server.enqueue(new MockResponse().setResponseCode(404).setBody("postResponse"));
+
+        final AtomicReference<String> errorRef = new AtomicReference<>();
+        final AtomicReference<Boolean> hasErrorFromServerRef = new AtomicReference<>();
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        AndroidNetworking.post(server.url("/").toString())
+                .addBodyParameter("fistName", "Amit")
+                .addBodyParameter("lastName", "Shekhar")
+                .build()
+                .getAsString(new RequestListener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        assertTrue(false);
+                    }
+
+                    @Override
+                    public void onError(AndroidNetworkingError error) {
+                        hasErrorFromServerRef.set(error.hasErrorFromServer());
+                        errorRef.set(error.getError());
+                        latch.countDown();
+                    }
+                });
+
+        assertTrue(latch.await(2, SECONDS));
+
+        assertEquals("errorResponseFromServer", errorRef.get());
+
+        assertTrue(hasErrorFromServerRef.get());
+    }
+
 
 }
