@@ -157,6 +157,7 @@ AndroidNetworking.upload(url)
                     public void onError(AndroidNetworkingError error) {
                     // handle error  
                     }
+                  });  
 ```
 
 ### Contributing to Android Networking
