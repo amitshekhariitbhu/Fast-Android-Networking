@@ -14,6 +14,13 @@ Android Networking supports:
 * Cancelling a request
 * Setting priority to any request (LOW, MEDIUM, HIGH, IMMEDIATE)
 
+As it uses [OkHttp](http://square.github.io/okhttp/) as a networking layer, it supports:
+
+* HTTP/2 support allows all requests to the same host to share a socket
+* Connection pooling reduces request latency (if HTTP/2 isn’t available)
+* Transparent GZIP shrinks download sizes
+* Response caching avoids the network completely for repeat requests
+
 ## Requirements
 
 Android Networking can be included in any Android application. 
@@ -168,6 +175,15 @@ Any request with a given tag can be cancelled. Just do like this.
 ```
 AndroidNetworking.cancel("testTag"); // All the requests with the given tag will be cancelled.
 ```
+### Inspiration behind making of this library :
+* Recent removal of HttpClient in Android Marshmallow(Android M) made other networking library obsolete.
+* No other single library do each and everything like making request, downloading any type of file, uploading file, loading
+  bitmap from network in ImageView, etc. There are libraries but they are outdated.
+* No other library provided simple interface for doing all types of things in networking like setting priority, cancelling, etc.
+* As it uses [Okio](https://github.com/square/okio) , No more GC overhead in android application.
+  [Okio](https://github.com/square/okio) is made to handle GC overhead while allocating memory.
+  [Okio](https://github.com/square/okio) do some clever things to save CPU and memory.
+* As it uses [OkHttp](http://square.github.io/okhttp/) , most important it supports HTTP/2.  
 ### Contributing to Android Networking
 Just make pull request. You are in.
 
