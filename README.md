@@ -1,8 +1,8 @@
 # Android Networking 
 
-Android Networking is a powerful system for doing any type of networking in Android applications which is made on top of [OkHttp Networking Layer](http://square.github.io/okhttp/).
+Android Networking is a powerful library for doing any type of networking in Android applications which is made on top of [OkHttp Networking Layer](http://square.github.io/okhttp/).
 
-Android Networking takes care of each and everythings. So you don't have to do anything, just have to make request and listen for the response.
+Android Networking takes care of each and everythings. So you don't have to do anything, just make request and listen for the response.
 
 Android Networking supports:
 
@@ -18,17 +18,17 @@ Android Networking supports Android 2.3 (Gingerbread) and later.
 
 ## Using Android Networking in your application
 
-As of now the library is under development so we have not open it use through gradle anyway you can it as a library in android project after downloading it.
+As of now the library is under development so we have not open it to use through gradle anyway you can add it as a library in android project after downloading it.
 
 After importing it as a library add this in your build.gradle
 ```
 compile project(':android-networking')
 ```
-and add this in settings.gradle
+and add this in your settings.gradle
 ```
 include ':android-networking'
 ```
-Then in your application class, initialize it in our onCreate Method :
+Then initialize it in onCreate() Method of application class, :
 ```
 AndroidNetworking.initialize(getApplicationContext());
 ```
@@ -159,6 +159,6 @@ AndroidNetworking.upload(url)
                     }
 ```
 
-### Join the Android Networking community
+### Contributing to Android Networking
 Just make pull request. You are in.
 
