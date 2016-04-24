@@ -4,13 +4,15 @@
 
 Android Networking is a powerful library for doing any type of networking in Android applications which is made on top of [OkHttp Networking Layer](http://square.github.io/okhttp/).
 
-Android Networking takes care of each and everythings. So you don't have to do anything, just make request and listen for the response.
+Android Networking takes care of each and everything. So you don't have to do anything, just make request and listen for the response.
 
 Android Networking supports:
 
 * All type of HTTP/HTTPS request like GET,POST,etc
 * Downloading any type of file
 * Uploading any type of file (supports multipart upload)
+* Cancelling a request
+* Setting priority to any request (LOW, MEDIUM, HIGH, IMMEDIATE)
 
 ## Requirements
 
