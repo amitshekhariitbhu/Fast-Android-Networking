@@ -3,6 +3,7 @@ package com.androidnetworking;
 import android.content.Context;
 
 import com.androidnetworking.common.AndroidNetworkingRequest;
+import com.androidnetworking.core.Core;
 import com.androidnetworking.internal.AndroidNetworkingImageLoader;
 import com.androidnetworking.internal.AndroidNetworkingRequestQueue;
 
@@ -44,5 +45,9 @@ public class AndroidNetworking {
 
     public static void cancel(Object tag) {
         AndroidNetworkingRequestQueue.getInstance().cancelRequestWithGivenTag(tag);
+    }
+
+    public static void shutDown() {
+        Core.shutDown();
     }
 }
