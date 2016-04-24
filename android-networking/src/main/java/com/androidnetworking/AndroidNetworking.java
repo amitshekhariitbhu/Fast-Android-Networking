@@ -54,7 +54,7 @@ public class AndroidNetworking {
      * Method to make GET request
      *
      * @param url The url on which request is to be made
-     * @return
+     * @return The GetRequestBuilder
      */
     public static AndroidNetworkingRequest.GetRequestBuilder get(String url) {
         return new AndroidNetworkingRequest.GetRequestBuilder(url);
@@ -64,7 +64,7 @@ public class AndroidNetworking {
      * Method to make POST request
      *
      * @param url The url on which request is to be made
-     * @return
+     * @return The PostRequestBuilder
      */
     public static AndroidNetworkingRequest.PostRequestBuilder post(String url) {
         return new AndroidNetworkingRequest.PostRequestBuilder(url);
@@ -76,7 +76,7 @@ public class AndroidNetworking {
      * @param url      The url on which request is to be made
      * @param dirPath  The directory path on which file is to be saved
      * @param fileName The file name with which file is to be saved
-     * @return
+     * @return The DownloadBuilder
      */
     public static AndroidNetworkingRequest.DownloadBuilder download(String url, String dirPath, String fileName) {
         return new AndroidNetworkingRequest.DownloadBuilder(url, dirPath, fileName);
@@ -86,7 +86,7 @@ public class AndroidNetworking {
      * Method to make upload request
      *
      * @param url The url on which request is to be made
-     * @return
+     * @return The MultiPartBuilder
      */
     public static AndroidNetworkingRequest.MultiPartBuilder upload(String url) {
         return new AndroidNetworkingRequest.MultiPartBuilder(url);
