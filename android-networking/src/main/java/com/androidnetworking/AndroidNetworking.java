@@ -24,7 +24,7 @@ public class AndroidNetworking {
         AndroidNetworkingImageLoader.initialize();
     }
 
-    public static void initialize(Context context, OkHttpClient okHttpClient) {
+    public static void initialize(OkHttpClient okHttpClient) {
         AndroidNetworkingOkHttp.setClient(okHttpClient);
         AndroidNetworkingRequestQueue.initialize();
         AndroidNetworkingImageLoader.initialize();
