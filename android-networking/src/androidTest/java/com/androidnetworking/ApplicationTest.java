@@ -65,6 +65,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         server.enqueue(new MockResponse().setResponseCode(404).setBody("getResponse"));
 
         final AtomicReference<String> errorRef = new AtomicReference<>();
+        final AtomicReference<String> errorContentRef = new AtomicReference<>();
         final AtomicReference<Boolean> hasErrorFromServerRef = new AtomicReference<>();
         final CountDownLatch latch = new CountDownLatch(1);
 
@@ -79,6 +80,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
                     @Override
                     public void onError(AndroidNetworkingError error) {
                         hasErrorFromServerRef.set(error.hasErrorFromServer());
+                        errorContentRef.set(error.getContent());
                         errorRef.set(error.getError());
                         latch.countDown();
                     }
@@ -86,9 +88,12 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
         assertTrue(latch.await(2, SECONDS));
 
+        assertTrue(hasErrorFromServerRef.get());
+
         assertEquals("errorResponseFromServer", errorRef.get());
 
-        assertTrue(hasErrorFromServerRef.get());
+        assertEquals("getResponse", errorContentRef.get());
+
     }
 
     public void testPostRequest() throws InterruptedException {
@@ -126,6 +131,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         server.enqueue(new MockResponse().setResponseCode(404).setBody("postResponse"));
 
         final AtomicReference<String> errorRef = new AtomicReference<>();
+        final AtomicReference<String> errorContentRef = new AtomicReference<>();
         final AtomicReference<Boolean> hasErrorFromServerRef = new AtomicReference<>();
         final CountDownLatch latch = new CountDownLatch(1);
 
@@ -142,6 +148,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
                     @Override
                     public void onError(AndroidNetworkingError error) {
                         hasErrorFromServerRef.set(error.hasErrorFromServer());
+                        errorContentRef.set(error.getContent());
                         errorRef.set(error.getError());
                         latch.countDown();
                     }
@@ -149,9 +156,11 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
         assertTrue(latch.await(2, SECONDS));
 
+        assertTrue(hasErrorFromServerRef.get());
+
         assertEquals("errorResponseFromServer", errorRef.get());
 
-        assertTrue(hasErrorFromServerRef.get());
+        assertEquals("postResponse", errorContentRef.get());
     }
 
 
