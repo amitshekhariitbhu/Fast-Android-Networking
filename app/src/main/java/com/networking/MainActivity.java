@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void loadImageDirect(View view) {
         AndroidNetworking.get(URL_IMAGE)
-                .setTag("ImageRequestTag")
+                .setTag("imageRequestTag")
                 .setPriority(Priority.MEDIUM)
                 .setImageScaleType(null)
                 .setBitmapMaxHeight(0)

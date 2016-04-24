@@ -89,7 +89,7 @@ AndroidNetworking.post("http://api.localhost.com/createAnUser")
                     }
                 });
 ```
-You can also post json,file,ect in POST request like this.
+You can also post json, file ,etc in POST request like this.
 ```
 JSONObject jsonObject = new JSONObject();
 try {
@@ -175,10 +175,42 @@ Any request with a given tag can be cancelled. Just do like this.
 ```
 AndroidNetworking.cancel("testTag"); // All the requests with the given tag will be cancelled.
 ```
+### Loading image from network into ImageView
+```
+      <com.androidnetworking.widget.GreatImageView
+          android:id="@+id/greatImageView"
+          android:layout_width="100dp"
+          android:layout_height="100dp"
+          android:layout_gravity="center" />
+          
+      greatImageView.setDefaultImageResId(R.drawable.default);
+      greatImageView.setErrorImageResId(R.drawable.error);
+      greatImageView.setImageUrl(imageUrl);          
+```
+### Getting Bitmap from url with some specified parameters
+```
+AndroidNetworking.get(imageUrl)
+                 .setTag("imageRequestTag")
+                 .setPriority(Priority.MEDIUM)
+                 .setBitmapMaxHeight(100)
+                 .setBitmapMaxWidth(100)
+                 .setBitmapConfig(Bitmap.Config.ARGB_8888)
+                 .build()
+                 .getAsBitmap(new RequestListener<Bitmap>() {
+                    @Override
+                    public void onResponse(Bitmap bitmap) {
+                    // do anything with bitmap
+                    }
+                    @Override
+                    public void onError(AndroidNetworkingError error) {
+                    // handle error
+                    }
+                });
+```
 ### Inspiration behind making of this library :
 * Recent removal of HttpClient in Android Marshmallow(Android M) made other networking library obsolete.
 * No other single library do each and everything like making request, downloading any type of file, uploading file, loading
-  bitmap from network in ImageView, etc. There are libraries but they are outdated.
+  image from network in ImageView, etc. There are libraries but they are outdated.
 * No other library provided simple interface for doing all types of things in networking like setting priority, cancelling, etc.
 * As it uses [Okio](https://github.com/square/okio) , No more GC overhead in android application.
   [Okio](https://github.com/square/okio) is made to handle GC overhead while allocating memory.
