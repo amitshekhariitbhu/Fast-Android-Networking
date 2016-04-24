@@ -1,5 +1,7 @@
 # Android Networking 
 
+### This library is under development
+
 Android Networking is a powerful library for doing any type of networking in Android applications which is made on top of [OkHttp Networking Layer](http://square.github.io/okhttp/).
 
 Android Networking takes care of each and everythings. So you don't have to do anything, just make request and listen for the response.
@@ -159,7 +161,11 @@ AndroidNetworking.upload(url)
                     }
                   });  
 ```
-
+### Cancelling a request.
+Any request with a given tag can be cancelled. Just do like this.
+```
+AndroidNetworking.cancel("testTag"); // All the requests with the given tag will be cancelled.
+```
 ### Contributing to Android Networking
 Just make pull request. You are in.
 
