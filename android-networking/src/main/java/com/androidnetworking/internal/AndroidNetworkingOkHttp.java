@@ -4,9 +4,8 @@ package com.androidnetworking.internal;
  * Created by amitshekhar on 22/03/16.
  */
 
-import android.support.annotation.NonNull;
+import android.content.Context;
 
-import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.AndroidNetworkingData;
 import com.androidnetworking.common.AndroidNetworkingRequest;
 import com.androidnetworking.common.Constants;
@@ -20,7 +19,6 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Headers;
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -38,15 +36,10 @@ import static com.androidnetworking.common.Method.PUT;
 
 public class AndroidNetworkingOkHttp {
 
-    public static final String HEADER_USER_AGENT = "User-Agent";
-    public static final int DOWNLOAD_CHUNK_SIZE = 2048;
+    private static final String HEADER_USER_AGENT = "User-Agent";
+    private static final int DOWNLOAD_CHUNK_SIZE = 2048;
 
-    private static OkHttpClient sHttpClient = new OkHttpClient().newBuilder()
-            .cache(Utils.getCache(AndroidNetworking.getContext(), Constants.MAX_CACHE_SIZE, Constants.CACHE_DIR_NAME))
-            .connectTimeout(60, TimeUnit.SECONDS)
-            .readTimeout(60, TimeUnit.SECONDS)
-            .writeTimeout(60, TimeUnit.SECONDS)
-            .build();
+    private static OkHttpClient sHttpClient = getClient();
 
     public static AndroidNetworkingData performSimpleRequest(AndroidNetworkingRequest request) throws AndroidNetworkingError {
         AndroidNetworkingData data = new AndroidNetworkingData();
@@ -212,17 +205,32 @@ public class AndroidNetworkingOkHttp {
         }
     }
 
-    public static void addNetworkInterceptor(@NonNull Interceptor interceptor) {
-        sHttpClient = sHttpClient.newBuilder()
-                .addNetworkInterceptor(interceptor)
+    public static OkHttpClient getClient() {
+        if (sHttpClient == null) {
+            return getDefaultClient();
+        }
+        return sHttpClient;
+    }
+
+    public static OkHttpClient getDefaultClient() {
+        return new OkHttpClient().newBuilder()
+                .connectTimeout(60, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS)
+                .writeTimeout(60, TimeUnit.SECONDS)
                 .build();
     }
 
-    public static void removeNetworkInterceptor(@NonNull Interceptor interceptor) {
-        OkHttpClient.Builder builder = sHttpClient.newBuilder();
-        builder.networkInterceptors().remove(interceptor);
-        sHttpClient = builder.build();
+    public static void setClientWithCache(Context context) {
+        sHttpClient = new OkHttpClient().newBuilder()
+                .cache(Utils.getCache(context, Constants.MAX_CACHE_SIZE, Constants.CACHE_DIR_NAME))
+                .connectTimeout(60, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS)
+                .writeTimeout(60, TimeUnit.SECONDS)
+                .build();
     }
 
+    public static void setClient(OkHttpClient okHttpClient) {
+        sHttpClient = okHttpClient;
+    }
 
 }

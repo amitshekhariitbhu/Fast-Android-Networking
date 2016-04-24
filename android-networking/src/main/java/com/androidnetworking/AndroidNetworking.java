@@ -5,26 +5,29 @@ import android.content.Context;
 import com.androidnetworking.common.AndroidNetworkingRequest;
 import com.androidnetworking.core.Core;
 import com.androidnetworking.internal.AndroidNetworkingImageLoader;
+import com.androidnetworking.internal.AndroidNetworkingOkHttp;
 import com.androidnetworking.internal.AndroidNetworkingRequestQueue;
+
+import okhttp3.OkHttpClient;
 
 /**
  * Created by amitshekhar on 24/03/16.
  */
 public class AndroidNetworking {
 
-    private static Context mContext;
-
     private AndroidNetworking() {
     }
 
     public static void initialize(Context context) {
-        mContext = context.getApplicationContext();
+        AndroidNetworkingOkHttp.setClientWithCache(context.getApplicationContext());
         AndroidNetworkingRequestQueue.initialize();
         AndroidNetworkingImageLoader.initialize();
     }
 
-    public static Context getContext() {
-        return mContext;
+    public static void initialize(Context context, OkHttpClient okHttpClient) {
+        AndroidNetworkingOkHttp.setClient(okHttpClient);
+        AndroidNetworkingRequestQueue.initialize();
+        AndroidNetworkingImageLoader.initialize();
     }
 
     public static AndroidNetworkingRequest.GetRequestBuilder get(String url) {

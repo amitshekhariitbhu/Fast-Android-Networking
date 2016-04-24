@@ -19,6 +19,14 @@ import java.util.LinkedList;
  */
 public class AndroidNetworkingImageLoader {
 
+    // Get max available VM memory, exceeding this amount will throw an
+    // OutOfMemory exception. Stored in kilobytes as LruCache takes an
+    // int in its constructor.
+    private static final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
+
+    // Use 1/8th of the available memory for this memory cache.
+    private static final int cacheSize = maxMemory / 8;
+
     private int mBatchResponseDelayMs = 100;
 
     private final ImageCache mCache;
@@ -42,16 +50,16 @@ public class AndroidNetworkingImageLoader {
     public static AndroidNetworkingImageLoader getInstance() {
         if (sInstance == null) {
             synchronized (AndroidNetworkingImageLoader.class) {
-                sInstance = new AndroidNetworkingImageLoader(new LruBitmapCache(LruBitmapCache.getCacheSize(AndroidNetworking.getContext())));
+                sInstance = new AndroidNetworkingImageLoader(new LruBitmapCache(cacheSize));
             }
         }
         return sInstance;
     }
 
     public interface ImageCache {
-        public Bitmap getBitmap(String url);
+        Bitmap getBitmap(String url);
 
-        public void putBitmap(String url, Bitmap bitmap);
+        void putBitmap(String url, Bitmap bitmap);
     }
 
     public AndroidNetworkingImageLoader(ImageCache imageCache) {
