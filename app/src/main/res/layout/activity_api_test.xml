@@ -108,14 +108,6 @@
             android:onClick="getResponseOnlyFromNetwork"
             android:text="getResponseOnlyFromNetwork" />
 
-        <Button
-            android:id="@+id/checkInCacheThenGoForNetwork"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_margin="8dp"
-            android:onClick="checkInCacheThenGoForNetwork"
-            android:text="checkInCacheThenGoForNetwork" />
-
     </LinearLayout>
 
 </ScrollView>

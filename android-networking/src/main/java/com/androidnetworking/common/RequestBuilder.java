@@ -23,6 +23,4 @@ public interface RequestBuilder {
 
     RequestBuilder getResponseOnlyFromNetwork();
 
-    RequestBuilder checkInCacheThenGoForNetwork(int ageInCache, TimeUnit timeUnit);
-
 }

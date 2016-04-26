@@ -321,36 +321,12 @@ public class ApiTestActivity extends AppCompatActivity {
     }
 
     public void getResponseOnlyFromNetwork(View view) {
-        AndroidNetworking.post(ApiEndPoint.BASE_URL + ApiEndPoint.CHECK_FOR_HEADER)
-                .addHeaders("token", "1234")
-                .setTag(this)
-                .setPriority(Priority.LOW)
-                .getResponseOnlyFromNetwork()
-                .build()
-                .getAsJsonObject(new RequestListener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d(TAG, "onResponse object : " + response.toString());
-                    }
-
-                    @Override
-                    public void onError(AndroidNetworkingError error) {
-                        if (error.hasErrorFromServer()) {
-                            Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
-                        } else {
-                            Log.d(TAG, "onError : " + error.getError());
-                        }
-                    }
-                });
-    }
-
-    public void checkInCacheThenGoForNetwork(View view) {
         AndroidNetworking.get(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_ARRAY)
                 .addPathParameter("pageNumber", "0")
                 .addQueryParameter("limit", "3")
                 .setTag(this)
                 .setPriority(Priority.LOW)
-                .checkInCacheThenGoForNetwork(365, TimeUnit.DAYS)
+                .getResponseOnlyFromNetwork()
                 .build()
                 .getAsJsonArray(new RequestListener<JSONArray>() {
                     @Override

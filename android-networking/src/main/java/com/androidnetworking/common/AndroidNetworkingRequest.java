@@ -537,12 +537,6 @@ public class AndroidNetworkingRequest {
             return this;
         }
 
-        @Override
-        public GetRequestBuilder checkInCacheThenGoForNetwork(int ageInCache, TimeUnit timeUnit) {
-            mCacheControl = new CacheControl.Builder().maxAge(ageInCache, timeUnit).build();
-            return this;
-        }
-
         public GetRequestBuilder setBitmapConfig(Bitmap.Config bitmapConfig) {
             this.mDecodeConfig = bitmapConfig;
             return this;
@@ -634,12 +628,6 @@ public class AndroidNetworkingRequest {
         @Override
         public PostRequestBuilder getResponseOnlyFromNetwork() {
             mCacheControl = CacheControl.FORCE_NETWORK;
-            return this;
-        }
-
-        @Override
-        public PostRequestBuilder checkInCacheThenGoForNetwork(int ageInCache, TimeUnit timeUnit) {
-            mCacheControl = new CacheControl.Builder().maxAge(ageInCache, timeUnit).build();
             return this;
         }
 
@@ -767,12 +755,6 @@ public class AndroidNetworkingRequest {
             return this;
         }
 
-        @Override
-        public DownloadBuilder checkInCacheThenGoForNetwork(int ageInCache, TimeUnit timeUnit) {
-            mCacheControl = new CacheControl.Builder().maxAge(ageInCache, timeUnit).build();
-            return this;
-        }
-
         public AndroidNetworkingRequest build() {
             return new AndroidNetworkingRequest(this);
         }
@@ -839,12 +821,6 @@ public class AndroidNetworkingRequest {
         @Override
         public MultiPartBuilder getResponseOnlyFromNetwork() {
             mCacheControl = CacheControl.FORCE_NETWORK;
-            return this;
-        }
-
-        @Override
-        public MultiPartBuilder checkInCacheThenGoForNetwork(int ageInCache, TimeUnit timeUnit) {
-            mCacheControl = new CacheControl.Builder().maxAge(ageInCache, timeUnit).build();
             return this;
         }
 
