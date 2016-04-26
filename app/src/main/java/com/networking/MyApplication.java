@@ -35,7 +35,8 @@ public class MyApplication extends Application {
         AndroidNetworking.initialize(getApplicationContext());
         //For testing purpose only: network interceptor : enable it only for non-images request checking
 //        Stetho.initializeWithDefaults(getApplicationContext());
-//        AndroidNetworkingOkHttp.addNetworkInterceptor(new StethoInterceptor());
+//        OkHttpClient okHttpClient = new OkHttpClient().newBuilder().addNetworkInterceptor(new StethoInterceptor()).build();
+//        AndroidNetworking.initialize(getApplicationContext(), okHttpClient);
     }
 
     private void setVariableFromEnv() {

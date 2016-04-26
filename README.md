@@ -48,7 +48,7 @@ Initializing it with some customization , as it uses [OkHttp](http://square.gith
 OkHttpClient okHttpClient = new OkHttpClient() .newBuilder()
                         .addNetworkInterceptor(new StethoInterceptor())
                         .build();
-AndroidNetworking.initialize(okHttpClient);                        
+AndroidNetworking.initialize(getApplicationContext(),okHttpClient);                        
 ```
 ### Making a GET Request
 ```

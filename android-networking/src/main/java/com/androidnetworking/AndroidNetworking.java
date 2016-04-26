@@ -3,10 +3,12 @@ package com.androidnetworking;
 import android.content.Context;
 
 import com.androidnetworking.common.AndroidNetworkingRequest;
+import com.androidnetworking.common.Constants;
 import com.androidnetworking.core.Core;
 import com.androidnetworking.internal.AndroidNetworkingImageLoader;
 import com.androidnetworking.internal.AndroidNetworkingOkHttp;
 import com.androidnetworking.internal.AndroidNetworkingRequestQueue;
+import com.androidnetworking.utils.Utils;
 
 import okhttp3.OkHttpClient;
 
@@ -42,9 +44,13 @@ public class AndroidNetworking {
     /**
      * Initializes AndroidNetworking with the specified config.
      *
+     * @param context
      * @param okHttpClient The okHttpClient
      */
-    public static void initialize(OkHttpClient okHttpClient) {
+    public static void initialize(Context context, OkHttpClient okHttpClient) {
+        if (okHttpClient != null && okHttpClient.cache() == null) {
+            okHttpClient = okHttpClient.newBuilder().cache(Utils.getCache(context.getApplicationContext(), Constants.MAX_CACHE_SIZE, Constants.CACHE_DIR_NAME)).build();
+        }
         AndroidNetworkingOkHttp.setClient(okHttpClient);
         AndroidNetworkingRequestQueue.initialize();
         AndroidNetworkingImageLoader.initialize();
