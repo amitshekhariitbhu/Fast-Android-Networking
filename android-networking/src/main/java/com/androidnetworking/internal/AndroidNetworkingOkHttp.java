@@ -44,12 +44,9 @@ public class AndroidNetworkingOkHttp {
     public static AndroidNetworkingData performSimpleRequest(AndroidNetworkingRequest request) throws AndroidNetworkingError {
         AndroidNetworkingData data = new AndroidNetworkingData();
         Request okHttpRequest = null;
-
         try {
-
             Request.Builder builder = new Request.Builder().url(request.getUrl());
             builder.addHeader(HEADER_USER_AGENT, "Android");
-
             Headers requestHeaders = request.getHeaders();
             if (requestHeaders != null) {
                 builder.headers(requestHeaders);
@@ -57,7 +54,6 @@ public class AndroidNetworkingOkHttp {
                     builder.addHeader(HEADER_USER_AGENT, "Android");
                 }
             }
-
             switch (request.getMethod()) {
                 case GET: {
                     builder = builder.get();
@@ -84,10 +80,11 @@ public class AndroidNetworkingOkHttp {
                     break;
                 }
             }
-
+            if (request.getCacheControl() != null) {
+                builder.cacheControl(request.getCacheControl());
+            }
             okHttpRequest = builder.build();
             Response okResponse = sHttpClient.newCall(okHttpRequest).execute();
-
             data.url = okResponse.request().url();
             data.code = okResponse.code();
             data.headers = okResponse.headers();
@@ -97,7 +94,6 @@ public class AndroidNetworkingOkHttp {
             if (okHttpRequest != null) {
                 data.url = okHttpRequest.url();
             }
-
             throw new AndroidNetworkingError(data, ioe);
         }
 
@@ -110,7 +106,6 @@ public class AndroidNetworkingOkHttp {
         try {
             Request.Builder builder = new Request.Builder().url(request.getUrl());
             builder.addHeader(HEADER_USER_AGENT, "Android");
-
             Headers requestHeaders = request.getHeaders();
             if (requestHeaders != null) {
                 builder.headers(requestHeaders);
@@ -119,13 +114,14 @@ public class AndroidNetworkingOkHttp {
                 }
             }
             builder = builder.get();
+            if (request.getCacheControl() != null) {
+                builder.cacheControl(request.getCacheControl());
+            }
             okHttpRequest = builder.build();
             Response okResponse = sHttpClient.newCall(okHttpRequest).execute();
-
             data.url = okResponse.request().url();
             data.code = okResponse.code();
             data.headers = okResponse.headers();
-
             ResponseBody body = okResponse.body();
             data.length = body.contentLength();
             BufferedSource source = body.source();
@@ -145,7 +141,6 @@ public class AndroidNetworkingOkHttp {
             }
             throw new AndroidNetworkingError(data, ioe);
         }
-
         return data;
     }
 
@@ -164,9 +159,11 @@ public class AndroidNetworkingOkHttp {
                 }
             }
             builder = builder.post(new RequestProgressBody(request.getMultiPartRequestBody(), request.getUploadProgressListener()));
+            if (request.getCacheControl() != null) {
+                builder.cacheControl(request.getCacheControl());
+            }
             okHttpRequest = builder.build();
             Response okResponse = sHttpClient.newCall(okHttpRequest).execute();
-
             data.url = okResponse.request().url();
             data.code = okResponse.code();
             data.headers = okResponse.headers();
@@ -176,7 +173,6 @@ public class AndroidNetworkingOkHttp {
             if (okHttpRequest != null) {
                 data.url = okHttpRequest.url();
             }
-
             throw new AndroidNetworkingError(data, ioe);
         }
         return data;

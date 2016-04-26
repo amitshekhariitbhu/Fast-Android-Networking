@@ -20,7 +20,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
+import okhttp3.CacheControl;
 import okhttp3.FormBody;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
@@ -70,6 +72,7 @@ public class AndroidNetworkingRequest {
     private int mMaxWidth;
     private int mMaxHeight;
     private ImageView.ScaleType mScaleType;
+    private CacheControl mCacheControl = null;
 
     private AndroidNetworkingRequest(GetRequestBuilder builder) {
         this.mRequestType = RequestType.SIMPLE;
@@ -84,6 +87,7 @@ public class AndroidNetworkingRequest {
         this.mScaleType = builder.mScaleType;
         this.mQueryParameterMap = builder.mQueryParameterMap;
         this.mPathParameterMap = builder.mPathParameterMap;
+        this.mCacheControl = builder.mCacheControl;
     }
 
     private AndroidNetworkingRequest(PostRequestBuilder builder) {
@@ -102,6 +106,7 @@ public class AndroidNetworkingRequest {
         this.mStringBody = builder.mStringBody;
         this.mFile = builder.mFile;
         this.mByte = builder.mByte;
+        this.mCacheControl = builder.mCacheControl;
     }
 
     private AndroidNetworkingRequest(DownloadBuilder builder) {
@@ -115,6 +120,7 @@ public class AndroidNetworkingRequest {
         this.mHeadersMap = builder.mHeadersMap;
         this.mQueryParameterMap = builder.mQueryParameterMap;
         this.mPathParameterMap = builder.mPathParameterMap;
+        this.mCacheControl = builder.mCacheControl;
     }
 
     private AndroidNetworkingRequest(MultiPartBuilder builder) {
@@ -128,6 +134,7 @@ public class AndroidNetworkingRequest {
         this.mPathParameterMap = builder.mPathParameterMap;
         this.mMultiPartParameterMap = builder.mMultiPartParameterMap;
         this.mMultiPartFileMap = builder.mMultiPartFileMap;
+        this.mCacheControl = builder.mCacheControl;
     }
 
     public void getAsJsonObject(RequestListener requestListener) {
@@ -227,6 +234,10 @@ public class AndroidNetworkingRequest {
 
     public String getFileName() {
         return mFileName;
+    }
+
+    public CacheControl getCacheControl() {
+        return mCacheControl;
     }
 
     public ImageView.ScaleType getScaleType() {
@@ -472,6 +483,7 @@ public class AndroidNetworkingRequest {
         private HashMap<String, String> mHeadersMap = new HashMap<String, String>();
         private HashMap<String, String> mQueryParameterMap = new HashMap<String, String>();
         private HashMap<String, String> mPathParameterMap = new HashMap<String, String>();
+        private CacheControl mCacheControl;
 
         public GetRequestBuilder(String url) {
             this.mUrl = url;
@@ -507,6 +519,30 @@ public class AndroidNetworkingRequest {
             return this;
         }
 
+        @Override
+        public GetRequestBuilder doNotCacheResponse() {
+            mCacheControl = new CacheControl.Builder().noStore().build();
+            return this;
+        }
+
+        @Override
+        public GetRequestBuilder getResponseOnlyIfCached() {
+            mCacheControl = CacheControl.FORCE_CACHE;
+            return this;
+        }
+
+        @Override
+        public GetRequestBuilder getResponseOnlyFromNetwork() {
+            mCacheControl = CacheControl.FORCE_NETWORK;
+            return this;
+        }
+
+        @Override
+        public GetRequestBuilder checkInCacheThenGoForNetwork(int ageInCache, TimeUnit timeUnit) {
+            mCacheControl = new CacheControl.Builder().maxAge(ageInCache, timeUnit).build();
+            return this;
+        }
+
         public GetRequestBuilder setBitmapConfig(Bitmap.Config bitmapConfig) {
             this.mDecodeConfig = bitmapConfig;
             return this;
@@ -528,8 +564,7 @@ public class AndroidNetworkingRequest {
         }
 
         public AndroidNetworkingRequest build() {
-            AndroidNetworkingRequest androidNetworkingRequest = new AndroidNetworkingRequest(this);
-            return androidNetworkingRequest;
+            return new AndroidNetworkingRequest(this);
         }
     }
 
@@ -548,6 +583,7 @@ public class AndroidNetworkingRequest {
         private HashMap<String, String> mUrlEncodedFormBodyParameterMap = new HashMap<String, String>();
         private HashMap<String, String> mQueryParameterMap = new HashMap<String, String>();
         private HashMap<String, String> mPathParameterMap = new HashMap<String, String>();
+        private CacheControl mCacheControl;
 
         public PostRequestBuilder(String url) {
             this.mUrl = url;
@@ -580,6 +616,30 @@ public class AndroidNetworkingRequest {
         @Override
         public PostRequestBuilder addHeaders(String key, String value) {
             mHeadersMap.put(key, value);
+            return this;
+        }
+
+        @Override
+        public PostRequestBuilder doNotCacheResponse() {
+            mCacheControl = new CacheControl.Builder().noStore().build();
+            return this;
+        }
+
+        @Override
+        public PostRequestBuilder getResponseOnlyIfCached() {
+            mCacheControl = CacheControl.FORCE_CACHE;
+            return this;
+        }
+
+        @Override
+        public PostRequestBuilder getResponseOnlyFromNetwork() {
+            mCacheControl = CacheControl.FORCE_NETWORK;
+            return this;
+        }
+
+        @Override
+        public PostRequestBuilder checkInCacheThenGoForNetwork(int ageInCache, TimeUnit timeUnit) {
+            mCacheControl = new CacheControl.Builder().maxAge(ageInCache, timeUnit).build();
             return this;
         }
 
@@ -637,8 +697,7 @@ public class AndroidNetworkingRequest {
         }
 
         public AndroidNetworkingRequest build() {
-            AndroidNetworkingRequest androidNetworkingRequest = new AndroidNetworkingRequest(this);
-            return androidNetworkingRequest;
+            return new AndroidNetworkingRequest(this);
         }
     }
 
@@ -652,6 +711,7 @@ public class AndroidNetworkingRequest {
         private HashMap<String, String> mPathParameterMap = new HashMap<String, String>();
         private String mDirPath;
         private String mFileName;
+        private CacheControl mCacheControl;
 
         public DownloadBuilder(String url, String dirPath, String fileName) {
             this.mUrl = url;
@@ -689,9 +749,32 @@ public class AndroidNetworkingRequest {
             return this;
         }
 
+        @Override
+        public DownloadBuilder doNotCacheResponse() {
+            mCacheControl = new CacheControl.Builder().noStore().build();
+            return this;
+        }
+
+        @Override
+        public DownloadBuilder getResponseOnlyIfCached() {
+            mCacheControl = CacheControl.FORCE_CACHE;
+            return this;
+        }
+
+        @Override
+        public DownloadBuilder getResponseOnlyFromNetwork() {
+            mCacheControl = CacheControl.FORCE_NETWORK;
+            return this;
+        }
+
+        @Override
+        public DownloadBuilder checkInCacheThenGoForNetwork(int ageInCache, TimeUnit timeUnit) {
+            mCacheControl = new CacheControl.Builder().maxAge(ageInCache, timeUnit).build();
+            return this;
+        }
+
         public AndroidNetworkingRequest build() {
-            AndroidNetworkingRequest androidNetworkingRequest = new AndroidNetworkingRequest(this);
-            return androidNetworkingRequest;
+            return new AndroidNetworkingRequest(this);
         }
     }
 
@@ -705,6 +788,7 @@ public class AndroidNetworkingRequest {
         private HashMap<String, String> mQueryParameterMap = new HashMap<String, String>();
         private HashMap<String, String> mPathParameterMap = new HashMap<String, String>();
         private HashMap<String, File> mMultiPartFileMap = new HashMap<String, File>();
+        private CacheControl mCacheControl;
 
         public MultiPartBuilder(String url) {
             this.mUrl = url;
@@ -740,6 +824,30 @@ public class AndroidNetworkingRequest {
             return this;
         }
 
+        @Override
+        public MultiPartBuilder doNotCacheResponse() {
+            mCacheControl = new CacheControl.Builder().noStore().build();
+            return this;
+        }
+
+        @Override
+        public MultiPartBuilder getResponseOnlyIfCached() {
+            mCacheControl = CacheControl.FORCE_CACHE;
+            return this;
+        }
+
+        @Override
+        public MultiPartBuilder getResponseOnlyFromNetwork() {
+            mCacheControl = CacheControl.FORCE_NETWORK;
+            return this;
+        }
+
+        @Override
+        public MultiPartBuilder checkInCacheThenGoForNetwork(int ageInCache, TimeUnit timeUnit) {
+            mCacheControl = new CacheControl.Builder().maxAge(ageInCache, timeUnit).build();
+            return this;
+        }
+
         public MultiPartBuilder addMultipartParameter(String key, String value) {
             mMultiPartParameterMap.put(key, value);
             return this;
@@ -751,8 +859,7 @@ public class AndroidNetworkingRequest {
         }
 
         public AndroidNetworkingRequest build() {
-            AndroidNetworkingRequest androidNetworkingRequest = new AndroidNetworkingRequest(this);
-            return androidNetworkingRequest;
+            return new AndroidNetworkingRequest(this);
         }
     }
 

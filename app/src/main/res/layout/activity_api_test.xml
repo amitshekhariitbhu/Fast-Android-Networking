@@ -84,6 +84,38 @@
             android:onClick="uploadImage"
             android:text="uploadImage" />
 
+        <Button
+            android:id="@+id/doNotCacheResponse"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_margin="8dp"
+            android:onClick="doNotCacheResponse"
+            android:text="doNotCacheResponse" />
+
+        <Button
+            android:id="@+id/getResponseOnlyIfCached"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_margin="8dp"
+            android:onClick="getResponseOnlyIfCached"
+            android:text="getResponseOnlyIfCached" />
+
+        <Button
+            android:id="@+id/getResponseOnlyFromNetwork"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_margin="8dp"
+            android:onClick="getResponseOnlyFromNetwork"
+            android:text="getResponseOnlyFromNetwork" />
+
+        <Button
+            android:id="@+id/checkInCacheThenGoForNetwork"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_margin="8dp"
+            android:onClick="checkInCacheThenGoForNetwork"
+            android:text="checkInCacheThenGoForNetwork" />
+
     </LinearLayout>
 
 </ScrollView>

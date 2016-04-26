@@ -19,6 +19,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by amitshekhar on 30/03/16.
@@ -267,6 +268,105 @@ public class ApiTestActivity extends AppCompatActivity {
                     }
                 });
 
+    }
+
+    public void doNotCacheResponse(View view) {
+        AndroidNetworking.get(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_ARRAY)
+                .addPathParameter("pageNumber", "0")
+                .addQueryParameter("limit", "3")
+                .setTag(this)
+                .setPriority(Priority.LOW)
+                .doNotCacheResponse()
+                .build()
+                .getAsJsonArray(new RequestListener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Log.d(TAG, "onResponse array : " + response.toString());
+                    }
+
+                    @Override
+                    public void onError(AndroidNetworkingError error) {
+                        if (error.hasErrorFromServer()) {
+                            Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
+                        } else {
+                            Log.d(TAG, "onError : " + error.getError());
+                        }
+                    }
+                });
+    }
+
+    public void getResponseOnlyIfCached(View view) {
+        AndroidNetworking.get(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_ARRAY)
+                .addPathParameter("pageNumber", "0")
+                .addQueryParameter("limit", "3")
+                .setTag(this)
+                .setPriority(Priority.LOW)
+                .getResponseOnlyIfCached()
+                .build()
+                .getAsJsonArray(new RequestListener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Log.d(TAG, "onResponse array : " + response.toString());
+                    }
+
+                    @Override
+                    public void onError(AndroidNetworkingError error) {
+                        if (error.hasErrorFromServer()) {
+                            Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
+                        } else {
+                            Log.d(TAG, "onError : " + error.getError());
+                        }
+                    }
+                });
+    }
+
+    public void getResponseOnlyFromNetwork(View view) {
+        AndroidNetworking.post(ApiEndPoint.BASE_URL + ApiEndPoint.CHECK_FOR_HEADER)
+                .addHeaders("token", "1234")
+                .setTag(this)
+                .setPriority(Priority.LOW)
+                .getResponseOnlyFromNetwork()
+                .build()
+                .getAsJsonObject(new RequestListener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, "onResponse object : " + response.toString());
+                    }
+
+                    @Override
+                    public void onError(AndroidNetworkingError error) {
+                        if (error.hasErrorFromServer()) {
+                            Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
+                        } else {
+                            Log.d(TAG, "onError : " + error.getError());
+                        }
+                    }
+                });
+    }
+
+    public void checkInCacheThenGoForNetwork(View view) {
+        AndroidNetworking.get(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_ARRAY)
+                .addPathParameter("pageNumber", "0")
+                .addQueryParameter("limit", "3")
+                .setTag(this)
+                .setPriority(Priority.LOW)
+                .checkInCacheThenGoForNetwork(365, TimeUnit.DAYS)
+                .build()
+                .getAsJsonArray(new RequestListener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Log.d(TAG, "onResponse array : " + response.toString());
+                    }
+
+                    @Override
+                    public void onError(AndroidNetworkingError error) {
+                        if (error.hasErrorFromServer()) {
+                            Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
+                        } else {
+                            Log.d(TAG, "onError : " + error.getError());
+                        }
+                    }
+                });
     }
 
 }
