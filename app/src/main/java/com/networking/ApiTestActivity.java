@@ -345,4 +345,54 @@ public class ApiTestActivity extends AppCompatActivity {
                 });
     }
 
+    public void setMaxAgeCacheControl(View view) {
+        AndroidNetworking.get(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_ARRAY)
+                .addPathParameter("pageNumber", "0")
+                .addQueryParameter("limit", "3")
+                .setTag(this)
+                .setPriority(Priority.LOW)
+                .setMaxAgeCacheControl(10, TimeUnit.SECONDS)
+                .build()
+                .getAsJsonArray(new RequestListener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Log.d(TAG, "onResponse array : " + response.toString());
+                    }
+
+                    @Override
+                    public void onError(AndroidNetworkingError error) {
+                        if (error.hasErrorFromServer()) {
+                            Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
+                        } else {
+                            Log.d(TAG, "onError : " + error.getError());
+                        }
+                    }
+                });
+    }
+
+    public void setMaxStaleCacheControl(View view) {
+        AndroidNetworking.get(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_ARRAY)
+                .addPathParameter("pageNumber", "0")
+                .addQueryParameter("limit", "3")
+                .setTag(this)
+                .setPriority(Priority.LOW)
+                .setMaxStaleCacheControl(10, TimeUnit.SECONDS)
+                .build()
+                .getAsJsonArray(new RequestListener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Log.d(TAG, "onResponse array : " + response.toString());
+                    }
+
+                    @Override
+                    public void onError(AndroidNetworkingError error) {
+                        if (error.hasErrorFromServer()) {
+                            Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
+                        } else {
+                            Log.d(TAG, "onError : " + error.getError());
+                        }
+                    }
+                });
+    }
+
 }

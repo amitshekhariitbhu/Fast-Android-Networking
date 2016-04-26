@@ -23,4 +23,8 @@ public interface RequestBuilder {
 
     RequestBuilder getResponseOnlyFromNetwork();
 
+    RequestBuilder setMaxAgeCacheControl(int maxAge, TimeUnit timeUnit);
+
+    RequestBuilder setMaxStaleCacheControl(int maxStale, TimeUnit timeUnit);
+
 }

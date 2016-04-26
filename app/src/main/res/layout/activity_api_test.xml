@@ -108,6 +108,22 @@
             android:onClick="getResponseOnlyFromNetwork"
             android:text="getResponseOnlyFromNetwork" />
 
+        <Button
+            android:id="@+id/setMaxAgeCacheControl"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_margin="8dp"
+            android:onClick="setMaxAgeCacheControl"
+            android:text="setMaxAgeCacheControl" />
+
+        <Button
+            android:id="@+id/setMaxStaleCacheControl"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_margin="8dp"
+            android:onClick="setMaxStaleCacheControl"
+            android:text="setMaxStaleCacheControl" />
+
     </LinearLayout>
 
 </ScrollView>

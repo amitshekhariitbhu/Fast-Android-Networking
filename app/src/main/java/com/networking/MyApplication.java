@@ -6,8 +6,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
-import com.facebook.stetho.Stetho;
-import com.facebook.stetho.okhttp3.StethoInterceptor;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,8 +14,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-
-import okhttp3.OkHttpClient;
 
 /**
  * Created by amitshekhar on 22/03/16.
@@ -36,11 +32,11 @@ public class MyApplication extends Application {
         super.onCreate();
         appInstance = this;
         setVariableFromEnv();
-//        AndroidNetworking.initialize(getApplicationContext());
+        AndroidNetworking.initialize(getApplicationContext());
         //For testing purpose only: network interceptor : enable it only for non-images request checking
-        Stetho.initializeWithDefaults(getApplicationContext());
-        OkHttpClient okHttpClient = new OkHttpClient().newBuilder().addNetworkInterceptor(new StethoInterceptor()).build();
-        AndroidNetworking.initialize(getApplicationContext(), okHttpClient);
+//        Stetho.initializeWithDefaults(getApplicationContext());
+//        OkHttpClient okHttpClient = new OkHttpClient().newBuilder().addNetworkInterceptor(new StethoInterceptor()).build();
+//        AndroidNetworking.initialize(getApplicationContext(), okHttpClient);
     }
 
     private void setVariableFromEnv() {

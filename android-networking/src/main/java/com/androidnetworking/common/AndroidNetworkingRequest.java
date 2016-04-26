@@ -537,6 +537,18 @@ public class AndroidNetworkingRequest {
             return this;
         }
 
+        @Override
+        public GetRequestBuilder setMaxAgeCacheControl(int maxAge, TimeUnit timeUnit) {
+            mCacheControl = new CacheControl.Builder().maxAge(maxAge, timeUnit).build();
+            return this;
+        }
+
+        @Override
+        public GetRequestBuilder setMaxStaleCacheControl(int maxStale, TimeUnit timeUnit) {
+            mCacheControl = new CacheControl.Builder().maxStale(maxStale, timeUnit).build();
+            return this;
+        }
+
         public GetRequestBuilder setBitmapConfig(Bitmap.Config bitmapConfig) {
             this.mDecodeConfig = bitmapConfig;
             return this;
@@ -628,6 +640,18 @@ public class AndroidNetworkingRequest {
         @Override
         public PostRequestBuilder getResponseOnlyFromNetwork() {
             mCacheControl = CacheControl.FORCE_NETWORK;
+            return this;
+        }
+
+        @Override
+        public PostRequestBuilder setMaxAgeCacheControl(int maxAge, TimeUnit timeUnit) {
+            mCacheControl = new CacheControl.Builder().maxAge(maxAge, timeUnit).build();
+            return this;
+        }
+
+        @Override
+        public PostRequestBuilder setMaxStaleCacheControl(int maxStale, TimeUnit timeUnit) {
+            mCacheControl = new CacheControl.Builder().maxStale(maxStale, timeUnit).build();
             return this;
         }
 
@@ -755,6 +779,18 @@ public class AndroidNetworkingRequest {
             return this;
         }
 
+        @Override
+        public DownloadBuilder setMaxAgeCacheControl(int maxAge, TimeUnit timeUnit) {
+            mCacheControl = new CacheControl.Builder().maxAge(maxAge, timeUnit).build();
+            return this;
+        }
+
+        @Override
+        public DownloadBuilder setMaxStaleCacheControl(int maxStale, TimeUnit timeUnit) {
+            mCacheControl = new CacheControl.Builder().maxStale(maxStale, timeUnit).build();
+            return this;
+        }
+
         public AndroidNetworkingRequest build() {
             return new AndroidNetworkingRequest(this);
         }
@@ -821,6 +857,18 @@ public class AndroidNetworkingRequest {
         @Override
         public MultiPartBuilder getResponseOnlyFromNetwork() {
             mCacheControl = CacheControl.FORCE_NETWORK;
+            return this;
+        }
+
+        @Override
+        public MultiPartBuilder setMaxAgeCacheControl(int maxAge, TimeUnit timeUnit) {
+            mCacheControl = new CacheControl.Builder().maxAge(maxAge, timeUnit).build();
+            return this;
+        }
+
+        @Override
+        public MultiPartBuilder setMaxStaleCacheControl(int maxStale, TimeUnit timeUnit) {
+            mCacheControl = new CacheControl.Builder().maxStale(maxStale, timeUnit).build();
             return this;
         }
 
