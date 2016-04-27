@@ -1,5 +1,6 @@
 package com.androidnetworking.common;
 
+import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -14,6 +15,8 @@ public interface RequestBuilder {
     RequestBuilder addHeaders(String key, String value);
 
     RequestBuilder addQueryParameter(String key, String value);
+
+    RequestBuilder addQueryParameter(HashMap<String, String> queryParameterMap);
 
     RequestBuilder addPathParameter(String key, String value);
 

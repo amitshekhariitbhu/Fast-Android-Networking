@@ -508,6 +508,16 @@ public class AndroidNetworkingRequest {
         }
 
         @Override
+        public GetRequestBuilder addQueryParameter(HashMap<String, String> queryParameterMap) {
+            if (queryParameterMap != null) {
+                for (HashMap.Entry<String, String> entry : queryParameterMap.entrySet()) {
+                    mQueryParameterMap.put(entry.getKey(), entry.getValue());
+                }
+            }
+            return this;
+        }
+
+        @Override
         public GetRequestBuilder addPathParameter(String key, String value) {
             mPathParameterMap.put(key, value);
             return this;
@@ -610,6 +620,16 @@ public class AndroidNetworkingRequest {
         @Override
         public PostRequestBuilder addQueryParameter(String key, String value) {
             mQueryParameterMap.put(key, value);
+            return this;
+        }
+
+        @Override
+        public PostRequestBuilder addQueryParameter(HashMap<String, String> queryParameterMap) {
+            if (queryParameterMap != null) {
+                for (HashMap.Entry<String, String> entry : queryParameterMap.entrySet()) {
+                    mQueryParameterMap.put(entry.getKey(), entry.getValue());
+                }
+            }
             return this;
         }
 
@@ -756,6 +776,16 @@ public class AndroidNetworkingRequest {
         }
 
         @Override
+        public DownloadBuilder addQueryParameter(HashMap<String, String> queryParameterMap) {
+            if (queryParameterMap != null) {
+                for (HashMap.Entry<String, String> entry : queryParameterMap.entrySet()) {
+                    mQueryParameterMap.put(entry.getKey(), entry.getValue());
+                }
+            }
+            return this;
+        }
+
+        @Override
         public DownloadBuilder addPathParameter(String key, String value) {
             mPathParameterMap.put(key, value);
             return this;
@@ -827,6 +857,16 @@ public class AndroidNetworkingRequest {
         @Override
         public MultiPartBuilder addQueryParameter(String key, String value) {
             mQueryParameterMap.put(key, value);
+            return this;
+        }
+
+        @Override
+        public MultiPartBuilder addQueryParameter(HashMap<String, String> queryParameterMap) {
+            if (queryParameterMap != null) {
+                for (HashMap.Entry<String, String> entry : queryParameterMap.entrySet()) {
+                    mQueryParameterMap.put(entry.getKey(), entry.getValue());
+                }
+            }
             return this;
         }
 
