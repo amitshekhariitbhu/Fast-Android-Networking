@@ -917,8 +917,26 @@ public class AndroidNetworkingRequest {
             return this;
         }
 
+        public MultiPartBuilder addMultipartParameter(HashMap<String, String> multiPartParameterMap) {
+            if (multiPartParameterMap != null) {
+                for (HashMap.Entry<String, String> entry : multiPartParameterMap.entrySet()) {
+                    mQueryParameterMap.put(entry.getKey(), entry.getValue());
+                }
+            }
+            return this;
+        }
+
         public MultiPartBuilder addMultipartFile(String key, File file) {
             mMultiPartFileMap.put(key, file);
+            return this;
+        }
+
+        public MultiPartBuilder addMultipartFile(HashMap<String, File> multiPartFileMap) {
+            if (multiPartFileMap != null) {
+                for (HashMap.Entry<String, File> entry : multiPartFileMap.entrySet()) {
+                    mMultiPartFileMap.put(entry.getKey(), entry.getValue());
+                }
+            }
             return this;
         }
 
