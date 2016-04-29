@@ -226,6 +226,7 @@ AndroidNetworking.get(imageUrl)
   [Okio](https://github.com/square/okio) is made to handle GC overhead while allocating memory.
   [Okio](https://github.com/square/okio) do some clever things to save CPU and memory.
 * As it uses [OkHttp](http://square.github.io/okhttp/) , most important it supports HTTP/2.  
+
 ### TODO
 * Network Speed Change Listener
 * Total data consumption in any request
