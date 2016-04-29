@@ -137,16 +137,23 @@ AndroidNetworking.download(url,dirPath,fileName)
                  .setTag("downloadTest")
                  .setPriority(Priority.MEDIUM)
                  .build()
-                 .startDownload(new DownloadProgressListener() {
-                   @Override
-                   public void onProgress(long bytesDownloaded, long totalBytes,boolean isCompleted){
-                     // do anything with progress and completion
+                 .setDownloadProgressListener(new DownloadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesDownloaded, long totalBytes) {
+                    // do anything with progress  
                     }
-                   @Override
-                   public void onError(AndroidNetworkingError error) {
-                   // handle error  
-                   }
-                });
+                 })
+                 .startDownload(new DownloadListener() {
+                    @Override
+                    public void onDownloadComplete() {
+                    // do anything after completion
+                    }
+
+                    @Override
+                    public void onError(AndroidNetworkingError error) {
+                    // handle error    
+                    }
+                });                 
 ```
 ### Uploading a file to server
 ```
@@ -155,20 +162,23 @@ AndroidNetworking.upload(url)
                  .setTag("uploadTest")
                  .setPriority(Priority.IMMEDIATE)
                  .build()
-                 .getAsJsonObject(new UploadProgressListener<JSONObject>() {
+                 .setUploadProgressListener(new UploadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesUploaded, long totalBytes) {
+                    // do anything with progress 
+                    }
+                 })
+                 .getAsJsonObject(new RequestListener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                    // do anything with response
+                    // do anything with response                
                     }
-                    @Override
-                    public void onProgress(long bytesUploaded, long totalBytes, boolean isCompleted) {
-                    // do anything with progress and completion
-                    }
+                  
                     @Override
                     public void onError(AndroidNetworkingError error) {
-                    // handle error  
+                    // handle error 
                     }
-                  });  
+                 }); 
 ```
 ### Cancelling a request.
 Any request with a given tag can be cancelled. Just do like this.
@@ -216,7 +226,12 @@ AndroidNetworking.get(imageUrl)
   [Okio](https://github.com/square/okio) is made to handle GC overhead while allocating memory.
   [Okio](https://github.com/square/okio) do some clever things to save CPU and memory.
 * As it uses [OkHttp](http://square.github.io/okhttp/) , most important it supports HTTP/2.  
-
+### TODO
+* Network Speed Change Listener
+* Total data consumption in any request
+* Network Execution Logic on the basis of network speed change
+* Integration with other library
+* And of course many many features and bug fixes
 ### Contributing to Android Networking
 Just make pull request. You are in.
 
