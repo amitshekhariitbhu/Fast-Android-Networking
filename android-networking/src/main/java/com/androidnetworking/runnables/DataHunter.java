@@ -35,7 +35,7 @@ public class DataHunter implements Runnable {
 
     @Override
     public void run() {
-        Log.d(TAG, "execution started for sequenceNumber: " + request.getSequenceNumber());
+        Log.d("execution started : ", request.toString());
         switch (request.getRequestType()) {
             case SIMPLE:
                 goForSimpleRequest();
@@ -47,7 +47,7 @@ public class DataHunter implements Runnable {
                 goForUploadRequest();
                 break;
         }
-        Log.d(TAG, "execution done for sequenceNumber: " + request.getSequenceNumber());
+        Log.d("execution done : ", request.toString());
     }
 
     private void goForSimpleRequest() {

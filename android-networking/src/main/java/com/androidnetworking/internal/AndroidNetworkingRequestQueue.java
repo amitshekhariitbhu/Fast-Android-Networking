@@ -1,6 +1,7 @@
 package com.androidnetworking.internal;
 
 import com.androidnetworking.common.AndroidNetworkingRequest;
+import com.androidnetworking.common.Priority;
 import com.androidnetworking.core.Core;
 import com.androidnetworking.runnables.DataHunter;
 
@@ -68,7 +69,11 @@ public class AndroidNetworkingRequestQueue {
             mCurrentRequests.add(request);
         }
         request.setSequenceNumber(getSequenceNumber());
-        request.setFuture(Core.getInstance().getExecutorSupplier().forNetworkTasks().submit(new DataHunter(request)));
+        if (request.getPriority() == Priority.IMMEDIATE) {
+            request.setFuture(Core.getInstance().getExecutorSupplier().forImmediateNetworkTasks().submit(new DataHunter(request)));
+        } else {
+            request.setFuture(Core.getInstance().getExecutorSupplier().forNetworkTasks().submit(new DataHunter(request)));
+        }
         return request;
     }
 

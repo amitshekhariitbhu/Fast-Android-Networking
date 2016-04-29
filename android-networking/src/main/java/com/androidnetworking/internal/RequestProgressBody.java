@@ -60,7 +60,7 @@ public class RequestProgressBody extends RequestBody {
                     Core.getInstance().getExecutorSupplier().forMainThreadTasks().execute(new Runnable() {
                         @Override
                         public void run() {
-                            uploadProgressListener.onProgress(bytesWritten, contentLength, bytesWritten == contentLength);
+                            uploadProgressListener.onProgress(bytesWritten, contentLength);
                         }
                     });
                 }

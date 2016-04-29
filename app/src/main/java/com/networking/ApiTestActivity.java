@@ -9,6 +9,7 @@ import android.view.View;
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.AndroidNetworkingError;
+import com.androidnetworking.interfaces.DownloadListener;
 import com.androidnetworking.interfaces.DownloadProgressListener;
 import com.androidnetworking.interfaces.RequestListener;
 import com.androidnetworking.interfaces.UploadProgressListener;
@@ -185,16 +186,19 @@ public class ApiTestActivity extends AppCompatActivity {
     public void downloadFile(final View view) {
         String url = "http://www.colorado.edu/conflict/peace/download/peace_problem.ZIP";
         AndroidNetworking.download(url, Utils.getRootDirPath(getApplicationContext()), "file1.zip")
-                .setPriority(Priority.MEDIUM)
+                .setPriority(Priority.IMMEDIATE)
                 .setTag(this)
                 .build()
-                .startDownload(new DownloadProgressListener() {
+                .setDownloadProgressListener(new DownloadProgressListener() {
                     @Override
-                    public void onProgress(long bytesDownloaded, long totalBytes, boolean isCompleted) {
+                    public void onProgress(long bytesDownloaded, long totalBytes) {
                         Log.d(TAG, "bytesDownloaded : " + bytesDownloaded + " totalBytes : " + totalBytes);
-                        if (isCompleted) {
-                            Log.d(TAG, "File download Completed");
-                        }
+                    }
+                })
+                .startDownload(new DownloadListener() {
+                    @Override
+                    public void onDownloadComplete() {
+                        Log.d(TAG, "File download Completed");
                     }
 
                     @Override
@@ -206,6 +210,7 @@ public class ApiTestActivity extends AppCompatActivity {
                         }
                     }
                 });
+
 
     }
 
@@ -215,13 +220,10 @@ public class ApiTestActivity extends AppCompatActivity {
                 .setPriority(Priority.MEDIUM)
                 .setTag(this)
                 .build()
-                .startDownload(new DownloadProgressListener() {
+                .startDownload(new DownloadListener() {
                     @Override
-                    public void onProgress(long bytesDownloaded, long totalBytes, boolean isCompleted) {
-                        Log.d(TAG, "bytesDownloaded : " + bytesDownloaded + " totalBytes : " + totalBytes);
-                        if (isCompleted) {
-                            Log.d(TAG, "Image download Completed");
-                        }
+                    public void onDownloadComplete() {
+                        Log.d(TAG, "Image download Completed");
                     }
 
                     @Override
@@ -233,7 +235,6 @@ public class ApiTestActivity extends AppCompatActivity {
                         }
                     }
                 });
-
     }
 
     public void uploadImage(final View view) {
@@ -242,20 +243,17 @@ public class ApiTestActivity extends AppCompatActivity {
                 .addMultipartFile("image", new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "test.png"))
                 .setTag(this)
                 .build()
-                .getAsJsonObject(new UploadProgressListener<JSONObject>() {
-
+                .setUploadProgressListener(new UploadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesUploaded, long totalBytes) {
+                        Log.d(TAG, "bytesUploaded : " + bytesUploaded + " totalBytes : " + totalBytes);
+                    }
+                })
+                .getAsJsonObject(new RequestListener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        Log.d(TAG, "Image upload Completed");
                         Log.d(TAG, "onResponse object : " + response.toString());
-                    }
-
-
-                    @Override
-                    public void onProgress(long bytesUploaded, long totalBytes, boolean isCompleted) {
-                        Log.d(TAG, "bytesUploaded : " + bytesUploaded + " totalBytes : " + totalBytes);
-                        if (isCompleted) {
-                            Log.d(TAG, "Image upload Completed");
-                        }
                     }
 
                     @Override
@@ -267,7 +265,6 @@ public class ApiTestActivity extends AppCompatActivity {
                         }
                     }
                 });
-
     }
 
     public void doNotCacheResponse(View view) {

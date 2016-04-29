@@ -3,7 +3,6 @@ package com.androidnetworking.core;
 import android.os.Process;
 
 import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 
 /**
@@ -12,14 +11,14 @@ import java.util.concurrent.ThreadFactory;
 public class DefaultExecutorSupplier implements ExecutorSupplier {
 
     public static final int DEFAULT_MAX_NUM_THREADS = Runtime.getRuntime().availableProcessors();
-    private final Executor mBackgroundExecutor;
     private final AndroidNetworkingExecutor mNetworkExecutor;
+    private final AndroidNetworkingExecutor mImmediateNetworkExecutor;
     private final Executor mMainThreadExecutor;
 
     public DefaultExecutorSupplier() {
         ThreadFactory backgroundPriorityThreadFactory = new PriorityThreadFactory(Process.THREAD_PRIORITY_BACKGROUND);
-        mBackgroundExecutor = Executors.newFixedThreadPool(DEFAULT_MAX_NUM_THREADS, backgroundPriorityThreadFactory);
-        mNetworkExecutor = new AndroidNetworkingExecutor(DEFAULT_MAX_NUM_THREADS,backgroundPriorityThreadFactory);
+        mNetworkExecutor = new AndroidNetworkingExecutor(DEFAULT_MAX_NUM_THREADS, backgroundPriorityThreadFactory);
+        mImmediateNetworkExecutor = new AndroidNetworkingExecutor(1, backgroundPriorityThreadFactory);
         mMainThreadExecutor = new MainThreadExecutor();
     }
 
@@ -29,8 +28,8 @@ public class DefaultExecutorSupplier implements ExecutorSupplier {
     }
 
     @Override
-    public Executor forBackgroundTasks() {
-        return mBackgroundExecutor;
+    public AndroidNetworkingExecutor forImmediateNetworkTasks() {
+        return mImmediateNetworkExecutor;
     }
 
     @Override

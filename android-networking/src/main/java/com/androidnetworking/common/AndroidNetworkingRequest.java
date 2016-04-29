@@ -6,6 +6,7 @@ import android.util.Log;
 import android.widget.ImageView;
 
 import com.androidnetworking.error.AndroidNetworkingError;
+import com.androidnetworking.interfaces.DownloadListener;
 import com.androidnetworking.interfaces.DownloadProgressListener;
 import com.androidnetworking.interfaces.RequestListener;
 import com.androidnetworking.interfaces.UploadProgressListener;
@@ -67,6 +68,7 @@ public class AndroidNetworkingRequest {
     private RequestListener mRequestListener;
     private DownloadProgressListener mDownloadProgressListener;
     private UploadProgressListener mUploadProgressListener;
+    private DownloadListener mDownloadListener;
 
     private Bitmap.Config mDecodeConfig;
     private int mMaxWidth;
@@ -161,27 +163,19 @@ public class AndroidNetworkingRequest {
         AndroidNetworkingRequestQueue.getInstance().addRequest(this);
     }
 
-    public void startDownload(DownloadProgressListener downloadProgressListener) {
+    public AndroidNetworkingRequest setDownloadProgressListener(DownloadProgressListener downloadProgressListener) {
         this.mDownloadProgressListener = downloadProgressListener;
+        return this;
+    }
+
+    public void startDownload(DownloadListener downloadListener) {
+        this.mDownloadListener = downloadListener;
         AndroidNetworkingRequestQueue.getInstance().addRequest(this);
     }
 
-    public void getAsJsonObject(UploadProgressListener uploadProgressListener) {
-        this.mResponseAs = RESPONSE.JSON_OBJECT;
+    public AndroidNetworkingRequest setUploadProgressListener(UploadProgressListener uploadProgressListener) {
         this.mUploadProgressListener = uploadProgressListener;
-        AndroidNetworkingRequestQueue.getInstance().addRequest(this);
-    }
-
-    public void getAsJsonArray(UploadProgressListener uploadProgressListener) {
-        this.mResponseAs = RESPONSE.JSON_ARRAY;
-        this.mUploadProgressListener = uploadProgressListener;
-        AndroidNetworkingRequestQueue.getInstance().addRequest(this);
-    }
-
-    public void getAsString(UploadProgressListener uploadProgressListener) {
-        this.mResponseAs = RESPONSE.STRING;
-        this.mUploadProgressListener = uploadProgressListener;
-        AndroidNetworkingRequestQueue.getInstance().addRequest(this);
+        return this;
     }
 
     public int getMethod() {
@@ -222,6 +216,10 @@ public class AndroidNetworkingRequest {
 
     public DownloadProgressListener getDownloadProgressListener() {
         return mDownloadProgressListener;
+    }
+
+    public DownloadListener getDownloadListener() {
+        return mDownloadListener;
     }
 
     public UploadProgressListener getUploadProgressListener() {
@@ -315,18 +313,14 @@ public class AndroidNetworkingRequest {
     public void deliverError(AndroidNetworkingError error) {
         if (mRequestListener != null) {
             mRequestListener.onError(error);
-        } else if (mDownloadProgressListener != null) {
-            mDownloadProgressListener.onError(error);
-        } else if (mUploadProgressListener != null) {
-            mUploadProgressListener.onError(error);
+        } else if (mDownloadListener != null) {
+            mDownloadListener.onError(error);
         }
     }
 
     public void deliverResponse(AndroidNetworkingResponse response) {
         if (mRequestListener != null) {
             mRequestListener.onResponse(response.getResult());
-        } else if (mUploadProgressListener != null) {
-            mUploadProgressListener.onResponse(response.getResult());
         }
     }
 
@@ -945,4 +939,15 @@ public class AndroidNetworkingRequest {
         }
     }
 
+    @Override
+    public String toString() {
+        return "AndroidNetworkingRequest{" +
+                "mUrl='" + mUrl + '\'' +
+                ", mMethod=" + mMethod +
+                ", mPriority=" + mPriority +
+                ", mRequestType=" + mRequestType +
+                ", sequenceNumber=" + sequenceNumber +
+                ", mTag=" + mTag +
+                '}';
+    }
 }

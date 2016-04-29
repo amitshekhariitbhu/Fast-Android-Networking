@@ -11,6 +11,7 @@ import com.androidnetworking.common.AndroidNetworkingRequest;
 import com.androidnetworking.common.Constants;
 import com.androidnetworking.core.Core;
 import com.androidnetworking.error.AndroidNetworkingError;
+import com.androidnetworking.interfaces.DownloadListener;
 import com.androidnetworking.interfaces.DownloadProgressListener;
 import com.androidnetworking.utils.Utils;
 
@@ -134,7 +135,7 @@ public class AndroidNetworkingOkHttp {
             }
             sink.writeAll(source);
             sink.close();
-            updateCompletion(data.length, request.getDownloadProgressListener());
+            updateCompletion(request.getDownloadListener());
         } catch (IOException ioe) {
             if (okHttpRequest != null) {
                 data.url = okHttpRequest.url();
@@ -184,18 +185,18 @@ public class AndroidNetworkingOkHttp {
             Core.getInstance().getExecutorSupplier().forMainThreadTasks().execute(new Runnable() {
                 @Override
                 public void run() {
-                    downloadProgressListener.onProgress(bytesDownloaded, totalBytes, false);
+                    downloadProgressListener.onProgress(bytesDownloaded, totalBytes);
                 }
             });
         }
     }
 
-    public static void updateCompletion(final long totalBytes, final DownloadProgressListener downloadProgressListener) {
-        if (downloadProgressListener != null) {
+    public static void updateCompletion(final DownloadListener downloadListener) {
+        if (downloadListener != null) {
             Core.getInstance().getExecutorSupplier().forMainThreadTasks().execute(new Runnable() {
                 @Override
                 public void run() {
-                    downloadProgressListener.onProgress(totalBytes, totalBytes, true);
+                    downloadListener.onDownloadComplete();
                 }
             });
         }

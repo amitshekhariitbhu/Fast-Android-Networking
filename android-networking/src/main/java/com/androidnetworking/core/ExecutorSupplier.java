@@ -9,7 +9,7 @@ public interface ExecutorSupplier {
 
     AndroidNetworkingExecutor forNetworkTasks();
 
-    Executor forBackgroundTasks();
+    AndroidNetworkingExecutor forImmediateNetworkTasks();
 
     Executor forMainThreadTasks();
 }
