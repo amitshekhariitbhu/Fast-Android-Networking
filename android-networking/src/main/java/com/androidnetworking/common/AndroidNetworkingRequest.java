@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.widget.ImageView;
 
+import com.androidnetworking.core.Core;
 import com.androidnetworking.error.AndroidNetworkingError;
 import com.androidnetworking.interfaces.DownloadListener;
 import com.androidnetworking.interfaces.DownloadProgressListener;
@@ -24,6 +25,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.CacheControl;
+import okhttp3.Call;
 import okhttp3.FormBody;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
@@ -65,6 +67,11 @@ public class AndroidNetworkingRequest {
     private static final Object sDecodeLock = new Object();
 
     private Future future;
+    private Call call;
+    private int mProgress;
+    private boolean isCancelled;
+    private boolean isDelivered;
+    private int mPercentageThresholdForCancelling = 0;
     private RequestListener mRequestListener;
     private DownloadProgressListener mDownloadProgressListener;
     private UploadProgressListener mUploadProgressListener;
@@ -123,6 +130,7 @@ public class AndroidNetworkingRequest {
         this.mQueryParameterMap = builder.mQueryParameterMap;
         this.mPathParameterMap = builder.mPathParameterMap;
         this.mCacheControl = builder.mCacheControl;
+        this.mPercentageThresholdForCancelling = builder.mPercentageThresholdForCancelling;
     }
 
     private AndroidNetworkingRequest(MultiPartBuilder builder) {
@@ -137,6 +145,7 @@ public class AndroidNetworkingRequest {
         this.mMultiPartParameterMap = builder.mMultiPartParameterMap;
         this.mMultiPartFileMap = builder.mMultiPartFileMap;
         this.mCacheControl = builder.mCacheControl;
+        this.mPercentageThresholdForCancelling = builder.mPercentageThresholdForCancelling;
     }
 
     public void getAsJsonObject(RequestListener requestListener) {
@@ -206,6 +215,10 @@ public class AndroidNetworkingRequest {
         this.sequenceNumber = sequenceNumber;
     }
 
+    public void setProgress(int progress) {
+        this.mProgress = progress;
+    }
+
     public Object getTag() {
         return mTag;
     }
@@ -215,15 +228,63 @@ public class AndroidNetworkingRequest {
     }
 
     public DownloadProgressListener getDownloadProgressListener() {
-        return mDownloadProgressListener;
+        return new DownloadProgressListener() {
+            @Override
+            public void onProgress(final long bytesDownloaded, final long totalBytes) {
+                if (mDownloadProgressListener != null && !isCancelled) {
+                    Core.getInstance().getExecutorSupplier().forMainThreadTasks().execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            mDownloadProgressListener.onProgress(bytesDownloaded, totalBytes);
+                        }
+                    });
+                }
+            }
+        };
     }
 
     public DownloadListener getDownloadListener() {
-        return mDownloadListener;
+        return new DownloadListener() {
+            @Override
+            public void onDownloadComplete() {
+                if (mDownloadListener != null) {
+                    isDelivered = true;
+                    Core.getInstance().getExecutorSupplier().forMainThreadTasks().execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (!isCancelled) {
+                                mDownloadListener.onDownloadComplete();
+                                Log.d(TAG, "Delivering success response for : " + toString());
+                            } else {
+                                deliverError(new AndroidNetworkingError());
+                            }
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onError(AndroidNetworkingError error) {
+
+            }
+        };
     }
 
     public UploadProgressListener getUploadProgressListener() {
-        return mUploadProgressListener;
+        return new UploadProgressListener() {
+            @Override
+            public void onProgress(final long bytesUploaded, final long totalBytes) {
+                mProgress = (int) ((bytesUploaded * 100) / totalBytes);
+                if (mUploadProgressListener != null && !isCancelled) {
+                    Core.getInstance().getExecutorSupplier().forMainThreadTasks().execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            mUploadProgressListener.onProgress(bytesUploaded, totalBytes);
+                        }
+                    });
+                }
+            }
+        };
     }
 
     public String getDirPath() {
@@ -243,12 +304,34 @@ public class AndroidNetworkingRequest {
     }
 
     public void cancel() {
-        Log.d(TAG, "cancelling request for sequenceNumber : " + sequenceNumber);
-        future.cancel(true);
+        if (mPercentageThresholdForCancelling == 0 || mProgress < mPercentageThresholdForCancelling) {
+            Log.d(TAG, "cancelling request for sequenceNumber : " + sequenceNumber);
+            isCancelled = true;
+            if (call != null) {
+                call.cancel();
+            }
+            if (future != null) {
+                future.cancel(true);
+            }
+            if (!isDelivered) {
+                deliverError(new AndroidNetworkingError());
+            }
+        } else {
+            Log.d(TAG, "not cancelling request for sequenceNumber : " + sequenceNumber);
+        }
+
     }
 
     public boolean isCanceled() {
-        return future.isCancelled();
+        return isCancelled;
+    }
+
+    public Call getCall() {
+        return call;
+    }
+
+    public void setCall(Call call) {
+        this.call = call;
     }
 
     public Future getFuture() {
@@ -310,18 +393,33 @@ public class AndroidNetworkingRequest {
         return error;
     }
 
-    public void deliverError(AndroidNetworkingError error) {
-        if (mRequestListener != null) {
-            mRequestListener.onError(error);
-        } else if (mDownloadListener != null) {
-            mDownloadListener.onError(error);
+    public synchronized void deliverError(AndroidNetworkingError error) {
+        if (!isDelivered) {
+            if (isCancelled) {
+                error.setCancellationMessageInError();
+            }
+            if (mRequestListener != null) {
+                mRequestListener.onError(error);
+            } else if (mDownloadListener != null) {
+                mDownloadListener.onError(error);
+            }
+            Log.d(TAG, "Delivering error response for : " + toString());
         }
+        isDelivered = true;
     }
 
     public void deliverResponse(AndroidNetworkingResponse response) {
+        isDelivered = true;
         if (mRequestListener != null) {
-            mRequestListener.onResponse(response.getResult());
+            if (!isCancelled) {
+                mRequestListener.onResponse(response.getResult());
+            } else {
+                AndroidNetworkingError error = new AndroidNetworkingError();
+                error.setCancellationMessageInError();
+                mRequestListener.onError(error);
+            }
         }
+        Log.d(TAG, "Delivering success response for : " + toString());
     }
 
     public RequestBody getRequestBody() {
@@ -738,6 +836,7 @@ public class AndroidNetworkingRequest {
         private String mDirPath;
         private String mFileName;
         private CacheControl mCacheControl;
+        private int mPercentageThresholdForCancelling = 0;
 
         public DownloadBuilder(String url, String dirPath, String fileName) {
             this.mUrl = url;
@@ -815,6 +914,10 @@ public class AndroidNetworkingRequest {
             return this;
         }
 
+        public void setPercentageThresholdForCancelling(int percentageThresholdForCancelling) {
+            this.mPercentageThresholdForCancelling = percentageThresholdForCancelling;
+        }
+
         public AndroidNetworkingRequest build() {
             return new AndroidNetworkingRequest(this);
         }
@@ -831,6 +934,7 @@ public class AndroidNetworkingRequest {
         private HashMap<String, String> mPathParameterMap = new HashMap<String, String>();
         private HashMap<String, File> mMultiPartFileMap = new HashMap<String, File>();
         private CacheControl mCacheControl;
+        private int mPercentageThresholdForCancelling = 0;
 
         public MultiPartBuilder(String url) {
             this.mUrl = url;
@@ -932,6 +1036,10 @@ public class AndroidNetworkingRequest {
                 }
             }
             return this;
+        }
+
+        public void setPercentageThresholdForCancelling(int percentageThresholdForCancelling) {
+            this.mPercentageThresholdForCancelling = percentageThresholdForCancelling;
         }
 
         public AndroidNetworkingRequest build() {

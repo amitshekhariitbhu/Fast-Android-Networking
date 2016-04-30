@@ -9,9 +9,7 @@ import android.content.Context;
 import com.androidnetworking.common.AndroidNetworkingData;
 import com.androidnetworking.common.AndroidNetworkingRequest;
 import com.androidnetworking.common.Constants;
-import com.androidnetworking.core.Core;
 import com.androidnetworking.error.AndroidNetworkingError;
-import com.androidnetworking.interfaces.DownloadListener;
 import com.androidnetworking.interfaces.DownloadProgressListener;
 import com.androidnetworking.utils.Utils;
 
@@ -129,13 +127,17 @@ public class AndroidNetworkingOkHttp {
             File file = new File(request.getDirPath() + File.separator + request.getFileName());
             BufferedSink sink = Okio.buffer(Okio.sink(file));
             long bytesRead = 0;
+            final DownloadProgressListener downloadProgressListener = request.getDownloadProgressListener();
             while (source.read(sink.buffer(), DOWNLOAD_CHUNK_SIZE) != -1) {
                 bytesRead += DOWNLOAD_CHUNK_SIZE;
-                updateProgress(bytesRead, data.length, request.getDownloadProgressListener());
+                request.setProgress((int) ((bytesRead * 100) / data.length));
+                if (downloadProgressListener != null) {
+                    downloadProgressListener.onProgress(bytesRead, data.length);
+                }
             }
             sink.writeAll(source);
             sink.close();
-            updateCompletion(request.getDownloadListener());
+            request.getDownloadListener().onDownloadComplete();
         } catch (IOException ioe) {
             if (okHttpRequest != null) {
                 data.url = okHttpRequest.url();
@@ -177,29 +179,6 @@ public class AndroidNetworkingOkHttp {
             throw new AndroidNetworkingError(data, ioe);
         }
         return data;
-    }
-
-
-    public static void updateProgress(final long bytesDownloaded, final long totalBytes, final DownloadProgressListener downloadProgressListener) {
-        if (downloadProgressListener != null) {
-            Core.getInstance().getExecutorSupplier().forMainThreadTasks().execute(new Runnable() {
-                @Override
-                public void run() {
-                    downloadProgressListener.onProgress(bytesDownloaded, totalBytes);
-                }
-            });
-        }
-    }
-
-    public static void updateCompletion(final DownloadListener downloadListener) {
-        if (downloadListener != null) {
-            Core.getInstance().getExecutorSupplier().forMainThreadTasks().execute(new Runnable() {
-                @Override
-                public void run() {
-                    downloadListener.onDownloadComplete();
-                }
-            });
-        }
     }
 
     public static OkHttpClient getClient() {

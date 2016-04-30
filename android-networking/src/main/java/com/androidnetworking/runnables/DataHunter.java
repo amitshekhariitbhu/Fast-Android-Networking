@@ -157,7 +157,6 @@ public class DataHunter implements Runnable {
     }
 
     private void deliverError(final AndroidNetworkingRequest request, final AndroidNetworkingError error) {
-        Log.d(TAG, "Delivering failed response for " + request.getSequenceNumber());
         Core.getInstance().getExecutorSupplier().forMainThreadTasks().execute(new Runnable() {
             public void run() {
                 request.deliverError(error);
@@ -167,7 +166,6 @@ public class DataHunter implements Runnable {
     }
 
     private void deliverResponse(final AndroidNetworkingRequest request, final AndroidNetworkingResponse response) {
-        Log.d(TAG, "Delivering success response for " + request.getSequenceNumber());
         Core.getInstance().getExecutorSupplier().forMainThreadTasks().execute(new Runnable() {
             public void run() {
                 request.deliverResponse(response);

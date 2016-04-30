@@ -86,27 +86,6 @@ public class MainActivity extends AppCompatActivity {
                     });
 
         }
-
-        AndroidNetworking.get(URL_JSON_ARRAY)
-                .setTag(this)
-                .setPriority(Priority.HIGH)
-                .build()
-                .getAsJsonArray(new RequestListener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        Log.d(TAG, "onResponse array : " + response.toString());
-                    }
-
-                    @Override
-                    public void onError(AndroidNetworkingError error) {
-                        if (error.hasErrorFromServer()) {
-                            Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
-                        } else {
-                            Log.d(TAG, "onError : " + error.getError());
-                        }
-                    }
-                });
-
     }
 
     public void cancelAllRequests(View view) {

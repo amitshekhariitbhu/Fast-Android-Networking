@@ -8,5 +8,6 @@ public final class Constants {
     public static final String CACHE_DIR_NAME = "cache_an";
     public static final String CONNECTION_ERROR = "connectionError";
     public static final String ERROR_RESPONSE_FROM_SERVER = "errorResponseFromServer";
+    public static final String ERROR_REQUEST_CANCELLED = "errorRequestCancelled";
     public static final String PARSE_ERROR = "parseError";
 }
