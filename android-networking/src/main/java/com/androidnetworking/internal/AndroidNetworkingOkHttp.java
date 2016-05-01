@@ -83,7 +83,8 @@ public class AndroidNetworkingOkHttp {
                 builder.cacheControl(request.getCacheControl());
             }
             okHttpRequest = builder.build();
-            Response okResponse = sHttpClient.newCall(okHttpRequest).execute();
+            request.setCall(sHttpClient.newCall(okHttpRequest));
+            Response okResponse = request.getCall().execute();
             data.url = okResponse.request().url();
             data.code = okResponse.code();
             data.headers = okResponse.headers();
@@ -117,7 +118,8 @@ public class AndroidNetworkingOkHttp {
                 builder.cacheControl(request.getCacheControl());
             }
             okHttpRequest = builder.build();
-            Response okResponse = sHttpClient.newCall(okHttpRequest).execute();
+            request.setCall(sHttpClient.newCall(okHttpRequest));
+            Response okResponse = request.getCall().execute();
             data.url = okResponse.request().url();
             data.code = okResponse.code();
             data.headers = okResponse.headers();
@@ -166,7 +168,8 @@ public class AndroidNetworkingOkHttp {
                 builder.cacheControl(request.getCacheControl());
             }
             okHttpRequest = builder.build();
-            Response okResponse = sHttpClient.newCall(okHttpRequest).execute();
+            request.setCall(sHttpClient.newCall(okHttpRequest));
+            Response okResponse = request.getCall().execute();
             data.url = okResponse.request().url();
             data.code = okResponse.code();
             data.headers = okResponse.headers();
