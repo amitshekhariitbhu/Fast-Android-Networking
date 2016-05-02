@@ -47,10 +47,19 @@ AndroidNetworking.initialize(getApplicationContext());
 ```
 Initializing it with some customization , as it uses [OkHttp](http://square.github.io/okhttp/) as newtorking layer, you can pass custom okHttpClient while initializing it.
 ```
+# Adding an Network Interceptor for Debugging purpose :
 OkHttpClient okHttpClient = new OkHttpClient() .newBuilder()
                         .addNetworkInterceptor(new StethoInterceptor())
                         .build();
 AndroidNetworking.initialize(getApplicationContext(),okHttpClient);                        
+```
+```
+# Enabling GZIP for Request (Not needed if your server doesn't support GZIP Compression), anyway responses from server are automatically unGzipped if required. So enable it only
+if you need your request to be Gzipped before sending to server(Make sure your server support GZIP Compression).
+OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
+                .addInterceptor(new GzipRequestInterceptor())
+                .build();
+AndroidNetworking.initialize(getApplicationContext(),okHttpClient);                
 ```
 ### Making a GET Request
 ```

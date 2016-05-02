@@ -6,6 +6,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.interceptors.GzipRequestInterceptor;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,6 +15,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+
+import okhttp3.OkHttpClient;
 
 /**
  * Created by amitshekhar on 22/03/16.
@@ -35,8 +38,11 @@ public class MyApplication extends Application {
         AndroidNetworking.initialize(getApplicationContext());
         //For testing purpose only: network interceptor : enable it only for non-images request checking
 //        Stetho.initializeWithDefaults(getApplicationContext());
-//        OkHttpClient okHttpClient = new OkHttpClient().newBuilder().addNetworkInterceptor(new StethoInterceptor()).build();
-//        AndroidNetworking.initialize(getApplicationContext(), okHttpClient);
+//        OkHttpClient okHttpClient = new OkHttpClient().newBuilder().addNetworkInterceptor(new StethoInterceptor()).addInterceptor(new GzipRequestInterceptor()).build();
+        OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
+                .addInterceptor(new GzipRequestInterceptor())
+                .build();
+        AndroidNetworking.initialize(getApplicationContext(), okHttpClient);
     }
 
     private void setVariableFromEnv() {
