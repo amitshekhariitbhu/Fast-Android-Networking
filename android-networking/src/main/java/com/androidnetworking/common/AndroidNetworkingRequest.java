@@ -1058,7 +1058,7 @@ public class AndroidNetworkingRequest {
         public MultiPartBuilder addMultipartParameter(HashMap<String, String> multiPartParameterMap) {
             if (multiPartParameterMap != null) {
                 for (HashMap.Entry<String, String> entry : multiPartParameterMap.entrySet()) {
-                    mQueryParameterMap.put(entry.getKey(), entry.getValue());
+                    mMultiPartParameterMap.put(entry.getKey(), entry.getValue());
                 }
             }
             return this;
