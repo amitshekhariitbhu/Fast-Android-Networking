@@ -944,8 +944,9 @@ public class AndroidNetworkingRequest {
             return this;
         }
 
-        public void setPercentageThresholdForCancelling(int percentageThresholdForCancelling) {
+        public DownloadBuilder setPercentageThresholdForCancelling(int percentageThresholdForCancelling) {
             this.mPercentageThresholdForCancelling = percentageThresholdForCancelling;
+            return this;
         }
 
         public AndroidNetworkingRequest build() {
@@ -1078,8 +1079,9 @@ public class AndroidNetworkingRequest {
             return this;
         }
 
-        public void setPercentageThresholdForCancelling(int percentageThresholdForCancelling) {
+        public MultiPartBuilder setPercentageThresholdForCancelling(int percentageThresholdForCancelling) {
             this.mPercentageThresholdForCancelling = percentageThresholdForCancelling;
+            return this;
         }
 
         public AndroidNetworkingRequest build() {
