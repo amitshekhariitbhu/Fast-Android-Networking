@@ -622,6 +622,16 @@ public class AndroidNetworkingRequest {
         }
 
         @Override
+        public GetRequestBuilder addHeaders(HashMap<String, String> headerMap) {
+            if (headerMap != null) {
+                for (HashMap.Entry<String, String> entry : headerMap.entrySet()) {
+                    mHeadersMap.put(entry.getKey(), entry.getValue());
+                }
+            }
+            return this;
+        }
+
+        @Override
         public GetRequestBuilder doNotCacheResponse() {
             mCacheControl = new CacheControl.Builder().noStore().build();
             return this;
@@ -734,6 +744,16 @@ public class AndroidNetworkingRequest {
         @Override
         public PostRequestBuilder addHeaders(String key, String value) {
             mHeadersMap.put(key, value);
+            return this;
+        }
+
+        @Override
+        public PostRequestBuilder addHeaders(HashMap<String, String> headerMap) {
+            if (headerMap != null) {
+                for (HashMap.Entry<String, String> entry : headerMap.entrySet()) {
+                    mHeadersMap.put(entry.getKey(), entry.getValue());
+                }
+            }
             return this;
         }
 
@@ -863,6 +883,16 @@ public class AndroidNetworkingRequest {
         }
 
         @Override
+        public DownloadBuilder addHeaders(HashMap<String, String> headerMap) {
+            if (headerMap != null) {
+                for (HashMap.Entry<String, String> entry : headerMap.entrySet()) {
+                    mHeadersMap.put(entry.getKey(), entry.getValue());
+                }
+            }
+            return this;
+        }
+
+        @Override
         public DownloadBuilder addQueryParameter(String key, String value) {
             mQueryParameterMap.put(key, value);
             return this;
@@ -977,6 +1007,16 @@ public class AndroidNetworkingRequest {
         @Override
         public MultiPartBuilder addHeaders(String key, String value) {
             mHeadersMap.put(key, value);
+            return this;
+        }
+
+        @Override
+        public MultiPartBuilder addHeaders(HashMap<String, String> headerMap) {
+            if (headerMap != null) {
+                for (HashMap.Entry<String, String> entry : headerMap.entrySet()) {
+                    mHeadersMap.put(entry.getKey(), entry.getValue());
+                }
+            }
             return this;
         }
 

@@ -14,6 +14,8 @@ public interface RequestBuilder {
 
     RequestBuilder addHeaders(String key, String value);
 
+    RequestBuilder addHeaders(HashMap<String, String> headerMap);
+
     RequestBuilder addQueryParameter(String key, String value);
 
     RequestBuilder addQueryParameter(HashMap<String, String> queryParameterMap);
