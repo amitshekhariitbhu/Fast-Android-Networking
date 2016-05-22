@@ -191,7 +191,8 @@ AndroidNetworking.upload(url)
                     }
                  }); 
 ```
-### Getting Response and completion in an another executor thread (Note : Error and progress will always be returned in main thread of application)
+### Getting Response and completion in an another thread executor 
+(Note : Error and Progress will always be returned in main thread of application)
 ```
 AndroidNetworking.upload(url)
                  .addMultipartFile("image",file)    
