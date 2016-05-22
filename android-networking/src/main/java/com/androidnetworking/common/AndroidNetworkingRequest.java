@@ -1,7 +1,6 @@
 package com.androidnetworking.common;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -21,6 +20,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.concurrent.Executor;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
@@ -82,6 +82,7 @@ public class AndroidNetworkingRequest {
     private int mMaxHeight;
     private ImageView.ScaleType mScaleType;
     private CacheControl mCacheControl = null;
+    private Executor mExecutor = null;
 
     private AndroidNetworkingRequest(GetRequestBuilder builder) {
         this.mRequestType = RequestType.SIMPLE;
@@ -97,6 +98,7 @@ public class AndroidNetworkingRequest {
         this.mQueryParameterMap = builder.mQueryParameterMap;
         this.mPathParameterMap = builder.mPathParameterMap;
         this.mCacheControl = builder.mCacheControl;
+        this.mExecutor = builder.mExecutor;
     }
 
     private AndroidNetworkingRequest(PostRequestBuilder builder) {
@@ -116,6 +118,7 @@ public class AndroidNetworkingRequest {
         this.mFile = builder.mFile;
         this.mByte = builder.mByte;
         this.mCacheControl = builder.mCacheControl;
+        this.mExecutor = builder.mExecutor;
     }
 
     private AndroidNetworkingRequest(DownloadBuilder builder) {
@@ -131,6 +134,7 @@ public class AndroidNetworkingRequest {
         this.mPathParameterMap = builder.mPathParameterMap;
         this.mCacheControl = builder.mCacheControl;
         this.mPercentageThresholdForCancelling = builder.mPercentageThresholdForCancelling;
+        this.mExecutor = builder.mExecutor;
     }
 
     private AndroidNetworkingRequest(MultiPartBuilder builder) {
@@ -146,6 +150,7 @@ public class AndroidNetworkingRequest {
         this.mMultiPartFileMap = builder.mMultiPartFileMap;
         this.mCacheControl = builder.mCacheControl;
         this.mPercentageThresholdForCancelling = builder.mPercentageThresholdForCancelling;
+        this.mExecutor = builder.mExecutor;
     }
 
     public void getAsJsonObject(RequestListener requestListener) {
@@ -249,17 +254,30 @@ public class AndroidNetworkingRequest {
             public void onDownloadComplete() {
                 if (mDownloadListener != null) {
                     isDelivered = true;
-                    Core.getInstance().getExecutorSupplier().forMainThreadTasks().execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (!isCancelled) {
-                                mDownloadListener.onDownloadComplete();
-                                Log.d(TAG, "Delivering success response for : " + toString());
-                            } else {
-                                deliverError(new AndroidNetworkingError());
-                            }
+                    if (!isCancelled) {
+                        if (mExecutor != null) {
+                            mExecutor.execute(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mDownloadListener.onDownloadComplete();
+                                    Log.d(TAG, "Delivering success response for : " + toString());
+                                    finish();
+                                }
+                            });
+                        } else {
+                            Core.getInstance().getExecutorSupplier().forMainThreadTasks().execute(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mDownloadListener.onDownloadComplete();
+                                    Log.d(TAG, "Delivering success response for : " + toString());
+                                    finish();
+                                }
+                            });
                         }
-                    });
+                    } else {
+                        deliverError(new AndroidNetworkingError());
+                        finish();
+                    }
                 }
             }
 
@@ -315,6 +333,7 @@ public class AndroidNetworkingRequest {
             }
             if (!isDelivered) {
                 deliverError(new AndroidNetworkingError());
+                finish();
             }
         } else {
             Log.d(TAG, "not cancelling request for sequenceNumber : " + sequenceNumber);
@@ -373,7 +392,7 @@ public class AndroidNetworkingRequest {
             case BITMAP:
                 synchronized (sDecodeLock) {
                     try {
-                        return doParse(data);
+                        return Utils.decodeBitmap(data, mMaxWidth, mMaxHeight, mDecodeConfig, mScaleType);
                     } catch (OutOfMemoryError e) {
                         return AndroidNetworkingResponse.failed(new AndroidNetworkingError(e));
                     }
@@ -408,11 +427,26 @@ public class AndroidNetworkingRequest {
         isDelivered = true;
     }
 
-    public void deliverResponse(AndroidNetworkingResponse response) {
+    public void deliverResponse(final AndroidNetworkingResponse response) {
         isDelivered = true;
         if (mRequestListener != null) {
             if (!isCancelled) {
-                mRequestListener.onResponse(response.getResult());
+                if (mExecutor != null) {
+                    mExecutor.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            mRequestListener.onResponse(response.getResult());
+                            finish();
+                        }
+                    });
+                } else {
+                    Core.getInstance().getExecutorSupplier().forMainThreadTasks().execute(new Runnable() {
+                        public void run() {
+                            mRequestListener.onResponse(response.getResult());
+                            finish();
+                        }
+                    });
+                }
             } else {
                 AndroidNetworkingError error = new AndroidNetworkingError();
                 error.setCancellationMessageInError();
@@ -467,103 +501,6 @@ public class AndroidNetworkingRequest {
     }
 
 
-    private AndroidNetworkingResponse<Bitmap> doParse(AndroidNetworkingData response) {
-        byte[] data = new byte[0];
-        try {
-            data = Okio.buffer(response.source).readByteArray();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        BitmapFactory.Options decodeOptions = new BitmapFactory.Options();
-        Bitmap bitmap = null;
-        if (mMaxWidth == 0 && mMaxHeight == 0) {
-            decodeOptions.inPreferredConfig = mDecodeConfig;
-            bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, decodeOptions);
-        } else {
-            decodeOptions.inJustDecodeBounds = true;
-            BitmapFactory.decodeByteArray(data, 0, data.length, decodeOptions);
-            int actualWidth = decodeOptions.outWidth;
-            int actualHeight = decodeOptions.outHeight;
-
-            int desiredWidth = getResizedDimension(mMaxWidth, mMaxHeight,
-                    actualWidth, actualHeight, mScaleType);
-            int desiredHeight = getResizedDimension(mMaxHeight, mMaxWidth,
-                    actualHeight, actualWidth, mScaleType);
-
-            decodeOptions.inJustDecodeBounds = false;
-            decodeOptions.inSampleSize =
-                    findBestSampleSize(actualWidth, actualHeight, desiredWidth, desiredHeight);
-            Bitmap tempBitmap =
-                    BitmapFactory.decodeByteArray(data, 0, data.length, decodeOptions);
-
-            if (tempBitmap != null && (tempBitmap.getWidth() > desiredWidth ||
-                    tempBitmap.getHeight() > desiredHeight)) {
-                bitmap = Bitmap.createScaledBitmap(tempBitmap,
-                        desiredWidth, desiredHeight, true);
-                tempBitmap.recycle();
-            } else {
-                bitmap = tempBitmap;
-            }
-        }
-
-        if (bitmap == null) {
-            return AndroidNetworkingResponse.failed(new AndroidNetworkingError(response));
-        } else {
-            return AndroidNetworkingResponse.success(bitmap);
-        }
-    }
-
-    private static int getResizedDimension(int maxPrimary, int maxSecondary, int actualPrimary,
-                                           int actualSecondary, ImageView.ScaleType scaleType) {
-
-        if ((maxPrimary == 0) && (maxSecondary == 0)) {
-            return actualPrimary;
-        }
-
-        if (scaleType == ImageView.ScaleType.FIT_XY) {
-            if (maxPrimary == 0) {
-                return actualPrimary;
-            }
-            return maxPrimary;
-        }
-
-        if (maxPrimary == 0) {
-            double ratio = (double) maxSecondary / (double) actualSecondary;
-            return (int) (actualPrimary * ratio);
-        }
-
-        if (maxSecondary == 0) {
-            return maxPrimary;
-        }
-
-        double ratio = (double) actualSecondary / (double) actualPrimary;
-        int resized = maxPrimary;
-
-        if (scaleType == ImageView.ScaleType.CENTER_CROP) {
-            if ((resized * ratio) < maxSecondary) {
-                resized = (int) (maxSecondary / ratio);
-            }
-            return resized;
-        }
-
-        if ((resized * ratio) > maxSecondary) {
-            resized = (int) (maxSecondary / ratio);
-        }
-        return resized;
-    }
-
-    static int findBestSampleSize(
-            int actualWidth, int actualHeight, int desiredWidth, int desiredHeight) {
-        double wr = (double) actualWidth / desiredWidth;
-        double hr = (double) actualHeight / desiredHeight;
-        double ratio = Math.min(wr, hr);
-        float n = 1.0f;
-        while ((n * 2) <= ratio) {
-            n *= 2;
-        }
-        return (int) n;
-    }
-
     public static class GetRequestBuilder implements RequestBuilder {
         private Priority mPriority = Priority.MEDIUM;
         private String mUrl;
@@ -576,6 +513,7 @@ public class AndroidNetworkingRequest {
         private HashMap<String, String> mQueryParameterMap = new HashMap<String, String>();
         private HashMap<String, String> mPathParameterMap = new HashMap<String, String>();
         private CacheControl mCacheControl;
+        private Executor mExecutor;
 
         public GetRequestBuilder(String url) {
             this.mUrl = url;
@@ -661,6 +599,12 @@ public class AndroidNetworkingRequest {
             return this;
         }
 
+        @Override
+        public GetRequestBuilder setExecutor(Executor executor) {
+            mExecutor = executor;
+            return this;
+        }
+
         public GetRequestBuilder setBitmapConfig(Bitmap.Config bitmapConfig) {
             this.mDecodeConfig = bitmapConfig;
             return this;
@@ -702,6 +646,7 @@ public class AndroidNetworkingRequest {
         private HashMap<String, String> mQueryParameterMap = new HashMap<String, String>();
         private HashMap<String, String> mPathParameterMap = new HashMap<String, String>();
         private CacheControl mCacheControl;
+        private Executor mExecutor;
 
         public PostRequestBuilder(String url) {
             this.mUrl = url;
@@ -787,6 +732,12 @@ public class AndroidNetworkingRequest {
             return this;
         }
 
+        @Override
+        public PostRequestBuilder setExecutor(Executor executor) {
+            mExecutor = executor;
+            return this;
+        }
+
         public PostRequestBuilder addBodyParameter(String key, String value) {
             mBodyParameterMap.put(key, value);
             return this;
@@ -857,6 +808,7 @@ public class AndroidNetworkingRequest {
         private String mFileName;
         private CacheControl mCacheControl;
         private int mPercentageThresholdForCancelling = 0;
+        private Executor mExecutor;
 
         public DownloadBuilder(String url, String dirPath, String fileName) {
             this.mUrl = url;
@@ -944,6 +896,12 @@ public class AndroidNetworkingRequest {
             return this;
         }
 
+        @Override
+        public DownloadBuilder setExecutor(Executor executor) {
+            mExecutor = executor;
+            return this;
+        }
+
         public DownloadBuilder setPercentageThresholdForCancelling(int percentageThresholdForCancelling) {
             this.mPercentageThresholdForCancelling = percentageThresholdForCancelling;
             return this;
@@ -966,6 +924,7 @@ public class AndroidNetworkingRequest {
         private HashMap<String, File> mMultiPartFileMap = new HashMap<String, File>();
         private CacheControl mCacheControl;
         private int mPercentageThresholdForCancelling = 0;
+        private Executor mExecutor;
 
         public MultiPartBuilder(String url) {
             this.mUrl = url;
@@ -1048,6 +1007,12 @@ public class AndroidNetworkingRequest {
         @Override
         public MultiPartBuilder setMaxStaleCacheControl(int maxStale, TimeUnit timeUnit) {
             mCacheControl = new CacheControl.Builder().maxStale(maxStale, timeUnit).build();
+            return this;
+        }
+
+        @Override
+        public MultiPartBuilder setExecutor(Executor executor) {
+            mExecutor = executor;
             return this;
         }
 

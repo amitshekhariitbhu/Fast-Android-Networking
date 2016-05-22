@@ -1,6 +1,7 @@
 package com.androidnetworking.common;
 
 import java.util.HashMap;
+import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -31,5 +32,7 @@ public interface RequestBuilder {
     RequestBuilder setMaxAgeCacheControl(int maxAge, TimeUnit timeUnit);
 
     RequestBuilder setMaxStaleCacheControl(int maxStale, TimeUnit timeUnit);
+
+    RequestBuilder setExecutor(Executor executor);
 
 }

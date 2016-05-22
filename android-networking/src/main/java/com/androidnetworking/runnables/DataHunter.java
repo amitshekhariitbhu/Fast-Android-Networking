@@ -71,7 +71,7 @@ public class DataHunter implements Runnable {
                 deliverError(request, response.getError());
                 return;
             }
-            deliverResponse(request, response);
+            request.deliverResponse(response);
         } catch (AndroidNetworkingError se) {
             se = request.parseNetworkError(se);
             se.setError(Constants.CONNECTION_ERROR);
@@ -132,7 +132,7 @@ public class DataHunter implements Runnable {
                 deliverError(request, response.getError());
                 return;
             }
-            deliverResponse(request, response);
+            request.deliverResponse(response);
         } catch (AndroidNetworkingError se) {
             se = request.parseNetworkError(se);
             se.setError(Constants.CONNECTION_ERROR);
@@ -160,15 +160,6 @@ public class DataHunter implements Runnable {
         Core.getInstance().getExecutorSupplier().forMainThreadTasks().execute(new Runnable() {
             public void run() {
                 request.deliverError(error);
-                request.finish();
-            }
-        });
-    }
-
-    private void deliverResponse(final AndroidNetworkingRequest request, final AndroidNetworkingResponse response) {
-        Core.getInstance().getExecutorSupplier().forMainThreadTasks().execute(new Runnable() {
-            public void run() {
-                request.deliverResponse(response);
                 request.finish();
             }
         });

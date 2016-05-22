@@ -2,6 +2,7 @@ package com.networking;
 
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -20,6 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -46,6 +48,7 @@ public class ApiTestActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONArray response) {
                         Log.d(TAG, "onResponse array : " + response.toString());
+                        Log.d(TAG, "onResponse isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }
 
                     @Override
@@ -55,6 +58,7 @@ public class ApiTestActivity extends AppCompatActivity {
                         } else {
                             Log.d(TAG, "onError : " + error.getError());
                         }
+                        Log.d(TAG, "onError isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }
                 });
     }
@@ -69,6 +73,7 @@ public class ApiTestActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d(TAG, "onResponse object : " + response.toString());
+                        Log.d(TAG, "onResponse isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }
 
                     @Override
@@ -78,6 +83,7 @@ public class ApiTestActivity extends AppCompatActivity {
                         } else {
                             Log.d(TAG, "onError : " + error.getError());
                         }
+                        Log.d(TAG, "onError isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }
                 });
     }
@@ -92,6 +98,7 @@ public class ApiTestActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d(TAG, "onResponse object : " + response.toString());
+                        Log.d(TAG, "onResponse isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }
 
                     @Override
@@ -101,6 +108,7 @@ public class ApiTestActivity extends AppCompatActivity {
                         } else {
                             Log.d(TAG, "onError : " + error.getError());
                         }
+                        Log.d(TAG, "onError isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }
                 });
     }
@@ -110,11 +118,13 @@ public class ApiTestActivity extends AppCompatActivity {
                 .addHeaders("token", "1234")
                 .setTag(this)
                 .setPriority(Priority.LOW)
+                .setExecutor(Executors.newSingleThreadExecutor())
                 .build()
                 .getAsJsonObject(new RequestListener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d(TAG, "onResponse object : " + response.toString());
+                        Log.d(TAG, "onResponse isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }
 
                     @Override
@@ -124,6 +134,7 @@ public class ApiTestActivity extends AppCompatActivity {
                         } else {
                             Log.d(TAG, "onError : " + error.getError());
                         }
+                        Log.d(TAG, "onError isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }
                 });
     }
@@ -139,6 +150,7 @@ public class ApiTestActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d(TAG, "onResponse object : " + response.toString());
+                        Log.d(TAG, "onResponse isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }
 
                     @Override
@@ -148,6 +160,7 @@ public class ApiTestActivity extends AppCompatActivity {
                         } else {
                             Log.d(TAG, "onError : " + error.getError());
                         }
+                        Log.d(TAG, "onError isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }
                 });
     }
@@ -170,6 +183,7 @@ public class ApiTestActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d(TAG, "onResponse object : " + response.toString());
+                        Log.d(TAG, "onResponse isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }
 
                     @Override
@@ -179,6 +193,7 @@ public class ApiTestActivity extends AppCompatActivity {
                         } else {
                             Log.d(TAG, "onError : " + error.getError());
                         }
+                        Log.d(TAG, "onError isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }
                 });
     }
@@ -193,12 +208,14 @@ public class ApiTestActivity extends AppCompatActivity {
                     @Override
                     public void onProgress(long bytesDownloaded, long totalBytes) {
                         Log.d(TAG, "bytesDownloaded : " + bytesDownloaded + " totalBytes : " + totalBytes);
+                        Log.d(TAG, "setDownloadProgressListener isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }
                 })
                 .startDownload(new DownloadListener() {
                     @Override
                     public void onDownloadComplete() {
                         Log.d(TAG, "File download Completed");
+                        Log.d(TAG, "onDownloadComplete isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }
 
                     @Override
@@ -208,6 +225,7 @@ public class ApiTestActivity extends AppCompatActivity {
                         } else {
                             Log.d(TAG, "onError : " + error.getError());
                         }
+                        Log.d(TAG, "onError isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }
                 });
 
@@ -224,6 +242,7 @@ public class ApiTestActivity extends AppCompatActivity {
                     @Override
                     public void onDownloadComplete() {
                         Log.d(TAG, "Image download Completed");
+                        Log.d(TAG, "onDownloadComplete isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }
 
                     @Override
@@ -233,6 +252,7 @@ public class ApiTestActivity extends AppCompatActivity {
                         } else {
                             Log.d(TAG, "onError : " + error.getError());
                         }
+                        Log.d(TAG, "onError isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }
                 });
     }
@@ -247,6 +267,7 @@ public class ApiTestActivity extends AppCompatActivity {
                     @Override
                     public void onProgress(long bytesUploaded, long totalBytes) {
                         Log.d(TAG, "bytesUploaded : " + bytesUploaded + " totalBytes : " + totalBytes);
+                        Log.d(TAG, "setUploadProgressListener isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }
                 })
                 .getAsJsonObject(new RequestListener<JSONObject>() {
@@ -263,6 +284,7 @@ public class ApiTestActivity extends AppCompatActivity {
                         } else {
                             Log.d(TAG, "onError : " + error.getError());
                         }
+                        Log.d(TAG, "onError isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }
                 });
     }
@@ -279,6 +301,7 @@ public class ApiTestActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONArray response) {
                         Log.d(TAG, "onResponse array : " + response.toString());
+                        Log.d(TAG, "onResponse isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }
 
                     @Override
@@ -288,6 +311,7 @@ public class ApiTestActivity extends AppCompatActivity {
                         } else {
                             Log.d(TAG, "onError : " + error.getError());
                         }
+                        Log.d(TAG, "onError isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }
                 });
     }
@@ -304,6 +328,7 @@ public class ApiTestActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONArray response) {
                         Log.d(TAG, "onResponse array : " + response.toString());
+                        Log.d(TAG, "onResponse isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }
 
                     @Override
@@ -313,6 +338,7 @@ public class ApiTestActivity extends AppCompatActivity {
                         } else {
                             Log.d(TAG, "onError : " + error.getError());
                         }
+                        Log.d(TAG, "onError isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }
                 });
     }
@@ -329,6 +355,7 @@ public class ApiTestActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONArray response) {
                         Log.d(TAG, "onResponse array : " + response.toString());
+                        Log.d(TAG, "onResponse isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }
 
                     @Override
@@ -338,6 +365,7 @@ public class ApiTestActivity extends AppCompatActivity {
                         } else {
                             Log.d(TAG, "onError : " + error.getError());
                         }
+                        Log.d(TAG, "onError isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }
                 });
     }
@@ -354,6 +382,7 @@ public class ApiTestActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONArray response) {
                         Log.d(TAG, "onResponse array : " + response.toString());
+                        Log.d(TAG, "onResponse isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }
 
                     @Override
@@ -363,6 +392,7 @@ public class ApiTestActivity extends AppCompatActivity {
                         } else {
                             Log.d(TAG, "onError : " + error.getError());
                         }
+                        Log.d(TAG, "onError isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }
                 });
     }
@@ -379,6 +409,7 @@ public class ApiTestActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONArray response) {
                         Log.d(TAG, "onResponse array : " + response.toString());
+                        Log.d(TAG, "onResponse isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }
 
                     @Override
@@ -388,6 +419,7 @@ public class ApiTestActivity extends AppCompatActivity {
                         } else {
                             Log.d(TAG, "onError : " + error.getError());
                         }
+                        Log.d(TAG, "onError isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }
                 });
     }
