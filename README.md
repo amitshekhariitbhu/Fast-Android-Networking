@@ -191,6 +191,33 @@ AndroidNetworking.upload(url)
                     }
                  }); 
 ```
+### Getting Response and completion in an another executor thread (Note : Error and progress will always be returned in main thread of application)
+```
+AndroidNetworking.upload(url)
+                 .addMultipartFile("image",file)    
+                 .setTag("uploadTest")
+                 .setPriority(Priority.IMMEDIATE)
+                 .build()
+                 .setExecutor(Executors.newSingleThreadExecutor()) // setting an executor to get response or completion on that executor thread
+                 .setUploadProgressListener(new UploadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesUploaded, long totalBytes) {
+                    // do anything with progress 
+                    }
+                 })
+                 .getAsJsonObject(new RequestListener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                    // below code will be executed in the executor provided
+                    // do anything with response                
+                    }
+                  
+                    @Override
+                    public void onError(AndroidNetworkingError error) {
+                    // handle error 
+                    }
+                 }); 
+```
 ### Cancelling a request.
 Any request with a given tag can be cancelled. Just do like this.
 ```
