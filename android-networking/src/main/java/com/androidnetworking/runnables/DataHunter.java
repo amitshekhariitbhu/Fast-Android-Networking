@@ -62,6 +62,7 @@ public class DataHunter implements Runnable {
                 AndroidNetworkingError error = new AndroidNetworkingError(data);
                 error = request.parseNetworkError(error);
                 error.setHasErrorFromServer();
+                error.setErrorCode(data.code);
                 deliverError(request, error);
                 return;
             }
@@ -100,6 +101,7 @@ public class DataHunter implements Runnable {
                 AndroidNetworkingError error = new AndroidNetworkingError();
                 error = request.parseNetworkError(error);
                 error.setHasErrorFromServer();
+                error.setErrorCode(data.code);
                 deliverError(request, error);
             }
         } catch (AndroidNetworkingError se) {
@@ -124,6 +126,7 @@ public class DataHunter implements Runnable {
                 AndroidNetworkingError error = new AndroidNetworkingError(data);
                 error = request.parseNetworkError(error);
                 error.setHasErrorFromServer();
+                error.setErrorCode(data.code);
                 deliverError(request, error);
                 return;
             }

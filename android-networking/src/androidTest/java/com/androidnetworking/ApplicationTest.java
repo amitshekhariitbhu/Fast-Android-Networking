@@ -66,6 +66,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
         final AtomicReference<String> errorRef = new AtomicReference<>();
         final AtomicReference<String> errorContentRef = new AtomicReference<>();
+        final AtomicReference<Integer> errorCodeRef = new AtomicReference<>();
         final AtomicReference<Boolean> hasErrorFromServerRef = new AtomicReference<>();
         final CountDownLatch latch = new CountDownLatch(1);
 
@@ -82,6 +83,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
                         hasErrorFromServerRef.set(error.hasErrorFromServer());
                         errorContentRef.set(error.getContent());
                         errorRef.set(error.getError());
+                        errorCodeRef.set(error.getErrorCode());
                         latch.countDown();
                     }
                 });
@@ -93,6 +95,8 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         assertEquals("errorResponseFromServer", errorRef.get());
 
         assertEquals("getResponse", errorContentRef.get());
+
+        assertEquals(404, errorCodeRef.get().intValue());
 
     }
 
@@ -132,6 +136,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
         final AtomicReference<String> errorRef = new AtomicReference<>();
         final AtomicReference<String> errorContentRef = new AtomicReference<>();
+        final AtomicReference<Integer> errorCodeRef = new AtomicReference<>();
         final AtomicReference<Boolean> hasErrorFromServerRef = new AtomicReference<>();
         final CountDownLatch latch = new CountDownLatch(1);
 
@@ -150,6 +155,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
                         hasErrorFromServerRef.set(error.hasErrorFromServer());
                         errorContentRef.set(error.getContent());
                         errorRef.set(error.getError());
+                        errorCodeRef.set(error.getErrorCode());
                         latch.countDown();
                     }
                 });
@@ -161,6 +167,8 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         assertEquals("errorResponseFromServer", errorRef.get());
 
         assertEquals("postResponse", errorContentRef.get());
+
+        assertEquals(404, errorCodeRef.get().intValue());
     }
 
 
