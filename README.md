@@ -274,5 +274,5 @@ AndroidNetworking.get(imageUrl)
 * And of course many many features and bug fixes
 
 ### Contributing to Android Networking
-Just make pull request. You are in.
+Just make pull request. You are in!
 
