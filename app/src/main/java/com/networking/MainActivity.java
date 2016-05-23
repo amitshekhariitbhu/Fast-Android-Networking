@@ -12,6 +12,8 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.AndroidNetworkingError;
 import com.androidnetworking.interfaces.BitmapRequestListener;
+import com.androidnetworking.interfaces.JSONArrayRequestListener;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.androidnetworking.internal.AndroidNetworkingImageLoader;
 import com.androidnetworking.widget.GreatImageView;
 import com.networking.provider.Images;
