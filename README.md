@@ -70,7 +70,7 @@ AndroidNetworking.get("http://api.localhost.com/{pageNumber}/test")
                  .setTag("test")
                  .setPriority(Priority.LOW)
                  .build()
-                 .getAsJsonArray(new RequestListener<JSONArray>() {
+                 .getAsJSONArray(new JSONArrayRequestListener() {
                     @Override
                     public void onResponse(JSONArray response) {
                     // do anything with response
@@ -89,7 +89,7 @@ AndroidNetworking.post("http://api.localhost.com/createAnUser")
                  .setTag("test")
                  .setPriority(Priority.MEDIUM)
                  .build()
-                 .getAsJsonArray(new RequestListener<JSONArray>() {
+                 .getAsJSONArray(new JSONArrayRequestListener() {
                     @Override
                     public void onResponse(JSONArray response) {
                     // do anything with response
@@ -115,7 +115,7 @@ AndroidNetworking.post("http://api.localhost.com/createAnUser")
                  .setTag("test")
                  .setPriority(Priority.MEDIUM)
                  .build()
-                 .getAsJsonArray(new RequestListener<JSONArray>() {
+                 .getAsJSONArray(new JSONArrayRequestListener() {
                     @Override
                     public void onResponse(JSONArray response) {
                     // do anything with response
@@ -131,7 +131,7 @@ AndroidNetworking.post("http://api.localhost.com/postFile")
                  .setTag("test")
                  .setPriority(Priority.MEDIUM)
                  .build()
-                 .getAsJsonObject(new RequestListener<JSONObject>() {
+                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
                     // do anything with response
@@ -179,7 +179,7 @@ AndroidNetworking.upload(url)
                     // do anything with progress 
                     }
                  })
-                 .getAsJsonObject(new RequestListener<JSONObject>() {
+                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
                     // do anything with response                
@@ -206,7 +206,7 @@ AndroidNetworking.upload(url)
                     // do anything with progress 
                     }
                  })
-                 .getAsJsonObject(new RequestListener<JSONObject>() {
+                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
                     // below code will be executed in the executor provided
@@ -245,7 +245,7 @@ AndroidNetworking.get(imageUrl)
                  .setBitmapMaxWidth(100)
                  .setBitmapConfig(Bitmap.Config.ARGB_8888)
                  .build()
-                 .getAsBitmap(new RequestListener<Bitmap>() {
+                 .getAsBitmap(new BitmapRequestListener() {
                     @Override
                     public void onResponse(Bitmap bitmap) {
                     // do anything with bitmap

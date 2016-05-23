@@ -159,13 +159,13 @@ public class AndroidNetworkingRequest {
         this.mExecutor = builder.mExecutor;
     }
 
-    public void getAsJsonObject(JSONObjectRequestListener requestListener) {
+    public void getAsJSONObject(JSONObjectRequestListener requestListener) {
         this.mResponseAs = RESPONSE.JSON_OBJECT;
         this.mJSONObjectRequestListener = requestListener;
         AndroidNetworkingRequestQueue.getInstance().addRequest(this);
     }
 
-    public void getAsJsonArray(JSONArrayRequestListener requestListener) {
+    public void getAsJSONArray(JSONArrayRequestListener requestListener) {
         this.mResponseAs = RESPONSE.JSON_ARRAY;
         this.mJSONArrayRequestListener = requestListener;
         AndroidNetworkingRequestQueue.getInstance().addRequest(this);

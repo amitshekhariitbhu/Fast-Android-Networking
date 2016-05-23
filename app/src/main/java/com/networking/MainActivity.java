@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
                     .setTag(this)
                     .setPriority(Priority.LOW)
                     .build()
-                    .getAsJsonArray(new JSONArrayRequestListener() {
+                    .getAsJSONArray(new JSONArrayRequestListener() {
                         @Override
                         public void onResponse(JSONArray response) {
                             Log.d(TAG, "onResponse array : " + response.toString());
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
                     .setTag(this)
                     .setPriority(Priority.HIGH)
                     .build()
-                    .getAsJsonObject(new JSONObjectRequestListener() {
+                    .getAsJSONObject(new JSONObjectRequestListener() {
                         @Override
                         public void onResponse(JSONObject response) {
                             Log.d(TAG, "onResponse object : " + response.toString());

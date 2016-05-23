@@ -45,7 +45,7 @@ public class ApiTestActivity extends AppCompatActivity {
                 .setTag(this)
                 .setPriority(Priority.LOW)
                 .build()
-                .getAsJsonArray(new JSONArrayRequestListener() {
+                .getAsJSONArray(new JSONArrayRequestListener() {
                     @Override
                     public void onResponse(JSONArray response) {
                         Log.d(TAG, "onResponse array : " + response.toString());
@@ -70,7 +70,7 @@ public class ApiTestActivity extends AppCompatActivity {
                 .setTag(this)
                 .setPriority(Priority.LOW)
                 .build()
-                .getAsJsonObject(new JSONObjectRequestListener() {
+                .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d(TAG, "onResponse object : " + response.toString());
@@ -95,7 +95,7 @@ public class ApiTestActivity extends AppCompatActivity {
                 .setTag(this)
                 .setPriority(Priority.LOW)
                 .build()
-                .getAsJsonObject(new JSONObjectRequestListener() {
+                .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d(TAG, "onResponse object : " + response.toString());
@@ -121,7 +121,7 @@ public class ApiTestActivity extends AppCompatActivity {
                 .setPriority(Priority.LOW)
                 .setExecutor(Executors.newSingleThreadExecutor())
                 .build()
-                .getAsJsonObject(new JSONObjectRequestListener() {
+                .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d(TAG, "onResponse object : " + response.toString());
@@ -147,7 +147,7 @@ public class ApiTestActivity extends AppCompatActivity {
                 .setTag(this)
                 .setPriority(Priority.LOW)
                 .build()
-                .getAsJsonObject(new JSONObjectRequestListener() {
+                .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d(TAG, "onResponse object : " + response.toString());
@@ -180,7 +180,7 @@ public class ApiTestActivity extends AppCompatActivity {
                 .setTag(this)
                 .setPriority(Priority.LOW)
                 .build()
-                .getAsJsonObject(new JSONObjectRequestListener() {
+                .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d(TAG, "onResponse object : " + response.toString());
@@ -271,7 +271,7 @@ public class ApiTestActivity extends AppCompatActivity {
                         Log.d(TAG, "setUploadProgressListener isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }
                 })
-                .getAsJsonObject(new JSONObjectRequestListener() {
+                .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d(TAG, "Image upload Completed");
@@ -298,7 +298,7 @@ public class ApiTestActivity extends AppCompatActivity {
                 .setPriority(Priority.LOW)
                 .doNotCacheResponse()
                 .build()
-                .getAsJsonArray(new JSONArrayRequestListener() {
+                .getAsJSONArray(new JSONArrayRequestListener() {
                     @Override
                     public void onResponse(JSONArray response) {
                         Log.d(TAG, "onResponse array : " + response.toString());
@@ -325,7 +325,7 @@ public class ApiTestActivity extends AppCompatActivity {
                 .setPriority(Priority.LOW)
                 .getResponseOnlyIfCached()
                 .build()
-                .getAsJsonArray(new JSONArrayRequestListener() {
+                .getAsJSONArray(new JSONArrayRequestListener() {
                     @Override
                     public void onResponse(JSONArray response) {
                         Log.d(TAG, "onResponse array : " + response.toString());
@@ -352,7 +352,7 @@ public class ApiTestActivity extends AppCompatActivity {
                 .setPriority(Priority.LOW)
                 .getResponseOnlyFromNetwork()
                 .build()
-                .getAsJsonArray(new JSONArrayRequestListener() {
+                .getAsJSONArray(new JSONArrayRequestListener() {
                     @Override
                     public void onResponse(JSONArray response) {
                         Log.d(TAG, "onResponse array : " + response.toString());
@@ -379,7 +379,7 @@ public class ApiTestActivity extends AppCompatActivity {
                 .setPriority(Priority.LOW)
                 .setMaxAgeCacheControl(10, TimeUnit.SECONDS)
                 .build()
-                .getAsJsonArray(new JSONArrayRequestListener() {
+                .getAsJSONArray(new JSONArrayRequestListener() {
                     @Override
                     public void onResponse(JSONArray response) {
                         Log.d(TAG, "onResponse array : " + response.toString());
@@ -406,7 +406,7 @@ public class ApiTestActivity extends AppCompatActivity {
                 .setPriority(Priority.LOW)
                 .setMaxStaleCacheControl(10, TimeUnit.SECONDS)
                 .build()
-                .getAsJsonArray(new JSONArrayRequestListener() {
+                .getAsJSONArray(new JSONArrayRequestListener() {
                     @Override
                     public void onResponse(JSONArray response) {
                         Log.d(TAG, "onResponse array : " + response.toString());
