@@ -4,7 +4,7 @@ import android.app.Application;
 import android.test.ApplicationTestCase;
 
 import com.androidnetworking.error.AndroidNetworkingError;
-import com.androidnetworking.interfaces.RequestListener;
+import com.androidnetworking.interfaces.StringRequestListener;
 
 import org.junit.Rule;
 
@@ -42,7 +42,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
         AndroidNetworking.get(server.url("/").toString())
                 .build()
-                .getAsString(new RequestListener<String>() {
+                .getAsString(new StringRequestListener() {
                     @Override
                     public void onResponse(String response) {
                         responseRef.set(response);
@@ -71,7 +71,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
         AndroidNetworking.get(server.url("/").toString())
                 .build()
-                .getAsString(new RequestListener<String>() {
+                .getAsString(new StringRequestListener() {
                     @Override
                     public void onResponse(String response) {
                         assertTrue(false);
@@ -107,7 +107,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
                 .addBodyParameter("fistName", "Amit")
                 .addBodyParameter("lastName", "Shekhar")
                 .build()
-                .getAsString(new RequestListener<String>() {
+                .getAsString(new StringRequestListener() {
                     @Override
                     public void onResponse(String response) {
                         responseRef.set(response);
@@ -139,7 +139,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
                 .addBodyParameter("fistName", "Amit")
                 .addBodyParameter("lastName", "Shekhar")
                 .build()
-                .getAsString(new RequestListener<String>() {
+                .getAsString(new StringRequestListener() {
                     @Override
                     public void onResponse(String response) {
                         assertTrue(false);

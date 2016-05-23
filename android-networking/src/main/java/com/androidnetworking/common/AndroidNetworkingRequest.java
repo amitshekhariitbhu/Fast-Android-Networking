@@ -6,9 +6,12 @@ import android.widget.ImageView;
 
 import com.androidnetworking.core.Core;
 import com.androidnetworking.error.AndroidNetworkingError;
+import com.androidnetworking.interfaces.BitmapRequestListener;
 import com.androidnetworking.interfaces.DownloadListener;
 import com.androidnetworking.interfaces.DownloadProgressListener;
-import com.androidnetworking.interfaces.RequestListener;
+import com.androidnetworking.interfaces.JSONArrayRequestListener;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.androidnetworking.interfaces.StringRequestListener;
 import com.androidnetworking.interfaces.UploadProgressListener;
 import com.androidnetworking.internal.AndroidNetworkingRequestQueue;
 import com.androidnetworking.utils.Utils;
@@ -72,7 +75,10 @@ public class AndroidNetworkingRequest {
     private boolean isCancelled;
     private boolean isDelivered;
     private int mPercentageThresholdForCancelling = 0;
-    private RequestListener mRequestListener;
+    private JSONArrayRequestListener mJSONArrayRequestListener;
+    private JSONObjectRequestListener mJSONObjectRequestListener;
+    private StringRequestListener mStringRequestListener;
+    private BitmapRequestListener mBitmapRequestListener;
     private DownloadProgressListener mDownloadProgressListener;
     private UploadProgressListener mUploadProgressListener;
     private DownloadListener mDownloadListener;
@@ -153,27 +159,27 @@ public class AndroidNetworkingRequest {
         this.mExecutor = builder.mExecutor;
     }
 
-    public void getAsJsonObject(RequestListener requestListener) {
+    public void getAsJsonObject(JSONObjectRequestListener requestListener) {
         this.mResponseAs = RESPONSE.JSON_OBJECT;
-        this.mRequestListener = requestListener;
+        this.mJSONObjectRequestListener = requestListener;
         AndroidNetworkingRequestQueue.getInstance().addRequest(this);
     }
 
-    public void getAsJsonArray(RequestListener requestListener) {
+    public void getAsJsonArray(JSONArrayRequestListener requestListener) {
         this.mResponseAs = RESPONSE.JSON_ARRAY;
-        this.mRequestListener = requestListener;
+        this.mJSONArrayRequestListener = requestListener;
         AndroidNetworkingRequestQueue.getInstance().addRequest(this);
     }
 
-    public void getAsString(RequestListener requestListener) {
+    public void getAsString(StringRequestListener requestListener) {
         this.mResponseAs = RESPONSE.STRING;
-        this.mRequestListener = requestListener;
+        this.mStringRequestListener = requestListener;
         AndroidNetworkingRequestQueue.getInstance().addRequest(this);
     }
 
-    public void getAsBitmap(RequestListener requestListener) {
+    public void getAsBitmap(BitmapRequestListener requestListener) {
         this.mResponseAs = RESPONSE.BITMAP;
-        this.mRequestListener = requestListener;
+        this.mBitmapRequestListener = requestListener;
         AndroidNetworkingRequestQueue.getInstance().addRequest(this);
     }
 
@@ -362,7 +368,10 @@ public class AndroidNetworkingRequest {
     }
 
     public void finish() {
-        mRequestListener = null;
+        mJSONArrayRequestListener = null;
+        mJSONArrayRequestListener = null;
+        mStringRequestListener = null;
+        mBitmapRequestListener = null;
         mDownloadProgressListener = null;
         AndroidNetworkingRequestQueue.getInstance().finish(this);
     }
@@ -417,8 +426,14 @@ public class AndroidNetworkingRequest {
             if (isCancelled) {
                 error.setCancellationMessageInError();
             }
-            if (mRequestListener != null) {
-                mRequestListener.onError(error);
+            if (mJSONObjectRequestListener != null) {
+                mJSONObjectRequestListener.onError(error);
+            } else if (mJSONArrayRequestListener != null) {
+                mJSONArrayRequestListener.onError(error);
+            } else if (mStringRequestListener != null) {
+                mStringRequestListener.onError(error);
+            } else if (mBitmapRequestListener != null) {
+                mBitmapRequestListener.onError(error);
             } else if (mDownloadListener != null) {
                 mDownloadListener.onError(error);
             }
@@ -429,28 +444,50 @@ public class AndroidNetworkingRequest {
 
     public void deliverResponse(final AndroidNetworkingResponse response) {
         isDelivered = true;
-        if (mRequestListener != null) {
-            if (!isCancelled) {
-                if (mExecutor != null) {
-                    mExecutor.execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            mRequestListener.onResponse(response.getResult());
-                            finish();
+        if (!isCancelled) {
+            if (mExecutor != null) {
+                mExecutor.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mJSONObjectRequestListener != null) {
+                            mJSONObjectRequestListener.onResponse((JSONObject) response.getResult());
+                        } else if (mJSONArrayRequestListener != null) {
+                            mJSONArrayRequestListener.onResponse((JSONArray) response.getResult());
+                        } else if (mStringRequestListener != null) {
+                            mStringRequestListener.onResponse((String) response.getResult());
+                        } else if (mBitmapRequestListener != null) {
+                            mBitmapRequestListener.onResponse((Bitmap) response.getResult());
                         }
-                    });
-                } else {
-                    Core.getInstance().getExecutorSupplier().forMainThreadTasks().execute(new Runnable() {
-                        public void run() {
-                            mRequestListener.onResponse(response.getResult());
-                            finish();
-                        }
-                    });
-                }
+                        finish();
+                    }
+                });
             } else {
-                AndroidNetworkingError error = new AndroidNetworkingError();
-                error.setCancellationMessageInError();
-                mRequestListener.onError(error);
+                Core.getInstance().getExecutorSupplier().forMainThreadTasks().execute(new Runnable() {
+                    public void run() {
+                        if (mJSONObjectRequestListener != null) {
+                            mJSONObjectRequestListener.onResponse((JSONObject) response.getResult());
+                        } else if (mJSONArrayRequestListener != null) {
+                            mJSONArrayRequestListener.onResponse((JSONArray) response.getResult());
+                        } else if (mStringRequestListener != null) {
+                            mStringRequestListener.onResponse((String) response.getResult());
+                        } else if (mBitmapRequestListener != null) {
+                            mBitmapRequestListener.onResponse((Bitmap) response.getResult());
+                        }
+                        finish();
+                    }
+                });
+            }
+        } else {
+            AndroidNetworkingError error = new AndroidNetworkingError();
+            error.setCancellationMessageInError();
+            if (mJSONObjectRequestListener != null) {
+                mJSONObjectRequestListener.onError(error);
+            } else if (mJSONArrayRequestListener != null) {
+                mJSONArrayRequestListener.onError(error);
+            } else if (mStringRequestListener != null) {
+                mStringRequestListener.onError(error);
+            } else if (mBitmapRequestListener != null) {
+                mBitmapRequestListener.onError(error);
             }
         }
         Log.d(TAG, "Delivering success response for : " + toString());

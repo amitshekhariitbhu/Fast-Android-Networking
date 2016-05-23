@@ -9,7 +9,7 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.cache.LruBitmapCache;
 import com.androidnetworking.common.AndroidNetworkingRequest;
 import com.androidnetworking.error.AndroidNetworkingError;
-import com.androidnetworking.interfaces.RequestListener;
+import com.androidnetworking.interfaces.BitmapRequestListener;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -158,7 +158,7 @@ public class AndroidNetworkingImageLoader {
                 .setBitmapConfig(Bitmap.Config.RGB_565)
                 .build();
 
-        androidNetworkingRequest.getAsBitmap(new RequestListener<Bitmap>() {
+        androidNetworkingRequest.getAsBitmap(new BitmapRequestListener() {
             @Override
             public void onResponse(Bitmap response) {
                 onGetImageSuccess(cacheKey, response);

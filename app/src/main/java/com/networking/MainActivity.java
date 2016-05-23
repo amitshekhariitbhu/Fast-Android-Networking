@@ -11,7 +11,9 @@ import android.widget.ImageView;
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.AndroidNetworkingError;
-import com.androidnetworking.interfaces.RequestListener;
+import com.androidnetworking.interfaces.BitmapRequestListener;
+import com.androidnetworking.interfaces.JSONArrayRequestListener;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.androidnetworking.internal.AndroidNetworkingImageLoader;
 import com.androidnetworking.widget.GreatImageView;
 import com.networking.provider.Images;
@@ -48,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
                     .setTag(this)
                     .setPriority(Priority.LOW)
                     .build()
-                    .getAsJsonArray(new RequestListener<JSONArray>() {
+                    .getAsJsonArray(new JSONArrayRequestListener() {
                         @Override
                         public void onResponse(JSONArray response) {
                             Log.d(TAG, "onResponse array : " + response.toString());
@@ -69,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
                     .setTag(this)
                     .setPriority(Priority.HIGH)
                     .build()
-                    .getAsJsonObject(new RequestListener<JSONObject>() {
+                    .getAsJsonObject(new JSONObjectRequestListener() {
                         @Override
                         public void onResponse(JSONObject response) {
                             Log.d(TAG, "onResponse object : " + response.toString());
@@ -101,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
                 .setBitmapMaxWidth(0)
                 .setBitmapConfig(Bitmap.Config.ARGB_8888)
                 .build()
-                .getAsBitmap(new RequestListener<Bitmap>() {
+                .getAsBitmap(new BitmapRequestListener() {
                     @Override
                     public void onResponse(Bitmap response) {
                         Log.d(TAG, "onResponse Bitmap");
