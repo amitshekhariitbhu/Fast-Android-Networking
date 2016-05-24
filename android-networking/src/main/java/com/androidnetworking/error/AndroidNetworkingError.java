@@ -10,11 +10,11 @@ public class AndroidNetworkingError extends Exception {
 
     private AndroidNetworkingData data;
 
-    private String content;
+    private String errorBody;
 
     private int errorCode = 0;
 
-    private String error;
+    private String errorDetail;
 
     public AndroidNetworkingError() {
     }
@@ -54,16 +54,12 @@ public class AndroidNetworkingError extends Exception {
         return data;
     }
 
-    public String getContent() {
-        return content;
+    public void setErrorDetail(String errorDetail) {
+        this.errorDetail = errorDetail;
     }
 
-    public void setError(String error) {
-        this.error = error;
-    }
-
-    public String getError() {
-        return this.error;
+    public String getErrorDetail() {
+        return this.errorDetail;
     }
 
     public void setErrorCode(int errorCode) {
@@ -75,11 +71,15 @@ public class AndroidNetworkingError extends Exception {
     }
 
     public void setCancellationMessageInError() {
-        this.error = Constants.ERROR_REQUEST_CANCELLED;
+        this.errorDetail = Constants.REQUEST_CANCELLED_ERROR;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public String getErrorBody() {
+        return errorBody;
+    }
+
+    public void setErrorBody(String errorBody) {
+        this.errorBody = errorBody;
     }
 
 }

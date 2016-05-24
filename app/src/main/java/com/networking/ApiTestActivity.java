@@ -55,9 +55,9 @@ public class ApiTestActivity extends AppCompatActivity {
                     @Override
                     public void onError(AndroidNetworkingError error) {
                         if (error.getErrorCode() != 0) {
-                            Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
+                            Log.d(TAG, "onError hasErrorFromServer : " + error.getErrorBody());
                         } else {
-                            Log.d(TAG, "onError : " + error.getError());
+                            Log.d(TAG, "onError : " + error.getErrorDetail());
                         }
                         Log.d(TAG, "onError isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }
@@ -80,9 +80,9 @@ public class ApiTestActivity extends AppCompatActivity {
                     @Override
                     public void onError(AndroidNetworkingError error) {
                         if (error.getErrorCode() != 0) {
-                            Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
+                            Log.d(TAG, "onError hasErrorFromServer : " + error.getErrorBody());
                         } else {
-                            Log.d(TAG, "onError : " + error.getError());
+                            Log.d(TAG, "onError : " + error.getErrorDetail());
                         }
                         Log.d(TAG, "onError isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }
@@ -105,9 +105,9 @@ public class ApiTestActivity extends AppCompatActivity {
                     @Override
                     public void onError(AndroidNetworkingError error) {
                         if (error.getErrorCode() != 0) {
-                            Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
+                            Log.d(TAG, "onError hasErrorFromServer : " + error.getErrorBody());
                         } else {
-                            Log.d(TAG, "onError : " + error.getError());
+                            Log.d(TAG, "onError : " + error.getErrorDetail());
                         }
                         Log.d(TAG, "onError isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }
@@ -131,9 +131,9 @@ public class ApiTestActivity extends AppCompatActivity {
                     @Override
                     public void onError(AndroidNetworkingError error) {
                         if (error.getErrorCode() != 0) {
-                            Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
+                            Log.d(TAG, "onError hasErrorFromServer : " + error.getErrorBody());
                         } else {
-                            Log.d(TAG, "onError : " + error.getError());
+                            Log.d(TAG, "onError : " + error.getErrorDetail());
                         }
                         Log.d(TAG, "onError isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }
@@ -157,9 +157,9 @@ public class ApiTestActivity extends AppCompatActivity {
                     @Override
                     public void onError(AndroidNetworkingError error) {
                         if (error.getErrorCode() != 0) {
-                            Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
+                            Log.d(TAG, "onError hasErrorFromServer : " + error.getErrorBody());
                         } else {
-                            Log.d(TAG, "onError : " + error.getError());
+                            Log.d(TAG, "onError : " + error.getErrorDetail());
                         }
                         Log.d(TAG, "onError isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }
@@ -190,9 +190,9 @@ public class ApiTestActivity extends AppCompatActivity {
                     @Override
                     public void onError(AndroidNetworkingError error) {
                         if (error.getErrorCode() != 0) {
-                            Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
+                            Log.d(TAG, "onError hasErrorFromServer : " + error.getErrorBody());
                         } else {
-                            Log.d(TAG, "onError : " + error.getError());
+                            Log.d(TAG, "onError : " + error.getErrorDetail());
                         }
                         Log.d(TAG, "onError isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }
@@ -222,9 +222,9 @@ public class ApiTestActivity extends AppCompatActivity {
                     @Override
                     public void onError(AndroidNetworkingError error) {
                         if (error.getErrorCode() != 0) {
-                            Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
+                            Log.d(TAG, "onError hasErrorFromServer : " + error.getErrorBody());
                         } else {
-                            Log.d(TAG, "onError : " + error.getError());
+                            Log.d(TAG, "onError : " + error.getErrorDetail());
                         }
                         Log.d(TAG, "onError isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }
@@ -249,9 +249,9 @@ public class ApiTestActivity extends AppCompatActivity {
                     @Override
                     public void onError(AndroidNetworkingError error) {
                         if (error.getErrorCode() != 0) {
-                            Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
+                            Log.d(TAG, "onError hasErrorFromServer : " + error.getErrorBody());
                         } else {
-                            Log.d(TAG, "onError : " + error.getError());
+                            Log.d(TAG, "onError : " + error.getErrorDetail());
                         }
                         Log.d(TAG, "onError isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }
@@ -281,9 +281,9 @@ public class ApiTestActivity extends AppCompatActivity {
                     @Override
                     public void onError(AndroidNetworkingError error) {
                         if (error.getErrorCode() != 0) {
-                            Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
+                            Log.d(TAG, "onError hasErrorFromServer : " + error.getErrorBody());
                         } else {
-                            Log.d(TAG, "onError : " + error.getError());
+                            Log.d(TAG, "onError : " + error.getErrorDetail());
                         }
                         Log.d(TAG, "onError isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }
@@ -308,9 +308,9 @@ public class ApiTestActivity extends AppCompatActivity {
                     @Override
                     public void onError(AndroidNetworkingError error) {
                         if (error.getErrorCode() != 0) {
-                            Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
+                            Log.d(TAG, "onError hasErrorFromServer : " + error.getErrorBody());
                         } else {
-                            Log.d(TAG, "onError : " + error.getError());
+                            Log.d(TAG, "onError : " + error.getErrorDetail());
                         }
                         Log.d(TAG, "onError isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }
@@ -335,9 +335,9 @@ public class ApiTestActivity extends AppCompatActivity {
                     @Override
                     public void onError(AndroidNetworkingError error) {
                         if (error.getErrorCode() != 0) {
-                            Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
+                            Log.d(TAG, "onError hasErrorFromServer : " + error.getErrorBody());
                         } else {
-                            Log.d(TAG, "onError : " + error.getError());
+                            Log.d(TAG, "onError : " + error.getErrorDetail());
                         }
                         Log.d(TAG, "onError isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }
@@ -362,9 +362,9 @@ public class ApiTestActivity extends AppCompatActivity {
                     @Override
                     public void onError(AndroidNetworkingError error) {
                         if (error.getErrorCode() != 0) {
-                            Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
+                            Log.d(TAG, "onError hasErrorFromServer : " + error.getErrorBody());
                         } else {
-                            Log.d(TAG, "onError : " + error.getError());
+                            Log.d(TAG, "onError : " + error.getErrorDetail());
                         }
                         Log.d(TAG, "onError isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }
@@ -389,9 +389,9 @@ public class ApiTestActivity extends AppCompatActivity {
                     @Override
                     public void onError(AndroidNetworkingError error) {
                         if (error.getErrorCode() != 0) {
-                            Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
+                            Log.d(TAG, "onError hasErrorFromServer : " + error.getErrorBody());
                         } else {
-                            Log.d(TAG, "onError : " + error.getError());
+                            Log.d(TAG, "onError : " + error.getErrorDetail());
                         }
                         Log.d(TAG, "onError isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }
@@ -416,9 +416,9 @@ public class ApiTestActivity extends AppCompatActivity {
                     @Override
                     public void onError(AndroidNetworkingError error) {
                         if (error.getErrorCode() != 0) {
-                            Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
+                            Log.d(TAG, "onError hasErrorFromServer : " + error.getErrorBody());
                         } else {
-                            Log.d(TAG, "onError : " + error.getError());
+                            Log.d(TAG, "onError : " + error.getErrorDetail());
                         }
                         Log.d(TAG, "onError isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }

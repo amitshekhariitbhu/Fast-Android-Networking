@@ -28,7 +28,7 @@ public class AndroidNetworkingResponse<T> {
         this.mResult = null;
         this.mError = error;
         this.mError.setErrorCode(0);
-        this.mError.setError(Constants.PARSE_ERROR);
+        this.mError.setErrorDetail(Constants.PARSE_ERROR);
     }
 
     public T getResult() {

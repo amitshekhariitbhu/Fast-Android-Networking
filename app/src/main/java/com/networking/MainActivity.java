@@ -59,9 +59,16 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onError(AndroidNetworkingError error) {
                             if (error.getErrorCode() != 0) {
-                                Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
+                                // received error from server
+                                // error.getErrorCode() - the error code from server
+                                // error.getErrorBody() - the error body from server
+                                // error.getErrorDetail() - just a error detail
+                                Log.d(TAG, "onError errorCode : " + error.getErrorCode());
+                                Log.d(TAG, "onError errorBody : " + error.getErrorBody());
+                                Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
                             } else {
-                                Log.d(TAG, "onError : " + error.getError());
+                                // error.getErrorDetail() : connectionError, parseError, requestCancelledError
+                                Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
                             }
                         }
                     });
@@ -80,9 +87,9 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onError(AndroidNetworkingError error) {
                             if (error.getErrorCode() != 0) {
-                                Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
+                                Log.d(TAG, "onError hasErrorFromServer : " + error.getErrorBody());
                             } else {
-                                Log.d(TAG, "onError : " + error.getError());
+                                Log.d(TAG, "onError : " + error.getErrorDetail());
                             }
                         }
                     });
@@ -113,9 +120,9 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onError(AndroidNetworkingError error) {
                         if (error.getErrorCode() != 0) {
-                            Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
+                            Log.d(TAG, "onError hasErrorFromServer : " + error.getErrorBody());
                         } else {
-                            Log.d(TAG, "onError : " + error.getError());
+                            Log.d(TAG, "onError : " + error.getErrorDetail());
                         }
                     }
                 });

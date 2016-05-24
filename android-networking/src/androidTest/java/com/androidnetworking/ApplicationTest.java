@@ -3,6 +3,7 @@ package com.androidnetworking;
 import android.app.Application;
 import android.test.ApplicationTestCase;
 
+import com.androidnetworking.common.Constants;
 import com.androidnetworking.error.AndroidNetworkingError;
 import com.androidnetworking.interfaces.StringRequestListener;
 
@@ -64,8 +65,8 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
         server.enqueue(new MockResponse().setResponseCode(404).setBody("getResponse"));
 
-        final AtomicReference<String> errorRef = new AtomicReference<>();
-        final AtomicReference<String> errorContentRef = new AtomicReference<>();
+        final AtomicReference<String> errorDetailRef = new AtomicReference<>();
+        final AtomicReference<String> errorBodyRef = new AtomicReference<>();
         final AtomicReference<Integer> errorCodeRef = new AtomicReference<>();
         final CountDownLatch latch = new CountDownLatch(1);
 
@@ -79,8 +80,8 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
                     @Override
                     public void onError(AndroidNetworkingError error) {
-                        errorContentRef.set(error.getContent());
-                        errorRef.set(error.getError());
+                        errorBodyRef.set(error.getErrorBody());
+                        errorDetailRef.set(error.getErrorDetail());
                         errorCodeRef.set(error.getErrorCode());
                         latch.countDown();
                     }
@@ -88,9 +89,9 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
         assertTrue(latch.await(2, SECONDS));
 
-        assertEquals("errorResponseFromServer", errorRef.get());
+        assertEquals(Constants.RESPONSE_FROM_SERVER_ERROR, errorDetailRef.get());
 
-        assertEquals("getResponse", errorContentRef.get());
+        assertEquals("getResponse", errorBodyRef.get());
 
         assertEquals(404, errorCodeRef.get().intValue());
 
@@ -130,8 +131,8 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
         server.enqueue(new MockResponse().setResponseCode(404).setBody("postResponse"));
 
-        final AtomicReference<String> errorRef = new AtomicReference<>();
-        final AtomicReference<String> errorContentRef = new AtomicReference<>();
+        final AtomicReference<String> errorDetailRef = new AtomicReference<>();
+        final AtomicReference<String> errorBodyRef = new AtomicReference<>();
         final AtomicReference<Integer> errorCodeRef = new AtomicReference<>();
         final CountDownLatch latch = new CountDownLatch(1);
 
@@ -147,8 +148,8 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
                     @Override
                     public void onError(AndroidNetworkingError error) {
-                        errorContentRef.set(error.getContent());
-                        errorRef.set(error.getError());
+                        errorBodyRef.set(error.getErrorBody());
+                        errorDetailRef.set(error.getErrorDetail());
                         errorCodeRef.set(error.getErrorCode());
                         latch.countDown();
                     }
@@ -156,9 +157,9 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
         assertTrue(latch.await(2, SECONDS));
 
-        assertEquals("errorResponseFromServer", errorRef.get());
+        assertEquals(Constants.RESPONSE_FROM_SERVER_ERROR, errorDetailRef.get());
 
-        assertEquals("postResponse", errorContentRef.get());
+        assertEquals("postResponse", errorBodyRef.get());
 
         assertEquals(404, errorCodeRef.get().intValue());
     }

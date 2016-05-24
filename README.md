@@ -256,6 +256,10 @@ AndroidNetworking.get(imageUrl)
                     }
                 });
 ```
+### Error Code Handling
+```
+
+```
 ### Inspiration behind making of this library :
 * Recent removal of HttpClient in Android Marshmallow(Android M) made other networking library obsolete.
 * No other single library do each and everything like making request, downloading any type of file, uploading file, loading

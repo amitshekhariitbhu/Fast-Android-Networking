@@ -413,7 +413,7 @@ public class AndroidNetworkingRequest {
     public AndroidNetworkingError parseNetworkError(AndroidNetworkingError error) {
         try {
             if (error.getData() != null && error.getData().source != null) {
-                error.setContent(Okio.buffer(error.getData().source).readUtf8());
+                error.setErrorBody(Okio.buffer(error.getData().source).readUtf8());
             }
         } catch (Exception e) {
             e.printStackTrace();
