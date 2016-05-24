@@ -258,7 +258,20 @@ AndroidNetworking.get(imageUrl)
 ```
 ### Error Code Handling
 ```
-
+public void onError(AndroidNetworkingError error) {
+                           if (error.getErrorCode() != 0) {
+                           // received error from server
+                           // error.getErrorCode() - the error code from server
+                           // error.getErrorBody() - the error body from server
+                           // error.getErrorDetail() - just a error detail
+                                Log.d(TAG, "onError errorCode : " + error.getErrorCode());
+                                Log.d(TAG, "onError errorBody : " + error.getErrorBody());
+                                Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                           } else {
+                                // error.getErrorDetail() : connectionError, parseError, requestCancelledError
+                                Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                           }
+                        }
 ```
 ### Inspiration behind making of this library :
 * Recent removal of HttpClient in Android Marshmallow(Android M) made other networking library obsolete.
