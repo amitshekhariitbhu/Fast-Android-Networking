@@ -10,22 +10,16 @@ import com.androidnetworking.common.AndroidNetworkingData;
 import com.androidnetworking.common.AndroidNetworkingRequest;
 import com.androidnetworking.common.Constants;
 import com.androidnetworking.error.AndroidNetworkingError;
-import com.androidnetworking.interfaces.DownloadProgressListener;
-import com.androidnetworking.model.Progress;
 import com.androidnetworking.utils.Utils;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Headers;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import okhttp3.ResponseBody;
-import okio.BufferedSink;
-import okio.BufferedSource;
-import okio.Okio;
 
 import static com.androidnetworking.common.Method.DELETE;
 import static com.androidnetworking.common.Method.GET;
@@ -101,7 +95,7 @@ public class AndroidNetworkingOkHttp {
         return data;
     }
 
-    public static AndroidNetworkingData performDownloadRequest(AndroidNetworkingRequest request) throws AndroidNetworkingError {
+    public static AndroidNetworkingData performDownloadRequest(final AndroidNetworkingRequest request) throws AndroidNetworkingError {
         AndroidNetworkingData data = new AndroidNetworkingData();
         Request okHttpRequest = null;
         try {
@@ -119,31 +113,22 @@ public class AndroidNetworkingOkHttp {
                 builder.cacheControl(request.getCacheControl());
             }
             okHttpRequest = builder.build();
-            request.setCall(sHttpClient.newCall(okHttpRequest));
+            OkHttpClient okHttpClient = sHttpClient.newBuilder()
+                    .addNetworkInterceptor(new Interceptor() {
+                        @Override
+                        public Response intercept(Chain chain) throws IOException {
+                            Response originalResponse = chain.proceed(chain.request());
+                            return originalResponse.newBuilder()
+                                    .body(new ResponseProgressBody(originalResponse.body(), request.getDownloadProgressListener()))
+                                    .build();
+                        }
+                    }).build();
+            request.setCall(okHttpClient.newCall(okHttpRequest));
             Response okResponse = request.getCall().execute();
             data.url = okResponse.request().url();
             data.code = okResponse.code();
             data.headers = okResponse.headers();
-            ResponseBody body = okResponse.body();
-            data.length = body.contentLength();
-            BufferedSource source = body.source();
-            File file = new File(request.getDirPath() + File.separator + request.getFileName());
-            BufferedSink sink = Okio.buffer(Okio.sink(file));
-            long bytesRead = 0;
-            final DownloadProgressListener downloadProgressListener = request.getDownloadProgressListener();
-            DownloadProgressHandler downloadProgressHandler = null;
-            if (downloadProgressListener != null) {
-                downloadProgressHandler = new DownloadProgressHandler(downloadProgressListener);
-            }
-            while (source.read(sink.buffer(), DOWNLOAD_CHUNK_SIZE) != -1) {
-                bytesRead += DOWNLOAD_CHUNK_SIZE;
-                request.setProgress((int) ((bytesRead * 100) / data.length));
-                if (downloadProgressHandler != null) {
-                    downloadProgressHandler.obtainMessage(Constants.UPDATE, new Progress(bytesRead, data.length)).sendToTarget();
-                }
-            }
-            sink.writeAll(source);
-            sink.close();
+            Utils.saveFile(okResponse, request.getDirPath(), request.getFileName());
             request.updateDownloadCompletion();
         } catch (IOException ioe) {
             if (okHttpRequest != null) {
@@ -153,6 +138,7 @@ public class AndroidNetworkingOkHttp {
         }
         return data;
     }
+
 
     public static AndroidNetworkingData performUploadRequest(AndroidNetworkingRequest request) throws AndroidNetworkingError {
         AndroidNetworkingData data = new AndroidNetworkingData();

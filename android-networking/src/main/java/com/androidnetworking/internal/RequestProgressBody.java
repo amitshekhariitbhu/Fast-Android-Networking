@@ -25,7 +25,7 @@ public class RequestProgressBody extends RequestBody {
     public RequestProgressBody(RequestBody requestBody, UploadProgressListener uploadProgressListener) {
         this.requestBody = requestBody;
         if (uploadProgressListener != null) {
-            uploadProgressHandler = new UploadProgressHandler(uploadProgressListener);
+            this.uploadProgressHandler = new UploadProgressHandler(uploadProgressListener);
         }
     }
 

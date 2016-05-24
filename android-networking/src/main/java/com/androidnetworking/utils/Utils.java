@@ -10,11 +10,14 @@ import com.androidnetworking.common.AndroidNetworkingResponse;
 import com.androidnetworking.error.AndroidNetworkingError;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.FileNameMap;
 import java.net.URLConnection;
 
 import okhttp3.Cache;
+import okhttp3.Response;
 import okio.Okio;
 
 /**
@@ -133,5 +136,36 @@ public class Utils {
             n *= 2;
         }
         return (int) n;
+    }
+
+    public static void saveFile(Response response, String dirPath, String fileName) throws IOException {
+        InputStream is = null;
+        byte[] buf = new byte[2048];
+        int len;
+        FileOutputStream fos = null;
+        try {
+            is = response.body().byteStream();
+            File dir = new File(dirPath);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+            File file = new File(dir, fileName);
+            fos = new FileOutputStream(file);
+            while ((len = is.read(buf)) != -1) {
+                fos.write(buf, 0, len);
+            }
+            fos.flush();
+        } finally {
+            try {
+                if (is != null) is.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (fos != null) fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
