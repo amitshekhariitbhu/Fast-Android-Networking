@@ -1,6 +1,8 @@
 package com.androidnetworking.internal;
 
+import com.androidnetworking.common.Constants;
 import com.androidnetworking.interfaces.UploadProgressListener;
+import com.androidnetworking.model.Progress;
 
 import java.io.IOException;
 
@@ -17,12 +19,14 @@ import okio.Sink;
  */
 public class RequestProgressBody extends RequestBody {
     private final RequestBody requestBody;
-    private final UploadProgressListener uploadProgressListener;
     private BufferedSink bufferedSink;
+    private UploadProgressHandler uploadProgressHandler;
 
     public RequestProgressBody(RequestBody requestBody, UploadProgressListener uploadProgressListener) {
         this.requestBody = requestBody;
-        this.uploadProgressListener = uploadProgressListener;
+        if (uploadProgressListener != null) {
+            uploadProgressHandler = new UploadProgressHandler(uploadProgressListener);
+        }
     }
 
     public MediaType contentType() {
@@ -55,9 +59,8 @@ public class RequestProgressBody extends RequestBody {
                     contentLength = contentLength();
                 }
                 bytesWritten += byteCount;
-                if (uploadProgressListener != null) {
-                    uploadProgressListener.onProgress(bytesWritten, contentLength);
-
+                if (uploadProgressHandler != null) {
+                    uploadProgressHandler.obtainMessage(Constants.UPDATE, new Progress(bytesWritten, contentLength)).sendToTarget();
                 }
             }
         };

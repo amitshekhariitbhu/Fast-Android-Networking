@@ -12,6 +12,11 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin">
 
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
         <Button
             android:id="@+id/getAllUsers"
             android:layout_width="match_parent"
@@ -19,6 +24,11 @@
             android:layout_margin="8dp"
             android:onClick="getAllUsers"
             android:text="/getAllUsers/{pageNumber}" />
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
 
         <Button
             android:id="@+id/getAnUser"
@@ -28,6 +38,11 @@
             android:onClick="getAnUser"
             android:text="/getAnUser/{userId}" />
 
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
         <Button
             android:id="@+id/checkForHeaderGet"
             android:layout_width="match_parent"
@@ -35,6 +50,11 @@
             android:layout_margin="8dp"
             android:onClick="checkForHeaderGet"
             android:text="GET : checkForHeader" />
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
 
         <Button
             android:id="@+id/checkForHeaderPost"
@@ -44,6 +64,11 @@
             android:onClick="checkForHeaderPost"
             android:text="POST : checkForHeader" />
 
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
         <Button
             android:id="@+id/createAnUser"
             android:layout_width="match_parent"
@@ -51,6 +76,11 @@
             android:layout_margin="8dp"
             android:onClick="createAnUser"
             android:text="/createAnUser" />
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
 
         <Button
             android:id="@+id/createAnUserJSONObject"
@@ -60,6 +90,11 @@
             android:onClick="createAnUserJSONObject"
             android:text="/createAnUserJSONObject" />
 
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
         <Button
             android:id="@+id/downloadFile"
             android:layout_width="match_parent"
@@ -67,6 +102,11 @@
             android:layout_margin="8dp"
             android:onClick="downloadFile"
             android:text="downloadFile" />
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
 
         <Button
             android:id="@+id/downloadImage"
@@ -76,6 +116,11 @@
             android:onClick="downloadImage"
             android:text="downloadImage" />
 
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
         <Button
             android:id="@+id/uploadImage"
             android:layout_width="match_parent"
@@ -83,6 +128,11 @@
             android:layout_margin="8dp"
             android:onClick="uploadImage"
             android:text="uploadImage" />
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
 
         <Button
             android:id="@+id/doNotCacheResponse"
@@ -92,6 +142,11 @@
             android:onClick="doNotCacheResponse"
             android:text="doNotCacheResponse" />
 
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
         <Button
             android:id="@+id/getResponseOnlyIfCached"
             android:layout_width="match_parent"
@@ -99,6 +154,11 @@
             android:layout_margin="8dp"
             android:onClick="getResponseOnlyIfCached"
             android:text="getResponseOnlyIfCached" />
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
 
         <Button
             android:id="@+id/getResponseOnlyFromNetwork"
@@ -108,6 +168,11 @@
             android:onClick="getResponseOnlyFromNetwork"
             android:text="getResponseOnlyFromNetwork" />
 
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
         <Button
             android:id="@+id/setMaxAgeCacheControl"
             android:layout_width="match_parent"
@@ -116,6 +181,11 @@
             android:onClick="setMaxAgeCacheControl"
             android:text="setMaxAgeCacheControl" />
 
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
         <Button
             android:id="@+id/setMaxStaleCacheControl"
             android:layout_width="match_parent"
@@ -123,6 +193,11 @@
             android:layout_margin="8dp"
             android:onClick="setMaxStaleCacheControl"
             android:text="setMaxStaleCacheControl" />
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
 
     </LinearLayout>
 

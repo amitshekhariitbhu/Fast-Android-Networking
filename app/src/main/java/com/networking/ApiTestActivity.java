@@ -261,7 +261,7 @@ public class ApiTestActivity extends AppCompatActivity {
                             // received error from server
                             // error.getErrorCode() - the error code from server
                             // error.getErrorBody() - the error body from server
-                            // error.getErrorDetail() - just a error detail
+                            // error.getErrorDetail() - just an error detail
                             Log.d(TAG, "onError errorCode : " + error.getErrorCode());
                             Log.d(TAG, "onError errorBody : " + error.getErrorBody());
                             Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());

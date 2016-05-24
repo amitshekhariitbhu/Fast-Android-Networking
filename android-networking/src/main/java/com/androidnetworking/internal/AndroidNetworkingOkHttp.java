@@ -11,6 +11,7 @@ import com.androidnetworking.common.AndroidNetworkingRequest;
 import com.androidnetworking.common.Constants;
 import com.androidnetworking.error.AndroidNetworkingError;
 import com.androidnetworking.interfaces.DownloadProgressListener;
+import com.androidnetworking.model.Progress;
 import com.androidnetworking.utils.Utils;
 
 import java.io.File;
@@ -130,16 +131,20 @@ public class AndroidNetworkingOkHttp {
             BufferedSink sink = Okio.buffer(Okio.sink(file));
             long bytesRead = 0;
             final DownloadProgressListener downloadProgressListener = request.getDownloadProgressListener();
+            DownloadProgressHandler downloadProgressHandler = null;
+            if (downloadProgressListener != null) {
+                downloadProgressHandler = new DownloadProgressHandler(downloadProgressListener);
+            }
             while (source.read(sink.buffer(), DOWNLOAD_CHUNK_SIZE) != -1) {
                 bytesRead += DOWNLOAD_CHUNK_SIZE;
                 request.setProgress((int) ((bytesRead * 100) / data.length));
-                if (downloadProgressListener != null) {
-                    downloadProgressListener.onProgress(bytesRead, data.length);
+                if (downloadProgressHandler != null) {
+                    downloadProgressHandler.obtainMessage(Constants.UPDATE, new Progress(bytesRead, data.length)).sendToTarget();
                 }
             }
             sink.writeAll(source);
             sink.close();
-            request.getDownloadListener().onDownloadComplete();
+            request.updateDownloadCompletion();
         } catch (IOException ioe) {
             if (okHttpRequest != null) {
                 data.url = okHttpRequest.url();

@@ -243,55 +243,44 @@ public class AndroidNetworkingRequest {
             @Override
             public void onProgress(final long bytesDownloaded, final long totalBytes) {
                 if (mDownloadProgressListener != null && !isCancelled) {
-                    Core.getInstance().getExecutorSupplier().forMainThreadTasks().execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            mDownloadProgressListener.onProgress(bytesDownloaded, totalBytes);
-                        }
-                    });
+                    mDownloadProgressListener.onProgress(bytesDownloaded, totalBytes);
                 }
             }
         };
     }
 
-    public DownloadListener getDownloadListener() {
-        return new DownloadListener() {
-            @Override
-            public void onDownloadComplete() {
-                if (mDownloadListener != null) {
-                    isDelivered = true;
-                    if (!isCancelled) {
-                        if (mExecutor != null) {
-                            mExecutor.execute(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mDownloadListener.onDownloadComplete();
-                                    Log.d(TAG, "Delivering success response for : " + toString());
-                                    finish();
-                                }
-                            });
-                        } else {
-                            Core.getInstance().getExecutorSupplier().forMainThreadTasks().execute(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mDownloadListener.onDownloadComplete();
-                                    Log.d(TAG, "Delivering success response for : " + toString());
-                                    finish();
-                                }
-                            });
+    public void updateDownloadCompletion() {
+        if (mDownloadListener != null) {
+            isDelivered = true;
+            if (!isCancelled) {
+                if (mExecutor != null) {
+                    mExecutor.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (mDownloadListener != null) {
+                                mDownloadListener.onDownloadComplete();
+                            }
+                            Log.d(TAG, "Delivering success response for : " + toString());
+                            finish();
                         }
-                    } else {
-                        deliverError(new AndroidNetworkingError());
-                        finish();
-                    }
+                    });
+                } else {
+                    Core.getInstance().getExecutorSupplier().forMainThreadTasks().execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (mDownloadListener != null) {
+                                mDownloadListener.onDownloadComplete();
+                            }
+                            Log.d(TAG, "Delivering success response for : " + toString());
+                            finish();
+                        }
+                    });
                 }
+            } else {
+                deliverError(new AndroidNetworkingError());
+                finish();
             }
-
-            @Override
-            public void onError(AndroidNetworkingError error) {
-
-            }
-        };
+        }
     }
 
     public UploadProgressListener getUploadProgressListener() {
@@ -300,12 +289,7 @@ public class AndroidNetworkingRequest {
             public void onProgress(final long bytesUploaded, final long totalBytes) {
                 mProgress = (int) ((bytesUploaded * 100) / totalBytes);
                 if (mUploadProgressListener != null && !isCancelled) {
-                    Core.getInstance().getExecutorSupplier().forMainThreadTasks().execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            mUploadProgressListener.onProgress(bytesUploaded, totalBytes);
-                        }
-                    });
+                    mUploadProgressListener.onProgress(bytesUploaded, totalBytes);
                 }
             }
         };
