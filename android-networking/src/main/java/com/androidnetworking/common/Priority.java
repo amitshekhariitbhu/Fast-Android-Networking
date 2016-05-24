@@ -40,8 +40,8 @@ public enum Priority {
     /**
      * Gets the higher priority among the two.
      *
-     * @param priority1
-     * @param priority2
+     * @param priority1 The priority
+     * @param priority2 The priority
      * @return higher priority
      */
     public static Priority getHigherPriority(

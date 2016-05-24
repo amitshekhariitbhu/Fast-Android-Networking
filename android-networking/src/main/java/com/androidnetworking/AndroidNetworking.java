@@ -18,8 +18,7 @@ import okhttp3.OkHttpClient;
 
 /**
  * AndroidNetworking entry point.
- * <p/>
- * <p/> You must initialize this class before use. The simplest way is to just do
+ * You must initialize this class before use. The simplest way is to just do
  * {#code AndroidNetworking.initialize(context)}.
  */
 public class AndroidNetworking {
@@ -44,7 +43,7 @@ public class AndroidNetworking {
     /**
      * Initializes AndroidNetworking with the specified config.
      *
-     * @param context
+     * @param context      The context
      * @param okHttpClient The okHttpClient
      */
     public static void initialize(Context context, OkHttpClient okHttpClient) {

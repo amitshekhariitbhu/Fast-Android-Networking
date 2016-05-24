@@ -31,15 +31,13 @@ Android Networking supports Android 2.3 (Gingerbread) and later.
 
 ## Using Android Networking in your application
 
-As of now the library is under development so we have not open it to use through gradle anyway you can add it as a library in android project after downloading it.
-
-After importing it as a library add this in your build.gradle
+Add this in your build.gradle
 ```
-compile project(':android-networking')
+compile 'com.amitshekhar.android:android-networking:0.0.0'
 ```
-and add this in your settings.gradle
+Do not forget to add internet permission in manifest if already not present
 ```
-include ':android-networking'
+<uses-permission android:name="android.permission.INTERNET" />
 ```
 Then initialize it in onCreate() Method of application class, :
 ```

@@ -25,3 +25,4 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.2.1'
     compile 'com.squareup.okhttp3:okhttp:3.2.0'
 }
+apply from: 'upload.gradle'

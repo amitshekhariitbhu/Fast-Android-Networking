@@ -31,7 +31,6 @@ import static com.androidnetworking.common.Method.PUT;
 public class AndroidNetworkingOkHttp {
 
     private static final String HEADER_USER_AGENT = "User-Agent";
-    private static final int DOWNLOAD_CHUNK_SIZE = 2048;
 
     private static OkHttpClient sHttpClient = getClient();
 
