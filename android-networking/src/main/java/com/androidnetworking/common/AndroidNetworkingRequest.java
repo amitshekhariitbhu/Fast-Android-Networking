@@ -425,6 +425,7 @@ public class AndroidNetworkingRequest {
         if (!isDelivered) {
             if (isCancelled) {
                 error.setCancellationMessageInError();
+                error.setErrorCode(0);
             }
             if (mJSONObjectRequestListener != null) {
                 mJSONObjectRequestListener.onError(error);
@@ -480,6 +481,7 @@ public class AndroidNetworkingRequest {
         } else {
             AndroidNetworkingError error = new AndroidNetworkingError();
             error.setCancellationMessageInError();
+            error.setErrorCode(0);
             if (mJSONObjectRequestListener != null) {
                 mJSONObjectRequestListener.onError(error);
             } else if (mJSONArrayRequestListener != null) {

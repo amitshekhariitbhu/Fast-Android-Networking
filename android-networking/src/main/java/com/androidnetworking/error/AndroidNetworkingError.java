@@ -12,8 +12,6 @@ public class AndroidNetworkingError extends Exception {
 
     private String content;
 
-    private boolean hasErrorFromServer = false;
-
     private int errorCode = 0;
 
     private String error;
@@ -68,11 +66,6 @@ public class AndroidNetworkingError extends Exception {
         return this.error;
     }
 
-    public void setHasErrorFromServer() {
-        this.hasErrorFromServer = true;
-        this.error = Constants.ERROR_RESPONSE_FROM_SERVER;
-    }
-
     public void setErrorCode(int errorCode) {
         this.errorCode = errorCode;
     }
@@ -82,12 +75,7 @@ public class AndroidNetworkingError extends Exception {
     }
 
     public void setCancellationMessageInError() {
-        this.hasErrorFromServer = false;
         this.error = Constants.ERROR_REQUEST_CANCELLED;
-    }
-
-    public boolean hasErrorFromServer() {
-        return this.hasErrorFromServer;
     }
 
     public void setContent(String content) {

@@ -67,7 +67,6 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         final AtomicReference<String> errorRef = new AtomicReference<>();
         final AtomicReference<String> errorContentRef = new AtomicReference<>();
         final AtomicReference<Integer> errorCodeRef = new AtomicReference<>();
-        final AtomicReference<Boolean> hasErrorFromServerRef = new AtomicReference<>();
         final CountDownLatch latch = new CountDownLatch(1);
 
         AndroidNetworking.get(server.url("/").toString())
@@ -80,7 +79,6 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
                     @Override
                     public void onError(AndroidNetworkingError error) {
-                        hasErrorFromServerRef.set(error.hasErrorFromServer());
                         errorContentRef.set(error.getContent());
                         errorRef.set(error.getError());
                         errorCodeRef.set(error.getErrorCode());
@@ -89,8 +87,6 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
                 });
 
         assertTrue(latch.await(2, SECONDS));
-
-        assertTrue(hasErrorFromServerRef.get());
 
         assertEquals("errorResponseFromServer", errorRef.get());
 
@@ -137,7 +133,6 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         final AtomicReference<String> errorRef = new AtomicReference<>();
         final AtomicReference<String> errorContentRef = new AtomicReference<>();
         final AtomicReference<Integer> errorCodeRef = new AtomicReference<>();
-        final AtomicReference<Boolean> hasErrorFromServerRef = new AtomicReference<>();
         final CountDownLatch latch = new CountDownLatch(1);
 
         AndroidNetworking.post(server.url("/").toString())
@@ -152,7 +147,6 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
 
                     @Override
                     public void onError(AndroidNetworkingError error) {
-                        hasErrorFromServerRef.set(error.hasErrorFromServer());
                         errorContentRef.set(error.getContent());
                         errorRef.set(error.getError());
                         errorCodeRef.set(error.getErrorCode());
@@ -161,8 +155,6 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
                 });
 
         assertTrue(latch.await(2, SECONDS));
-
-        assertTrue(hasErrorFromServerRef.get());
 
         assertEquals("errorResponseFromServer", errorRef.get());
 

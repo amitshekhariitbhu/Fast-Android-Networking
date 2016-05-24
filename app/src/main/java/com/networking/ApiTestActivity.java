@@ -54,7 +54,7 @@ public class ApiTestActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(AndroidNetworkingError error) {
-                        if (error.hasErrorFromServer()) {
+                        if (error.getErrorCode() != 0) {
                             Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
                         } else {
                             Log.d(TAG, "onError : " + error.getError());
@@ -79,7 +79,7 @@ public class ApiTestActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(AndroidNetworkingError error) {
-                        if (error.hasErrorFromServer()) {
+                        if (error.getErrorCode() != 0) {
                             Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
                         } else {
                             Log.d(TAG, "onError : " + error.getError());
@@ -104,7 +104,7 @@ public class ApiTestActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(AndroidNetworkingError error) {
-                        if (error.hasErrorFromServer()) {
+                        if (error.getErrorCode() != 0) {
                             Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
                         } else {
                             Log.d(TAG, "onError : " + error.getError());
@@ -130,7 +130,7 @@ public class ApiTestActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(AndroidNetworkingError error) {
-                        if (error.hasErrorFromServer()) {
+                        if (error.getErrorCode() != 0) {
                             Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
                         } else {
                             Log.d(TAG, "onError : " + error.getError());
@@ -156,7 +156,7 @@ public class ApiTestActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(AndroidNetworkingError error) {
-                        if (error.hasErrorFromServer()) {
+                        if (error.getErrorCode() != 0) {
                             Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
                         } else {
                             Log.d(TAG, "onError : " + error.getError());
@@ -189,7 +189,7 @@ public class ApiTestActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(AndroidNetworkingError error) {
-                        if (error.hasErrorFromServer()) {
+                        if (error.getErrorCode() != 0) {
                             Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
                         } else {
                             Log.d(TAG, "onError : " + error.getError());
@@ -221,7 +221,7 @@ public class ApiTestActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(AndroidNetworkingError error) {
-                        if (error.hasErrorFromServer()) {
+                        if (error.getErrorCode() != 0) {
                             Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
                         } else {
                             Log.d(TAG, "onError : " + error.getError());
@@ -248,7 +248,7 @@ public class ApiTestActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(AndroidNetworkingError error) {
-                        if (error.hasErrorFromServer()) {
+                        if (error.getErrorCode() != 0) {
                             Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
                         } else {
                             Log.d(TAG, "onError : " + error.getError());
@@ -280,7 +280,7 @@ public class ApiTestActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(AndroidNetworkingError error) {
-                        if (error.hasErrorFromServer()) {
+                        if (error.getErrorCode() != 0) {
                             Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
                         } else {
                             Log.d(TAG, "onError : " + error.getError());
@@ -307,7 +307,7 @@ public class ApiTestActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(AndroidNetworkingError error) {
-                        if (error.hasErrorFromServer()) {
+                        if (error.getErrorCode() != 0) {
                             Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
                         } else {
                             Log.d(TAG, "onError : " + error.getError());
@@ -334,7 +334,7 @@ public class ApiTestActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(AndroidNetworkingError error) {
-                        if (error.hasErrorFromServer()) {
+                        if (error.getErrorCode() != 0) {
                             Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
                         } else {
                             Log.d(TAG, "onError : " + error.getError());
@@ -361,7 +361,7 @@ public class ApiTestActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(AndroidNetworkingError error) {
-                        if (error.hasErrorFromServer()) {
+                        if (error.getErrorCode() != 0) {
                             Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
                         } else {
                             Log.d(TAG, "onError : " + error.getError());
@@ -388,7 +388,7 @@ public class ApiTestActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(AndroidNetworkingError error) {
-                        if (error.hasErrorFromServer()) {
+                        if (error.getErrorCode() != 0) {
                             Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
                         } else {
                             Log.d(TAG, "onError : " + error.getError());
@@ -415,7 +415,7 @@ public class ApiTestActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(AndroidNetworkingError error) {
-                        if (error.hasErrorFromServer()) {
+                        if (error.getErrorCode() != 0) {
                             Log.d(TAG, "onError hasErrorFromServer : " + error.getContent());
                         } else {
                             Log.d(TAG, "onError : " + error.getError());
