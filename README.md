@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/amitshekhariitbhu/AndroidNetworking.svg?branch=master)](https://travis-ci.org/amitshekhariitbhu/AndroidNetworking)
 
-<img src=assets/androidnetworking.png width=500 height=300 />
+<img src=https://raw.githubusercontent.com/amitshekhariitbhu/AndroidNetworking/master/assets/androidnetworking.png width=500 height=300 />
 
 ### About Android Networking
 
