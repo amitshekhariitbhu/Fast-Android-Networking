@@ -59,6 +59,10 @@ OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
                 .build();
 AndroidNetworking.initialize(getApplicationContext(),okHttpClient);                
 ```
+If you are using proguard, then add this rule in proguard-project.txt
+```
+-dontwarn okio.**
+```
 ### Making a GET Request
 ```
 AndroidNetworking.get("http://api.localhost.com/{pageNumber}/test")
