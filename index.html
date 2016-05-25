@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Android Networking by amitshekhariitbhu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Android Networking</h1>
+      <h2 class="project-tagline">Android Networking is a powerful library for doing any type of networking in Android Applications</h2>
+      <a href="https://github.com/amitshekhariitbhu/AndroidNetworking" class="btn">View on GitHub</a>
+      <a href="https://github.com/amitshekhariitbhu/AndroidNetworking/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/amitshekhariitbhu/AndroidNetworking/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="android-networking" class="anchor" href="#android-networking" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Android Networking</h1>
+
+<p><a href="https://travis-ci.org/amitshekhariitbhu/AndroidNetworking"><img src="https://travis-ci.org/amitshekhariitbhu/AndroidNetworking.svg?branch=master" alt="Build Status"></a></p>
+
+<h3>
+<a id="about-android-networking" class="anchor" href="#about-android-networking" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>About Android Networking</h3>
+
+<p>Android Networking is a powerful library for doing any type of networking in Android applications which is made on top of <a href="http://square.github.io/okhttp/">OkHttp Networking Layer</a>.</p>
+
+<p>Android Networking takes care of each and everything. So you don't have to do anything, just make request and listen for the response.</p>
+
+<p>Android Networking supports:</p>
+
+<ul>
+<li>All type of HTTP/HTTPS request like GET,POST,etc</li>
+<li>Downloading any type of file</li>
+<li>Uploading any type of file (supports multipart upload)</li>
+<li>Cancelling a request</li>
+<li>Setting priority to any request (LOW, MEDIUM, HIGH, IMMEDIATE)</li>
+</ul>
+
+<p>As it uses <a href="http://square.github.io/okhttp/">OkHttp</a> as a networking layer, it supports:</p>
+
+<ul>
+<li>HTTP/2 support allows all requests to the same host to share a socket</li>
+<li>Connection pooling reduces request latency (if HTTP/2 isn’t available)</li>
+<li>Transparent GZIP shrinks download sizes</li>
+<li>Response caching avoids the network completely for repeat requests</li>
+</ul>
+
+<h2>
+<a id="requirements" class="anchor" href="#requirements" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Requirements</h2>
+
+<p>Android Networking can be included in any Android application. </p>
+
+<p>Android Networking supports Android 2.3 (Gingerbread) and later. </p>
+
+<h2>
+<a id="using-android-networking-in-your-application" class="anchor" href="#using-android-networking-in-your-application" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Using Android Networking in your application</h2>
+
+<p>Add this in your build.gradle</p>
+
+<pre><code>compile 'com.amitshekhar.android:android-networking:0.0.0'
+</code></pre>
+
+<p>Do not forget to add internet permission in manifest if already not present</p>
+
+<pre><code>&lt;uses-permission android:name="android.permission.INTERNET" /&gt;
+</code></pre>
+
+<p>Then initialize it in onCreate() Method of application class, :</p>
+
+<pre><code>AndroidNetworking.initialize(getApplicationContext());
+</code></pre>
+
+<p>Initializing it with some customization , as it uses <a href="http://square.github.io/okhttp/">OkHttp</a> as newtorking layer, you can pass custom okHttpClient while initializing it.</p>
+
+<pre><code># Adding an Network Interceptor for Debugging purpose :
+OkHttpClient okHttpClient = new OkHttpClient() .newBuilder()
+                        .addNetworkInterceptor(new StethoInterceptor())
+                        .build();
+AndroidNetworking.initialize(getApplicationContext(),okHttpClient);                        
+</code></pre>
+
+<pre><code># Enabling GZIP for Request (Not needed if your server doesn't support GZIP Compression), anyway responses from server are automatically unGzipped if required. So enable it only
+if you need your request to be Gzipped before sending to server(Make sure your server support GZIP Compression).
+OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
+                .addInterceptor(new GzipRequestInterceptor())
+                .build();
+AndroidNetworking.initialize(getApplicationContext(),okHttpClient);                
+</code></pre>
+
+<p>If you are using proguard, then add this rule in proguard-project.txt</p>
+
+<pre><code>-dontwarn okio.**
+</code></pre>
+
+<h3>
+<a id="making-a-get-request" class="anchor" href="#making-a-get-request" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Making a GET Request</h3>
+
+<pre><code>AndroidNetworking.get("http://api.localhost.com/{pageNumber}/test")
+                 .addPathParameter("pageNumber", "0")
+                 .addQueryParameter("limit", "3")
+                 .addHeaders("token", "1234")
+                 .setTag("test")
+                 .setPriority(Priority.LOW)
+                 .build()
+                 .getAsJSONArray(new JSONArrayRequestListener() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                    // do anything with response
+                    }
+                    @Override
+                    public void onError(AndroidNetworkingError error) {
+                    // handle error
+                    }
+                });
+</code></pre>
+
+<h3>
+<a id="making-a-post-request" class="anchor" href="#making-a-post-request" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Making a POST Request</h3>
+
+<pre><code>AndroidNetworking.post("http://api.localhost.com/createAnUser")
+                 .addBodyParameter("firstname", "Amit")
+                 .addBodyParameter("lastname", "Shekhar")
+                 .setTag("test")
+                 .setPriority(Priority.MEDIUM)
+                 .build()
+                 .getAsJSONArray(new JSONArrayRequestListener() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                    // do anything with response
+                    }
+                    @Override
+                    public void onError(AndroidNetworkingError error) {
+                    // handle error
+                    }
+                });
+</code></pre>
+
+<p>You can also post json, file ,etc in POST request like this.</p>
+
+<pre><code>JSONObject jsonObject = new JSONObject();
+try {
+    jsonObject.put("firstname", "Rohit");
+    jsonObject.put("lastname", "Kumar");
+    } catch (JSONException e) {
+    e.printStackTrace();
+    }
+
+AndroidNetworking.post("http://api.localhost.com/createAnUser")
+                 .addJSONObjectBody(jsonObject) // posting json
+                 .setTag("test")
+                 .setPriority(Priority.MEDIUM)
+                 .build()
+                 .getAsJSONArray(new JSONArrayRequestListener() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                    // do anything with response
+                    }
+                    @Override
+                    public void onError(AndroidNetworkingError error) {
+                    // handle error
+                    }
+                });
+
+AndroidNetworking.post("http://api.localhost.com/postFile")
+                 .addFileBody(file) // posting any type of file
+                 .setTag("test")
+                 .setPriority(Priority.MEDIUM)
+                 .build()
+                 .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                    // do anything with response
+                    }
+                    @Override
+                    public void onError(AndroidNetworkingError error) {
+                    // handle error
+                    }
+                });               
+</code></pre>
+
+<h3>
+<a id="downloading-a-file-from-server" class="anchor" href="#downloading-a-file-from-server" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Downloading a file from server</h3>
+
+<pre><code>AndroidNetworking.download(url,dirPath,fileName)
+                 .setTag("downloadTest")
+                 .setPriority(Priority.MEDIUM)
+                 .build()
+                 .setDownloadProgressListener(new DownloadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesDownloaded, long totalBytes) {
+                    // do anything with progress  
+                    }
+                 })
+                 .startDownload(new DownloadListener() {
+                    @Override
+                    public void onDownloadComplete() {
+                    // do anything after completion
+                    }
+
+                    @Override
+                    public void onError(AndroidNetworkingError error) {
+                    // handle error    
+                    }
+                });                 
+</code></pre>
+
+<h3>
+<a id="uploading-a-file-to-server" class="anchor" href="#uploading-a-file-to-server" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Uploading a file to server</h3>
+
+<pre><code>AndroidNetworking.upload(url)
+                 .addMultipartFile("image",file)    
+                 .setTag("uploadTest")
+                 .setPriority(Priority.IMMEDIATE)
+                 .build()
+                 .setUploadProgressListener(new UploadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesUploaded, long totalBytes) {
+                    // do anything with progress 
+                    }
+                 })
+                 .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                    // do anything with response                
+                    }
+
+                    @Override
+                    public void onError(AndroidNetworkingError error) {
+                    // handle error 
+                    }
+                 }); 
+</code></pre>
+
+<h3>
+<a id="getting-response-and-completion-in-an-another-thread-executor" class="anchor" href="#getting-response-and-completion-in-an-another-thread-executor" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Getting Response and completion in an another thread executor</h3>
+
+<p>(Note : Error and Progress will always be returned in main thread of application)</p>
+
+<pre><code>AndroidNetworking.upload(url)
+                 .addMultipartFile("image",file)    
+                 .setTag("uploadTest")
+                 .setPriority(Priority.IMMEDIATE)
+                 .build()
+                 .setExecutor(Executors.newSingleThreadExecutor()) // setting an executor to get response or completion on that executor thread
+                 .setUploadProgressListener(new UploadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesUploaded, long totalBytes) {
+                    // do anything with progress 
+                    }
+                 })
+                 .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                    // below code will be executed in the executor provided
+                    // do anything with response                
+                    }
+
+                    @Override
+                    public void onError(AndroidNetworkingError error) {
+                    // handle error 
+                    }
+                 }); 
+</code></pre>
+
+<h3>
+<a id="cancelling-a-request" class="anchor" href="#cancelling-a-request" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Cancelling a request.</h3>
+
+<p>Any request with a given tag can be cancelled. Just do like this.</p>
+
+<pre><code>AndroidNetworking.cancel("testTag"); // All the requests with the given tag will be cancelled.
+</code></pre>
+
+<h3>
+<a id="loading-image-from-network-into-imageview" class="anchor" href="#loading-image-from-network-into-imageview" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Loading image from network into ImageView</h3>
+
+<pre><code>      &lt;com.androidnetworking.widget.GreatImageView
+          android:id="@+id/greatImageView"
+          android:layout_width="100dp"
+          android:layout_height="100dp"
+          android:layout_gravity="center" /&gt;
+
+      greatImageView.setDefaultImageResId(R.drawable.default);
+      greatImageView.setErrorImageResId(R.drawable.error);
+      greatImageView.setImageUrl(imageUrl);          
+</code></pre>
+
+<h3>
+<a id="getting-bitmap-from-url-with-some-specified-parameters" class="anchor" href="#getting-bitmap-from-url-with-some-specified-parameters" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Getting Bitmap from url with some specified parameters</h3>
+
+<pre><code>AndroidNetworking.get(imageUrl)
+                 .setTag("imageRequestTag")
+                 .setPriority(Priority.MEDIUM)
+                 .setBitmapMaxHeight(100)
+                 .setBitmapMaxWidth(100)
+                 .setBitmapConfig(Bitmap.Config.ARGB_8888)
+                 .build()
+                 .getAsBitmap(new BitmapRequestListener() {
+                    @Override
+                    public void onResponse(Bitmap bitmap) {
+                    // do anything with bitmap
+                    }
+                    @Override
+                    public void onError(AndroidNetworkingError error) {
+                    // handle error
+                    }
+                });
+</code></pre>
+
+<h3>
+<a id="error-code-handling" class="anchor" href="#error-code-handling" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Error Code Handling</h3>
+
+<pre><code>public void onError(AndroidNetworkingError error) {
+                           if (error.getErrorCode() != 0) {
+                           // received error from server
+                           // error.getErrorCode() - the error code from server
+                           // error.getErrorBody() - the error body from server
+                           // error.getErrorDetail() - just an error detail
+                                Log.d(TAG, "onError errorCode : " + error.getErrorCode());
+                                Log.d(TAG, "onError errorBody : " + error.getErrorBody());
+                                Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                           } else {
+                                // error.getErrorDetail() : connectionError, parseError, requestCancelledError
+                                Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                           }
+                        }
+</code></pre>
+
+<h3>
+<a id="inspiration-behind-making-of-this-library-" class="anchor" href="#inspiration-behind-making-of-this-library-" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Inspiration behind making of this library :</h3>
+
+<ul>
+<li>Recent removal of HttpClient in Android Marshmallow(Android M) made other networking library obsolete.</li>
+<li>No other single library do each and everything like making request, downloading any type of file, uploading file, loading
+image from network in ImageView, etc. There are libraries but they are outdated.</li>
+<li>No other library provided simple interface for doing all types of things in networking like setting priority, cancelling, etc.</li>
+<li>As it uses <a href="https://github.com/square/okio">Okio</a> , No more GC overhead in android application.
+<a href="https://github.com/square/okio">Okio</a> is made to handle GC overhead while allocating memory.
+<a href="https://github.com/square/okio">Okio</a> do some clever things to save CPU and memory.</li>
+<li>As it uses <a href="http://square.github.io/okhttp/">OkHttp</a> , most important it supports HTTP/2.<br>
+</li>
+</ul>
+
+<h3>
+<a id="todo" class="anchor" href="#todo" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>TODO</h3>
+
+<ul>
+<li>Network Speed Change Listener</li>
+<li>Total data consumption in any request</li>
+<li>Network Execution Logic on the basis of network speed change</li>
+<li>Integration with other library</li>
+<li>And of course many many features and bug fixes</li>
+</ul>
+
+<h3>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>License</h3>
+
+<pre><code>   Copyright (C) 2016 Amit Shekhar
+   Copyright (C) 2011 The Android Open Source Project
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+</code></pre>
+
+<h3>
+<a id="contributing-to-android-networking" class="anchor" href="#contributing-to-android-networking" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Contributing to Android Networking</h3>
+
+<p>Just make pull request. You are in!</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/amitshekhariitbhu/AndroidNetworking">Android Networking</a> is maintained by <a href="https://github.com/amitshekhariitbhu">amitshekhariitbhu</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
