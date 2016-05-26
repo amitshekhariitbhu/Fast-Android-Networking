@@ -306,6 +306,10 @@ public class AndroidNetworkingImageLoader {
             mContainers.remove(container);
             if (mContainers.size() == 0) {
                 mRequest.cancel();
+                if (mRequest.isCanceled()) {
+                    mRequest.destroy();
+                    AndroidNetworkingRequestQueue.getInstance().finish(mRequest);
+                }
                 return true;
             }
             return false;

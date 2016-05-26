@@ -17,12 +17,15 @@
 
 package com.androidnetworking.internal;
 
+import android.util.Log;
+
 import com.androidnetworking.common.AndroidNetworkingRequest;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.core.Core;
 import com.androidnetworking.runnables.DataHunter;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -57,24 +60,37 @@ public class AndroidNetworkingRequestQueue {
 
     private void cancel(RequestFilter filter) {
         synchronized (mCurrentRequests) {
-            for (AndroidNetworkingRequest request : mCurrentRequests) {
-                if (filter.apply(request)) {
-                    request.cancel();
+            try {
+                for (Iterator<AndroidNetworkingRequest> iterator = mCurrentRequests.iterator(); iterator.hasNext(); ) {
+                    AndroidNetworkingRequest request = iterator.next();
+                    if (filter.apply(request)) {
+                        request.cancel();
+                        if (request.isCanceled()) {
+                            request.destroy();
+                            iterator.remove();
+                        }
+                    }
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
 
     public void cancelRequestWithGivenTag(final Object tag) {
-        if (tag == null) {
-            throw new IllegalArgumentException("Cannot cancelAll with a null tag");
-        }
-        cancel(new RequestFilter() {
-            @Override
-            public boolean apply(AndroidNetworkingRequest request) {
-                return request.getTag() == tag;
+        try {
+            if (tag == null) {
+                return;
             }
-        });
+            cancel(new RequestFilter() {
+                @Override
+                public boolean apply(AndroidNetworkingRequest request) {
+                    return request.getTag() == tag;
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public int getSequenceNumber() {
@@ -83,20 +99,33 @@ public class AndroidNetworkingRequestQueue {
 
     public AndroidNetworkingRequest addRequest(AndroidNetworkingRequest request) {
         synchronized (mCurrentRequests) {
-            mCurrentRequests.add(request);
+            try {
+                mCurrentRequests.add(request);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-        request.setSequenceNumber(getSequenceNumber());
-        if (request.getPriority() == Priority.IMMEDIATE) {
-            request.setFuture(Core.getInstance().getExecutorSupplier().forImmediateNetworkTasks().submit(new DataHunter(request)));
-        } else {
-            request.setFuture(Core.getInstance().getExecutorSupplier().forNetworkTasks().submit(new DataHunter(request)));
+        try {
+            request.setSequenceNumber(getSequenceNumber());
+            if (request.getPriority() == Priority.IMMEDIATE) {
+                request.setFuture(Core.getInstance().getExecutorSupplier().forImmediateNetworkTasks().submit(new DataHunter(request)));
+            } else {
+                request.setFuture(Core.getInstance().getExecutorSupplier().forNetworkTasks().submit(new DataHunter(request)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return request;
     }
 
     public void finish(AndroidNetworkingRequest request) {
         synchronized (mCurrentRequests) {
-            mCurrentRequests.remove(request);
+            try {
+                mCurrentRequests.remove(request);
+                Log.d(TAG, "finish: mCurrentRequests size: " + mCurrentRequests.size());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }

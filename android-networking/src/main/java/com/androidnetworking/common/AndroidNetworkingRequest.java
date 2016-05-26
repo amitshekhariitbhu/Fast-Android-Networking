@@ -329,23 +329,25 @@ public class AndroidNetworkingRequest {
     }
 
     public void cancel() {
-        if (mPercentageThresholdForCancelling == 0 || mProgress < mPercentageThresholdForCancelling) {
-            Log.d(TAG, "cancelling request for sequenceNumber : " + sequenceNumber);
-            isCancelled = true;
-            if (call != null) {
-                call.cancel();
+        try {
+            if (mPercentageThresholdForCancelling == 0 || mProgress < mPercentageThresholdForCancelling) {
+                Log.d(TAG, "cancelling request for sequenceNumber : " + sequenceNumber);
+                isCancelled = true;
+                if (call != null) {
+                    call.cancel();
+                }
+                if (future != null) {
+                    future.cancel(true);
+                }
+                if (!isDelivered) {
+                    deliverError(new AndroidNetworkingError());
+                }
+            } else {
+                Log.d(TAG, "not cancelling request for sequenceNumber : " + sequenceNumber);
             }
-            if (future != null) {
-                future.cancel(true);
-            }
-            if (!isDelivered) {
-                deliverError(new AndroidNetworkingError());
-                finish();
-            }
-        } else {
-            Log.d(TAG, "not cancelling request for sequenceNumber : " + sequenceNumber);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
     }
 
     public boolean isCanceled() {
@@ -368,12 +370,16 @@ public class AndroidNetworkingRequest {
         this.future = future;
     }
 
-    public void finish() {
+    public void destroy() {
         mJSONArrayRequestListener = null;
         mJSONArrayRequestListener = null;
         mStringRequestListener = null;
         mBitmapRequestListener = null;
         mDownloadProgressListener = null;
+    }
+
+    public void finish() {
+        destroy();
         AndroidNetworkingRequestQueue.getInstance().finish(this);
     }
 
@@ -423,77 +429,85 @@ public class AndroidNetworkingRequest {
     }
 
     public synchronized void deliverError(AndroidNetworkingError error) {
-        if (!isDelivered) {
-            if (isCancelled) {
-                error.setCancellationMessageInError();
-                error.setErrorCode(0);
+        try {
+            if (!isDelivered) {
+                if (isCancelled) {
+                    error.setCancellationMessageInError();
+                    error.setErrorCode(0);
+                }
+                if (mJSONObjectRequestListener != null) {
+                    mJSONObjectRequestListener.onError(error);
+                } else if (mJSONArrayRequestListener != null) {
+                    mJSONArrayRequestListener.onError(error);
+                } else if (mStringRequestListener != null) {
+                    mStringRequestListener.onError(error);
+                } else if (mBitmapRequestListener != null) {
+                    mBitmapRequestListener.onError(error);
+                } else if (mDownloadListener != null) {
+                    mDownloadListener.onError(error);
+                }
+                Log.d(TAG, "Delivering error response for : " + toString());
             }
-            if (mJSONObjectRequestListener != null) {
-                mJSONObjectRequestListener.onError(error);
-            } else if (mJSONArrayRequestListener != null) {
-                mJSONArrayRequestListener.onError(error);
-            } else if (mStringRequestListener != null) {
-                mStringRequestListener.onError(error);
-            } else if (mBitmapRequestListener != null) {
-                mBitmapRequestListener.onError(error);
-            } else if (mDownloadListener != null) {
-                mDownloadListener.onError(error);
-            }
-            Log.d(TAG, "Delivering error response for : " + toString());
+            isDelivered = true;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        isDelivered = true;
     }
 
     public void deliverResponse(final AndroidNetworkingResponse response) {
-        isDelivered = true;
-        if (!isCancelled) {
-            if (mExecutor != null) {
-                mExecutor.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (mJSONObjectRequestListener != null) {
-                            mJSONObjectRequestListener.onResponse((JSONObject) response.getResult());
-                        } else if (mJSONArrayRequestListener != null) {
-                            mJSONArrayRequestListener.onResponse((JSONArray) response.getResult());
-                        } else if (mStringRequestListener != null) {
-                            mStringRequestListener.onResponse((String) response.getResult());
-                        } else if (mBitmapRequestListener != null) {
-                            mBitmapRequestListener.onResponse((Bitmap) response.getResult());
+        try {
+            isDelivered = true;
+            if (!isCancelled) {
+                if (mExecutor != null) {
+                    mExecutor.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (mJSONObjectRequestListener != null) {
+                                mJSONObjectRequestListener.onResponse((JSONObject) response.getResult());
+                            } else if (mJSONArrayRequestListener != null) {
+                                mJSONArrayRequestListener.onResponse((JSONArray) response.getResult());
+                            } else if (mStringRequestListener != null) {
+                                mStringRequestListener.onResponse((String) response.getResult());
+                            } else if (mBitmapRequestListener != null) {
+                                mBitmapRequestListener.onResponse((Bitmap) response.getResult());
+                            }
+                            finish();
                         }
-                        finish();
-                    }
-                });
+                    });
+                } else {
+                    Core.getInstance().getExecutorSupplier().forMainThreadTasks().execute(new Runnable() {
+                        public void run() {
+                            if (mJSONObjectRequestListener != null) {
+                                mJSONObjectRequestListener.onResponse((JSONObject) response.getResult());
+                            } else if (mJSONArrayRequestListener != null) {
+                                mJSONArrayRequestListener.onResponse((JSONArray) response.getResult());
+                            } else if (mStringRequestListener != null) {
+                                mStringRequestListener.onResponse((String) response.getResult());
+                            } else if (mBitmapRequestListener != null) {
+                                mBitmapRequestListener.onResponse((Bitmap) response.getResult());
+                            }
+                            finish();
+                        }
+                    });
+                }
             } else {
-                Core.getInstance().getExecutorSupplier().forMainThreadTasks().execute(new Runnable() {
-                    public void run() {
-                        if (mJSONObjectRequestListener != null) {
-                            mJSONObjectRequestListener.onResponse((JSONObject) response.getResult());
-                        } else if (mJSONArrayRequestListener != null) {
-                            mJSONArrayRequestListener.onResponse((JSONArray) response.getResult());
-                        } else if (mStringRequestListener != null) {
-                            mStringRequestListener.onResponse((String) response.getResult());
-                        } else if (mBitmapRequestListener != null) {
-                            mBitmapRequestListener.onResponse((Bitmap) response.getResult());
-                        }
-                        finish();
-                    }
-                });
+                AndroidNetworkingError error = new AndroidNetworkingError();
+                error.setCancellationMessageInError();
+                error.setErrorCode(0);
+                if (mJSONObjectRequestListener != null) {
+                    mJSONObjectRequestListener.onError(error);
+                } else if (mJSONArrayRequestListener != null) {
+                    mJSONArrayRequestListener.onError(error);
+                } else if (mStringRequestListener != null) {
+                    mStringRequestListener.onError(error);
+                } else if (mBitmapRequestListener != null) {
+                    mBitmapRequestListener.onError(error);
+                }
             }
-        } else {
-            AndroidNetworkingError error = new AndroidNetworkingError();
-            error.setCancellationMessageInError();
-            error.setErrorCode(0);
-            if (mJSONObjectRequestListener != null) {
-                mJSONObjectRequestListener.onError(error);
-            } else if (mJSONArrayRequestListener != null) {
-                mJSONArrayRequestListener.onError(error);
-            } else if (mStringRequestListener != null) {
-                mStringRequestListener.onError(error);
-            } else if (mBitmapRequestListener != null) {
-                mBitmapRequestListener.onError(error);
-            }
+            Log.d(TAG, "Delivering success response for : " + toString());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        Log.d(TAG, "Delivering success response for : " + toString());
     }
 
     public RequestBody getRequestBody() {
@@ -509,11 +523,15 @@ public class AndroidNetworkingRequest {
             return RequestBody.create(MEDIA_TYPE_MARKDOWN, mByte);
         } else {
             FormBody.Builder builder = new FormBody.Builder();
-            for (HashMap.Entry<String, String> entry : mBodyParameterMap.entrySet()) {
-                builder.add(entry.getKey(), entry.getValue());
-            }
-            for (HashMap.Entry<String, String> entry : mUrlEncodedFormBodyParameterMap.entrySet()) {
-                builder.addEncoded(entry.getKey(), entry.getValue());
+            try {
+                for (HashMap.Entry<String, String> entry : mBodyParameterMap.entrySet()) {
+                    builder.add(entry.getKey(), entry.getValue());
+                }
+                for (HashMap.Entry<String, String> entry : mUrlEncodedFormBodyParameterMap.entrySet()) {
+                    builder.addEncoded(entry.getKey(), entry.getValue());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
             return builder.build();
         }
@@ -521,21 +539,29 @@ public class AndroidNetworkingRequest {
 
     public RequestBody getMultiPartRequestBody() {
         MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
-        for (HashMap.Entry<String, String> entry : mMultiPartParameterMap.entrySet()) {
-            builder.addPart(Headers.of("Content-Disposition", "form-data; name=\"" + entry.getKey() + "\""), RequestBody.create(null, entry.getValue()));
-        }
-        for (HashMap.Entry<String, File> entry : mMultiPartFileMap.entrySet()) {
-            String fileName = entry.getValue().getName();
-            RequestBody fileBody = RequestBody.create(MediaType.parse(Utils.getMimeType(fileName)), entry.getValue());
-            builder.addPart(Headers.of("Content-Disposition", "form-data; name=\"" + entry.getKey() + "\"; filename=\"" + fileName + "\""), fileBody);
+        try {
+            for (HashMap.Entry<String, String> entry : mMultiPartParameterMap.entrySet()) {
+                builder.addPart(Headers.of("Content-Disposition", "form-data; name=\"" + entry.getKey() + "\""), RequestBody.create(null, entry.getValue()));
+            }
+            for (HashMap.Entry<String, File> entry : mMultiPartFileMap.entrySet()) {
+                String fileName = entry.getValue().getName();
+                RequestBody fileBody = RequestBody.create(MediaType.parse(Utils.getMimeType(fileName)), entry.getValue());
+                builder.addPart(Headers.of("Content-Disposition", "form-data; name=\"" + entry.getKey() + "\"; filename=\"" + fileName + "\""), fileBody);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return builder.build();
     }
 
     public Headers getHeaders() {
         Headers.Builder builder = new Headers.Builder();
-        for (HashMap.Entry<String, String> entry : mHeadersMap.entrySet()) {
-            builder.add(entry.getKey(), entry.getValue());
+        try {
+            for (HashMap.Entry<String, String> entry : mHeadersMap.entrySet()) {
+                builder.add(entry.getKey(), entry.getValue());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return builder.build();
     }
