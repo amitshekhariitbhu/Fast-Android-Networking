@@ -64,7 +64,7 @@
 
 <p>Add this in your build.gradle</p>
 
-<pre><code>compile 'com.amitshekhar.android:android-networking:0.0.0'
+<pre><code>compile 'com.amitshekhar.android:android-networking:0.0.2'
 </code></pre>
 
 <p>Do not forget to add internet permission in manifest if already not present</p>
@@ -330,6 +330,13 @@ AndroidNetworking.post("http://api.localhost.com/postFile")
                                 Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
                            }
                         }
+</code></pre>
+
+<h3>
+<a id="remove-bitmap-from-cache-or-clear-cache" class="anchor" href="#remove-bitmap-from-cache-or-clear-cache" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Remove Bitmap from cache or clear cache</h3>
+
+<pre><code>AndroidNetworking.evictBitmap(key); // remove a bitmap with key from LruCache
+AndroidNetworking.evictAllBitmap(); // clear LruCache
 </code></pre>
 
 <h3>
