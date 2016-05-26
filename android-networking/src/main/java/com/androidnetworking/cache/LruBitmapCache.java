@@ -38,8 +38,18 @@ public class LruBitmapCache extends LruCache<String, Bitmap>
     }
 
     @Override
-    public Bitmap getBitmap(String url) {
-        return get(url);
+    public Bitmap getBitmap(String key) {
+        return get(key);
+    }
+
+    @Override
+    public void evictBitmap(String key) {
+        remove(key);
+    }
+
+    @Override
+    public void evictAllBitmap() {
+        evictAll();
     }
 
     @Override

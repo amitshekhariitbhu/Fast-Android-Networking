@@ -124,9 +124,32 @@ public class AndroidNetworking {
     }
 
     /**
+     * Method to evict a bitmap with given key from LruCache
+     *
+     * @param key The key of the bitmap
+     */
+    public static void evictBitmap(String key) {
+        final AndroidNetworkingImageLoader.ImageCache imageCache = AndroidNetworkingImageLoader.getInstance().getImageCache();
+        if (imageCache != null && key != null) {
+            imageCache.evictBitmap(key);
+        }
+    }
+
+    /**
+     * Method to clear LruCache
+     */
+    public static void evictAllBitmap() {
+        final AndroidNetworkingImageLoader.ImageCache imageCache = AndroidNetworkingImageLoader.getInstance().getImageCache();
+        if (imageCache != null) {
+            imageCache.evictAllBitmap();
+        }
+    }
+
+    /**
      * Shuts AndroidNetworking down
      */
     public static void shutDown() {
         Core.shutDown();
+        evictAllBitmap();
     }
 }

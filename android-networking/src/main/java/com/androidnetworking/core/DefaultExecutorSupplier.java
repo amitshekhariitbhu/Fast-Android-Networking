@@ -27,7 +27,7 @@ import java.util.concurrent.ThreadFactory;
  */
 public class DefaultExecutorSupplier implements ExecutorSupplier {
 
-    public static final int DEFAULT_MAX_NUM_THREADS = Runtime.getRuntime().availableProcessors();
+    public static final int DEFAULT_MAX_NUM_THREADS = 2 * Runtime.getRuntime().availableProcessors() + 1;
     private final AndroidNetworkingExecutor mNetworkExecutor;
     private final AndroidNetworkingExecutor mImmediateNetworkExecutor;
     private final Executor mMainThreadExecutor;

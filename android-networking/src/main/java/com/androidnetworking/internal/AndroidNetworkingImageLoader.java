@@ -74,13 +74,21 @@ public class AndroidNetworkingImageLoader {
     }
 
     public interface ImageCache {
-        Bitmap getBitmap(String url);
+        Bitmap getBitmap(String key);
 
-        void putBitmap(String url, Bitmap bitmap);
+        void putBitmap(String key, Bitmap bitmap);
+
+        void evictBitmap(String key);
+
+        void evictAllBitmap();
     }
 
     public AndroidNetworkingImageLoader(ImageCache imageCache) {
         mCache = imageCache;
+    }
+
+    public ImageCache getImageCache() {
+        return mCache;
     }
 
     public static ImageListener getImageListener(final ImageView view,
