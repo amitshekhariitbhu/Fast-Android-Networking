@@ -35,7 +35,7 @@ Android Networking supports Android 2.3 (Gingerbread) and later.
 
 Add this in your build.gradle
 ```
-compile 'com.amitshekhar.android:android-networking:0.0.0'
+compile 'com.amitshekhar.android:android-networking:0.0.1'
 ```
 Do not forget to add internet permission in manifest if already not present
 ```
@@ -276,6 +276,11 @@ public void onError(AndroidNetworkingError error) {
                                 Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
                            }
                         }
+```
+### Remove Bitmap from cache or clear cache
+```
+AndroidNetworking.evictBitmap(key); // remove a bitmap with key from LruCache
+AndroidNetworking.evictAllBitmap(); // clear LruCache
 ```
 ### Inspiration behind making of this library :
 * Recent removal of HttpClient in Android Marshmallow(Android M) made other networking library obsolete.
