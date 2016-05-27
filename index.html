@@ -64,7 +64,7 @@
 
 <p>Add this in your build.gradle</p>
 
-<pre><code>compile 'com.amitshekhar.android:android-networking:0.0.2'
+<pre><code>compile 'com.amitshekhar.android:android-networking:0.0.0'
 </code></pre>
 
 <p>Do not forget to add internet permission in manifest if already not present</p>
@@ -115,7 +115,7 @@ AndroidNetworking.initialize(getApplicationContext(),okHttpClient);
                     // do anything with response
                     }
                     @Override
-                    public void onError(AndroidNetworkingError error) {
+                    public void onError(ANError error) {
                     // handle error
                     }
                 });
@@ -136,7 +136,7 @@ AndroidNetworking.initialize(getApplicationContext(),okHttpClient);
                     // do anything with response
                     }
                     @Override
-                    public void onError(AndroidNetworkingError error) {
+                    public void onError(ANError error) {
                     // handle error
                     }
                 });
@@ -163,7 +163,7 @@ AndroidNetworking.post("http://api.localhost.com/createAnUser")
                     // do anything with response
                     }
                     @Override
-                    public void onError(AndroidNetworkingError error) {
+                    public void onError(ANError error) {
                     // handle error
                     }
                 });
@@ -179,7 +179,7 @@ AndroidNetworking.post("http://api.localhost.com/postFile")
                     // do anything with response
                     }
                     @Override
-                    public void onError(AndroidNetworkingError error) {
+                    public void onError(ANError error) {
                     // handle error
                     }
                 });               
@@ -205,7 +205,7 @@ AndroidNetworking.post("http://api.localhost.com/postFile")
                     }
 
                     @Override
-                    public void onError(AndroidNetworkingError error) {
+                    public void onError(ANError error) {
                     // handle error    
                     }
                 });                 
@@ -232,7 +232,7 @@ AndroidNetworking.post("http://api.localhost.com/postFile")
                     }
 
                     @Override
-                    public void onError(AndroidNetworkingError error) {
+                    public void onError(ANError error) {
                     // handle error 
                     }
                  }); 
@@ -263,7 +263,7 @@ AndroidNetworking.post("http://api.localhost.com/postFile")
                     }
 
                     @Override
-                    public void onError(AndroidNetworkingError error) {
+                    public void onError(ANError error) {
                     // handle error 
                     }
                  }); 
@@ -280,15 +280,15 @@ AndroidNetworking.post("http://api.localhost.com/postFile")
 <h3>
 <a id="loading-image-from-network-into-imageview" class="anchor" href="#loading-image-from-network-into-imageview" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Loading image from network into ImageView</h3>
 
-<pre><code>      &lt;com.androidnetworking.widget.GreatImageView
-          android:id="@+id/greatImageView"
+<pre><code>      &lt;com.androidnetworking.widget.ANImageView
+          android:id="@+id/imageView"
           android:layout_width="100dp"
           android:layout_height="100dp"
           android:layout_gravity="center" /&gt;
 
-      greatImageView.setDefaultImageResId(R.drawable.default);
-      greatImageView.setErrorImageResId(R.drawable.error);
-      greatImageView.setImageUrl(imageUrl);          
+      imageView.setDefaultImageResId(R.drawable.default);
+      imageView.setErrorImageResId(R.drawable.error);
+      imageView.setImageUrl(imageUrl);          
 </code></pre>
 
 <h3>
@@ -307,7 +307,7 @@ AndroidNetworking.post("http://api.localhost.com/postFile")
                     // do anything with bitmap
                     }
                     @Override
-                    public void onError(AndroidNetworkingError error) {
+                    public void onError(ANError error) {
                     // handle error
                     }
                 });
@@ -316,7 +316,7 @@ AndroidNetworking.post("http://api.localhost.com/postFile")
 <h3>
 <a id="error-code-handling" class="anchor" href="#error-code-handling" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Error Code Handling</h3>
 
-<pre><code>public void onError(AndroidNetworkingError error) {
+<pre><code>public void onError(ANError error) {
                            if (error.getErrorCode() != 0) {
                            // received error from server
                            // error.getErrorCode() - the error code from server
