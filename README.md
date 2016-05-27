@@ -35,7 +35,7 @@ Android Networking supports Android 2.3 (Gingerbread) and later.
 
 Add this in your build.gradle
 ```
-compile 'com.amitshekhar.android:android-networking:0.0.2'
+compile 'com.amitshekhar.android:android-networking:0.0.0'
 ```
 Do not forget to add internet permission in manifest if already not present
 ```
@@ -80,7 +80,7 @@ AndroidNetworking.get("http://api.localhost.com/{pageNumber}/test")
                     // do anything with response
                     }
                     @Override
-                    public void onError(AndroidNetworkingError error) {
+                    public void onError(ANError error) {
                     // handle error
                     }
                 });
@@ -99,7 +99,7 @@ AndroidNetworking.post("http://api.localhost.com/createAnUser")
                     // do anything with response
                     }
                     @Override
-                    public void onError(AndroidNetworkingError error) {
+                    public void onError(ANError error) {
                     // handle error
                     }
                 });
@@ -125,7 +125,7 @@ AndroidNetworking.post("http://api.localhost.com/createAnUser")
                     // do anything with response
                     }
                     @Override
-                    public void onError(AndroidNetworkingError error) {
+                    public void onError(ANError error) {
                     // handle error
                     }
                 });
@@ -141,7 +141,7 @@ AndroidNetworking.post("http://api.localhost.com/postFile")
                     // do anything with response
                     }
                     @Override
-                    public void onError(AndroidNetworkingError error) {
+                    public void onError(ANError error) {
                     // handle error
                     }
                 });               
@@ -165,7 +165,7 @@ AndroidNetworking.download(url,dirPath,fileName)
                     }
 
                     @Override
-                    public void onError(AndroidNetworkingError error) {
+                    public void onError(ANError error) {
                     // handle error    
                     }
                 });                 
@@ -190,7 +190,7 @@ AndroidNetworking.upload(url)
                     }
                   
                     @Override
-                    public void onError(AndroidNetworkingError error) {
+                    public void onError(ANError error) {
                     // handle error 
                     }
                  }); 
@@ -218,7 +218,7 @@ AndroidNetworking.upload(url)
                     }
                   
                     @Override
-                    public void onError(AndroidNetworkingError error) {
+                    public void onError(ANError error) {
                     // handle error 
                     }
                  }); 
@@ -230,15 +230,15 @@ AndroidNetworking.cancel("testTag"); // All the requests with the given tag will
 ```
 ### Loading image from network into ImageView
 ```
-      <com.androidnetworking.widget.GreatImageView
-          android:id="@+id/greatImageView"
+      <com.androidnetworking.widget.ANImageView
+          android:id="@+id/imageView"
           android:layout_width="100dp"
           android:layout_height="100dp"
           android:layout_gravity="center" />
           
-      greatImageView.setDefaultImageResId(R.drawable.default);
-      greatImageView.setErrorImageResId(R.drawable.error);
-      greatImageView.setImageUrl(imageUrl);          
+      imageView.setDefaultImageResId(R.drawable.default);
+      imageView.setErrorImageResId(R.drawable.error);
+      imageView.setImageUrl(imageUrl);          
 ```
 ### Getting Bitmap from url with some specified parameters
 ```
@@ -255,14 +255,14 @@ AndroidNetworking.get(imageUrl)
                     // do anything with bitmap
                     }
                     @Override
-                    public void onError(AndroidNetworkingError error) {
+                    public void onError(ANError error) {
                     // handle error
                     }
                 });
 ```
 ### Error Code Handling
 ```
-public void onError(AndroidNetworkingError error) {
+public void onError(ANError error) {
                            if (error.getErrorCode() != 0) {
                            // received error from server
                            // error.getErrorCode() - the error code from server
