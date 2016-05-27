@@ -17,35 +17,35 @@
 
 package com.androidnetworking.common;
 
-import com.androidnetworking.error.AndroidNetworkingError;
+import com.androidnetworking.error.ANError;
 
 /**
  * Created by amitshekhar on 22/03/16.
  */
-public class AndroidNetworkingResponse<T> {
+public class ANResponse<T> {
 
     private final T mResult;
 
-    private final AndroidNetworkingError mError;
+    private final ANError mANError;
 
-    public static <T> AndroidNetworkingResponse<T> success(T result) {
-        return new AndroidNetworkingResponse<>(result);
+    public static <T> ANResponse<T> success(T result) {
+        return new ANResponse<>(result);
     }
 
-    public static <T> AndroidNetworkingResponse<T> failed(AndroidNetworkingError error) {
-        return new AndroidNetworkingResponse<>(error);
+    public static <T> ANResponse<T> failed(ANError ANError) {
+        return new ANResponse<>(ANError);
     }
 
-    private AndroidNetworkingResponse(T result) {
+    private ANResponse(T result) {
         this.mResult = result;
-        this.mError = null;
+        this.mANError = null;
     }
 
-    private AndroidNetworkingResponse(AndroidNetworkingError error) {
+    private ANResponse(ANError ANError) {
         this.mResult = null;
-        this.mError = error;
-        this.mError.setErrorCode(0);
-        this.mError.setErrorDetail(Constants.PARSE_ERROR);
+        this.mANError = ANError;
+        this.mANError.setErrorCode(0);
+        this.mANError.setErrorDetail(ANConstants.PARSE_ERROR);
     }
 
     public T getResult() {
@@ -53,11 +53,11 @@ public class AndroidNetworkingResponse<T> {
     }
 
     public boolean isSuccess() {
-        return mError == null;
+        return mANError == null;
     }
 
-    public AndroidNetworkingError getError() {
-        return mError;
+    public ANError getError() {
+        return mANError;
     }
 
 }

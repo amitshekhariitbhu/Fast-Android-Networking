@@ -17,15 +17,15 @@
 
 package com.androidnetworking.error;
 
-import com.androidnetworking.common.AndroidNetworkingData;
-import com.androidnetworking.common.Constants;
+import com.androidnetworking.common.ANData;
+import com.androidnetworking.common.ANConstants;
 
 /**
  * Created by amitshekhar on 22/03/16.
  */
-public class AndroidNetworkingError extends Exception {
+public class ANError extends Exception {
 
-    private AndroidNetworkingData data;
+    private ANData data;
 
     private String errorBody;
 
@@ -33,41 +33,41 @@ public class AndroidNetworkingError extends Exception {
 
     private String errorDetail;
 
-    public AndroidNetworkingError() {
+    public ANError() {
     }
 
-    public AndroidNetworkingError(AndroidNetworkingData data) {
+    public ANError(ANData data) {
         this.data = data;
     }
 
-    public AndroidNetworkingError(String message) {
+    public ANError(String message) {
         super(message);
     }
 
-    public AndroidNetworkingError(String message, AndroidNetworkingData data) {
+    public ANError(String message, ANData data) {
         super(message);
         this.data = data;
     }
 
-    public AndroidNetworkingError(String message, Throwable throwable) {
+    public ANError(String message, Throwable throwable) {
         super(message, throwable);
     }
 
-    public AndroidNetworkingError(String message, AndroidNetworkingData data, Throwable throwable) {
+    public ANError(String message, ANData data, Throwable throwable) {
         super(message, throwable);
         this.data = data;
     }
 
-    public AndroidNetworkingError(AndroidNetworkingData data, Throwable throwable) {
+    public ANError(ANData data, Throwable throwable) {
         super(throwable);
         this.data = data;
     }
 
-    public AndroidNetworkingError(Throwable throwable) {
+    public ANError(Throwable throwable) {
         super(throwable);
     }
 
-    public AndroidNetworkingData getData() {
+    public ANData getData() {
         return data;
     }
 
@@ -88,7 +88,7 @@ public class AndroidNetworkingError extends Exception {
     }
 
     public void setCancellationMessageInError() {
-        this.errorDetail = Constants.REQUEST_CANCELLED_ERROR;
+        this.errorDetail = ANConstants.REQUEST_CANCELLED_ERROR;
     }
 
     public String getErrorBody() {

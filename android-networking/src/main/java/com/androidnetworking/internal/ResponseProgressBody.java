@@ -17,7 +17,7 @@
 
 package com.androidnetworking.internal;
 
-import com.androidnetworking.common.Constants;
+import com.androidnetworking.common.ANConstants;
 import com.androidnetworking.interfaces.DownloadProgressListener;
 import com.androidnetworking.model.Progress;
 
@@ -76,7 +76,7 @@ public class ResponseProgressBody extends ResponseBody {
                 long bytesRead = super.read(sink, byteCount);
                 totalBytesRead += ((bytesRead != -1) ? bytesRead : 0);
                 if (downloadProgressHandler != null) {
-                    downloadProgressHandler.obtainMessage(Constants.UPDATE, new Progress(totalBytesRead, mResponseBody.contentLength())).sendToTarget();
+                    downloadProgressHandler.obtainMessage(ANConstants.UPDATE, new Progress(totalBytesRead, mResponseBody.contentLength())).sendToTarget();
                 }
                 return bytesRead;
             }

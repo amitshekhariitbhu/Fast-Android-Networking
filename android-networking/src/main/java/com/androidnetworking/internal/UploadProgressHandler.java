@@ -21,7 +21,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 
-import com.androidnetworking.common.Constants;
+import com.androidnetworking.common.ANConstants;
 import com.androidnetworking.interfaces.UploadProgressListener;
 import com.androidnetworking.model.Progress;
 
@@ -43,7 +43,7 @@ public class UploadProgressHandler extends Handler {
     public void handleMessage(Message msg) {
         final UploadProgressListener uploadProgressListener = mUploadProgressListenerWeakRef.get();
         switch (msg.what) {
-            case Constants.UPDATE:
+            case ANConstants.UPDATE:
                 if (uploadProgressListener != null) {
                     final Progress progress = (Progress) msg.obj;
                     uploadProgressListener.onProgress(progress.currentBytes, progress.totalBytes);

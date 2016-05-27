@@ -17,15 +17,23 @@
 
 package com.androidnetworking.common;
 
+import okhttp3.Headers;
+import okhttp3.HttpUrl;
+import okio.Source;
+
 /**
- * Created by amitshekhar on 29/03/16.
+ * Created by amitshekhar on 22/03/16.
  */
-public final class Constants {
-    public static final int MAX_CACHE_SIZE = 10 * 1024 * 1024;
-    public static final int UPDATE = 0x01;
-    public static final String CACHE_DIR_NAME = "cache_an";
-    public static final String CONNECTION_ERROR = "connectionError";
-    public static final String RESPONSE_FROM_SERVER_ERROR = "responseFromServerError";
-    public static final String REQUEST_CANCELLED_ERROR = "requestCancelledError";
-    public static final String PARSE_ERROR = "parseError";
+public class ANData {
+
+    public int code;
+
+    public Headers headers;
+
+    public long length;
+
+    public Source source;
+
+    public HttpUrl url;
+
 }

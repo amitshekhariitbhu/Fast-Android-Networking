@@ -15,18 +15,17 @@
  *    limitations under the License.
  */
 
-package com.androidnetworking.runnables;
+package com.androidnetworking.internal;
 
 import android.util.Log;
 
-import com.androidnetworking.common.AndroidNetworkingData;
-import com.androidnetworking.common.AndroidNetworkingRequest;
-import com.androidnetworking.common.AndroidNetworkingResponse;
-import com.androidnetworking.common.Constants;
+import com.androidnetworking.common.ANData;
+import com.androidnetworking.common.ANRequest;
+import com.androidnetworking.common.ANResponse;
+import com.androidnetworking.common.ANConstants;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.core.Core;
-import com.androidnetworking.error.AndroidNetworkingError;
-import com.androidnetworking.internal.AndroidNetworkingOkHttp;
+import com.androidnetworking.error.ANError;
 
 import java.io.IOException;
 
@@ -37,14 +36,14 @@ import static com.androidnetworking.common.RequestType.SIMPLE;
 /**
  * Created by amitshekhar on 22/03/16.
  */
-public class DataHunter implements Runnable {
+public class InternalRunnable implements Runnable {
 
-    private static final String TAG = DataHunter.class.getSimpleName();
+    private static final String TAG = InternalRunnable.class.getSimpleName();
     private final Priority priority;
     public final int sequence;
-    public final AndroidNetworkingRequest request;
+    public final ANRequest request;
 
-    public DataHunter(AndroidNetworkingRequest request) {
+    public InternalRunnable(ANRequest request) {
         this.request = request;
         this.sequence = request.getSequenceNumber();
         this.priority = request.getPriority();
@@ -68,36 +67,36 @@ public class DataHunter implements Runnable {
     }
 
     private void goForSimpleRequest() {
-        AndroidNetworkingData data = null;
+        ANData data = null;
         try {
-            data = AndroidNetworkingOkHttp.performSimpleRequest(request);
+            data = InternalNetworking.performSimpleRequest(request);
             if (data.code == 304) {
                 request.finish();
                 return;
             }
             if (data.code >= 400) {
-                AndroidNetworkingError error = new AndroidNetworkingError(data);
-                error = request.parseNetworkError(error);
-                error.setErrorCode(data.code);
-                error.setErrorDetail(Constants.RESPONSE_FROM_SERVER_ERROR);
-                deliverError(request, error);
+                ANError ANError = new ANError(data);
+                ANError = request.parseNetworkError(ANError);
+                ANError.setErrorCode(data.code);
+                ANError.setErrorDetail(ANConstants.RESPONSE_FROM_SERVER_ERROR);
+                deliverError(request, ANError);
                 return;
             }
 
-            AndroidNetworkingResponse response = request.parseResponse(data);
+            ANResponse response = request.parseResponse(data);
             if (!response.isSuccess()) {
                 deliverError(request, response.getError());
                 return;
             }
             request.deliverResponse(response);
-        } catch (AndroidNetworkingError se) {
+        } catch (ANError se) {
             se = request.parseNetworkError(se);
-            se.setErrorDetail(Constants.CONNECTION_ERROR);
+            se.setErrorDetail(ANConstants.CONNECTION_ERROR);
             se.setErrorCode(0);
             deliverError(request, se);
         } catch (Exception e) {
-            AndroidNetworkingError se = new AndroidNetworkingError(e);
-            se.setErrorDetail(Constants.CONNECTION_ERROR);
+            ANError se = new ANError(e);
+            se.setErrorDetail(ANConstants.CONNECTION_ERROR);
             se.setErrorCode(0);
             deliverError(request, se);
 
@@ -113,58 +112,58 @@ public class DataHunter implements Runnable {
     }
 
     private void goForDownloadRequest() {
-        AndroidNetworkingData data = null;
+        ANData data = null;
         try {
-            data = AndroidNetworkingOkHttp.performDownloadRequest(request);
+            data = InternalNetworking.performDownloadRequest(request);
             if (data.code >= 400) {
-                AndroidNetworkingError error = new AndroidNetworkingError();
-                error = request.parseNetworkError(error);
-                error.setErrorCode(data.code);
-                error.setErrorDetail(Constants.RESPONSE_FROM_SERVER_ERROR);
-                deliverError(request, error);
+                ANError ANError = new ANError();
+                ANError = request.parseNetworkError(ANError);
+                ANError.setErrorCode(data.code);
+                ANError.setErrorDetail(ANConstants.RESPONSE_FROM_SERVER_ERROR);
+                deliverError(request, ANError);
             }
-        } catch (AndroidNetworkingError se) {
-            se.setErrorDetail(Constants.CONNECTION_ERROR);
+        } catch (ANError se) {
+            se.setErrorDetail(ANConstants.CONNECTION_ERROR);
             se.setErrorCode(0);
             deliverError(request, se);
         } catch (Exception e) {
-            AndroidNetworkingError se = new AndroidNetworkingError(e);
-            se.setErrorDetail(Constants.CONNECTION_ERROR);
+            ANError se = new ANError(e);
+            se.setErrorDetail(ANConstants.CONNECTION_ERROR);
             se.setErrorCode(0);
             deliverError(request, se);
         }
     }
 
     private void goForUploadRequest() {
-        AndroidNetworkingData data = null;
+        ANData data = null;
         try {
-            data = AndroidNetworkingOkHttp.performUploadRequest(request);
+            data = InternalNetworking.performUploadRequest(request);
             if (data.code == 304) {
                 request.finish();
                 return;
             }
             if (data.code >= 400) {
-                AndroidNetworkingError error = new AndroidNetworkingError(data);
-                error = request.parseNetworkError(error);
-                error.setErrorCode(data.code);
-                error.setErrorDetail(Constants.RESPONSE_FROM_SERVER_ERROR);
-                deliverError(request, error);
+                ANError ANError = new ANError(data);
+                ANError = request.parseNetworkError(ANError);
+                ANError.setErrorCode(data.code);
+                ANError.setErrorDetail(ANConstants.RESPONSE_FROM_SERVER_ERROR);
+                deliverError(request, ANError);
                 return;
             }
-            AndroidNetworkingResponse response = request.parseResponse(data);
+            ANResponse response = request.parseResponse(data);
             if (!response.isSuccess()) {
                 deliverError(request, response.getError());
                 return;
             }
             request.deliverResponse(response);
-        } catch (AndroidNetworkingError se) {
+        } catch (ANError se) {
             se = request.parseNetworkError(se);
-            se.setErrorDetail(Constants.CONNECTION_ERROR);
+            se.setErrorDetail(ANConstants.CONNECTION_ERROR);
             se.setErrorCode(0);
             deliverError(request, se);
         } catch (Exception e) {
-            AndroidNetworkingError se = new AndroidNetworkingError(e);
-            se.setErrorDetail(Constants.CONNECTION_ERROR);
+            ANError se = new ANError(e);
+            se.setErrorDetail(ANConstants.CONNECTION_ERROR);
             se.setErrorCode(0);
             deliverError(request, se);
         } finally {
@@ -182,10 +181,10 @@ public class DataHunter implements Runnable {
         return priority;
     }
 
-    private void deliverError(final AndroidNetworkingRequest request, final AndroidNetworkingError error) {
+    private void deliverError(final ANRequest request, final ANError ANError) {
         Core.getInstance().getExecutorSupplier().forMainThreadTasks().execute(new Runnable() {
             public void run() {
-                request.deliverError(error);
+                request.deliverError(ANError);
                 request.finish();
             }
         });

@@ -27,12 +27,12 @@ import android.widget.ImageView;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
-import com.androidnetworking.error.AndroidNetworkingError;
+import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.BitmapRequestListener;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
-import com.androidnetworking.internal.AndroidNetworkingImageLoader;
-import com.androidnetworking.widget.GreatImageView;
+import com.androidnetworking.internal.ANImageLoader;
+import com.androidnetworking.widget.ANImageView;
 import com.networking.provider.Images;
 
 import org.json.JSONArray;
@@ -48,17 +48,17 @@ public class MainActivity extends AppCompatActivity {
     private static final String URL_IMAGE_LOADER = "http://i.imgur.com/52md06W.jpg";
 
     private ImageView imageView;
-    private GreatImageView greatImageView;
+    private ANImageView ANImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         imageView = (ImageView) findViewById(R.id.imageView);
-        greatImageView = (GreatImageView) findViewById(R.id.greatImageView);
-        greatImageView.setDefaultImageResId(R.drawable.ic_toys_black_24dp);
-        greatImageView.setErrorImageResId(R.drawable.ic_error_outline_black_24dp);
-        greatImageView.setImageUrl(Images.imageThumbUrls[0]);
+        ANImageView = (ANImageView) findViewById(R.id.greatImageView);
+        ANImageView.setDefaultImageResId(R.drawable.ic_toys_black_24dp);
+        ANImageView.setErrorImageResId(R.drawable.ic_error_outline_black_24dp);
+        ANImageView.setImageUrl(Images.imageThumbUrls[0]);
     }
 
     public void makeRequests(View view) {
@@ -74,18 +74,18 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         @Override
-                        public void onError(AndroidNetworkingError error) {
-                            if (error.getErrorCode() != 0) {
-                                // received error from server
-                                // error.getErrorCode() - the error code from server
-                                // error.getErrorBody() - the error body from server
-                                // error.getErrorDetail() - just a error detail
-                                Log.d(TAG, "onError errorCode : " + error.getErrorCode());
-                                Log.d(TAG, "onError errorBody : " + error.getErrorBody());
-                                Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                        public void onError(ANError ANError) {
+                            if (ANError.getErrorCode() != 0) {
+                                // received ANError from server
+                                // ANError.getErrorCode() - the ANError code from server
+                                // ANError.getErrorBody() - the ANError body from server
+                                // ANError.getErrorDetail() - just a ANError detail
+                                Log.d(TAG, "onError errorCode : " + ANError.getErrorCode());
+                                Log.d(TAG, "onError errorBody : " + ANError.getErrorBody());
+                                Log.d(TAG, "onError errorDetail : " + ANError.getErrorDetail());
                             } else {
-                                // error.getErrorDetail() : connectionError, parseError, requestCancelledError
-                                Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                                // ANError.getErrorDetail() : connectionError, parseError, requestCancelledError
+                                Log.d(TAG, "onError errorDetail : " + ANError.getErrorDetail());
                             }
                         }
                     });
@@ -102,18 +102,18 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         @Override
-                        public void onError(AndroidNetworkingError error) {
-                            if (error.getErrorCode() != 0) {
-                                // received error from server
-                                // error.getErrorCode() - the error code from server
-                                // error.getErrorBody() - the error body from server
-                                // error.getErrorDetail() - just a error detail
-                                Log.d(TAG, "onError errorCode : " + error.getErrorCode());
-                                Log.d(TAG, "onError errorBody : " + error.getErrorBody());
-                                Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                        public void onError(ANError ANError) {
+                            if (ANError.getErrorCode() != 0) {
+                                // received ANError from server
+                                // ANError.getErrorCode() - the ANError code from server
+                                // ANError.getErrorBody() - the ANError body from server
+                                // ANError.getErrorDetail() - just a ANError detail
+                                Log.d(TAG, "onError errorCode : " + ANError.getErrorCode());
+                                Log.d(TAG, "onError errorBody : " + ANError.getErrorBody());
+                                Log.d(TAG, "onError errorDetail : " + ANError.getErrorDetail());
                             } else {
-                                // error.getErrorDetail() : connectionError, parseError, requestCancelledError
-                                Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                                // ANError.getErrorDetail() : connectionError, parseError, requestCancelledError
+                                Log.d(TAG, "onError errorDetail : " + ANError.getErrorDetail());
                             }
                         }
                     });
@@ -142,25 +142,25 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onError(AndroidNetworkingError error) {
-                        if (error.getErrorCode() != 0) {
-                            // received error from server
-                            // error.getErrorCode() - the error code from server
-                            // error.getErrorBody() - the error body from server
-                            // error.getErrorDetail() - just a error detail
-                            Log.d(TAG, "onError errorCode : " + error.getErrorCode());
-                            Log.d(TAG, "onError errorBody : " + error.getErrorBody());
-                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                    public void onError(ANError ANError) {
+                        if (ANError.getErrorCode() != 0) {
+                            // received ANError from server
+                            // ANError.getErrorCode() - the ANError code from server
+                            // ANError.getErrorBody() - the ANError body from server
+                            // ANError.getErrorDetail() - just a ANError detail
+                            Log.d(TAG, "onError errorCode : " + ANError.getErrorCode());
+                            Log.d(TAG, "onError errorBody : " + ANError.getErrorBody());
+                            Log.d(TAG, "onError errorDetail : " + ANError.getErrorDetail());
                         } else {
-                            // error.getErrorDetail() : connectionError, parseError, requestCancelledError
-                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                            // ANError.getErrorDetail() : connectionError, parseError, requestCancelledError
+                            Log.d(TAG, "onError errorDetail : " + ANError.getErrorDetail());
                         }
                     }
                 });
     }
 
     public void loadImageFromImageLoader(View view) {
-        AndroidNetworkingImageLoader.getInstance().get(URL_IMAGE_LOADER, AndroidNetworkingImageLoader.getImageListener(imageView,
+        ANImageLoader.getInstance().get(URL_IMAGE_LOADER, ANImageLoader.getImageListener(imageView,
                 R.drawable.ic_toys_black_24dp, R.drawable.ic_error_outline_black_24dp));
     }
 

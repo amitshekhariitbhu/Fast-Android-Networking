@@ -22,9 +22,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.widget.ImageView;
 
-import com.androidnetworking.common.AndroidNetworkingData;
-import com.androidnetworking.common.AndroidNetworkingResponse;
-import com.androidnetworking.error.AndroidNetworkingError;
+import com.androidnetworking.common.ANData;
+import com.androidnetworking.common.ANResponse;
+import com.androidnetworking.error.ANError;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -60,7 +60,7 @@ public class Utils {
     }
 
 
-    public static AndroidNetworkingResponse<Bitmap> decodeBitmap(AndroidNetworkingData response, int maxWidth, int maxHeight, Bitmap.Config decodeConfig, ImageView.ScaleType scaleType) {
+    public static ANResponse<Bitmap> decodeBitmap(ANData response, int maxWidth, int maxHeight, Bitmap.Config decodeConfig, ImageView.ScaleType scaleType) {
         byte[] data = new byte[0];
         try {
             data = Okio.buffer(response.source).readByteArray();
@@ -100,9 +100,9 @@ public class Utils {
         }
 
         if (bitmap == null) {
-            return AndroidNetworkingResponse.failed(new AndroidNetworkingError(response));
+            return ANResponse.failed(new ANError(response));
         } else {
-            return AndroidNetworkingResponse.success(bitmap);
+            return ANResponse.success(bitmap);
         }
     }
 

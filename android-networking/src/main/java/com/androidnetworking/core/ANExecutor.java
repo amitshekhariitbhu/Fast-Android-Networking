@@ -22,7 +22,7 @@ import android.net.NetworkInfo;
 import android.telephony.TelephonyManager;
 
 import com.androidnetworking.common.Priority;
-import com.androidnetworking.runnables.DataHunter;
+import com.androidnetworking.internal.InternalRunnable;
 
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
@@ -34,11 +34,11 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by amitshekhar on 22/03/16.
  */
-public class AndroidNetworkingExecutor extends ThreadPoolExecutor {
+public class ANExecutor extends ThreadPoolExecutor {
 
     private static final int DEFAULT_THREAD_COUNT = 3;
 
-    AndroidNetworkingExecutor(int maxNumThreads, ThreadFactory threadFactory) {
+    ANExecutor(int maxNumThreads, ThreadFactory threadFactory) {
         super(maxNumThreads, maxNumThreads, 0, TimeUnit.MILLISECONDS,
                 new PriorityBlockingQueue<Runnable>(), threadFactory);
     }
@@ -89,16 +89,16 @@ public class AndroidNetworkingExecutor extends ThreadPoolExecutor {
 
     @Override
     public Future<?> submit(Runnable task) {
-        AndroidNetworkingFutureTask futureTask = new AndroidNetworkingFutureTask((DataHunter) task);
+        AndroidNetworkingFutureTask futureTask = new AndroidNetworkingFutureTask((InternalRunnable) task);
         execute(futureTask);
         return futureTask;
     }
 
-    private static final class AndroidNetworkingFutureTask extends FutureTask<DataHunter>
+    private static final class AndroidNetworkingFutureTask extends FutureTask<InternalRunnable>
             implements Comparable<AndroidNetworkingFutureTask> {
-        private final DataHunter hunter;
+        private final InternalRunnable hunter;
 
-        public AndroidNetworkingFutureTask(DataHunter hunter) {
+        public AndroidNetworkingFutureTask(InternalRunnable hunter) {
             super(hunter, null);
             this.hunter = hunter;
         }

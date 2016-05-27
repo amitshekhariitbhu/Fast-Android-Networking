@@ -24,8 +24,8 @@ import android.widget.ImageView;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.cache.LruBitmapCache;
-import com.androidnetworking.common.AndroidNetworkingRequest;
-import com.androidnetworking.error.AndroidNetworkingError;
+import com.androidnetworking.common.ANRequest;
+import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.BitmapRequestListener;
 
 import java.util.HashMap;
@@ -34,7 +34,7 @@ import java.util.LinkedList;
 /**
  * Created by amitshekhar on 23/03/16.
  */
-public class AndroidNetworkingImageLoader {
+public class ANImageLoader {
 
     // Get max available VM memory, exceeding this amount will throw an
     // OutOfMemory exception. Stored in kilobytes as LruCache takes an
@@ -58,16 +58,16 @@ public class AndroidNetworkingImageLoader {
 
     private Runnable mRunnable;
 
-    private static AndroidNetworkingImageLoader sInstance;
+    private static ANImageLoader sInstance;
 
     public static void initialize() {
         getInstance();
     }
 
-    public static AndroidNetworkingImageLoader getInstance() {
+    public static ANImageLoader getInstance() {
         if (sInstance == null) {
-            synchronized (AndroidNetworkingImageLoader.class) {
-                sInstance = new AndroidNetworkingImageLoader(new LruBitmapCache(cacheSize));
+            synchronized (ANImageLoader.class) {
+                sInstance = new ANImageLoader(new LruBitmapCache(cacheSize));
             }
         }
         return sInstance;
@@ -83,7 +83,7 @@ public class AndroidNetworkingImageLoader {
         void evictAllBitmap();
     }
 
-    public AndroidNetworkingImageLoader(ImageCache imageCache) {
+    public ANImageLoader(ImageCache imageCache) {
         mCache = imageCache;
     }
 
@@ -104,7 +104,7 @@ public class AndroidNetworkingImageLoader {
             }
 
             @Override
-            public void onError(AndroidNetworkingError error) {
+            public void onError(ANError ANError) {
                 if (errorImageResId != 0) {
                     view.setImageResource(errorImageResId);
                 }
@@ -116,7 +116,7 @@ public class AndroidNetworkingImageLoader {
 
         void onResponse(ImageContainer response, boolean isImmediate);
 
-        void onError(AndroidNetworkingError error);
+        void onError(ANError ANError);
     }
 
     public boolean isCached(String requestUrl, int maxWidth, int maxHeight) {
@@ -165,7 +165,7 @@ public class AndroidNetworkingImageLoader {
             return imageContainer;
         }
 
-        AndroidNetworkingRequest newRequest = makeImageRequest(requestUrl, maxWidth, maxHeight, scaleType,
+        ANRequest newRequest = makeImageRequest(requestUrl, maxWidth, maxHeight, scaleType,
                 cacheKey);
 
         mInFlightRequests.put(cacheKey,
@@ -173,9 +173,9 @@ public class AndroidNetworkingImageLoader {
         return imageContainer;
     }
 
-    protected AndroidNetworkingRequest makeImageRequest(String requestUrl, int maxWidth, int maxHeight,
-                                                        ImageView.ScaleType scaleType, final String cacheKey) {
-        AndroidNetworkingRequest androidNetworkingRequest = AndroidNetworking.get(requestUrl)
+    protected ANRequest makeImageRequest(String requestUrl, int maxWidth, int maxHeight,
+                                         ImageView.ScaleType scaleType, final String cacheKey) {
+        ANRequest ANRequest = AndroidNetworking.get(requestUrl)
                 .setTag("ImageRequestTag")
                 .setBitmapMaxHeight(maxHeight)
                 .setBitmapMaxWidth(maxWidth)
@@ -183,19 +183,19 @@ public class AndroidNetworkingImageLoader {
                 .setBitmapConfig(Bitmap.Config.RGB_565)
                 .build();
 
-        androidNetworkingRequest.getAsBitmap(new BitmapRequestListener() {
+        ANRequest.getAsBitmap(new BitmapRequestListener() {
             @Override
             public void onResponse(Bitmap response) {
                 onGetImageSuccess(cacheKey, response);
             }
 
             @Override
-            public void onError(AndroidNetworkingError error) {
-                onGetImageError(cacheKey, error);
+            public void onError(ANError ANError) {
+                onGetImageError(cacheKey, ANError);
             }
         });
 
-        return androidNetworkingRequest;
+        return ANRequest;
     }
 
 
@@ -216,11 +216,11 @@ public class AndroidNetworkingImageLoader {
         }
     }
 
-    protected void onGetImageError(String cacheKey, AndroidNetworkingError error) {
+    protected void onGetImageError(String cacheKey, ANError ANError) {
         BatchedImageRequest request = mInFlightRequests.remove(cacheKey);
 
         if (request != null) {
-            request.setError(error);
+            request.setError(ANError);
             batchResponse(cacheKey, request);
         }
     }
@@ -277,25 +277,25 @@ public class AndroidNetworkingImageLoader {
 
     private class BatchedImageRequest {
 
-        private final AndroidNetworkingRequest mRequest;
+        private final ANRequest mRequest;
 
         private Bitmap mResponseBitmap;
 
-        private AndroidNetworkingError mError;
+        private ANError mANError;
 
         private final LinkedList<ImageContainer> mContainers = new LinkedList<ImageContainer>();
 
-        public BatchedImageRequest(AndroidNetworkingRequest request, ImageContainer container) {
+        public BatchedImageRequest(ANRequest request, ImageContainer container) {
             mRequest = request;
             mContainers.add(container);
         }
 
-        public void setError(AndroidNetworkingError error) {
-            mError = error;
+        public void setError(ANError ANError) {
+            mANError = ANError;
         }
 
-        public AndroidNetworkingError getError() {
-            return mError;
+        public ANError getError() {
+            return mANError;
         }
 
         public void addContainer(ImageContainer container) {
@@ -308,7 +308,7 @@ public class AndroidNetworkingImageLoader {
                 mRequest.cancel();
                 if (mRequest.isCanceled()) {
                     mRequest.destroy();
-                    AndroidNetworkingRequestQueue.getInstance().finish(mRequest);
+                    ANRequestQueue.getInstance().finish(mRequest);
                 }
                 return true;
             }

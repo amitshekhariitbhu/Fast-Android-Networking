@@ -24,9 +24,9 @@ import java.util.concurrent.Executor;
  */
 public interface ExecutorSupplier {
 
-    AndroidNetworkingExecutor forNetworkTasks();
+    ANExecutor forNetworkTasks();
 
-    AndroidNetworkingExecutor forImmediateNetworkTasks();
+    ANExecutor forImmediateNetworkTasks();
 
     Executor forMainThreadTasks();
 }

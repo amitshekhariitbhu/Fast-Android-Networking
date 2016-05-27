@@ -26,7 +26,7 @@ import android.view.View;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
-import com.androidnetworking.error.AndroidNetworkingError;
+import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.DownloadListener;
 import com.androidnetworking.interfaces.DownloadProgressListener;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
@@ -70,18 +70,18 @@ public class ApiTestActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onError(AndroidNetworkingError error) {
-                        if (error.getErrorCode() != 0) {
-                            // received error from server
-                            // error.getErrorCode() - the error code from server
-                            // error.getErrorBody() - the error body from server
-                            // error.getErrorDetail() - just a error detail
-                            Log.d(TAG, "onError errorCode : " + error.getErrorCode());
-                            Log.d(TAG, "onError errorBody : " + error.getErrorBody());
-                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                    public void onError(ANError ANError) {
+                        if (ANError.getErrorCode() != 0) {
+                            // received ANError from server
+                            // ANError.getErrorCode() - the ANError code from server
+                            // ANError.getErrorBody() - the ANError body from server
+                            // ANError.getErrorDetail() - just a ANError detail
+                            Log.d(TAG, "onError errorCode : " + ANError.getErrorCode());
+                            Log.d(TAG, "onError errorBody : " + ANError.getErrorBody());
+                            Log.d(TAG, "onError errorDetail : " + ANError.getErrorDetail());
                         } else {
-                            // error.getErrorDetail() : connectionError, parseError, requestCancelledError
-                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                            // ANError.getErrorDetail() : connectionError, parseError, requestCancelledError
+                            Log.d(TAG, "onError errorDetail : " + ANError.getErrorDetail());
                         }
                     }
                 });
@@ -101,18 +101,18 @@ public class ApiTestActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onError(AndroidNetworkingError error) {
-                        if (error.getErrorCode() != 0) {
-                            // received error from server
-                            // error.getErrorCode() - the error code from server
-                            // error.getErrorBody() - the error body from server
-                            // error.getErrorDetail() - just a error detail
-                            Log.d(TAG, "onError errorCode : " + error.getErrorCode());
-                            Log.d(TAG, "onError errorBody : " + error.getErrorBody());
-                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                    public void onError(ANError ANError) {
+                        if (ANError.getErrorCode() != 0) {
+                            // received ANError from server
+                            // ANError.getErrorCode() - the ANError code from server
+                            // ANError.getErrorBody() - the ANError body from server
+                            // ANError.getErrorDetail() - just a ANError detail
+                            Log.d(TAG, "onError errorCode : " + ANError.getErrorCode());
+                            Log.d(TAG, "onError errorBody : " + ANError.getErrorBody());
+                            Log.d(TAG, "onError errorDetail : " + ANError.getErrorDetail());
                         } else {
-                            // error.getErrorDetail() : connectionError, parseError, requestCancelledError
-                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                            // ANError.getErrorDetail() : connectionError, parseError, requestCancelledError
+                            Log.d(TAG, "onError errorDetail : " + ANError.getErrorDetail());
                         }
                     }
                 });
@@ -132,18 +132,18 @@ public class ApiTestActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onError(AndroidNetworkingError error) {
-                        if (error.getErrorCode() != 0) {
-                            // received error from server
-                            // error.getErrorCode() - the error code from server
-                            // error.getErrorBody() - the error body from server
-                            // error.getErrorDetail() - just a error detail
-                            Log.d(TAG, "onError errorCode : " + error.getErrorCode());
-                            Log.d(TAG, "onError errorBody : " + error.getErrorBody());
-                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                    public void onError(ANError ANError) {
+                        if (ANError.getErrorCode() != 0) {
+                            // received ANError from server
+                            // ANError.getErrorCode() - the ANError code from server
+                            // ANError.getErrorBody() - the ANError body from server
+                            // ANError.getErrorDetail() - just a ANError detail
+                            Log.d(TAG, "onError errorCode : " + ANError.getErrorCode());
+                            Log.d(TAG, "onError errorBody : " + ANError.getErrorBody());
+                            Log.d(TAG, "onError errorDetail : " + ANError.getErrorDetail());
                         } else {
-                            // error.getErrorDetail() : connectionError, parseError, requestCancelledError
-                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                            // ANError.getErrorDetail() : connectionError, parseError, requestCancelledError
+                            Log.d(TAG, "onError errorDetail : " + ANError.getErrorDetail());
                         }
                     }
                 });
@@ -164,18 +164,18 @@ public class ApiTestActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onError(AndroidNetworkingError error) {
-                        if (error.getErrorCode() != 0) {
-                            // received error from server
-                            // error.getErrorCode() - the error code from server
-                            // error.getErrorBody() - the error body from server
-                            // error.getErrorDetail() - just a error detail
-                            Log.d(TAG, "onError errorCode : " + error.getErrorCode());
-                            Log.d(TAG, "onError errorBody : " + error.getErrorBody());
-                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                    public void onError(ANError ANError) {
+                        if (ANError.getErrorCode() != 0) {
+                            // received ANError from server
+                            // ANError.getErrorCode() - the ANError code from server
+                            // ANError.getErrorBody() - the ANError body from server
+                            // ANError.getErrorDetail() - just a ANError detail
+                            Log.d(TAG, "onError errorCode : " + ANError.getErrorCode());
+                            Log.d(TAG, "onError errorBody : " + ANError.getErrorBody());
+                            Log.d(TAG, "onError errorDetail : " + ANError.getErrorDetail());
                         } else {
-                            // error.getErrorDetail() : connectionError, parseError, requestCancelledError
-                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                            // ANError.getErrorDetail() : connectionError, parseError, requestCancelledError
+                            Log.d(TAG, "onError errorDetail : " + ANError.getErrorDetail());
                         }
                     }
                 });
@@ -196,18 +196,18 @@ public class ApiTestActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onError(AndroidNetworkingError error) {
-                        if (error.getErrorCode() != 0) {
-                            // received error from server
-                            // error.getErrorCode() - the error code from server
-                            // error.getErrorBody() - the error body from server
-                            // error.getErrorDetail() - just a error detail
-                            Log.d(TAG, "onError errorCode : " + error.getErrorCode());
-                            Log.d(TAG, "onError errorBody : " + error.getErrorBody());
-                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                    public void onError(ANError ANError) {
+                        if (ANError.getErrorCode() != 0) {
+                            // received ANError from server
+                            // ANError.getErrorCode() - the ANError code from server
+                            // ANError.getErrorBody() - the ANError body from server
+                            // ANError.getErrorDetail() - just a ANError detail
+                            Log.d(TAG, "onError errorCode : " + ANError.getErrorCode());
+                            Log.d(TAG, "onError errorBody : " + ANError.getErrorBody());
+                            Log.d(TAG, "onError errorDetail : " + ANError.getErrorDetail());
                         } else {
-                            // error.getErrorDetail() : connectionError, parseError, requestCancelledError
-                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                            // ANError.getErrorDetail() : connectionError, parseError, requestCancelledError
+                            Log.d(TAG, "onError errorDetail : " + ANError.getErrorDetail());
                         }
                     }
                 });
@@ -235,18 +235,18 @@ public class ApiTestActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onError(AndroidNetworkingError error) {
-                        if (error.getErrorCode() != 0) {
-                            // received error from server
-                            // error.getErrorCode() - the error code from server
-                            // error.getErrorBody() - the error body from server
-                            // error.getErrorDetail() - just a error detail
-                            Log.d(TAG, "onError errorCode : " + error.getErrorCode());
-                            Log.d(TAG, "onError errorBody : " + error.getErrorBody());
-                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                    public void onError(ANError ANError) {
+                        if (ANError.getErrorCode() != 0) {
+                            // received ANError from server
+                            // ANError.getErrorCode() - the ANError code from server
+                            // ANError.getErrorBody() - the ANError body from server
+                            // ANError.getErrorDetail() - just a ANError detail
+                            Log.d(TAG, "onError errorCode : " + ANError.getErrorCode());
+                            Log.d(TAG, "onError errorBody : " + ANError.getErrorBody());
+                            Log.d(TAG, "onError errorDetail : " + ANError.getErrorDetail());
                         } else {
-                            // error.getErrorDetail() : connectionError, parseError, requestCancelledError
-                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                            // ANError.getErrorDetail() : connectionError, parseError, requestCancelledError
+                            Log.d(TAG, "onError errorDetail : " + ANError.getErrorDetail());
                         }
                     }
                 });
@@ -273,18 +273,18 @@ public class ApiTestActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onError(AndroidNetworkingError error) {
-                        if (error.getErrorCode() != 0) {
-                            // received error from server
-                            // error.getErrorCode() - the error code from server
-                            // error.getErrorBody() - the error body from server
-                            // error.getErrorDetail() - just an error detail
-                            Log.d(TAG, "onError errorCode : " + error.getErrorCode());
-                            Log.d(TAG, "onError errorBody : " + error.getErrorBody());
-                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                    public void onError(ANError ANError) {
+                        if (ANError.getErrorCode() != 0) {
+                            // received ANError from server
+                            // ANError.getErrorCode() - the ANError code from server
+                            // ANError.getErrorBody() - the ANError body from server
+                            // ANError.getErrorDetail() - just an ANError detail
+                            Log.d(TAG, "onError errorCode : " + ANError.getErrorCode());
+                            Log.d(TAG, "onError errorBody : " + ANError.getErrorBody());
+                            Log.d(TAG, "onError errorDetail : " + ANError.getErrorDetail());
                         } else {
-                            // error.getErrorDetail() : connectionError, parseError, requestCancelledError
-                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                            // ANError.getErrorDetail() : connectionError, parseError, requestCancelledError
+                            Log.d(TAG, "onError errorDetail : " + ANError.getErrorDetail());
                         }
                     }
                 });
@@ -306,18 +306,18 @@ public class ApiTestActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onError(AndroidNetworkingError error) {
-                        if (error.getErrorCode() != 0) {
-                            // received error from server
-                            // error.getErrorCode() - the error code from server
-                            // error.getErrorBody() - the error body from server
-                            // error.getErrorDetail() - just a error detail
-                            Log.d(TAG, "onError errorCode : " + error.getErrorCode());
-                            Log.d(TAG, "onError errorBody : " + error.getErrorBody());
-                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                    public void onError(ANError ANError) {
+                        if (ANError.getErrorCode() != 0) {
+                            // received ANError from server
+                            // ANError.getErrorCode() - the ANError code from server
+                            // ANError.getErrorBody() - the ANError body from server
+                            // ANError.getErrorDetail() - just a ANError detail
+                            Log.d(TAG, "onError errorCode : " + ANError.getErrorCode());
+                            Log.d(TAG, "onError errorBody : " + ANError.getErrorBody());
+                            Log.d(TAG, "onError errorDetail : " + ANError.getErrorDetail());
                         } else {
-                            // error.getErrorDetail() : connectionError, parseError, requestCancelledError
-                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                            // ANError.getErrorDetail() : connectionError, parseError, requestCancelledError
+                            Log.d(TAG, "onError errorDetail : " + ANError.getErrorDetail());
                         }
                     }
                 });
@@ -344,18 +344,18 @@ public class ApiTestActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onError(AndroidNetworkingError error) {
-                        if (error.getErrorCode() != 0) {
-                            // received error from server
-                            // error.getErrorCode() - the error code from server
-                            // error.getErrorBody() - the error body from server
-                            // error.getErrorDetail() - just a error detail
-                            Log.d(TAG, "onError errorCode : " + error.getErrorCode());
-                            Log.d(TAG, "onError errorBody : " + error.getErrorBody());
-                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                    public void onError(ANError ANError) {
+                        if (ANError.getErrorCode() != 0) {
+                            // received ANError from server
+                            // ANError.getErrorCode() - the ANError code from server
+                            // ANError.getErrorBody() - the ANError body from server
+                            // ANError.getErrorDetail() - just a ANError detail
+                            Log.d(TAG, "onError errorCode : " + ANError.getErrorCode());
+                            Log.d(TAG, "onError errorBody : " + ANError.getErrorBody());
+                            Log.d(TAG, "onError errorDetail : " + ANError.getErrorDetail());
                         } else {
-                            // error.getErrorDetail() : connectionError, parseError, requestCancelledError
-                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                            // ANError.getErrorDetail() : connectionError, parseError, requestCancelledError
+                            Log.d(TAG, "onError errorDetail : " + ANError.getErrorDetail());
                         }
                     }
                 });
@@ -377,18 +377,18 @@ public class ApiTestActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onError(AndroidNetworkingError error) {
-                        if (error.getErrorCode() != 0) {
-                            // received error from server
-                            // error.getErrorCode() - the error code from server
-                            // error.getErrorBody() - the error body from server
-                            // error.getErrorDetail() - just a error detail
-                            Log.d(TAG, "onError errorCode : " + error.getErrorCode());
-                            Log.d(TAG, "onError errorBody : " + error.getErrorBody());
-                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                    public void onError(ANError ANError) {
+                        if (ANError.getErrorCode() != 0) {
+                            // received ANError from server
+                            // ANError.getErrorCode() - the ANError code from server
+                            // ANError.getErrorBody() - the ANError body from server
+                            // ANError.getErrorDetail() - just a ANError detail
+                            Log.d(TAG, "onError errorCode : " + ANError.getErrorCode());
+                            Log.d(TAG, "onError errorBody : " + ANError.getErrorBody());
+                            Log.d(TAG, "onError errorDetail : " + ANError.getErrorDetail());
                         } else {
-                            // error.getErrorDetail() : connectionError, parseError, requestCancelledError
-                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                            // ANError.getErrorDetail() : connectionError, parseError, requestCancelledError
+                            Log.d(TAG, "onError errorDetail : " + ANError.getErrorDetail());
                         }
                     }
                 });
@@ -410,18 +410,18 @@ public class ApiTestActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onError(AndroidNetworkingError error) {
-                        if (error.getErrorCode() != 0) {
-                            // received error from server
-                            // error.getErrorCode() - the error code from server
-                            // error.getErrorBody() - the error body from server
-                            // error.getErrorDetail() - just a error detail
-                            Log.d(TAG, "onError errorCode : " + error.getErrorCode());
-                            Log.d(TAG, "onError errorBody : " + error.getErrorBody());
-                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                    public void onError(ANError ANError) {
+                        if (ANError.getErrorCode() != 0) {
+                            // received ANError from server
+                            // ANError.getErrorCode() - the ANError code from server
+                            // ANError.getErrorBody() - the ANError body from server
+                            // ANError.getErrorDetail() - just a ANError detail
+                            Log.d(TAG, "onError errorCode : " + ANError.getErrorCode());
+                            Log.d(TAG, "onError errorBody : " + ANError.getErrorBody());
+                            Log.d(TAG, "onError errorDetail : " + ANError.getErrorDetail());
                         } else {
-                            // error.getErrorDetail() : connectionError, parseError, requestCancelledError
-                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                            // ANError.getErrorDetail() : connectionError, parseError, requestCancelledError
+                            Log.d(TAG, "onError errorDetail : " + ANError.getErrorDetail());
                         }
                     }
                 });
@@ -443,18 +443,18 @@ public class ApiTestActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onError(AndroidNetworkingError error) {
-                        if (error.getErrorCode() != 0) {
-                            // received error from server
-                            // error.getErrorCode() - the error code from server
-                            // error.getErrorBody() - the error body from server
-                            // error.getErrorDetail() - just a error detail
-                            Log.d(TAG, "onError errorCode : " + error.getErrorCode());
-                            Log.d(TAG, "onError errorBody : " + error.getErrorBody());
-                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                    public void onError(ANError ANError) {
+                        if (ANError.getErrorCode() != 0) {
+                            // received ANError from server
+                            // ANError.getErrorCode() - the ANError code from server
+                            // ANError.getErrorBody() - the ANError body from server
+                            // ANError.getErrorDetail() - just a ANError detail
+                            Log.d(TAG, "onError errorCode : " + ANError.getErrorCode());
+                            Log.d(TAG, "onError errorBody : " + ANError.getErrorBody());
+                            Log.d(TAG, "onError errorDetail : " + ANError.getErrorDetail());
                         } else {
-                            // error.getErrorDetail() : connectionError, parseError, requestCancelledError
-                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                            // ANError.getErrorDetail() : connectionError, parseError, requestCancelledError
+                            Log.d(TAG, "onError errorDetail : " + ANError.getErrorDetail());
                         }
                     }
                 });
@@ -476,18 +476,18 @@ public class ApiTestActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onError(AndroidNetworkingError error) {
-                        if (error.getErrorCode() != 0) {
-                            // received error from server
-                            // error.getErrorCode() - the error code from server
-                            // error.getErrorBody() - the error body from server
-                            // error.getErrorDetail() - just a error detail
-                            Log.d(TAG, "onError errorCode : " + error.getErrorCode());
-                            Log.d(TAG, "onError errorBody : " + error.getErrorBody());
-                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                    public void onError(ANError ANError) {
+                        if (ANError.getErrorCode() != 0) {
+                            // received ANError from server
+                            // ANError.getErrorCode() - the ANError code from server
+                            // ANError.getErrorBody() - the ANError body from server
+                            // ANError.getErrorDetail() - just a ANError detail
+                            Log.d(TAG, "onError errorCode : " + ANError.getErrorCode());
+                            Log.d(TAG, "onError errorBody : " + ANError.getErrorBody());
+                            Log.d(TAG, "onError errorDetail : " + ANError.getErrorDetail());
                         } else {
-                            // error.getErrorDetail() : connectionError, parseError, requestCancelledError
-                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                            // ANError.getErrorDetail() : connectionError, parseError, requestCancelledError
+                            Log.d(TAG, "onError errorDetail : " + ANError.getErrorDetail());
                         }
                     }
                 });
@@ -509,18 +509,18 @@ public class ApiTestActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onError(AndroidNetworkingError error) {
-                        if (error.getErrorCode() != 0) {
-                            // received error from server
-                            // error.getErrorCode() - the error code from server
-                            // error.getErrorBody() - the error body from server
-                            // error.getErrorDetail() - just a error detail
-                            Log.d(TAG, "onError errorCode : " + error.getErrorCode());
-                            Log.d(TAG, "onError errorBody : " + error.getErrorBody());
-                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                    public void onError(ANError ANError) {
+                        if (ANError.getErrorCode() != 0) {
+                            // received ANError from server
+                            // ANError.getErrorCode() - the ANError code from server
+                            // ANError.getErrorBody() - the ANError body from server
+                            // ANError.getErrorDetail() - just a ANError detail
+                            Log.d(TAG, "onError errorCode : " + ANError.getErrorCode());
+                            Log.d(TAG, "onError errorBody : " + ANError.getErrorBody());
+                            Log.d(TAG, "onError errorDetail : " + ANError.getErrorDetail());
                         } else {
-                            // error.getErrorDetail() : connectionError, parseError, requestCancelledError
-                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                            // ANError.getErrorDetail() : connectionError, parseError, requestCancelledError
+                            Log.d(TAG, "onError errorDetail : " + ANError.getErrorDetail());
                         }
                     }
                 });

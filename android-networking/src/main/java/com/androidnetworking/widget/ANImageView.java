@@ -23,13 +23,13 @@ import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.androidnetworking.error.AndroidNetworkingError;
-import com.androidnetworking.internal.AndroidNetworkingImageLoader;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.internal.ANImageLoader;
 
 /**
  * Created by amitshekhar on 23/03/16.
  */
-public class GreatImageView extends ImageView {
+public class ANImageView extends ImageView {
 
     private String mUrl;
 
@@ -37,17 +37,17 @@ public class GreatImageView extends ImageView {
 
     private int mErrorImageId;
 
-    private AndroidNetworkingImageLoader.ImageContainer mImageContainer;
+    private ANImageLoader.ImageContainer mImageContainer;
 
-    public GreatImageView(Context context) {
+    public ANImageView(Context context) {
         this(context, null);
     }
 
-    public GreatImageView(Context context, AttributeSet attrs) {
+    public ANImageView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public GreatImageView(Context context, AttributeSet attrs, int defStyle) {
+    public ANImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 
@@ -101,10 +101,10 @@ public class GreatImageView extends ImageView {
         int maxWidth = wrapWidth ? 0 : width;
         int maxHeight = wrapHeight ? 0 : height;
 
-        AndroidNetworkingImageLoader.ImageContainer newContainer = AndroidNetworkingImageLoader.getInstance().get(mUrl,
-                new AndroidNetworkingImageLoader.ImageListener() {
+        ANImageLoader.ImageContainer newContainer = ANImageLoader.getInstance().get(mUrl,
+                new ANImageLoader.ImageListener() {
                     @Override
-                    public void onResponse(final AndroidNetworkingImageLoader.ImageContainer response, boolean isImmediate) {
+                    public void onResponse(final ANImageLoader.ImageContainer response, boolean isImmediate) {
                         if (isImmediate && isInLayoutPass) {
                             post(new Runnable() {
                                 @Override
@@ -123,7 +123,7 @@ public class GreatImageView extends ImageView {
                     }
 
                     @Override
-                    public void onError(AndroidNetworkingError error) {
+                    public void onError(ANError error) {
                         if (mErrorImageId != 0) {
                             setImageResource(mErrorImageId);
                         }

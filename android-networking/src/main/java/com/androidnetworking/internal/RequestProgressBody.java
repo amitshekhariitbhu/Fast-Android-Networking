@@ -17,7 +17,7 @@
 
 package com.androidnetworking.internal;
 
-import com.androidnetworking.common.Constants;
+import com.androidnetworking.common.ANConstants;
 import com.androidnetworking.interfaces.UploadProgressListener;
 import com.androidnetworking.model.Progress;
 
@@ -77,7 +77,7 @@ public class RequestProgressBody extends RequestBody {
                 }
                 bytesWritten += byteCount;
                 if (uploadProgressHandler != null) {
-                    uploadProgressHandler.obtainMessage(Constants.UPDATE, new Progress(bytesWritten, contentLength)).sendToTarget();
+                    uploadProgressHandler.obtainMessage(ANConstants.UPDATE, new Progress(bytesWritten, contentLength)).sendToTarget();
                 }
             }
         };

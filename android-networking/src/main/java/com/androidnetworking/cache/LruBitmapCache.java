@@ -20,13 +20,13 @@ package com.androidnetworking.cache;
 import android.graphics.Bitmap;
 import android.support.v4.util.LruCache;
 
-import com.androidnetworking.internal.AndroidNetworkingImageLoader;
+import com.androidnetworking.internal.ANImageLoader;
 
 /**
  * Created by amitshekhar on 24/03/16.
  */
 public class LruBitmapCache extends LruCache<String, Bitmap>
-        implements AndroidNetworkingImageLoader.ImageCache {
+        implements ANImageLoader.ImageCache {
 
     public LruBitmapCache(int maxSize) {
         super(maxSize);

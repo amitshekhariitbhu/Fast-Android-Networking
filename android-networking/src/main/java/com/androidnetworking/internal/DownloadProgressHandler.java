@@ -21,7 +21,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 
-import com.androidnetworking.common.Constants;
+import com.androidnetworking.common.ANConstants;
 import com.androidnetworking.interfaces.DownloadProgressListener;
 import com.androidnetworking.model.Progress;
 
@@ -43,7 +43,7 @@ public class DownloadProgressHandler extends Handler {
     public void handleMessage(Message msg) {
         final DownloadProgressListener downloadProgressListener = mDownloadProgressListenerWeakRef.get();
         switch (msg.what) {
-            case Constants.UPDATE:
+            case ANConstants.UPDATE:
                 if (downloadProgressListener != null) {
                     final Progress progress = (Progress) msg.obj;
                     downloadProgressListener.onProgress(progress.currentBytes, progress.totalBytes);

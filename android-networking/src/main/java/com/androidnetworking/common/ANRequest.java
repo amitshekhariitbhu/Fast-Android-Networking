@@ -22,7 +22,7 @@ import android.util.Log;
 import android.widget.ImageView;
 
 import com.androidnetworking.core.Core;
-import com.androidnetworking.error.AndroidNetworkingError;
+import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.BitmapRequestListener;
 import com.androidnetworking.interfaces.DownloadListener;
 import com.androidnetworking.interfaces.DownloadProgressListener;
@@ -30,7 +30,7 @@ import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.androidnetworking.interfaces.StringRequestListener;
 import com.androidnetworking.interfaces.UploadProgressListener;
-import com.androidnetworking.internal.AndroidNetworkingRequestQueue;
+import com.androidnetworking.internal.ANRequestQueue;
 import com.androidnetworking.utils.Utils;
 
 import org.json.JSONArray;
@@ -57,9 +57,9 @@ import okio.Okio;
 /**
  * Created by amitshekhar on 26/03/16.
  */
-public class AndroidNetworkingRequest {
+public class ANRequest {
 
-    private final static String TAG = AndroidNetworkingRequest.class.getSimpleName();
+    private final static String TAG = ANRequest.class.getSimpleName();
 
     private int mMethod;
     private Priority mPriority;
@@ -107,7 +107,7 @@ public class AndroidNetworkingRequest {
     private CacheControl mCacheControl = null;
     private Executor mExecutor = null;
 
-    private AndroidNetworkingRequest(GetRequestBuilder builder) {
+    private ANRequest(GetRequestBuilder builder) {
         this.mRequestType = RequestType.SIMPLE;
         this.mMethod = Method.GET;
         this.mPriority = builder.mPriority;
@@ -124,7 +124,7 @@ public class AndroidNetworkingRequest {
         this.mExecutor = builder.mExecutor;
     }
 
-    private AndroidNetworkingRequest(PostRequestBuilder builder) {
+    private ANRequest(PostRequestBuilder builder) {
         this.mRequestType = RequestType.SIMPLE;
         this.mMethod = Method.POST;
         this.mPriority = builder.mPriority;
@@ -144,7 +144,7 @@ public class AndroidNetworkingRequest {
         this.mExecutor = builder.mExecutor;
     }
 
-    private AndroidNetworkingRequest(DownloadBuilder builder) {
+    private ANRequest(DownloadBuilder builder) {
         this.mRequestType = RequestType.DOWNLOAD;
         this.mMethod = Method.GET;
         this.mPriority = builder.mPriority;
@@ -160,7 +160,7 @@ public class AndroidNetworkingRequest {
         this.mExecutor = builder.mExecutor;
     }
 
-    private AndroidNetworkingRequest(MultiPartBuilder builder) {
+    private ANRequest(MultiPartBuilder builder) {
         this.mRequestType = RequestType.MULTIPART;
         this.mMethod = Method.POST;
         this.mPriority = builder.mPriority;
@@ -179,38 +179,38 @@ public class AndroidNetworkingRequest {
     public void getAsJSONObject(JSONObjectRequestListener requestListener) {
         this.mResponseAs = RESPONSE.JSON_OBJECT;
         this.mJSONObjectRequestListener = requestListener;
-        AndroidNetworkingRequestQueue.getInstance().addRequest(this);
+        ANRequestQueue.getInstance().addRequest(this);
     }
 
     public void getAsJSONArray(JSONArrayRequestListener requestListener) {
         this.mResponseAs = RESPONSE.JSON_ARRAY;
         this.mJSONArrayRequestListener = requestListener;
-        AndroidNetworkingRequestQueue.getInstance().addRequest(this);
+        ANRequestQueue.getInstance().addRequest(this);
     }
 
     public void getAsString(StringRequestListener requestListener) {
         this.mResponseAs = RESPONSE.STRING;
         this.mStringRequestListener = requestListener;
-        AndroidNetworkingRequestQueue.getInstance().addRequest(this);
+        ANRequestQueue.getInstance().addRequest(this);
     }
 
     public void getAsBitmap(BitmapRequestListener requestListener) {
         this.mResponseAs = RESPONSE.BITMAP;
         this.mBitmapRequestListener = requestListener;
-        AndroidNetworkingRequestQueue.getInstance().addRequest(this);
+        ANRequestQueue.getInstance().addRequest(this);
     }
 
-    public AndroidNetworkingRequest setDownloadProgressListener(DownloadProgressListener downloadProgressListener) {
+    public ANRequest setDownloadProgressListener(DownloadProgressListener downloadProgressListener) {
         this.mDownloadProgressListener = downloadProgressListener;
         return this;
     }
 
     public void startDownload(DownloadListener downloadListener) {
         this.mDownloadListener = downloadListener;
-        AndroidNetworkingRequestQueue.getInstance().addRequest(this);
+        ANRequestQueue.getInstance().addRequest(this);
     }
 
-    public AndroidNetworkingRequest setUploadProgressListener(UploadProgressListener uploadProgressListener) {
+    public ANRequest setUploadProgressListener(UploadProgressListener uploadProgressListener) {
         this.mUploadProgressListener = uploadProgressListener;
         return this;
     }
@@ -277,7 +277,7 @@ public class AndroidNetworkingRequest {
                             if (mDownloadListener != null) {
                                 mDownloadListener.onDownloadComplete();
                             }
-                            Log.d(TAG, "Delivering success response for : " + toString());
+                            Log.d(TAG, "Delivering success : " + toString());
                             finish();
                         }
                     });
@@ -288,13 +288,13 @@ public class AndroidNetworkingRequest {
                             if (mDownloadListener != null) {
                                 mDownloadListener.onDownloadComplete();
                             }
-                            Log.d(TAG, "Delivering success response for : " + toString());
+                            Log.d(TAG, "Delivering success : " + toString());
                             finish();
                         }
                     });
                 }
             } else {
-                deliverError(new AndroidNetworkingError());
+                deliverError(new ANError());
                 finish();
             }
         }
@@ -331,7 +331,7 @@ public class AndroidNetworkingRequest {
     public void cancel() {
         try {
             if (mPercentageThresholdForCancelling == 0 || mProgress < mPercentageThresholdForCancelling) {
-                Log.d(TAG, "cancelling request for sequenceNumber : " + sequenceNumber);
+                Log.d(TAG, "cancelling request : " + toString());
                 isCancelled = true;
                 if (call != null) {
                     call.cancel();
@@ -340,10 +340,10 @@ public class AndroidNetworkingRequest {
                     future.cancel(true);
                 }
                 if (!isDelivered) {
-                    deliverError(new AndroidNetworkingError());
+                    deliverError(new ANError());
                 }
             } else {
-                Log.d(TAG, "not cancelling request for sequenceNumber : " + sequenceNumber);
+                Log.d(TAG, "not cancelling request : " + toString());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -380,73 +380,73 @@ public class AndroidNetworkingRequest {
 
     public void finish() {
         destroy();
-        AndroidNetworkingRequestQueue.getInstance().finish(this);
+        ANRequestQueue.getInstance().finish(this);
     }
 
-    public AndroidNetworkingResponse parseResponse(AndroidNetworkingData data) {
+    public ANResponse parseResponse(ANData data) {
         switch (mResponseAs) {
             case JSON_ARRAY:
                 try {
                     JSONArray json = new JSONArray(Okio.buffer(data.source).readUtf8());
-                    return AndroidNetworkingResponse.success(json);
+                    return ANResponse.success(json);
                 } catch (JSONException | IOException e) {
-                    return AndroidNetworkingResponse.failed(new AndroidNetworkingError(e));
+                    return ANResponse.failed(new ANError(e));
                 }
             case JSON_OBJECT:
                 try {
                     JSONObject json = new JSONObject(Okio.buffer(data.source).readUtf8());
-                    return AndroidNetworkingResponse.success(json);
+                    return ANResponse.success(json);
                 } catch (JSONException | IOException e) {
-                    return AndroidNetworkingResponse.failed(new AndroidNetworkingError(e));
+                    return ANResponse.failed(new ANError(e));
                 }
             case STRING:
                 try {
-                    return AndroidNetworkingResponse.success(Okio.buffer(data.source).readUtf8());
+                    return ANResponse.success(Okio.buffer(data.source).readUtf8());
                 } catch (IOException e) {
-                    return AndroidNetworkingResponse.failed(new AndroidNetworkingError(e));
+                    return ANResponse.failed(new ANError(e));
                 }
             case BITMAP:
                 synchronized (sDecodeLock) {
                     try {
                         return Utils.decodeBitmap(data, mMaxWidth, mMaxHeight, mDecodeConfig, mScaleType);
                     } catch (OutOfMemoryError e) {
-                        return AndroidNetworkingResponse.failed(new AndroidNetworkingError(e));
+                        return ANResponse.failed(new ANError(e));
                     }
                 }
         }
         return null;
     }
 
-    public AndroidNetworkingError parseNetworkError(AndroidNetworkingError error) {
+    public ANError parseNetworkError(ANError ANError) {
         try {
-            if (error.getData() != null && error.getData().source != null) {
-                error.setErrorBody(Okio.buffer(error.getData().source).readUtf8());
+            if (ANError.getData() != null && ANError.getData().source != null) {
+                ANError.setErrorBody(Okio.buffer(ANError.getData().source).readUtf8());
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return error;
+        return ANError;
     }
 
-    public synchronized void deliverError(AndroidNetworkingError error) {
+    public synchronized void deliverError(ANError ANError) {
         try {
             if (!isDelivered) {
                 if (isCancelled) {
-                    error.setCancellationMessageInError();
-                    error.setErrorCode(0);
+                    ANError.setCancellationMessageInError();
+                    ANError.setErrorCode(0);
                 }
                 if (mJSONObjectRequestListener != null) {
-                    mJSONObjectRequestListener.onError(error);
+                    mJSONObjectRequestListener.onError(ANError);
                 } else if (mJSONArrayRequestListener != null) {
-                    mJSONArrayRequestListener.onError(error);
+                    mJSONArrayRequestListener.onError(ANError);
                 } else if (mStringRequestListener != null) {
-                    mStringRequestListener.onError(error);
+                    mStringRequestListener.onError(ANError);
                 } else if (mBitmapRequestListener != null) {
-                    mBitmapRequestListener.onError(error);
+                    mBitmapRequestListener.onError(ANError);
                 } else if (mDownloadListener != null) {
-                    mDownloadListener.onError(error);
+                    mDownloadListener.onError(ANError);
                 }
-                Log.d(TAG, "Delivering error response for : " + toString());
+                Log.d(TAG, "Delivering ANError : " + toString());
             }
             isDelivered = true;
         } catch (Exception e) {
@@ -454,7 +454,7 @@ public class AndroidNetworkingRequest {
         }
     }
 
-    public void deliverResponse(final AndroidNetworkingResponse response) {
+    public void deliverResponse(final ANResponse response) {
         try {
             isDelivered = true;
             if (!isCancelled) {
@@ -491,20 +491,20 @@ public class AndroidNetworkingRequest {
                     });
                 }
             } else {
-                AndroidNetworkingError error = new AndroidNetworkingError();
-                error.setCancellationMessageInError();
-                error.setErrorCode(0);
+                ANError ANError = new ANError();
+                ANError.setCancellationMessageInError();
+                ANError.setErrorCode(0);
                 if (mJSONObjectRequestListener != null) {
-                    mJSONObjectRequestListener.onError(error);
+                    mJSONObjectRequestListener.onError(ANError);
                 } else if (mJSONArrayRequestListener != null) {
-                    mJSONArrayRequestListener.onError(error);
+                    mJSONArrayRequestListener.onError(ANError);
                 } else if (mStringRequestListener != null) {
-                    mStringRequestListener.onError(error);
+                    mStringRequestListener.onError(ANError);
                 } else if (mBitmapRequestListener != null) {
-                    mBitmapRequestListener.onError(error);
+                    mBitmapRequestListener.onError(ANError);
                 }
             }
-            Log.d(TAG, "Delivering success response for : " + toString());
+            Log.d(TAG, "Delivering success : " + toString());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -691,8 +691,8 @@ public class AndroidNetworkingRequest {
             return this;
         }
 
-        public AndroidNetworkingRequest build() {
-            return new AndroidNetworkingRequest(this);
+        public ANRequest build() {
+            return new ANRequest(this);
         }
     }
 
@@ -857,8 +857,8 @@ public class AndroidNetworkingRequest {
             return this;
         }
 
-        public AndroidNetworkingRequest build() {
-            return new AndroidNetworkingRequest(this);
+        public ANRequest build() {
+            return new ANRequest(this);
         }
     }
 
@@ -973,8 +973,8 @@ public class AndroidNetworkingRequest {
             return this;
         }
 
-        public AndroidNetworkingRequest build() {
-            return new AndroidNetworkingRequest(this);
+        public ANRequest build() {
+            return new ANRequest(this);
         }
     }
 
@@ -1115,20 +1115,19 @@ public class AndroidNetworkingRequest {
             return this;
         }
 
-        public AndroidNetworkingRequest build() {
-            return new AndroidNetworkingRequest(this);
+        public ANRequest build() {
+            return new ANRequest(this);
         }
     }
 
     @Override
     public String toString() {
-        return "AndroidNetworkingRequest{" +
-                "mUrl='" + mUrl + '\'' +
+        return "ANRequest{" +
+                "sequenceNumber='" + sequenceNumber +
                 ", mMethod=" + mMethod +
                 ", mPriority=" + mPriority +
                 ", mRequestType=" + mRequestType +
-                ", sequenceNumber=" + sequenceNumber +
-                ", mTag=" + mTag +
+                ", mUrl=" + mUrl +
                 '}';
     }
 }

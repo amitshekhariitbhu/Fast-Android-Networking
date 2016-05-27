@@ -99,7 +99,7 @@
                 android:layout_gravity="center"
                 android:layout_marginRight="8dp" />
 
-            <com.androidnetworking.widget.GreatImageView
+            <com.androidnetworking.widget.ANImageView
                 android:id="@+id/greatImageView"
                 android:layout_width="100dp"
                 android:layout_height="100dp"

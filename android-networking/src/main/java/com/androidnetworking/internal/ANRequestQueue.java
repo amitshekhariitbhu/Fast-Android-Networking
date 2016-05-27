@@ -19,10 +19,9 @@ package com.androidnetworking.internal;
 
 import android.util.Log;
 
-import com.androidnetworking.common.AndroidNetworkingRequest;
+import com.androidnetworking.common.ANRequest;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.core.Core;
-import com.androidnetworking.runnables.DataHunter;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -32,21 +31,21 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Created by amitshekhar on 22/03/16.
  */
-public class AndroidNetworkingRequestQueue {
+public class ANRequestQueue {
 
-    private final static String TAG = AndroidNetworkingRequestQueue.class.getSimpleName();
-    private final Set<AndroidNetworkingRequest> mCurrentRequests = new HashSet<AndroidNetworkingRequest>();
+    private final static String TAG = ANRequestQueue.class.getSimpleName();
+    private final Set<ANRequest> mCurrentRequests = new HashSet<ANRequest>();
     private AtomicInteger mSequenceGenerator = new AtomicInteger();
-    private static AndroidNetworkingRequestQueue sInstance = null;
+    private static ANRequestQueue sInstance = null;
 
     public static void initialize() {
         getInstance();
     }
 
-    public static AndroidNetworkingRequestQueue getInstance() {
+    public static ANRequestQueue getInstance() {
         if (sInstance == null) {
-            synchronized (AndroidNetworkingRequestQueue.class) {
-                sInstance = new AndroidNetworkingRequestQueue();
+            synchronized (ANRequestQueue.class) {
+                sInstance = new ANRequestQueue();
             }
         }
         return sInstance;
@@ -54,15 +53,15 @@ public class AndroidNetworkingRequestQueue {
 
 
     public interface RequestFilter {
-        boolean apply(AndroidNetworkingRequest request);
+        boolean apply(ANRequest request);
     }
 
 
     private void cancel(RequestFilter filter) {
         synchronized (mCurrentRequests) {
             try {
-                for (Iterator<AndroidNetworkingRequest> iterator = mCurrentRequests.iterator(); iterator.hasNext(); ) {
-                    AndroidNetworkingRequest request = iterator.next();
+                for (Iterator<ANRequest> iterator = mCurrentRequests.iterator(); iterator.hasNext(); ) {
+                    ANRequest request = iterator.next();
                     if (filter.apply(request)) {
                         request.cancel();
                         if (request.isCanceled()) {
@@ -84,7 +83,7 @@ public class AndroidNetworkingRequestQueue {
             }
             cancel(new RequestFilter() {
                 @Override
-                public boolean apply(AndroidNetworkingRequest request) {
+                public boolean apply(ANRequest request) {
                     return request.getTag() == tag;
                 }
             });
@@ -97,7 +96,7 @@ public class AndroidNetworkingRequestQueue {
         return mSequenceGenerator.incrementAndGet();
     }
 
-    public AndroidNetworkingRequest addRequest(AndroidNetworkingRequest request) {
+    public ANRequest addRequest(ANRequest request) {
         synchronized (mCurrentRequests) {
             try {
                 mCurrentRequests.add(request);
@@ -108,21 +107,22 @@ public class AndroidNetworkingRequestQueue {
         try {
             request.setSequenceNumber(getSequenceNumber());
             if (request.getPriority() == Priority.IMMEDIATE) {
-                request.setFuture(Core.getInstance().getExecutorSupplier().forImmediateNetworkTasks().submit(new DataHunter(request)));
+                request.setFuture(Core.getInstance().getExecutorSupplier().forImmediateNetworkTasks().submit(new InternalRunnable(request)));
             } else {
-                request.setFuture(Core.getInstance().getExecutorSupplier().forNetworkTasks().submit(new DataHunter(request)));
+                request.setFuture(Core.getInstance().getExecutorSupplier().forNetworkTasks().submit(new InternalRunnable(request)));
             }
+            Log.d(TAG, "addRequest: after addition - mCurrentRequests size: " + mCurrentRequests.size());
         } catch (Exception e) {
             e.printStackTrace();
         }
         return request;
     }
 
-    public void finish(AndroidNetworkingRequest request) {
+    public void finish(ANRequest request) {
         synchronized (mCurrentRequests) {
             try {
                 mCurrentRequests.remove(request);
-                Log.d(TAG, "finish: mCurrentRequests size: " + mCurrentRequests.size());
+                Log.d(TAG, "finish: after removal - mCurrentRequests size: " + mCurrentRequests.size());
             } catch (Exception e) {
                 e.printStackTrace();
             }

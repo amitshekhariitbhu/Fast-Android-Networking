@@ -17,7 +17,7 @@
 
 package com.androidnetworking.interfaces;
 
-import com.androidnetworking.error.AndroidNetworkingError;
+import com.androidnetworking.error.ANError;
 
 import org.json.JSONObject;
 
@@ -28,6 +28,6 @@ public interface JSONObjectRequestListener {
 
     void onResponse(JSONObject response);
 
-    void onError(AndroidNetworkingError error);
+    void onError(ANError ANError);
 
 }

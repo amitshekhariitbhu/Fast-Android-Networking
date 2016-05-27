@@ -20,8 +20,8 @@ package com.androidnetworking;
 import android.app.Application;
 import android.test.ApplicationTestCase;
 
-import com.androidnetworking.common.Constants;
-import com.androidnetworking.error.AndroidNetworkingError;
+import com.androidnetworking.common.ANConstants;
+import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.StringRequestListener;
 
 import org.junit.Rule;
@@ -68,7 +68,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
                     }
 
                     @Override
-                    public void onError(AndroidNetworkingError error) {
+                    public void onError(ANError ANError) {
                         assertTrue(false);
                     }
                 });
@@ -96,17 +96,17 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
                     }
 
                     @Override
-                    public void onError(AndroidNetworkingError error) {
-                        errorBodyRef.set(error.getErrorBody());
-                        errorDetailRef.set(error.getErrorDetail());
-                        errorCodeRef.set(error.getErrorCode());
+                    public void onError(ANError ANError) {
+                        errorBodyRef.set(ANError.getErrorBody());
+                        errorDetailRef.set(ANError.getErrorDetail());
+                        errorCodeRef.set(ANError.getErrorCode());
                         latch.countDown();
                     }
                 });
 
         assertTrue(latch.await(2, SECONDS));
 
-        assertEquals(Constants.RESPONSE_FROM_SERVER_ERROR, errorDetailRef.get());
+        assertEquals(ANConstants.RESPONSE_FROM_SERVER_ERROR, errorDetailRef.get());
 
         assertEquals("getResponse", errorBodyRef.get());
 
@@ -133,7 +133,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
                     }
 
                     @Override
-                    public void onError(AndroidNetworkingError error) {
+                    public void onError(ANError ANError) {
                         assertTrue(false);
                     }
                 });
@@ -164,17 +164,17 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
                     }
 
                     @Override
-                    public void onError(AndroidNetworkingError error) {
-                        errorBodyRef.set(error.getErrorBody());
-                        errorDetailRef.set(error.getErrorDetail());
-                        errorCodeRef.set(error.getErrorCode());
+                    public void onError(ANError ANError) {
+                        errorBodyRef.set(ANError.getErrorBody());
+                        errorDetailRef.set(ANError.getErrorDetail());
+                        errorCodeRef.set(ANError.getErrorCode());
                         latch.countDown();
                     }
                 });
 
         assertTrue(latch.await(2, SECONDS));
 
-        assertEquals(Constants.RESPONSE_FROM_SERVER_ERROR, errorDetailRef.get());
+        assertEquals(ANConstants.RESPONSE_FROM_SERVER_ERROR, errorDetailRef.get());
 
         assertEquals("postResponse", errorBodyRef.get());
 

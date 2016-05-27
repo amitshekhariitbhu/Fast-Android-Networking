@@ -33,7 +33,7 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
-import com.androidnetworking.widget.GreatImageView;
+import com.androidnetworking.widget.ANImageView;
 import com.networking.R;
 import com.networking.provider.Images;
 
@@ -188,13 +188,13 @@ public class ImageGridFragment extends Fragment implements AdapterView.OnItemCli
                 return convertView;
             }
 
-            GreatImageView imageView;
+            ANImageView imageView;
             if (convertView == null) {
-                imageView = new GreatImageView(mContext);
+                imageView = new ANImageView(mContext);
                 imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 imageView.setLayoutParams(mImageViewLayoutParams);
             } else {
-                imageView = (GreatImageView) convertView;
+                imageView = (ANImageView) convertView;
             }
 
             if (imageView.getLayoutParams().height != mItemHeight) {

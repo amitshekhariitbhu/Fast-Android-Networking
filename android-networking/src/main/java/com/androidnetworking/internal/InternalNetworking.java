@@ -23,10 +23,10 @@ package com.androidnetworking.internal;
 
 import android.content.Context;
 
-import com.androidnetworking.common.AndroidNetworkingData;
-import com.androidnetworking.common.AndroidNetworkingRequest;
-import com.androidnetworking.common.Constants;
-import com.androidnetworking.error.AndroidNetworkingError;
+import com.androidnetworking.common.ANData;
+import com.androidnetworking.common.ANRequest;
+import com.androidnetworking.common.ANConstants;
+import com.androidnetworking.error.ANError;
 import com.androidnetworking.utils.Utils;
 
 import java.io.IOException;
@@ -45,14 +45,14 @@ import static com.androidnetworking.common.Method.PATCH;
 import static com.androidnetworking.common.Method.POST;
 import static com.androidnetworking.common.Method.PUT;
 
-public class AndroidNetworkingOkHttp {
+public class InternalNetworking {
 
     private static final String HEADER_USER_AGENT = "User-Agent";
 
     private static OkHttpClient sHttpClient = getClient();
 
-    public static AndroidNetworkingData performSimpleRequest(AndroidNetworkingRequest request) throws AndroidNetworkingError {
-        AndroidNetworkingData data = new AndroidNetworkingData();
+    public static ANData performSimpleRequest(ANRequest request) throws ANError {
+        ANData data = new ANData();
         Request okHttpRequest = null;
         try {
             Request.Builder builder = new Request.Builder().url(request.getUrl());
@@ -105,14 +105,14 @@ public class AndroidNetworkingOkHttp {
             if (okHttpRequest != null) {
                 data.url = okHttpRequest.url();
             }
-            throw new AndroidNetworkingError(data, ioe);
+            throw new ANError(data, ioe);
         }
 
         return data;
     }
 
-    public static AndroidNetworkingData performDownloadRequest(final AndroidNetworkingRequest request) throws AndroidNetworkingError {
-        AndroidNetworkingData data = new AndroidNetworkingData();
+    public static ANData performDownloadRequest(final ANRequest request) throws ANError {
+        ANData data = new ANData();
         Request okHttpRequest = null;
         try {
             Request.Builder builder = new Request.Builder().url(request.getUrl());
@@ -150,14 +150,14 @@ public class AndroidNetworkingOkHttp {
             if (okHttpRequest != null) {
                 data.url = okHttpRequest.url();
             }
-            throw new AndroidNetworkingError(data, ioe);
+            throw new ANError(data, ioe);
         }
         return data;
     }
 
 
-    public static AndroidNetworkingData performUploadRequest(AndroidNetworkingRequest request) throws AndroidNetworkingError {
-        AndroidNetworkingData data = new AndroidNetworkingData();
+    public static ANData performUploadRequest(ANRequest request) throws ANError {
+        ANData data = new ANData();
         Request okHttpRequest = null;
         try {
             Request.Builder builder = new Request.Builder().url(request.getUrl());
@@ -186,7 +186,7 @@ public class AndroidNetworkingOkHttp {
             if (okHttpRequest != null) {
                 data.url = okHttpRequest.url();
             }
-            throw new AndroidNetworkingError(data, ioe);
+            throw new ANError(data, ioe);
         }
         return data;
     }
@@ -208,7 +208,7 @@ public class AndroidNetworkingOkHttp {
 
     public static void setClientWithCache(Context context) {
         sHttpClient = new OkHttpClient().newBuilder()
-                .cache(Utils.getCache(context, Constants.MAX_CACHE_SIZE, Constants.CACHE_DIR_NAME))
+                .cache(Utils.getCache(context, ANConstants.MAX_CACHE_SIZE, ANConstants.CACHE_DIR_NAME))
                 .connectTimeout(60, TimeUnit.SECONDS)
                 .readTimeout(60, TimeUnit.SECONDS)
                 .writeTimeout(60, TimeUnit.SECONDS)
