@@ -23,12 +23,13 @@ package com.androidnetworking.internal;
 
 import android.content.Context;
 
+import com.androidnetworking.common.ANConstants;
 import com.androidnetworking.common.ANData;
 import com.androidnetworking.common.ANRequest;
-import com.androidnetworking.common.ANConstants;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.utils.Utils;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
@@ -149,6 +150,14 @@ public class InternalNetworking {
         } catch (IOException ioe) {
             if (okHttpRequest != null) {
                 data.url = okHttpRequest.url();
+            }
+            try {
+                File destinationFile = new File(request.getDirPath() + File.separator + request.getFileName());
+                if (destinationFile.exists()) {
+                    destinationFile.delete();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
             throw new ANError(data, ioe);
         }

@@ -547,4 +547,46 @@ public class ApiTestActivity extends AppCompatActivity {
                 });
     }
 
+    public void cleanupDestinationTest(View view) {
+        String url = "http://i.imgur.com/m6K1DCQ.jpg";
+        AndroidNetworking.download(url, Utils.getRootDirPath(getApplicationContext()), "cleanupDestinationTest.jpg")
+                .setPriority(Priority.IMMEDIATE)
+                .setTag("cleanupDestinationTest")
+                .build()
+                .setDownloadProgressListener(new DownloadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesDownloaded, long totalBytes) {
+                        Log.d(TAG, "bytesDownloaded : " + bytesDownloaded + " totalBytes : " + totalBytes);
+                        Log.d(TAG, "setDownloadProgressListener isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
+                        if (bytesDownloaded > 50) {
+                            AndroidNetworking.cancel("cleanupDestinationTest");
+                            Log.d(TAG, "cancel: cleanupDestinationTest");
+                        }
+                    }
+                })
+                .startDownload(new DownloadListener() {
+                    @Override
+                    public void onDownloadComplete() {
+                        Log.d(TAG, "File download Completed");
+                        Log.d(TAG, "onDownloadComplete isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        if (error.getErrorCode() != 0) {
+                            // received ANError from server
+                            // error.getErrorCode() - the ANError code from server
+                            // error.getErrorBody() - the ANError body from server
+                            // error.getErrorDetail() - just an ANError detail
+                            Log.d(TAG, "onError errorCode : " + error.getErrorCode());
+                            Log.d(TAG, "onError errorBody : " + error.getErrorBody());
+                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                        } else {
+                            // error.getErrorDetail() : connectionError, parseError, requestCancelledError
+                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                        }
+                    }
+                });
+    }
+
 }
