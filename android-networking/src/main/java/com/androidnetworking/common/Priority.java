@@ -22,8 +22,6 @@ package com.androidnetworking.common;
  */
 
 
-import android.support.annotation.Nullable;
-
 /**
  * Priority levels recognized by the request server.
  */
@@ -62,8 +60,8 @@ public enum Priority {
      * @return higher priority
      */
     public static Priority getHigherPriority(
-            @Nullable Priority priority1,
-            @Nullable Priority priority2) {
+            Priority priority1,
+            Priority priority2) {
         if (priority1 == null) {
             return priority2;
         }

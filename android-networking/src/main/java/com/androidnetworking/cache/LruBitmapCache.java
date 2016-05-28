@@ -18,7 +18,6 @@
 package com.androidnetworking.cache;
 
 import android.graphics.Bitmap;
-import android.support.v4.util.LruCache;
 
 import com.androidnetworking.internal.ANImageLoader;
 
