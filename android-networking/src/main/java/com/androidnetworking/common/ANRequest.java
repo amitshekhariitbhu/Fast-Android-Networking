@@ -210,6 +210,11 @@ public class ANRequest {
         ANRequestQueue.getInstance().addRequest(this);
     }
 
+    public void prefetch() {
+        this.mResponseAs = RESPONSE.PREFETCH;
+        ANRequestQueue.getInstance().addRequest(this);
+    }
+
     public ANRequest setUploadProgressListener(UploadProgressListener uploadProgressListener) {
         this.mUploadProgressListener = uploadProgressListener;
         return this;
@@ -267,8 +272,8 @@ public class ANRequest {
     }
 
     public void updateDownloadCompletion() {
+        isDelivered = true;
         if (mDownloadListener != null) {
-            isDelivered = true;
             if (!isCancelled) {
                 if (mExecutor != null) {
                     mExecutor.execute(new Runnable() {
@@ -297,6 +302,9 @@ public class ANRequest {
                 deliverError(new ANError());
                 finish();
             }
+        } else {
+            Log.d(TAG, "Prefetch done : " + toString());
+            finish();
         }
     }
 
@@ -413,6 +421,8 @@ public class ANRequest {
                         return ANResponse.failed(new ANError(e));
                     }
                 }
+            case PREFETCH:
+                return ANResponse.success(ANConstants.PREFETCH);
         }
         return null;
     }
@@ -490,21 +500,23 @@ public class ANRequest {
                         }
                     });
                 }
+                Log.d(TAG, "Delivering success : " + toString());
             } else {
-                ANError ANError = new ANError();
-                ANError.setCancellationMessageInError();
-                ANError.setErrorCode(0);
+                ANError anError = new ANError();
+                anError.setCancellationMessageInError();
+                anError.setErrorCode(0);
                 if (mJSONObjectRequestListener != null) {
-                    mJSONObjectRequestListener.onError(ANError);
+                    mJSONObjectRequestListener.onError(anError);
                 } else if (mJSONArrayRequestListener != null) {
-                    mJSONArrayRequestListener.onError(ANError);
+                    mJSONArrayRequestListener.onError(anError);
                 } else if (mStringRequestListener != null) {
-                    mStringRequestListener.onError(ANError);
+                    mStringRequestListener.onError(anError);
                 } else if (mBitmapRequestListener != null) {
-                    mBitmapRequestListener.onError(ANError);
+                    mBitmapRequestListener.onError(anError);
                 }
+                finish();
+                Log.d(TAG, "Delivering cancelled : " + toString());
             }
-            Log.d(TAG, "Delivering success : " + toString());
         } catch (Exception e) {
             e.printStackTrace();
         }

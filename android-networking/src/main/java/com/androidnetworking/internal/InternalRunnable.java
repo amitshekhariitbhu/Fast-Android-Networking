@@ -19,10 +19,10 @@ package com.androidnetworking.internal;
 
 import android.util.Log;
 
+import com.androidnetworking.common.ANConstants;
 import com.androidnetworking.common.ANData;
 import com.androidnetworking.common.ANRequest;
 import com.androidnetworking.common.ANResponse;
-import com.androidnetworking.common.ANConstants;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.core.Core;
 import com.androidnetworking.error.ANError;

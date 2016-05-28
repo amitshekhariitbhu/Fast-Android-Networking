@@ -53,6 +53,27 @@ public class ApiTestActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_api_test);
+        prefetch();
+        prefetchDownload();
+    }
+
+    private void prefetch() {
+        AndroidNetworking.get(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_ARRAY)
+                .addPathParameter("pageNumber", "0")
+                .addQueryParameter("limit", "3")
+                .setTag(this)
+                .setPriority(Priority.LOW)
+                .build()
+                .prefetch();
+    }
+
+    private void prefetchDownload() {
+        String url = "http://www.colorado.edu/conflict/peace/download/peace_problem.ZIP";
+        AndroidNetworking.download(url, Utils.getRootDirPath(getApplicationContext()), "file1.zip")
+                .setPriority(Priority.IMMEDIATE)
+                .setTag(this)
+                .build()
+                .prefetch();
     }
 
     public void getAllUsers(View view) {

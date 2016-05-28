@@ -28,4 +28,5 @@ public final class ANConstants {
     public static final String RESPONSE_FROM_SERVER_ERROR = "responseFromServerError";
     public static final String REQUEST_CANCELLED_ERROR = "requestCancelledError";
     public static final String PARSE_ERROR = "parseError";
+    public static final String PREFETCH = "prefetch";
 }
