@@ -51,27 +51,4 @@ public enum Priority {
      */
     IMMEDIATE;
 
-
-    /**
-     * Gets the higher priority among the two.
-     *
-     * @param priority1 The priority
-     * @param priority2 The priority
-     * @return higher priority
-     */
-    public static Priority getHigherPriority(
-            Priority priority1,
-            Priority priority2) {
-        if (priority1 == null) {
-            return priority2;
-        }
-        if (priority2 == null) {
-            return priority1;
-        }
-        if (priority1.ordinal() > priority2.ordinal()) {
-            return priority1;
-        } else {
-            return priority2;
-        }
-    }
 }

@@ -74,18 +74,18 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         @Override
-                        public void onError(ANError ANError) {
-                            if (ANError.getErrorCode() != 0) {
+                        public void onError(ANError error) {
+                            if (error.getErrorCode() != 0) {
                                 // received ANError from server
-                                // ANError.getErrorCode() - the ANError code from server
-                                // ANError.getErrorBody() - the ANError body from server
-                                // ANError.getErrorDetail() - just a ANError detail
-                                Log.d(TAG, "onError errorCode : " + ANError.getErrorCode());
-                                Log.d(TAG, "onError errorBody : " + ANError.getErrorBody());
-                                Log.d(TAG, "onError errorDetail : " + ANError.getErrorDetail());
+                                // error.getErrorCode() - the ANError code from server
+                                // error.getErrorBody() - the ANError body from server
+                                // error.getErrorDetail() - just a ANError detail
+                                Log.d(TAG, "onError errorCode : " + error.getErrorCode());
+                                Log.d(TAG, "onError errorBody : " + error.getErrorBody());
+                                Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
                             } else {
-                                // ANError.getErrorDetail() : connectionError, parseError, requestCancelledError
-                                Log.d(TAG, "onError errorDetail : " + ANError.getErrorDetail());
+                                // error.getErrorDetail() : connectionError, parseError, requestCancelledError
+                                Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
                             }
                         }
                     });
@@ -102,18 +102,18 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         @Override
-                        public void onError(ANError ANError) {
-                            if (ANError.getErrorCode() != 0) {
+                        public void onError(ANError error) {
+                            if (error.getErrorCode() != 0) {
                                 // received ANError from server
-                                // ANError.getErrorCode() - the ANError code from server
-                                // ANError.getErrorBody() - the ANError body from server
-                                // ANError.getErrorDetail() - just a ANError detail
-                                Log.d(TAG, "onError errorCode : " + ANError.getErrorCode());
-                                Log.d(TAG, "onError errorBody : " + ANError.getErrorBody());
-                                Log.d(TAG, "onError errorDetail : " + ANError.getErrorDetail());
+                                // error.getErrorCode() - the ANError code from server
+                                // error.getErrorBody() - the ANError body from server
+                                // error.getErrorDetail() - just a ANError detail
+                                Log.d(TAG, "onError errorCode : " + error.getErrorCode());
+                                Log.d(TAG, "onError errorBody : " + error.getErrorBody());
+                                Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
                             } else {
-                                // ANError.getErrorDetail() : connectionError, parseError, requestCancelledError
-                                Log.d(TAG, "onError errorDetail : " + ANError.getErrorDetail());
+                                // error.getErrorDetail() : connectionError, parseError, requestCancelledError
+                                Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
                             }
                         }
                     });
@@ -142,18 +142,18 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onError(ANError ANError) {
-                        if (ANError.getErrorCode() != 0) {
+                    public void onError(ANError error) {
+                        if (error.getErrorCode() != 0) {
                             // received ANError from server
-                            // ANError.getErrorCode() - the ANError code from server
-                            // ANError.getErrorBody() - the ANError body from server
-                            // ANError.getErrorDetail() - just a ANError detail
-                            Log.d(TAG, "onError errorCode : " + ANError.getErrorCode());
-                            Log.d(TAG, "onError errorBody : " + ANError.getErrorBody());
-                            Log.d(TAG, "onError errorDetail : " + ANError.getErrorDetail());
+                            // error.getErrorCode() - the ANError code from server
+                            // error.getErrorBody() - the ANError body from server
+                            // error.getErrorDetail() - just a ANError detail
+                            Log.d(TAG, "onError errorCode : " + error.getErrorCode());
+                            Log.d(TAG, "onError errorBody : " + error.getErrorBody());
+                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
                         } else {
-                            // ANError.getErrorDetail() : connectionError, parseError, requestCancelledError
-                            Log.d(TAG, "onError errorDetail : " + ANError.getErrorDetail());
+                            // error.getErrorDetail() : connectionError, parseError, requestCancelledError
+                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
                         }
                     }
                 });
