@@ -588,6 +588,12 @@ public class ANRequest {
         return builder.build();
     }
 
+    public static class HeadRequestBuilder extends GetRequestBuilder {
+
+        public HeadRequestBuilder(String url) {
+            super(url, Method.HEAD);
+        }
+    }
 
     public static class GetRequestBuilder implements RequestBuilder {
         private Priority mPriority = Priority.MEDIUM;
@@ -605,7 +611,12 @@ public class ANRequest {
         private Executor mExecutor;
         private OkHttpClient mOkHttpClient;
 
-        public GetRequestBuilder(String url, int method) {
+        public GetRequestBuilder(String url) {
+            this.mUrl = url;
+            this.mMethod = Method.GET;
+        }
+
+        private GetRequestBuilder(String url, int method) {
             this.mUrl = url;
             this.mMethod = method;
         }
@@ -727,6 +738,27 @@ public class ANRequest {
         }
     }
 
+    public static class PutRequestBuilder extends PostRequestBuilder {
+
+        public PutRequestBuilder(String url) {
+            super(url, Method.PUT);
+        }
+    }
+
+    public static class DeleteRequestBuilder extends PostRequestBuilder {
+
+        public DeleteRequestBuilder(String url) {
+            super(url, Method.DELETE);
+        }
+    }
+
+    public static class PatchRequestBuilder extends PostRequestBuilder {
+
+        public PatchRequestBuilder(String url) {
+            super(url, Method.PATCH);
+        }
+    }
+
     public static class PostRequestBuilder implements RequestBuilder {
 
         private Priority mPriority = Priority.MEDIUM;
@@ -747,7 +779,12 @@ public class ANRequest {
         private Executor mExecutor;
         private OkHttpClient mOkHttpClient;
 
-        public PostRequestBuilder(String url, int method) {
+        public PostRequestBuilder(String url) {
+            this.mUrl = url;
+            this.mMethod = Method.POST;
+        }
+
+        private PostRequestBuilder(String url, int method) {
             this.mUrl = url;
             this.mMethod = method;
         }

@@ -25,6 +25,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.ANRequest;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.DownloadListener;
@@ -142,8 +143,10 @@ public class ApiTestActivity extends AppCompatActivity {
     }
 
     public void checkForHeaderGet(View view) {
-        AndroidNetworking.get(ApiEndPoint.BASE_URL + ApiEndPoint.CHECK_FOR_HEADER)
-                .addHeaders("token", "1234")
+
+        ANRequest.GetRequestBuilder getRequestBuilder = new ANRequest.GetRequestBuilder(ApiEndPoint.BASE_URL + ApiEndPoint.CHECK_FOR_HEADER);
+
+        getRequestBuilder.addHeaders("token", "1234")
                 .setTag(this)
                 .setPriority(Priority.LOW)
                 .build()
@@ -173,35 +176,39 @@ public class ApiTestActivity extends AppCompatActivity {
     }
 
     public void checkForHeaderPost(View view) {
-        AndroidNetworking.post(ApiEndPoint.BASE_URL + ApiEndPoint.CHECK_FOR_HEADER)
-                .addHeaders("token", "1234")
+
+        ANRequest.PostRequestBuilder postRequestBuilder = AndroidNetworking.post(ApiEndPoint.BASE_URL + ApiEndPoint.CHECK_FOR_HEADER);
+
+        ANRequest anRequest = postRequestBuilder.addHeaders("token", "1234")
                 .setTag(this)
                 .setPriority(Priority.LOW)
                 .setExecutor(Executors.newSingleThreadExecutor())
-                .build()
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d(TAG, "onResponse object : " + response.toString());
-                        Log.d(TAG, "onResponse isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
-                    }
+                .build();
 
-                    @Override
-                    public void onError(ANError error) {
-                        if (error.getErrorCode() != 0) {
-                            // received ANError from server
-                            // error.getErrorCode() - the ANError code from server
-                            // error.getErrorBody() - the ANError body from server
-                            // error.getErrorDetail() - just a ANError detail
-                            Log.d(TAG, "onError errorCode : " + error.getErrorCode());
-                            Log.d(TAG, "onError errorBody : " + error.getErrorBody());
-                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
-                        } else {
-                            // error.getErrorDetail() : connectionError, parseError, requestCancelledError
-                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
-                        }
-                    }
-                });
+
+        anRequest.getAsJSONObject(new JSONObjectRequestListener() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d(TAG, "onResponse object : " + response.toString());
+                Log.d(TAG, "onResponse isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
+            }
+
+            @Override
+            public void onError(ANError error) {
+                if (error.getErrorCode() != 0) {
+                    // received ANError from server
+                    // error.getErrorCode() - the ANError code from server
+                    // error.getErrorBody() - the ANError body from server
+                    // error.getErrorDetail() - just a ANError detail
+                    Log.d(TAG, "onError errorCode : " + error.getErrorCode());
+                    Log.d(TAG, "onError errorBody : " + error.getErrorBody());
+                    Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                } else {
+                    // error.getErrorDetail() : connectionError, parseError, requestCancelledError
+                    Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                }
+            }
+        });
     }
 
     public void createAnUser(View view) {

@@ -167,6 +167,7 @@ public class InternalNetworking {
             data.code = okResponse.code();
             data.headers = okResponse.headers();
             Utils.saveFile(okResponse, request.getDirPath(), request.getFileName());
+            data.length = okResponse.body().contentLength();
             request.updateDownloadCompletion();
         } catch (IOException ioe) {
             if (okHttpRequest != null) {

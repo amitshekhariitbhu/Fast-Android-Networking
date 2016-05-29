@@ -21,7 +21,6 @@ import android.content.Context;
 
 import com.androidnetworking.common.ANConstants;
 import com.androidnetworking.common.ANRequest;
-import com.androidnetworking.common.Method;
 import com.androidnetworking.core.Core;
 import com.androidnetworking.internal.ANImageLoader;
 import com.androidnetworking.internal.ANRequestQueue;
@@ -80,7 +79,7 @@ public class AndroidNetworking {
      * @return The GetRequestBuilder
      */
     public static ANRequest.GetRequestBuilder get(String url) {
-        return new ANRequest.GetRequestBuilder(url, Method.GET);
+        return new ANRequest.GetRequestBuilder(url);
     }
 
     /**
@@ -89,8 +88,8 @@ public class AndroidNetworking {
      * @param url The url on which request is to be made
      * @return The HeadRequestBuilder
      */
-    public static ANRequest.GetRequestBuilder head(String url) {
-        return new ANRequest.GetRequestBuilder(url, Method.HEAD);
+    public static ANRequest.HeadRequestBuilder head(String url) {
+        return new ANRequest.HeadRequestBuilder(url);
     }
 
     /**
@@ -100,7 +99,7 @@ public class AndroidNetworking {
      * @return The PostRequestBuilder
      */
     public static ANRequest.PostRequestBuilder post(String url) {
-        return new ANRequest.PostRequestBuilder(url, Method.POST);
+        return new ANRequest.PostRequestBuilder(url);
     }
 
     /**
@@ -109,8 +108,8 @@ public class AndroidNetworking {
      * @param url The url on which request is to be made
      * @return The PutRequestBuilder
      */
-    public static ANRequest.PostRequestBuilder put(String url) {
-        return new ANRequest.PostRequestBuilder(url, Method.PUT);
+    public static ANRequest.PutRequestBuilder put(String url) {
+        return new ANRequest.PutRequestBuilder(url);
     }
 
     /**
@@ -119,8 +118,8 @@ public class AndroidNetworking {
      * @param url The url on which request is to be made
      * @return The DeleteRequestBuilder
      */
-    public static ANRequest.PostRequestBuilder delete(String url) {
-        return new ANRequest.PostRequestBuilder(url, Method.DELETE);
+    public static ANRequest.DeleteRequestBuilder delete(String url) {
+        return new ANRequest.DeleteRequestBuilder(url);
     }
 
     /**
@@ -129,8 +128,8 @@ public class AndroidNetworking {
      * @param url The url on which request is to be made
      * @return The PatchRequestBuilder
      */
-    public static ANRequest.PostRequestBuilder patch(String url) {
-        return new ANRequest.PostRequestBuilder(url, Method.PATCH);
+    public static ANRequest.PatchRequestBuilder patch(String url) {
+        return new ANRequest.PatchRequestBuilder(url);
     }
 
     /**
