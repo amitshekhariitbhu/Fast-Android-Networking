@@ -340,6 +340,45 @@ AndroidNetworking.evictAllBitmap(); // clear LruCache
 </code></pre>
 
 <h3>
+<a id="prefetch-a-request-so-that-it-can-return-from-cache-when-required-at-instant" class="anchor" href="#prefetch-a-request-so-that-it-can-return-from-cache-when-required-at-instant" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Prefetch a request (so that it can return from cache when required at instant)</h3>
+
+<pre><code>AndroidNetworking.get(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_ARRAY)
+                .addPathParameter("pageNumber", "0")
+                .addQueryParameter("limit", "30")
+                .setTag(this)
+                .setPriority(Priority.LOW)
+                .build()
+                .prefetch();
+</code></pre>
+
+<h3>
+<a id="customizing-okhttpclient-for-a-particular-request" class="anchor" href="#customizing-okhttpclient-for-a-particular-request" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Customizing OkHttpClient for a particular request</h3>
+
+<pre><code>OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
+                .addInterceptor(new GzipRequestInterceptor())
+                .build();
+
+AndroidNetworking.get("http://api.localhost.com/{pageNumber}/test")
+                 .addPathParameter("pageNumber", "0")
+                 .addQueryParameter("limit", "3")
+                 .addHeaders("token", "1234")
+                 .setTag("test")
+                 .setPriority(Priority.LOW)
+                 .setOkHttpClient(okHttpClient) // passing a custom okHttpClient 
+                 .build()
+                 .getAsJSONArray(new JSONArrayRequestListener() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                    // do anything with response
+                    }
+                    @Override
+                    public void onError(ANError error) {
+                    // handle error
+                    }
+                });
+</code></pre>
+
+<h3>
 <a id="inspiration-behind-making-of-this-library-" class="anchor" href="#inspiration-behind-making-of-this-library-" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Inspiration behind making of this library :</h3>
 
 <ul>
