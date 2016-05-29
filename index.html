@@ -406,6 +406,33 @@ anRequest.getAsJSONObject(new JSONObjectRequestListener() {
 </code></pre>
 
 <h3>
+<a id="connectionclass-listener-to-get-current-network-quality-and-bandwidth" class="anchor" href="#connectionclass-listener-to-get-current-network-quality-and-bandwidth" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>ConnectionClass Listener to get current network quality and bandwidth</h3>
+
+<pre><code>// Adding Listener
+AndroidNetworking.setConnectionQualityChangeListener(new ConnectionQualityChangeListener() {
+            @Override
+            public void onChange(ConnectionQuality currentConnectionQuality, int currentBandwidth) {
+                // do something on change in connectionQuality
+            }
+        });
+
+// Removing Listener   
+AndroidNetworking.removeConnectionQualityChangeListener();
+
+// Getting current ConnectionQuality
+ConnectionQuality connectionQuality = AndroidNetworking.getCurrentConnectionQuality();
+if(connectionQuality == ConnectionQuality.EXCELLENT){
+// do something
+}else if (connectionQuality == ConnectionQuality.POOR){
+// do something
+}else if (connectionQuality == ConnectionQuality.UNKNOWN){
+// do something
+}
+// Getting current bandwidth
+int currentBandwidth = AndroidNetworking.getCurrentBandwidth(); // Note : if (currentBandwidth == 0) : means UNKNOWN
+</code></pre>
+
+<h3>
 <a id="inspiration-behind-making-of-this-library-" class="anchor" href="#inspiration-behind-making-of-this-library-" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Inspiration behind making of this library :</h3>
 
 <ul>
@@ -424,7 +451,6 @@ image from network in ImageView, etc. There are libraries but they are outdated.
 <a id="todo" class="anchor" href="#todo" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>TODO</h3>
 
 <ul>
-<li>Network Speed Change Listener</li>
 <li>Total data consumption in any request</li>
 <li>Network Execution Logic on the basis of network speed change</li>
 <li>Integration with other library</li>
