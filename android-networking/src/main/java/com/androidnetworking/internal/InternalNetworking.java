@@ -26,6 +26,7 @@ import android.content.Context;
 import com.androidnetworking.common.ANConstants;
 import com.androidnetworking.common.ANData;
 import com.androidnetworking.common.ANRequest;
+import com.androidnetworking.common.ConnectionClassManager;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.utils.Utils;
 
@@ -101,12 +102,17 @@ public class InternalNetworking {
             } else {
                 request.setCall(sHttpClient.newCall(okHttpRequest));
             }
+            long startTime = System.currentTimeMillis();
             Response okResponse = request.getCall().execute();
             data.url = okResponse.request().url();
             data.code = okResponse.code();
             data.headers = okResponse.headers();
             data.source = okResponse.body().source();
             data.length = okResponse.body().contentLength();
+            long timeTaken = System.currentTimeMillis() - startTime;
+            if (okResponse.cacheResponse() == null) {
+                ConnectionClassManager.getInstance().updateBandwidth(data.length, timeTaken);
+            }
         } catch (IOException ioe) {
             if (okHttpRequest != null) {
                 data.url = okHttpRequest.url();
@@ -162,12 +168,17 @@ public class InternalNetworking {
                         }).build();
             }
             request.setCall(okHttpClient.newCall(okHttpRequest));
+            long startTime = System.currentTimeMillis();
             Response okResponse = request.getCall().execute();
             data.url = okResponse.request().url();
             data.code = okResponse.code();
             data.headers = okResponse.headers();
             Utils.saveFile(okResponse, request.getDirPath(), request.getFileName());
             data.length = okResponse.body().contentLength();
+            long timeTaken = System.currentTimeMillis() - startTime;
+            if (okResponse.cacheResponse() == null) {
+                ConnectionClassManager.getInstance().updateBandwidth(data.length, timeTaken);
+            }
             request.updateDownloadCompletion();
         } catch (IOException ioe) {
             if (okHttpRequest != null) {

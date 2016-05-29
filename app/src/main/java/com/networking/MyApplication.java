@@ -23,7 +23,9 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.ConnectionQuality;
 import com.androidnetworking.interceptors.GzipRequestInterceptor;
+import com.androidnetworking.interfaces.ConnectionQualityChangeListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -59,6 +61,14 @@ public class MyApplication extends Application {
                 .addInterceptor(new GzipRequestInterceptor())
                 .build();
         AndroidNetworking.initialize(getApplicationContext(), okHttpClient);
+
+        AndroidNetworking.setConnectionQualityChangeListener(new ConnectionQualityChangeListener() {
+            @Override
+            public void onChange(ConnectionQuality currentConnectionQuality, int currentBandwidth) {
+                Log.d(TAG, "onChange: currentConnectionQuality : " + currentConnectionQuality + " currentBandwidth : " + currentBandwidth);
+            }
+        });
+
     }
 
     private void setVariableFromEnv() {

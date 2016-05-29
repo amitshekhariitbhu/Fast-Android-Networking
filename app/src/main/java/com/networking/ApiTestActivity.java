@@ -669,4 +669,8 @@ public class ApiTestActivity extends AppCompatActivity {
                 });
     }
 
+    public void getCurrentConnectionQuality(View view) {
+        Log.d(TAG, "getCurrentConnectionQuality : " + AndroidNetworking.getCurrentConnectionQuality() + " currentBandwidth : " + AndroidNetworking.getCurrentBandwidth());
+    }
+
 }

@@ -21,7 +21,10 @@ import android.content.Context;
 
 import com.androidnetworking.common.ANConstants;
 import com.androidnetworking.common.ANRequest;
+import com.androidnetworking.common.ConnectionClassManager;
+import com.androidnetworking.common.ConnectionQuality;
 import com.androidnetworking.core.Core;
+import com.androidnetworking.interfaces.ConnectionQualityChangeListener;
 import com.androidnetworking.internal.ANImageLoader;
 import com.androidnetworking.internal.ANRequestQueue;
 import com.androidnetworking.internal.InternalNetworking;
@@ -70,6 +73,22 @@ public class AndroidNetworking {
         InternalNetworking.setClient(okHttpClient);
         ANRequestQueue.initialize();
         ANImageLoader.initialize();
+    }
+
+    /**
+     * Method to set connectionQualityChangeListener
+     *
+     * @param connectionChangeListener The connectionQualityChangeListener
+     */
+    public static void setConnectionQualityChangeListener(ConnectionQualityChangeListener connectionChangeListener) {
+        ConnectionClassManager.getInstance().setListener(connectionChangeListener);
+    }
+
+    /**
+     * Method to set connectionQualityChangeListener
+     */
+    public static void removeConnectionQualityChangeListener() {
+        ConnectionClassManager.getInstance().removeListener();
     }
 
     /**
@@ -186,10 +205,30 @@ public class AndroidNetworking {
     }
 
     /**
+     * Method to get currentBandwidth
+     *
+     * @return currentBandwidth
+     */
+    public static int getCurrentBandwidth() {
+        return ConnectionClassManager.getInstance().getCurrentBandwidth();
+    }
+
+    /**
+     * Method to get currentConnectionQuality
+     *
+     * @return currentConnectionQuality
+     */
+    public static ConnectionQuality getCurrentConnectionQuality() {
+        return ConnectionClassManager.getInstance().getCurrentConnectionQuality();
+    }
+
+    /**
      * Shuts AndroidNetworking down
      */
     public static void shutDown() {
         Core.shutDown();
         evictAllBitmap();
+        ConnectionClassManager.getInstance().removeListener();
+        ConnectionClassManager.shutDown();
     }
 }
