@@ -342,6 +342,31 @@ anRequest.getAsJSONObject(new JSONObjectRequestListener() {
     }
 });
 ```
+### ConnectionClass Listener to get current network quality and bandwidth
+```
+// Adding Listener
+AndroidNetworking.setConnectionQualityChangeListener(new ConnectionQualityChangeListener() {
+            @Override
+            public void onChange(ConnectionQuality currentConnectionQuality, int currentBandwidth) {
+                // do something on change in connectionQuality
+            }
+        });
+        
+// Removing Listener   
+AndroidNetworking.removeConnectionQualityChangeListener();
+
+// Getting current ConnectionQuality
+ConnectionQuality connectionQuality = AndroidNetworking.getCurrentConnectionQuality();
+if(connectionQuality == ConnectionQuality.EXCELLENT){
+// do something
+}else if (connectionQuality == ConnectionQuality.POOR){
+// do something
+}else if (connectionQuality == ConnectionQuality.UNKNOWN){
+    // do something
+}
+// Getting current bandwidth
+int currentBandwidth = AndroidNetworking.getCurrentBandwidth(); // Note : if (currentBandwidth == 0) : means UNKNOWN
+```
 ### Inspiration behind making of this library :
 * Recent removal of HttpClient in Android Marshmallow(Android M) made other networking library obsolete.
 * No other single library do each and everything like making request, downloading any type of file, uploading file, loading
@@ -353,7 +378,6 @@ anRequest.getAsJSONObject(new JSONObjectRequestListener() {
 * As it uses [OkHttp](http://square.github.io/okhttp/) , most important it supports HTTP/2.  
 
 ### TODO
-* Network Speed Change Listener
 * Total data consumption in any request
 * Network Execution Logic on the basis of network speed change
 * Integration with other library
