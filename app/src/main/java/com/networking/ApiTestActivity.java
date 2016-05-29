@@ -179,8 +179,9 @@ public class ApiTestActivity extends AppCompatActivity {
 
         ANRequest.PostRequestBuilder postRequestBuilder = AndroidNetworking.post(ApiEndPoint.BASE_URL + ApiEndPoint.CHECK_FOR_HEADER);
 
-        ANRequest anRequest = postRequestBuilder.addHeaders("token", "1234")
-                .setTag(this)
+        postRequestBuilder.addHeaders("token", "1234");
+
+        ANRequest anRequest = postRequestBuilder.setTag(this)
                 .setPriority(Priority.LOW)
                 .setExecutor(Executors.newSingleThreadExecutor())
                 .build();

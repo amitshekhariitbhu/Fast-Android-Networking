@@ -317,6 +317,31 @@ AndroidNetworking.get("http://api.localhost.com/{pageNumber}/test")
                     }
                 });
 ```
+### Making a conditional request (Building a request)
+```
+ANRequest.GetRequestBuilder getRequestBuilder = new ANRequest.GetRequestBuilder(ApiEndPoint.BASE_URL + ApiEndPoint.CHECK_FOR_HEADER);
+               
+if(isHeaderRequired){
+ getRequestBuilder.addHeaders("token", "1234");
+}
+
+if(executorRequired){
+ getRequestBuilder.setExecutor(Executors.newSingleThreadExecutor());
+}
+               
+ANRequest anRequest = getRequestBuilder.build();       
+                 
+anRequest.getAsJSONObject(new JSONObjectRequestListener() {
+    @Override
+    public void onResponse(JSONObject response) {
+        // do anything with response
+    }
+    @Override
+    public void onError(ANError error) {
+        // handle error
+    }
+});
+```
 ### Inspiration behind making of this library :
 * Recent removal of HttpClient in Android Marshmallow(Android M) made other networking library obsolete.
 * No other single library do each and everything like making request, downloading any type of file, uploading file, loading
