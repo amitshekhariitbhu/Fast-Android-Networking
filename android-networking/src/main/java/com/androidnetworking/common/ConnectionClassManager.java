@@ -17,6 +17,8 @@
 
 package com.androidnetworking.common;
 
+import android.util.Log;
+
 import com.androidnetworking.interfaces.ConnectionQualityChangeListener;
 
 /**
@@ -49,7 +51,7 @@ public class ConnectionClassManager {
     }
 
     public synchronized void updateBandwidth(long bytes, long timeInMs) {
-        if (timeInMs == 0 || (bytes) * 1.0 / (timeInMs) * BYTES_TO_BITS < BANDWIDTH_LOWER_BOUND) {
+        if (timeInMs == 0 || bytes < 20000 || (bytes) * 1.0 / (timeInMs) * BYTES_TO_BITS < BANDWIDTH_LOWER_BOUND) {
             return;
         }
         double bandwidth = (bytes) * 1.0 / (timeInMs) * BYTES_TO_BITS;

@@ -22,6 +22,8 @@ package com.androidnetworking.internal;
  */
 
 import android.content.Context;
+import android.net.TrafficStats;
+import android.util.Log;
 
 import com.androidnetworking.common.ANConstants;
 import com.androidnetworking.common.ANData;
@@ -102,16 +104,25 @@ public class InternalNetworking {
             } else {
                 request.setCall(sHttpClient.newCall(okHttpRequest));
             }
-            long startTime = System.currentTimeMillis();
+            final long startTime = System.currentTimeMillis();
+            final long startBytes = TrafficStats.getTotalRxBytes();
             Response okResponse = request.getCall().execute();
             data.url = okResponse.request().url();
             data.code = okResponse.code();
             data.headers = okResponse.headers();
             data.source = okResponse.body().source();
             data.length = okResponse.body().contentLength();
-            long timeTaken = System.currentTimeMillis() - startTime;
             if (okResponse.cacheResponse() == null) {
-                ConnectionClassManager.getInstance().updateBandwidth(data.length, timeTaken);
+                final long timeTaken = System.currentTimeMillis() - startTime;
+                final long finalBytes = TrafficStats.getTotalRxBytes();
+                final long diffBytes;
+                if (startBytes == TrafficStats.UNSUPPORTED || finalBytes == TrafficStats.UNSUPPORTED) {
+                    diffBytes = data.length;
+                    Log.d("InternalNetworking", " TrafficStats : UNSUPPORTED ");
+                } else {
+                    diffBytes = finalBytes - startBytes;
+                }
+                ConnectionClassManager.getInstance().updateBandwidth(diffBytes, timeTaken);
             }
         } catch (IOException ioe) {
             if (okHttpRequest != null) {
@@ -168,16 +179,25 @@ public class InternalNetworking {
                         }).build();
             }
             request.setCall(okHttpClient.newCall(okHttpRequest));
-            long startTime = System.currentTimeMillis();
+            final long startTime = System.currentTimeMillis();
+            final long startBytes = TrafficStats.getTotalRxBytes();
             Response okResponse = request.getCall().execute();
             data.url = okResponse.request().url();
             data.code = okResponse.code();
             data.headers = okResponse.headers();
             Utils.saveFile(okResponse, request.getDirPath(), request.getFileName());
             data.length = okResponse.body().contentLength();
-            long timeTaken = System.currentTimeMillis() - startTime;
             if (okResponse.cacheResponse() == null) {
-                ConnectionClassManager.getInstance().updateBandwidth(data.length, timeTaken);
+                final long timeTaken = System.currentTimeMillis() - startTime;
+                final long finalBytes = TrafficStats.getTotalRxBytes();
+                final long diffBytes;
+                if (startBytes == TrafficStats.UNSUPPORTED || finalBytes == TrafficStats.UNSUPPORTED) {
+                    diffBytes = data.length;
+                    Log.d("InternalNetworking", " TrafficStats : UNSUPPORTED ");
+                } else {
+                    diffBytes = finalBytes - startBytes;
+                }
+                ConnectionClassManager.getInstance().updateBandwidth(diffBytes, timeTaken);
             }
             request.updateDownloadCompletion();
         } catch (IOException ioe) {
