@@ -362,7 +362,7 @@ if(connectionQuality == ConnectionQuality.EXCELLENT){
 }else if (connectionQuality == ConnectionQuality.POOR){
 // do something
 }else if (connectionQuality == ConnectionQuality.UNKNOWN){
-    // do something
+// do something
 }
 // Getting current bandwidth
 int currentBandwidth = AndroidNetworking.getCurrentBandwidth(); // Note : if (currentBandwidth == 0) : means UNKNOWN
