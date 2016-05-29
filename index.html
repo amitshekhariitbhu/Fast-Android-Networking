@@ -379,6 +379,33 @@ AndroidNetworking.get("http://api.localhost.com/{pageNumber}/test")
 </code></pre>
 
 <h3>
+<a id="making-a-conditional-request-building-a-request" class="anchor" href="#making-a-conditional-request-building-a-request" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Making a conditional request (Building a request)</h3>
+
+<pre><code>ANRequest.GetRequestBuilder getRequestBuilder = new ANRequest.GetRequestBuilder(ApiEndPoint.BASE_URL + ApiEndPoint.CHECK_FOR_HEADER);
+
+if(isHeaderRequired){
+ getRequestBuilder.addHeaders("token", "1234");
+}
+
+if(executorRequired){
+ getRequestBuilder.setExecutor(Executors.newSingleThreadExecutor());
+}
+
+ANRequest anRequest = getRequestBuilder.build();       
+
+anRequest.getAsJSONObject(new JSONObjectRequestListener() {
+    @Override
+    public void onResponse(JSONObject response) {
+        // do anything with response
+    }
+    @Override
+    public void onError(ANError error) {
+        // handle error
+    }
+});
+</code></pre>
+
+<h3>
 <a id="inspiration-behind-making-of-this-library-" class="anchor" href="#inspiration-behind-making-of-this-library-" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Inspiration behind making of this library :</h3>
 
 <ul>
