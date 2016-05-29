@@ -111,7 +111,7 @@ public class ANRequest {
 
     private ANRequest(GetRequestBuilder builder) {
         this.mRequestType = RequestType.SIMPLE;
-        this.mMethod = Method.GET;
+        this.mMethod = builder.mMethod;
         this.mPriority = builder.mPriority;
         this.mUrl = builder.mUrl;
         this.mTag = builder.mTag;
@@ -129,7 +129,7 @@ public class ANRequest {
 
     private ANRequest(PostRequestBuilder builder) {
         this.mRequestType = RequestType.SIMPLE;
-        this.mMethod = Method.POST;
+        this.mMethod = builder.mMethod;
         this.mPriority = builder.mPriority;
         this.mUrl = builder.mUrl;
         this.mTag = builder.mTag;
@@ -591,6 +591,7 @@ public class ANRequest {
 
     public static class GetRequestBuilder implements RequestBuilder {
         private Priority mPriority = Priority.MEDIUM;
+        private int mMethod = Method.GET;
         private String mUrl;
         private Object mTag;
         private Bitmap.Config mDecodeConfig;
@@ -604,8 +605,9 @@ public class ANRequest {
         private Executor mExecutor;
         private OkHttpClient mOkHttpClient;
 
-        public GetRequestBuilder(String url) {
+        public GetRequestBuilder(String url, int method) {
             this.mUrl = url;
+            this.mMethod = method;
         }
 
         @Override
@@ -728,6 +730,7 @@ public class ANRequest {
     public static class PostRequestBuilder implements RequestBuilder {
 
         private Priority mPriority = Priority.MEDIUM;
+        private int mMethod = Method.POST;
         private String mUrl;
         private Object mTag;
         private JSONObject mJsonObject = null;
@@ -744,8 +747,9 @@ public class ANRequest {
         private Executor mExecutor;
         private OkHttpClient mOkHttpClient;
 
-        public PostRequestBuilder(String url) {
+        public PostRequestBuilder(String url, int method) {
             this.mUrl = url;
+            this.mMethod = method;
         }
 
         @Override
