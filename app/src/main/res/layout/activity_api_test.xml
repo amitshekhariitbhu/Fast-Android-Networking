@@ -228,6 +228,32 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center" />
 
+        <Button
+            android:id="@+id/disableGzipForCustomRequest"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_margin="8dp"
+            android:onClick="disableGzipForCustomRequest"
+            android:text="disableGzipForCustomRequest" />
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
+        <Button
+            android:id="@+id/checkCacheForCustomClient"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_margin="8dp"
+            android:onClick="checkCacheForCustomClient"
+            android:text="checkCacheForCustomClient" />
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
     </LinearLayout>
 
 </ScrollView>

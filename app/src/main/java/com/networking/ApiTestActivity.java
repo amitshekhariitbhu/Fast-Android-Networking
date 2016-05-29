@@ -42,6 +42,8 @@ import java.io.File;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.OkHttpClient;
+
 /**
  * Created by amitshekhar on 30/03/16.
  */
@@ -309,8 +311,6 @@ public class ApiTestActivity extends AppCompatActivity {
                         }
                     }
                 });
-
-
     }
 
     public void downloadImage(final View view) {
@@ -562,6 +562,78 @@ public class ApiTestActivity extends AppCompatActivity {
                             AndroidNetworking.cancel("cleanupDestinationTest");
                             Log.d(TAG, "cancel: cleanupDestinationTest");
                         }
+                    }
+                })
+                .startDownload(new DownloadListener() {
+                    @Override
+                    public void onDownloadComplete() {
+                        Log.d(TAG, "File download Completed");
+                        Log.d(TAG, "onDownloadComplete isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        if (error.getErrorCode() != 0) {
+                            // received ANError from server
+                            // error.getErrorCode() - the ANError code from server
+                            // error.getErrorBody() - the ANError body from server
+                            // error.getErrorDetail() - just an ANError detail
+                            Log.d(TAG, "onError errorCode : " + error.getErrorCode());
+                            Log.d(TAG, "onError errorBody : " + error.getErrorBody());
+                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                        } else {
+                            // error.getErrorDetail() : connectionError, parseError, requestCancelledError
+                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                        }
+                    }
+                });
+    }
+
+    public void disableGzipForCustomRequest(View view) {
+        AndroidNetworking.post(ApiEndPoint.BASE_URL + ApiEndPoint.POST_CREATE_AN_USER)
+                .addBodyParameter("firstname", "Amit")
+                .addBodyParameter("lastname", "Shekhar")
+                .setTag(this)
+                .setOkHttpClient(new OkHttpClient())
+                .setPriority(Priority.LOW)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, "onResponse object : " + response.toString());
+                        Log.d(TAG, "onResponse isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        if (error.getErrorCode() != 0) {
+                            // received ANError from server
+                            // error.getErrorCode() - the ANError code from server
+                            // error.getErrorBody() - the ANError body from server
+                            // error.getErrorDetail() - just a ANError detail
+                            Log.d(TAG, "onError errorCode : " + error.getErrorCode());
+                            Log.d(TAG, "onError errorBody : " + error.getErrorBody());
+                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                        } else {
+                            // error.getErrorDetail() : connectionError, parseError, requestCancelledError
+                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                        }
+                    }
+                });
+    }
+
+    public void checkCacheForCustomClient(View view) {
+        String url = "http://www.colorado.edu/conflict/peace/download/peace_problem.ZIP";
+        AndroidNetworking.download(url, Utils.getRootDirPath(getApplicationContext()), "file1.zip")
+                .setPriority(Priority.IMMEDIATE)
+                .setTag(this)
+                .setOkHttpClient(new OkHttpClient())
+                .build()
+                .setDownloadProgressListener(new DownloadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesDownloaded, long totalBytes) {
+                        Log.d(TAG, "bytesDownloaded : " + bytesDownloaded + " totalBytes : " + totalBytes);
+                        Log.d(TAG, "setDownloadProgressListener isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }
                 })
                 .startDownload(new DownloadListener() {

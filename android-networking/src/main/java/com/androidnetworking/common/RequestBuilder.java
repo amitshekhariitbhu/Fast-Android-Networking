@@ -21,6 +21,8 @@ import java.util.HashMap;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.OkHttpClient;
+
 /**
  * Created by amitshekhar on 26/03/16.
  */
@@ -51,5 +53,7 @@ public interface RequestBuilder {
     RequestBuilder setMaxStaleCacheControl(int maxStale, TimeUnit timeUnit);
 
     RequestBuilder setExecutor(Executor executor);
+
+    RequestBuilder setOkHttpClient(OkHttpClient okHttpClient);
 
 }

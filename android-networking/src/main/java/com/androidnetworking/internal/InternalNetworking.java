@@ -95,7 +95,12 @@ public class InternalNetworking {
                 builder.cacheControl(request.getCacheControl());
             }
             okHttpRequest = builder.build();
-            request.setCall(sHttpClient.newCall(okHttpRequest));
+
+            if (request.getOkHttpClient() != null) {
+                request.setCall(request.getOkHttpClient().newBuilder().cache(sHttpClient.cache()).build().newCall(okHttpRequest));
+            } else {
+                request.setCall(sHttpClient.newCall(okHttpRequest));
+            }
             Response okResponse = request.getCall().execute();
             data.url = okResponse.request().url();
             data.code = okResponse.code();
@@ -130,16 +135,32 @@ public class InternalNetworking {
                 builder.cacheControl(request.getCacheControl());
             }
             okHttpRequest = builder.build();
-            OkHttpClient okHttpClient = sHttpClient.newBuilder()
-                    .addNetworkInterceptor(new Interceptor() {
-                        @Override
-                        public Response intercept(Chain chain) throws IOException {
-                            Response originalResponse = chain.proceed(chain.request());
-                            return originalResponse.newBuilder()
-                                    .body(new ResponseProgressBody(originalResponse.body(), request.getDownloadProgressListener()))
-                                    .build();
-                        }
-                    }).build();
+
+            OkHttpClient okHttpClient;
+
+            if (request.getOkHttpClient() != null) {
+                okHttpClient = request.getOkHttpClient().newBuilder().cache(sHttpClient.cache())
+                        .addNetworkInterceptor(new Interceptor() {
+                            @Override
+                            public Response intercept(Chain chain) throws IOException {
+                                Response originalResponse = chain.proceed(chain.request());
+                                return originalResponse.newBuilder()
+                                        .body(new ResponseProgressBody(originalResponse.body(), request.getDownloadProgressListener()))
+                                        .build();
+                            }
+                        }).build();
+            } else {
+                okHttpClient = sHttpClient.newBuilder()
+                        .addNetworkInterceptor(new Interceptor() {
+                            @Override
+                            public Response intercept(Chain chain) throws IOException {
+                                Response originalResponse = chain.proceed(chain.request());
+                                return originalResponse.newBuilder()
+                                        .body(new ResponseProgressBody(originalResponse.body(), request.getDownloadProgressListener()))
+                                        .build();
+                            }
+                        }).build();
+            }
             request.setCall(okHttpClient.newCall(okHttpRequest));
             Response okResponse = request.getCall().execute();
             data.url = okResponse.request().url();
@@ -184,7 +205,11 @@ public class InternalNetworking {
                 builder.cacheControl(request.getCacheControl());
             }
             okHttpRequest = builder.build();
-            request.setCall(sHttpClient.newCall(okHttpRequest));
+            if (request.getOkHttpClient() != null) {
+                request.setCall(request.getOkHttpClient().newBuilder().cache(sHttpClient.cache()).build().newCall(okHttpRequest));
+            } else {
+                request.setCall(sHttpClient.newCall(okHttpRequest));
+            }
             Response okResponse = request.getCall().execute();
             data.url = okResponse.request().url();
             data.code = okResponse.code();

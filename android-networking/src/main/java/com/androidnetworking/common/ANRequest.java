@@ -51,6 +51,7 @@ import okhttp3.Headers;
 import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import okio.Okio;
 
@@ -106,6 +107,7 @@ public class ANRequest {
     private ImageView.ScaleType mScaleType;
     private CacheControl mCacheControl = null;
     private Executor mExecutor = null;
+    private OkHttpClient mOkHttpClient = null;
 
     private ANRequest(GetRequestBuilder builder) {
         this.mRequestType = RequestType.SIMPLE;
@@ -122,6 +124,7 @@ public class ANRequest {
         this.mPathParameterMap = builder.mPathParameterMap;
         this.mCacheControl = builder.mCacheControl;
         this.mExecutor = builder.mExecutor;
+        this.mOkHttpClient = builder.mOkHttpClient;
     }
 
     private ANRequest(PostRequestBuilder builder) {
@@ -142,6 +145,7 @@ public class ANRequest {
         this.mByte = builder.mByte;
         this.mCacheControl = builder.mCacheControl;
         this.mExecutor = builder.mExecutor;
+        this.mOkHttpClient = builder.mOkHttpClient;
     }
 
     private ANRequest(DownloadBuilder builder) {
@@ -158,6 +162,7 @@ public class ANRequest {
         this.mCacheControl = builder.mCacheControl;
         this.mPercentageThresholdForCancelling = builder.mPercentageThresholdForCancelling;
         this.mExecutor = builder.mExecutor;
+        this.mOkHttpClient = builder.mOkHttpClient;
     }
 
     private ANRequest(MultiPartBuilder builder) {
@@ -174,6 +179,7 @@ public class ANRequest {
         this.mCacheControl = builder.mCacheControl;
         this.mPercentageThresholdForCancelling = builder.mPercentageThresholdForCancelling;
         this.mExecutor = builder.mExecutor;
+        this.mOkHttpClient = builder.mOkHttpClient;
     }
 
     public void getAsJSONObject(JSONObjectRequestListener requestListener) {
@@ -258,6 +264,10 @@ public class ANRequest {
 
     public int getRequestType() {
         return mRequestType;
+    }
+
+    public OkHttpClient getOkHttpClient() {
+        return mOkHttpClient;
     }
 
     public DownloadProgressListener getDownloadProgressListener() {
@@ -592,6 +602,7 @@ public class ANRequest {
         private HashMap<String, String> mPathParameterMap = new HashMap<String, String>();
         private CacheControl mCacheControl;
         private Executor mExecutor;
+        private OkHttpClient mOkHttpClient;
 
         public GetRequestBuilder(String url) {
             this.mUrl = url;
@@ -683,6 +694,12 @@ public class ANRequest {
             return this;
         }
 
+        @Override
+        public GetRequestBuilder setOkHttpClient(OkHttpClient okHttpClient) {
+            mOkHttpClient = okHttpClient;
+            return this;
+        }
+
         public GetRequestBuilder setBitmapConfig(Bitmap.Config bitmapConfig) {
             this.mDecodeConfig = bitmapConfig;
             return this;
@@ -725,6 +742,7 @@ public class ANRequest {
         private HashMap<String, String> mPathParameterMap = new HashMap<String, String>();
         private CacheControl mCacheControl;
         private Executor mExecutor;
+        private OkHttpClient mOkHttpClient;
 
         public PostRequestBuilder(String url) {
             this.mUrl = url;
@@ -816,6 +834,12 @@ public class ANRequest {
             return this;
         }
 
+        @Override
+        public PostRequestBuilder setOkHttpClient(OkHttpClient okHttpClient) {
+            mOkHttpClient = okHttpClient;
+            return this;
+        }
+
         public PostRequestBuilder addBodyParameter(String key, String value) {
             mBodyParameterMap.put(key, value);
             return this;
@@ -887,6 +911,7 @@ public class ANRequest {
         private CacheControl mCacheControl;
         private int mPercentageThresholdForCancelling = 0;
         private Executor mExecutor;
+        private OkHttpClient mOkHttpClient;
 
         public DownloadBuilder(String url, String dirPath, String fileName) {
             this.mUrl = url;
@@ -980,6 +1005,12 @@ public class ANRequest {
             return this;
         }
 
+        @Override
+        public DownloadBuilder setOkHttpClient(OkHttpClient okHttpClient) {
+            mOkHttpClient = okHttpClient;
+            return this;
+        }
+
         public DownloadBuilder setPercentageThresholdForCancelling(int percentageThresholdForCancelling) {
             this.mPercentageThresholdForCancelling = percentageThresholdForCancelling;
             return this;
@@ -1003,6 +1034,7 @@ public class ANRequest {
         private CacheControl mCacheControl;
         private int mPercentageThresholdForCancelling = 0;
         private Executor mExecutor;
+        private OkHttpClient mOkHttpClient;
 
         public MultiPartBuilder(String url) {
             this.mUrl = url;
@@ -1091,6 +1123,12 @@ public class ANRequest {
         @Override
         public MultiPartBuilder setExecutor(Executor executor) {
             mExecutor = executor;
+            return this;
+        }
+
+        @Override
+        public MultiPartBuilder setOkHttpClient(OkHttpClient okHttpClient) {
+            mOkHttpClient = okHttpClient;
             return this;
         }
 

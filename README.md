@@ -292,6 +292,31 @@ AndroidNetworking.get(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_ARRAY)
                 .build()
                 .prefetch();
 ```
+### Customizing OkHttpClient for a particular request
+```
+OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
+                .addInterceptor(new GzipRequestInterceptor())
+                .build();
+                
+AndroidNetworking.get("http://api.localhost.com/{pageNumber}/test")
+                 .addPathParameter("pageNumber", "0")
+                 .addQueryParameter("limit", "3")
+                 .addHeaders("token", "1234")
+                 .setTag("test")
+                 .setPriority(Priority.LOW)
+                 .setOkHttpClient(okHttpClient) // passing a custom okHttpClient 
+                 .build()
+                 .getAsJSONArray(new JSONArrayRequestListener() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                    // do anything with response
+                    }
+                    @Override
+                    public void onError(ANError error) {
+                    // handle error
+                    }
+                });
+```
 ### Inspiration behind making of this library :
 * Recent removal of HttpClient in Android Marshmallow(Android M) made other networking library obsolete.
 * No other single library do each and everything like making request, downloading any type of file, uploading file, loading
