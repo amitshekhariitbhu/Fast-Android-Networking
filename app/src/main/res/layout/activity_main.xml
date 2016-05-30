@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~    Copyright (C) 2016 Amit Shekhar
   ~    Copyright (C) 2011 The Android Open Source Project
   ~
@@ -132,6 +131,19 @@
             android:layout_margin="8dp"
             android:onClick="startApiTestActivity"
             android:text="StartApiTestActivity" />
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
+        <Button
+            android:id="@+id/testGZIP"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_margin="8dp"
+            android:onClick="testGZIP"
+            android:text="testGZIP" />
 
         <ProgressBar
             android:layout_width="wrap_content"

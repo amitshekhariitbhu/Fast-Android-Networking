@@ -19,8 +19,10 @@ package com.networking;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -36,7 +38,10 @@ import com.androidnetworking.widget.ANImageView;
 import com.networking.provider.Images;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -170,6 +175,56 @@ public class MainActivity extends AppCompatActivity {
 
     public void startApiTestActivity(View view) {
         startActivity(new Intent(MainActivity.this, ApiTestActivity.class));
+    }
+
+    public void testGZIP(View view) {
+        Bitmap bitmap = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
+
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, bos);
+        byte[] data = bos.toByteArray();
+        String imageEncoded = Base64.encodeToString(data, Base64.DEFAULT);
+
+        JSONObject jsonObject = new JSONObject();
+
+        try {
+            jsonObject.put("image", imageEncoded);
+            jsonObject.put("deviceId", "");
+            jsonObject.put("deviceType", "android");
+            jsonObject.put("featurePointsType", "dlibv1");
+            jsonObject.put("sdkVersion", Build.VERSION.RELEASE);
+            jsonObject.put("appVersion", "");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        AndroidNetworking.post("http://192.168.1.25:8089/getFacialPoints")
+                .addHeaders("Authorization", "")
+                .addJSONObjectBody(jsonObject)
+                .setPriority(Priority.IMMEDIATE)
+                .setTag(TAG)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, "onResponse: " + response.toString());
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        if (error.getErrorCode() != 0) {
+                            // received ANError from server
+                            // error.getErrorCode() - the ANError code from server
+                            // error.getErrorBody() - the ANError body from server
+                            // error.getErrorDetail() - just a ANError detail
+                            Log.d(TAG, "onError errorCode : " + error.getErrorCode());
+                            Log.d(TAG, "onError errorBody : " + error.getErrorBody());
+                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                        } else {
+                            // error.getErrorDetail() : connectionError, parseError, requestCancelledError
+                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                        }
+                    }
+                });
     }
 
 }

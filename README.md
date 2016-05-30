@@ -35,7 +35,7 @@ Android Networking supports Android 2.3 (Gingerbread) and later.
 
 Add this in your build.gradle
 ```
-compile 'com.amitshekhar.android:android-networking:0.0.5'
+compile 'com.amitshekhar.android:android-networking:0.0.6'
 ```
 Do not forget to add internet permission in manifest if already not present
 ```
