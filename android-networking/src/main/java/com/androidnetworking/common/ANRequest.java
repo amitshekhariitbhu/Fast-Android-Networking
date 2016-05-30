@@ -108,6 +108,7 @@ public class ANRequest {
     private CacheControl mCacheControl = null;
     private Executor mExecutor = null;
     private OkHttpClient mOkHttpClient = null;
+    private String mUserAgent = null;
 
     private ANRequest(GetRequestBuilder builder) {
         this.mRequestType = RequestType.SIMPLE;
@@ -125,6 +126,7 @@ public class ANRequest {
         this.mCacheControl = builder.mCacheControl;
         this.mExecutor = builder.mExecutor;
         this.mOkHttpClient = builder.mOkHttpClient;
+        this.mUserAgent = builder.mUserAgent;
     }
 
     private ANRequest(PostRequestBuilder builder) {
@@ -146,6 +148,7 @@ public class ANRequest {
         this.mCacheControl = builder.mCacheControl;
         this.mExecutor = builder.mExecutor;
         this.mOkHttpClient = builder.mOkHttpClient;
+        this.mUserAgent = builder.mUserAgent;
     }
 
     private ANRequest(DownloadBuilder builder) {
@@ -163,6 +166,7 @@ public class ANRequest {
         this.mPercentageThresholdForCancelling = builder.mPercentageThresholdForCancelling;
         this.mExecutor = builder.mExecutor;
         this.mOkHttpClient = builder.mOkHttpClient;
+        this.mUserAgent = builder.mUserAgent;
     }
 
     private ANRequest(MultiPartBuilder builder) {
@@ -180,6 +184,7 @@ public class ANRequest {
         this.mPercentageThresholdForCancelling = builder.mPercentageThresholdForCancelling;
         this.mExecutor = builder.mExecutor;
         this.mOkHttpClient = builder.mOkHttpClient;
+        this.mUserAgent = builder.mUserAgent;
     }
 
     public void getAsJSONObject(JSONObjectRequestListener requestListener) {
@@ -268,6 +273,14 @@ public class ANRequest {
 
     public OkHttpClient getOkHttpClient() {
         return mOkHttpClient;
+    }
+
+    public void setUserAgent(String userAgent) {
+        this.mUserAgent = userAgent;
+    }
+
+    public String getUserAgent() {
+        return mUserAgent;
     }
 
     public DownloadProgressListener getDownloadProgressListener() {
@@ -610,6 +623,7 @@ public class ANRequest {
         private CacheControl mCacheControl;
         private Executor mExecutor;
         private OkHttpClient mOkHttpClient;
+        private String mUserAgent;
 
         public GetRequestBuilder(String url) {
             this.mUrl = url;
@@ -713,6 +727,12 @@ public class ANRequest {
             return this;
         }
 
+        @Override
+        public GetRequestBuilder setUserAgent(String userAgent) {
+            mUserAgent = userAgent;
+            return this;
+        }
+
         public GetRequestBuilder setBitmapConfig(Bitmap.Config bitmapConfig) {
             this.mDecodeConfig = bitmapConfig;
             return this;
@@ -778,6 +798,7 @@ public class ANRequest {
         private CacheControl mCacheControl;
         private Executor mExecutor;
         private OkHttpClient mOkHttpClient;
+        private String mUserAgent;
 
         public PostRequestBuilder(String url) {
             this.mUrl = url;
@@ -881,6 +902,12 @@ public class ANRequest {
             return this;
         }
 
+        @Override
+        public PostRequestBuilder setUserAgent(String userAgent) {
+            mUserAgent = userAgent;
+            return this;
+        }
+
         public PostRequestBuilder addBodyParameter(String key, String value) {
             mBodyParameterMap.put(key, value);
             return this;
@@ -953,6 +980,7 @@ public class ANRequest {
         private int mPercentageThresholdForCancelling = 0;
         private Executor mExecutor;
         private OkHttpClient mOkHttpClient;
+        private String mUserAgent;
 
         public DownloadBuilder(String url, String dirPath, String fileName) {
             this.mUrl = url;
@@ -1052,6 +1080,12 @@ public class ANRequest {
             return this;
         }
 
+        @Override
+        public DownloadBuilder setUserAgent(String userAgent) {
+            mUserAgent = userAgent;
+            return this;
+        }
+
         public DownloadBuilder setPercentageThresholdForCancelling(int percentageThresholdForCancelling) {
             this.mPercentageThresholdForCancelling = percentageThresholdForCancelling;
             return this;
@@ -1076,6 +1110,7 @@ public class ANRequest {
         private int mPercentageThresholdForCancelling = 0;
         private Executor mExecutor;
         private OkHttpClient mOkHttpClient;
+        private String mUserAgent;
 
         public MultiPartBuilder(String url) {
             this.mUrl = url;
@@ -1170,6 +1205,12 @@ public class ANRequest {
         @Override
         public MultiPartBuilder setOkHttpClient(OkHttpClient okHttpClient) {
             mOkHttpClient = okHttpClient;
+            return this;
+        }
+
+        @Override
+        public MultiPartBuilder setUserAgent(String userAgent) {
+            mUserAgent = userAgent;
             return this;
         }
 

@@ -116,6 +116,7 @@ public class ApiTestActivity extends AppCompatActivity {
                 .addPathParameter("userId", "1")
                 .setTag(this)
                 .setPriority(Priority.LOW)
+                .setUserAgent("getAnUser")
                 .build()
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override

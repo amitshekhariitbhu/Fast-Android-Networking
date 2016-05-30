@@ -205,6 +205,15 @@ public class AndroidNetworking {
     }
 
     /**
+     * Method to set userAgent globally
+     *
+     * @param userAgent The userAgent
+     */
+    public static void setUserAgent(String userAgent) {
+        ANRequestQueue.getInstance().setUserAgent(userAgent);
+    }
+
+    /**
      * Method to get currentBandwidth
      *
      * @return currentBandwidth

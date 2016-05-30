@@ -51,7 +51,7 @@ import static com.androidnetworking.common.Method.PUT;
 
 public class InternalNetworking {
 
-    private static final String HEADER_USER_AGENT = "User-Agent";
+    private static final String USER_AGENT = "User-Agent";
 
     private static OkHttpClient sHttpClient = getClient();
 
@@ -60,12 +60,14 @@ public class InternalNetworking {
         Request okHttpRequest = null;
         try {
             Request.Builder builder = new Request.Builder().url(request.getUrl());
-            builder.addHeader(HEADER_USER_AGENT, "Android");
+            if (request.getUserAgent() != null) {
+                builder.addHeader(USER_AGENT, request.getUserAgent());
+            }
             Headers requestHeaders = request.getHeaders();
             if (requestHeaders != null) {
                 builder.headers(requestHeaders);
-                if (!requestHeaders.names().contains(HEADER_USER_AGENT)) {
-                    builder.addHeader(HEADER_USER_AGENT, "Android");
+                if (request.getUserAgent() != null && !requestHeaders.names().contains(USER_AGENT)) {
+                    builder.addHeader(USER_AGENT, request.getUserAgent());
                 }
             }
             switch (request.getMethod()) {
@@ -139,12 +141,14 @@ public class InternalNetworking {
         Request okHttpRequest = null;
         try {
             Request.Builder builder = new Request.Builder().url(request.getUrl());
-            builder.addHeader(HEADER_USER_AGENT, "Android");
+            if (request.getUserAgent() != null) {
+                builder.addHeader(USER_AGENT, request.getUserAgent());
+            }
             Headers requestHeaders = request.getHeaders();
             if (requestHeaders != null) {
                 builder.headers(requestHeaders);
-                if (!requestHeaders.names().contains(HEADER_USER_AGENT)) {
-                    builder.addHeader(HEADER_USER_AGENT, "Android");
+                if (request.getUserAgent() != null && !requestHeaders.names().contains(USER_AGENT)) {
+                    builder.addHeader(USER_AGENT, request.getUserAgent());
                 }
             }
             builder = builder.get();
@@ -223,13 +227,14 @@ public class InternalNetworking {
         Request okHttpRequest = null;
         try {
             Request.Builder builder = new Request.Builder().url(request.getUrl());
-            builder.addHeader(HEADER_USER_AGENT, "Android");
-
+            if (request.getUserAgent() != null) {
+                builder.addHeader(USER_AGENT, request.getUserAgent());
+            }
             Headers requestHeaders = request.getHeaders();
             if (requestHeaders != null) {
                 builder.headers(requestHeaders);
-                if (!requestHeaders.names().contains(HEADER_USER_AGENT)) {
-                    builder.addHeader(HEADER_USER_AGENT, "Android");
+                if (request.getUserAgent() != null && !requestHeaders.names().contains(USER_AGENT)) {
+                    builder.addHeader(USER_AGENT, request.getUserAgent());
                 }
             }
             builder = builder.post(new RequestProgressBody(request.getMultiPartRequestBody(), request.getUploadProgressListener()));

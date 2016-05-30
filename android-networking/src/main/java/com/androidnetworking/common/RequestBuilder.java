@@ -56,4 +56,6 @@ public interface RequestBuilder {
 
     RequestBuilder setOkHttpClient(OkHttpClient okHttpClient);
 
+    RequestBuilder setUserAgent(String userAgent);
+
 }

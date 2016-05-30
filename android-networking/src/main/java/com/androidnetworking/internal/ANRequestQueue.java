@@ -37,6 +37,7 @@ public class ANRequestQueue {
     private final Set<ANRequest> mCurrentRequests = new HashSet<ANRequest>();
     private AtomicInteger mSequenceGenerator = new AtomicInteger();
     private static ANRequestQueue sInstance = null;
+    private String userAgent = null;
 
     public static void initialize() {
         getInstance();
@@ -51,6 +52,9 @@ public class ANRequestQueue {
         return sInstance;
     }
 
+    public void setUserAgent(String userAgent) {
+        this.userAgent = userAgent;
+    }
 
     public interface RequestFilter {
         boolean apply(ANRequest request);
@@ -105,6 +109,9 @@ public class ANRequestQueue {
             }
         }
         try {
+            if (userAgent != null && request.getUserAgent() == null) {
+                request.setUserAgent(userAgent);
+            }
             request.setSequenceNumber(getSequenceNumber());
             if (request.getPriority() == Priority.IMMEDIATE) {
                 request.setFuture(Core.getInstance().getExecutorSupplier().forImmediateNetworkTasks().submit(new InternalRunnable(request)));
