@@ -17,8 +17,7 @@
 
 package com.androidnetworking.common;
 
-import android.util.Log;
-
+import com.androidnetworking.core.Core;
 import com.androidnetworking.interfaces.ConnectionQualityChangeListener;
 
 /**
@@ -80,7 +79,12 @@ public class ConnectionClassManager {
                 mCurrentNumberOfSample = 0;
             }
             if (mCurrentConnectionQuality != lastConnectionQuality && mConnectionQualityChangeListener != null) {
-                mConnectionQualityChangeListener.onChange(mCurrentConnectionQuality, mCurrentBandwidth);
+                Core.getInstance().getExecutorSupplier().forMainThreadTasks().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        mConnectionQualityChangeListener.onChange(mCurrentConnectionQuality, mCurrentBandwidth);
+                    }
+                });
             }
         }
 
