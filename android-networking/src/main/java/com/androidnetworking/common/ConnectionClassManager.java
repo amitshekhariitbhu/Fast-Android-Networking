@@ -59,19 +59,15 @@ public class ConnectionClassManager {
         if (mCurrentNumberOfSample == DEFAULT_SAMPLES_TO_QUALITY_CHANGE || (mCurrentConnectionQuality == ConnectionQuality.UNKNOWN && mCurrentNumberOfSample == MINIMUM_SAMPLES_TO_DECIDE_QUALITY)) {
             final ConnectionQuality lastConnectionQuality = mCurrentConnectionQuality;
             mCurrentBandwidth = mCurrentBandwidthForSampling;
-            if (mCurrentBandwidthForSampling < 0) {
+            if (mCurrentBandwidthForSampling <= 0) {
                 mCurrentConnectionQuality = ConnectionQuality.UNKNOWN;
-            }
-            if (mCurrentBandwidthForSampling < DEFAULT_POOR_BANDWIDTH) {
+            } else if (mCurrentBandwidthForSampling < DEFAULT_POOR_BANDWIDTH) {
                 mCurrentConnectionQuality = ConnectionQuality.POOR;
-            }
-            if (mCurrentBandwidthForSampling < DEFAULT_MODERATE_BANDWIDTH) {
+            } else if (mCurrentBandwidthForSampling < DEFAULT_MODERATE_BANDWIDTH) {
                 mCurrentConnectionQuality = ConnectionQuality.MODERATE;
-            }
-            if (mCurrentBandwidthForSampling < DEFAULT_GOOD_BANDWIDTH) {
+            } else if (mCurrentBandwidthForSampling < DEFAULT_GOOD_BANDWIDTH) {
                 mCurrentConnectionQuality = ConnectionQuality.GOOD;
-            }
-            if (mCurrentBandwidthForSampling > DEFAULT_GOOD_BANDWIDTH) {
+            } else if (mCurrentBandwidthForSampling > DEFAULT_GOOD_BANDWIDTH) {
                 mCurrentConnectionQuality = ConnectionQuality.EXCELLENT;
             }
             if (mCurrentNumberOfSample == DEFAULT_SAMPLES_TO_QUALITY_CHANGE) {
