@@ -22,7 +22,7 @@ def siteUrl = 'https://github.com/amitshekhariitbhu/AndroidNetworking'
 def gitUrl = 'https://github.com/amitshekhariitbhu/AndroidNetworking.git'
 
 group = "com.amitshekhar.android"
-version = '0.0.1'
+version = '0.0.4'
 
 install {
     repositories.mavenInstaller {
