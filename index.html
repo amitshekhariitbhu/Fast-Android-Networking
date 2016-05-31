@@ -64,7 +64,7 @@
 
 <p>Add this in your build.gradle</p>
 
-<pre><code>compile 'com.amitshekhar.android:android-networking:0.0.6'
+<pre><code>compile 'com.amitshekhar.android:android-networking:0.0.7'
 </code></pre>
 
 <p>Do not forget to add internet permission in manifest if already not present</p>
@@ -203,7 +203,6 @@ AndroidNetworking.post("http://api.localhost.com/postFile")
                     public void onDownloadComplete() {
                     // do anything after completion
                     }
-
                     @Override
                     public void onError(ANError error) {
                     // handle error    
@@ -230,7 +229,6 @@ AndroidNetworking.post("http://api.localhost.com/postFile")
                     public void onResponse(JSONObject response) {
                     // do anything with response                
                     }
-
                     @Override
                     public void onError(ANError error) {
                     // handle error 
@@ -261,7 +259,6 @@ AndroidNetworking.post("http://api.localhost.com/postFile")
                     // below code will be executed in the executor provided
                     // do anything with response                
                     }
-
                     @Override
                     public void onError(ANError error) {
                     // handle error 
@@ -433,6 +430,41 @@ int currentBandwidth = AndroidNetworking.getCurrentBandwidth(); // Note : if (cu
 </code></pre>
 
 <h3>
+<a id="getting-analytics-of-a-request-by-setting-analyticslistener-on-that" class="anchor" href="#getting-analytics-of-a-request-by-setting-analyticslistener-on-that" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Getting Analytics of a request by setting AnalyticsListener on that</h3>
+
+<pre><code>AndroidNetworking.download(url,dirPath,fileName)
+                 .setTag("downloadTest")
+                 .setPriority(Priority.MEDIUM)
+                 .build()
+                 .setAnalyticsListener(new AnalyticsListener() {
+                      @Override
+                      public void onReceived(long timeTakenInMillis, long bytesSent, long bytesReceived, boolean isFromCache) {
+                          Log.d(TAG, " timeTakenInMillis : " + timeTakenInMillis);
+                          Log.d(TAG, " bytesSent : " + bytesSent);
+                          Log.d(TAG, " bytesReceived : " + bytesReceived);
+                          Log.d(TAG, " isFromCache : " + isFromCache);
+                      }
+                  })
+                 .setDownloadProgressListener(new DownloadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesDownloaded, long totalBytes) {
+                    // do anything with progress  
+                    }
+                 })
+                 .startDownload(new DownloadListener() {
+                    @Override
+                    public void onDownloadComplete() {
+                    // do anything after completion
+                    }
+                    @Override
+                    public void onError(ANError error) {
+                    // handle error    
+                    }
+                });  
+Note : If bytesSent or bytesReceived is -1 , it means it is unknown                
+</code></pre>
+
+<h3>
 <a id="inspiration-behind-making-of-this-library-" class="anchor" href="#inspiration-behind-making-of-this-library-" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Inspiration behind making of this library :</h3>
 
 <ul>
@@ -461,7 +493,6 @@ image from network in ImageView, etc. There are libraries but they are outdated.
 <a id="license" class="anchor" href="#license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>License</h3>
 
 <pre><code>   Copyright (C) 2016 Amit Shekhar
-   Copyright (C) 2011 The Android Open Source Project
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
