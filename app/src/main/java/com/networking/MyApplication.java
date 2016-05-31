@@ -1,6 +1,5 @@
 /*
  *    Copyright (C) 2016 Amit Shekhar
- *    Copyright (C) 2011 The Android Open Source Project
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -24,7 +23,6 @@ import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.ConnectionQuality;
-import com.androidnetworking.interceptors.GzipRequestInterceptor;
 import com.androidnetworking.interfaces.ConnectionQualityChangeListener;
 
 import org.json.JSONException;
@@ -34,8 +32,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-
-import okhttp3.OkHttpClient;
 
 /**
  * Created by amitshekhar on 22/03/16.
@@ -57,11 +53,11 @@ public class MyApplication extends Application {
         //For testing purpose only: network interceptor : enable it only for non-images request checking
 //        Stetho.initializeWithDefaults(getApplicationContext());
 //        OkHttpClient okHttpClient = new OkHttpClient().newBuilder().addNetworkInterceptor(new StethoInterceptor()).addInterceptor(new GzipRequestInterceptor()).build();
-        OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
-                .addInterceptor(new GzipRequestInterceptor())
-                .build();
-        AndroidNetworking.initialize(getApplicationContext(), okHttpClient);
-
+//        OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
+//                .addInterceptor(new GzipRequestInterceptor())
+//                .build();
+//        AndroidNetworking.initialize(getApplicationContext(), okHttpClient);
+        AndroidNetworking.initialize(getApplicationContext());
         AndroidNetworking.setConnectionQualityChangeListener(new ConnectionQualityChangeListener() {
             @Override
             public void onChange(ConnectionQuality currentConnectionQuality, int currentBandwidth) {

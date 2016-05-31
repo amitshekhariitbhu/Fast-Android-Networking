@@ -14,16 +14,13 @@
  *    limitations under the License.
  */
 
-package com.androidnetworking;
-
-import android.app.Application;
-import android.test.ApplicationTestCase;
+package com.androidnetworking.interfaces;
 
 /**
- * <a href="http://d.android.com/tools/testing/testing_android.html">Testing Fundamentals</a>
+ * Created by amitshekhar on 31/05/16.
  */
-public class ApplicationTest extends ApplicationTestCase<Application> {
-    public ApplicationTest() {
-        super(Application.class);
-    }
+public interface AnalyticsListener {
+
+    void onReceived(long timeTakenInMillis, long bytesSent, long bytesReceived, boolean isFromCache);
+
 }

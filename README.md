@@ -163,7 +163,6 @@ AndroidNetworking.download(url,dirPath,fileName)
                     public void onDownloadComplete() {
                     // do anything after completion
                     }
-
                     @Override
                     public void onError(ANError error) {
                     // handle error    
@@ -188,7 +187,6 @@ AndroidNetworking.upload(url)
                     public void onResponse(JSONObject response) {
                     // do anything with response                
                     }
-                  
                     @Override
                     public void onError(ANError error) {
                     // handle error 
@@ -216,7 +214,6 @@ AndroidNetworking.upload(url)
                     // below code will be executed in the executor provided
                     // do anything with response                
                     }
-                  
                     @Override
                     public void onError(ANError error) {
                     // handle error 
@@ -367,6 +364,39 @@ if(connectionQuality == ConnectionQuality.EXCELLENT){
 // Getting current bandwidth
 int currentBandwidth = AndroidNetworking.getCurrentBandwidth(); // Note : if (currentBandwidth == 0) : means UNKNOWN
 ```
+### Getting Analytics of a request by setting AnalyticsListener on that
+```
+AndroidNetworking.download(url,dirPath,fileName)
+                 .setTag("downloadTest")
+                 .setPriority(Priority.MEDIUM)
+                 .build()
+                 .setAnalyticsListener(new AnalyticsListener() {
+                      @Override
+                      public void onReceived(long timeTakenInMillis, long bytesSent, long bytesReceived, boolean isFromCache) {
+                          Log.d(TAG, " timeTakenInMillis : " + timeTakenInMillis);
+                          Log.d(TAG, " bytesSent : " + bytesSent);
+                          Log.d(TAG, " bytesReceived : " + bytesReceived);
+                          Log.d(TAG, " isFromCache : " + isFromCache);
+                      }
+                  })
+                 .setDownloadProgressListener(new DownloadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesDownloaded, long totalBytes) {
+                    // do anything with progress  
+                    }
+                 })
+                 .startDownload(new DownloadListener() {
+                    @Override
+                    public void onDownloadComplete() {
+                    // do anything after completion
+                    }
+                    @Override
+                    public void onError(ANError error) {
+                    // handle error    
+                    }
+                });  
+Note : If bytesSent or bytesReceived is -1 , it means it is unknown                
+```
 ### Inspiration behind making of this library :
 * Recent removal of HttpClient in Android Marshmallow(Android M) made other networking library obsolete.
 * No other single library do each and everything like making request, downloading any type of file, uploading file, loading
@@ -386,7 +416,6 @@ int currentBandwidth = AndroidNetworking.getCurrentBandwidth(); // Note : if (cu
 ### License
 ```
    Copyright (C) 2016 Amit Shekhar
-   Copyright (C) 2011 The Android Open Source Project
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.

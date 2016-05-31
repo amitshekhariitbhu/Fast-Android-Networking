@@ -1,6 +1,5 @@
 /*
  *    Copyright (C) 2016 Amit Shekhar
- *    Copyright (C) 2011 The Android Open Source Project
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -23,6 +22,7 @@ import android.widget.ImageView;
 
 import com.androidnetworking.core.Core;
 import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.AnalyticsListener;
 import com.androidnetworking.interfaces.BitmapRequestListener;
 import com.androidnetworking.interfaces.DownloadListener;
 import com.androidnetworking.interfaces.DownloadProgressListener;
@@ -100,6 +100,7 @@ public class ANRequest {
     private DownloadProgressListener mDownloadProgressListener;
     private UploadProgressListener mUploadProgressListener;
     private DownloadListener mDownloadListener;
+    private AnalyticsListener mAnalyticsListener;
 
     private Bitmap.Config mDecodeConfig;
     private int mMaxWidth;
@@ -229,6 +230,15 @@ public class ANRequest {
     public ANRequest setUploadProgressListener(UploadProgressListener uploadProgressListener) {
         this.mUploadProgressListener = uploadProgressListener;
         return this;
+    }
+
+    public ANRequest setAnalyticsListener(AnalyticsListener analyticsListener) {
+        this.mAnalyticsListener = analyticsListener;
+        return this;
+    }
+
+    public AnalyticsListener getAnalyticsListener() {
+        return mAnalyticsListener;
     }
 
     public int getMethod() {
@@ -407,6 +417,9 @@ public class ANRequest {
         mStringRequestListener = null;
         mBitmapRequestListener = null;
         mDownloadProgressListener = null;
+        mUploadProgressListener = null;
+        mDownloadListener = null;
+        mAnalyticsListener = null;
     }
 
     public void finish() {
