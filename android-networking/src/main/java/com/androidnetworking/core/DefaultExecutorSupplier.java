@@ -34,7 +34,7 @@ public class DefaultExecutorSupplier implements ExecutorSupplier {
     public DefaultExecutorSupplier() {
         ThreadFactory backgroundPriorityThreadFactory = new PriorityThreadFactory(Process.THREAD_PRIORITY_BACKGROUND);
         mNetworkExecutor = new ANExecutor(DEFAULT_MAX_NUM_THREADS, backgroundPriorityThreadFactory);
-        mImmediateNetworkExecutor = new ANExecutor(1, backgroundPriorityThreadFactory);
+        mImmediateNetworkExecutor = new ANExecutor(2, backgroundPriorityThreadFactory);
         mMainThreadExecutor = new MainThreadExecutor();
     }
 
