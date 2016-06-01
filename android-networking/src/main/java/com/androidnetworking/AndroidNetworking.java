@@ -19,6 +19,7 @@ package com.androidnetworking;
 import android.content.Context;
 
 import com.androidnetworking.common.ANConstants;
+import com.androidnetworking.common.ANLog;
 import com.androidnetworking.common.ANRequest;
 import com.androidnetworking.common.ConnectionClassManager;
 import com.androidnetworking.common.ConnectionQuality;
@@ -202,6 +203,30 @@ public class AndroidNetworking {
      */
     public static void forceCancelAll() {
         ANRequestQueue.getInstance().cancelAll(true);
+    }
+
+    /**
+     * Method to enable logging
+     */
+    public static void enableLogging() {
+        ANLog.enableLogging();
+    }
+
+    /**
+     * Method to enable logging with tag
+     *
+     * @param tag The tag for logging
+     */
+    public static void enableLogging(String tag) {
+        ANLog.enableLogging();
+        ANLog.setTag(tag);
+    }
+
+    /**
+     * Method to disable logging
+     */
+    public static void disableLogging() {
+        ANLog.disableLogging();
     }
 
     /**

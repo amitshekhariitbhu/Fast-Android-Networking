@@ -17,7 +17,6 @@
 package com.androidnetworking.common;
 
 import android.graphics.Bitmap;
-import android.util.Log;
 import android.widget.ImageView;
 
 import com.androidnetworking.core.Core;
@@ -315,7 +314,7 @@ public class ANRequest {
                             if (mDownloadListener != null) {
                                 mDownloadListener.onDownloadComplete();
                             }
-                            Log.d(TAG, "Delivering success : " + toString());
+                            ANLog.d("Delivering success : " + toString());
                             finish();
                         }
                     });
@@ -326,7 +325,7 @@ public class ANRequest {
                             if (mDownloadListener != null) {
                                 mDownloadListener.onDownloadComplete();
                             }
-                            Log.d(TAG, "Delivering success : " + toString());
+                            ANLog.d("Delivering success : " + toString());
                             finish();
                         }
                     });
@@ -336,7 +335,7 @@ public class ANRequest {
                 finish();
             }
         } else {
-            Log.d(TAG, "Prefetch done : " + toString());
+            ANLog.d("Prefetch done : " + toString());
             finish();
         }
     }
@@ -372,7 +371,7 @@ public class ANRequest {
     public void cancel(boolean forceCancel) {
         try {
             if (forceCancel || mPercentageThresholdForCancelling == 0 || mProgress < mPercentageThresholdForCancelling) {
-                Log.d(TAG, "cancelling request : " + toString());
+                ANLog.d("cancelling request : " + toString());
                 isCancelled = true;
                 if (call != null) {
                     call.cancel();
@@ -384,7 +383,7 @@ public class ANRequest {
                     deliverError(new ANError());
                 }
             } else {
-                Log.d(TAG, "not cancelling request : " + toString());
+                ANLog.d("not cancelling request : " + toString());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -492,7 +491,7 @@ public class ANRequest {
                 } else if (mDownloadListener != null) {
                     mDownloadListener.onError(ANError);
                 }
-                Log.d(TAG, "Delivering ANError : " + toString());
+                ANLog.d("Delivering ANError : " + toString());
             }
             isDelivered = true;
         } catch (Exception e) {
@@ -536,7 +535,7 @@ public class ANRequest {
                         }
                     });
                 }
-                Log.d(TAG, "Delivering success : " + toString());
+                ANLog.d("Delivering success : " + toString());
             } else {
                 ANError anError = new ANError();
                 anError.setCancellationMessageInError();
@@ -551,7 +550,7 @@ public class ANRequest {
                     mBitmapRequestListener.onError(anError);
                 }
                 finish();
-                Log.d(TAG, "Delivering cancelled : " + toString());
+                ANLog.d("Delivering cancelled : " + toString());
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -16,10 +16,9 @@
 
 package com.androidnetworking.internal;
 
-import android.util.Log;
-
 import com.androidnetworking.common.ANConstants;
 import com.androidnetworking.common.ANData;
+import com.androidnetworking.common.ANLog;
 import com.androidnetworking.common.ANRequest;
 import com.androidnetworking.common.ANResponse;
 import com.androidnetworking.common.Priority;
@@ -50,7 +49,7 @@ public class InternalRunnable implements Runnable {
 
     @Override
     public void run() {
-        Log.d("execution started : ", request.toString());
+        ANLog.d("execution started : " + request.toString());
         switch (request.getRequestType()) {
             case SIMPLE:
                 goForSimpleRequest();
@@ -62,7 +61,7 @@ public class InternalRunnable implements Runnable {
                 goForUploadRequest();
                 break;
         }
-        Log.d("execution done : ", request.toString());
+        ANLog.d("execution done : " + request.toString());
     }
 
     private void goForSimpleRequest() {
@@ -104,7 +103,7 @@ public class InternalRunnable implements Runnable {
                 try {
                     data.source.close();
                 } catch (IOException ignored) {
-                    Log.d(TAG, "Unable to close source data");
+                    ANLog.d("Unable to close source data");
                 }
             }
         }
@@ -170,7 +169,7 @@ public class InternalRunnable implements Runnable {
                 try {
                     data.source.close();
                 } catch (IOException ignored) {
-                    Log.d(TAG, "Unable to close source data");
+                    ANLog.d("Unable to close source data");
                 }
             }
         }

@@ -58,6 +58,7 @@ public class MyApplication extends Application {
 //                .build();
 //        AndroidNetworking.initialize(getApplicationContext(), okHttpClient);
         AndroidNetworking.initialize(getApplicationContext());
+        AndroidNetworking.enableLogging();
         AndroidNetworking.setConnectionQualityChangeListener(new ConnectionQualityChangeListener() {
             @Override
             public void onChange(ConnectionQuality currentConnectionQuality, int currentBandwidth) {

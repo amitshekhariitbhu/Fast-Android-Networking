@@ -16,8 +16,7 @@
 
 package com.androidnetworking.internal;
 
-import android.util.Log;
-
+import com.androidnetworking.common.ANLog;
 import com.androidnetworking.common.ANRequest;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.core.Core;
@@ -134,7 +133,7 @@ public class ANRequestQueue {
             } else {
                 request.setFuture(Core.getInstance().getExecutorSupplier().forNetworkTasks().submit(new InternalRunnable(request)));
             }
-            Log.d(TAG, "addRequest: after addition - mCurrentRequests size: " + mCurrentRequests.size());
+            ANLog.d("addRequest: after addition - mCurrentRequests size: " + mCurrentRequests.size());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -145,7 +144,7 @@ public class ANRequestQueue {
         synchronized (mCurrentRequests) {
             try {
                 mCurrentRequests.remove(request);
-                Log.d(TAG, "finish: after removal - mCurrentRequests size: " + mCurrentRequests.size());
+                ANLog.d("finish: after removal - mCurrentRequests size: " + mCurrentRequests.size());
             } catch (Exception e) {
                 e.printStackTrace();
             }
