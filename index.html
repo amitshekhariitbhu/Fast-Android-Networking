@@ -64,7 +64,7 @@
 
 <p>Add this in your build.gradle</p>
 
-<pre><code>compile 'com.amitshekhar.android:android-networking:0.0.7'
+<pre><code>compile 'com.amitshekhar.android:android-networking:0.0.9'
 </code></pre>
 
 <p>Do not forget to add internet permission in manifest if already not present</p>
@@ -267,11 +267,42 @@ AndroidNetworking.post("http://api.localhost.com/postFile")
 </code></pre>
 
 <h3>
+<a id="setting-a-percentage-threshold-for-not-cancelling-the-request-if-it-has-completed-the-given-threshold" class="anchor" href="#setting-a-percentage-threshold-for-not-cancelling-the-request-if-it-has-completed-the-given-threshold" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Setting a Percentage Threshold For Not Cancelling the request if it has completed the given threshold</h3>
+
+<pre><code>AndroidNetworking.download(url,dirPath,fileName)
+                 .setTag("downloadTest")
+                 .setPriority(Priority.MEDIUM)
+                 .setPercentageThresholdForCancelling(50) // even if at the time of cancelling it will not cancel if 50% 
+                 .build()                                 // downloading is done.But can be cancalled with forceCancel.
+                 .setDownloadProgressListener(new DownloadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesDownloaded, long totalBytes) {
+                    // do anything with progress  
+                    }
+                 })
+                 .startDownload(new DownloadListener() {
+                    @Override
+                    public void onDownloadComplete() {
+                    // do anything after completion
+                    }
+                    @Override
+                    public void onError(ANError error) {
+                    // handle error    
+                    }
+                });   
+</code></pre>
+
+<h3>
 <a id="cancelling-a-request" class="anchor" href="#cancelling-a-request" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Cancelling a request.</h3>
 
 <p>Any request with a given tag can be cancelled. Just do like this.</p>
 
-<pre><code>AndroidNetworking.cancel("testTag"); // All the requests with the given tag will be cancelled.
+<pre><code>AndroidNetworking.cancel("tag"); // All the requests with the given tag will be cancelled.
+AndroidNetworking.forceCancel("tag");  // All the requests with the given tag will be cancelled , even if any percent threshold is
+                                       // set , it will be cancelled forcefully. 
+AndroidNetworking.cancelAll(); // All the requests will be cancelled.  
+AndroidNetworking.forceCancelAll(); // All the requests will be cancelled , even if any percent threshold is
+                               // set , it will be cancelled forcefully.                           
 </code></pre>
 
 <h3>
@@ -465,6 +496,24 @@ Note : If bytesSent or bytesReceived is -1 , it means it is unknown
 </code></pre>
 
 <h3>
+<a id="enabling-logging" class="anchor" href="#enabling-logging" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Enabling Logging</h3>
+
+<pre><code>AndroidNetworking.enableLogging(); // simply enable logging
+AndroidNetworking.enableLogging("tag"); // enabling logging with some tag
+AndroidNetworking.disableLogging(); // disable logging
+</code></pre>
+
+<h3>
+<a id="important-note" class="anchor" href="#important-note" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>IMPORTANT NOTE</h3>
+
+<ul>
+<li>Use IMMEDIATE Priority with caution - use is at appropriate place only when
+1 or 2 (at max 2)IMMEDIATE request is required at instant.Otherwise use HIGH Priority.</li>
+<li>Known Bug : As on now if you are using GZIP Interceptor from client to server, Upload progress
+is not working perfectly in Multipart(But is working , only upload progress is not working).</li>
+</ul>
+
+<h3>
 <a id="inspiration-behind-making-of-this-library-" class="anchor" href="#inspiration-behind-making-of-this-library-" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Inspiration behind making of this library :</h3>
 
 <ul>
@@ -483,7 +532,6 @@ image from network in ImageView, etc. There are libraries but they are outdated.
 <a id="todo" class="anchor" href="#todo" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>TODO</h3>
 
 <ul>
-<li>Total data consumption in any request</li>
 <li>Network Execution Logic on the basis of network speed change</li>
 <li>Integration with other library</li>
 <li>And of course many many features and bug fixes</li>
