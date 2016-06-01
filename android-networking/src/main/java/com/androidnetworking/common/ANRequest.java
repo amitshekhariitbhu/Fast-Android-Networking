@@ -369,9 +369,9 @@ public class ANRequest {
         return mScaleType;
     }
 
-    public void cancel() {
+    public void cancel(boolean forceCancel) {
         try {
-            if (mPercentageThresholdForCancelling == 0 || mProgress < mPercentageThresholdForCancelling) {
+            if (forceCancel || mPercentageThresholdForCancelling == 0 || mProgress < mPercentageThresholdForCancelling) {
                 Log.d(TAG, "cancelling request : " + toString());
                 isCancelled = true;
                 if (call != null) {

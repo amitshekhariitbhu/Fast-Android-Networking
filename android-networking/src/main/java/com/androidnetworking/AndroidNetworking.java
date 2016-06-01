@@ -178,7 +178,30 @@ public class AndroidNetworking {
      * @param tag The tag with which requests are to be cancelled
      */
     public static void cancel(Object tag) {
-        ANRequestQueue.getInstance().cancelRequestWithGivenTag(tag);
+        ANRequestQueue.getInstance().cancelRequestWithGivenTag(tag, false);
+    }
+
+    /**
+     * Method to force cancel requests with the given tag
+     *
+     * @param tag The tag with which requests are to be cancelled
+     */
+    public static void forceCancel(Object tag) {
+        ANRequestQueue.getInstance().cancelRequestWithGivenTag(tag, true);
+    }
+
+    /**
+     * Method to cancel all given request
+     */
+    public static void cancelAll() {
+        ANRequestQueue.getInstance().cancelAll(false);
+    }
+
+    /**
+     * Method to force cancel all given request
+     */
+    public static void forceCancelAll() {
+        ANRequestQueue.getInstance().cancelAll(true);
     }
 
     /**

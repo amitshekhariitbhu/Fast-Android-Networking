@@ -35,7 +35,7 @@ Android Networking supports Android 2.3 (Gingerbread) and later.
 
 Add this in your build.gradle
 ```
-compile 'com.amitshekhar.android:android-networking:0.0.8'
+compile 'com.amitshekhar.android:android-networking:0.0.9'
 ```
 Do not forget to add internet permission in manifest if already not present
 ```
@@ -220,10 +220,39 @@ AndroidNetworking.upload(url)
                     }
                  }); 
 ```
+### Setting a Percentage Threshold For Not Cancelling the request if it has completed the given threshold
+```
+AndroidNetworking.download(url,dirPath,fileName)
+                 .setTag("downloadTest")
+                 .setPriority(Priority.MEDIUM)
+                 .setPercentageThresholdForCancelling(50) // even if at the time of cancelling it will not cancel if 50% 
+                 .build()                                 // downloading is done.But can be cancalled with forceCancel.
+                 .setDownloadProgressListener(new DownloadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesDownloaded, long totalBytes) {
+                    // do anything with progress  
+                    }
+                 })
+                 .startDownload(new DownloadListener() {
+                    @Override
+                    public void onDownloadComplete() {
+                    // do anything after completion
+                    }
+                    @Override
+                    public void onError(ANError error) {
+                    // handle error    
+                    }
+                });   
+```
 ### Cancelling a request.
 Any request with a given tag can be cancelled. Just do like this.
 ```
-AndroidNetworking.cancel("testTag"); // All the requests with the given tag will be cancelled.
+AndroidNetworking.cancel("tag"); // All the requests with the given tag will be cancelled.
+AndroidNetworking.forceCancel("tag");  // All the requests with the given tag will be cancelled , even if any percent threshold is
+                                       // set , it will be cancelled forcefully. 
+AndroidNetworking.cancelAll(); // All the requests will be cancelled.  
+AndroidNetworking.forceCancelAll(); // All the requests will be cancelled , even if any percent threshold is
+                               // set , it will be cancelled forcefully.                           
 ```
 ### Loading image from network into ImageView
 ```

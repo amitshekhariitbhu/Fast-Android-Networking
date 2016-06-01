@@ -60,13 +60,13 @@ public class ANRequestQueue {
     }
 
 
-    private void cancel(RequestFilter filter) {
+    private void cancel(RequestFilter filter, boolean forceCancel) {
         synchronized (mCurrentRequests) {
             try {
                 for (Iterator<ANRequest> iterator = mCurrentRequests.iterator(); iterator.hasNext(); ) {
                     ANRequest request = iterator.next();
                     if (filter.apply(request)) {
-                        request.cancel();
+                        request.cancel(forceCancel);
                         if (request.isCanceled()) {
                             request.destroy();
                             iterator.remove();
@@ -79,7 +79,24 @@ public class ANRequestQueue {
         }
     }
 
-    public void cancelRequestWithGivenTag(final Object tag) {
+    public void cancelAll(boolean forceCancel) {
+        synchronized (mCurrentRequests) {
+            try {
+                for (Iterator<ANRequest> iterator = mCurrentRequests.iterator(); iterator.hasNext(); ) {
+                    ANRequest request = iterator.next();
+                    request.cancel(forceCancel);
+                    if (request.isCanceled()) {
+                        request.destroy();
+                        iterator.remove();
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void cancelRequestWithGivenTag(final Object tag, final boolean forceCancel) {
         try {
             if (tag == null) {
                 return;
@@ -89,7 +106,7 @@ public class ANRequestQueue {
                 public boolean apply(ANRequest request) {
                     return request.getTag() == tag;
                 }
-            });
+            }, forceCancel);
         } catch (Exception e) {
             e.printStackTrace();
         }

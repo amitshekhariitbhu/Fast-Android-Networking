@@ -304,7 +304,7 @@ public class ANImageLoader {
         public boolean removeContainerAndCancelIfNecessary(ImageContainer container) {
             mContainers.remove(container);
             if (mContainers.size() == 0) {
-                mRequest.cancel();
+                mRequest.cancel(true);
                 if (mRequest.isCanceled()) {
                     mRequest.destroy();
                     ANRequestQueue.getInstance().finish(mRequest);
