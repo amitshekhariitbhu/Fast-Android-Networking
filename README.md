@@ -446,8 +446,8 @@ AndroidNetworking.disableLogging(); // disable logging
 ### IMPORTANT NOTE
 * Use IMMEDIATE Priority with caution - use is at appropriate place only when
   1 or 2 (at max 2)IMMEDIATE request is required at instant.Otherwise use HIGH Priority.
-* Known Bug : As on now if you are using GZIP Interceptor from client to server, Upload progress
-  is not working perfectly in Multipart(But is working , only upload progress is not working).
+* Known Bug : As present if you are using GZIP Interceptor from client to server, Upload progress
+  is not working perfectly in Multipart.
   
 ### Inspiration behind making of this library :
 * Recent removal of HttpClient in Android Marshmallow(Android M) made other networking library obsolete.
