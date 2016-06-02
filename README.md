@@ -426,6 +426,17 @@ AndroidNetworking.download(url,dirPath,fileName)
                 });  
 Note : If bytesSent or bytesReceived is -1 , it means it is unknown                
 ```
+### How caching works ?
+* First of all the server must send cache-control in header so that is starts working.
+* Response will be cached on the basis of cache-control max-age,max-stale.
+* If internet is connected and the age is NOT expired it will return from cache.
+* If internet is connected and the age is expired and if server returns 304(NOT MODIFIED) it will return from cache.
+* If internet is NOT connected if you are using getResponseOnlyIfCached() - it will return from cache even it date is expired.
+* If internet is NOT connected , if you are NOT using getResponseOnlyIfCached() - it will NOT return anything.
+* If you are using getResponseOnlyFromNetwork() , it will only return response after validation from server.
+* If cache-control is set, it will work according to the max-age,max-stale returned from server.
+* If internet is NOT connected only way to get cache Response is by using getResponseOnlyIfCached().
+
 ### Enabling Logging
 ```
 AndroidNetworking.enableLogging(); // simply enable logging
