@@ -449,6 +449,15 @@ AndroidNetworking.disableLogging(); // disable logging
 * Known Bug : As present if you are using GZIP Interceptor from client to server, Upload progress
   is not working perfectly in Multipart.
   
+### DIFFERENCES OVER OTHER NETWORK LIBRARY
+* OkHttpClient can be customized for every request easily.
+* Complete analytics of any request can be obtained.
+* Getting current bandwidth and connection quality can be obtained to decide logic of code.
+* Executor can be passed to any request to get response in another thread.
+* Single library for all type of networking.
+* Prefetching of any request can be done so that it gives instant data when required from cache.
+* All types of customization is possible
+  
 ### Inspiration behind making of this library :
 * Recent removal of HttpClient in Android Marshmallow(Android M) made other networking library obsolete.
 * No other single library do each and everything like making request, downloading any type of file, uploading file, loading
