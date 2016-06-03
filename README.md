@@ -452,11 +452,14 @@ AndroidNetworking.disableLogging(); // disable logging
 ### DIFFERENCES OVER OTHER NETWORK LIBRARY
 * OkHttpClient can be customized for every request easily.
 * Complete analytics of any request can be obtained.
-* Getting current bandwidth and connection quality can be obtained to decide logic of code.
+* Current bandwidth and connection quality can be obtained to decide logic of code.
 * Executor can be passed to any request to get response in another thread.
 * Single library for all type of networking.
 * Prefetching of any request can be done so that it gives instant data when required from cache.
-* All types of customization is possible
+* All types of customization is possible.
+* Proper cancellation of request.
+* Do not cancel a request if completed more than a threshold percentage.
+* Simple interface to make any type of request.
   
 ### Inspiration behind making of this library :
 * Recent removal of HttpClient in Android Marshmallow(Android M) made other networking library obsolete.
