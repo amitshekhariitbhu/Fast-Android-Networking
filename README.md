@@ -477,6 +477,7 @@ AndroidNetworking.initialize(getApplicationContext(),okHttpClient);
 * Network Execution Logic on the basis of network speed change
 * Integration with other library
 * And of course many many features and bug fixes
+* Json Parser - It is not present as you can use any parser on the basis of your requirement
 
 ### CREDITS
 * [Square](https://square.github.io/) - As both [OkHttp](http://square.github.io/okhttp/) and [Okio](https://github.com/square/okio)
