@@ -53,14 +53,6 @@ OkHttpClient okHttpClient = new OkHttpClient() .newBuilder()
                         .build();
 AndroidNetworking.initialize(getApplicationContext(),okHttpClient);                        
 ```
-```
-# Enabling GZIP for Request (Not needed if your server doesn't support GZIP Compression), anyway responses from server are automatically unGzipped if required. So enable it only
-if you need your request to be Gzipped before sending to server(Make sure your server support GZIP Compression).
-OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
-                .addInterceptor(new GzipRequestInterceptor())
-                .build();
-AndroidNetworking.initialize(getApplicationContext(),okHttpClient);                
-```
 If you are using proguard, then add this rule in proguard-project.txt
 ```
 -dontwarn okio.**
@@ -443,6 +435,16 @@ AndroidNetworking.enableLogging(); // simply enable logging
 AndroidNetworking.enableLogging("tag"); // enabling logging with some tag
 AndroidNetworking.disableLogging(); // disable logging
 ```
+### Enabling GZIP From Client to Server
+```
+# Enabling GZIP for Request (Not needed if your server doesn't support GZIP Compression), anyway responses 
+from server are automatically unGzipped if required. So enable it only if you need your request to be 
+Gzipped before sending to server(Make sure your server support GZIP Compression).
+OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
+                .addInterceptor(new GzipRequestInterceptor())
+                .build();
+AndroidNetworking.initialize(getApplicationContext(),okHttpClient);                
+```
 ### IMPORTANT NOTE
 * Use IMMEDIATE Priority with caution - use is at appropriate place only when
   1 or 2 (at max 2)IMMEDIATE request is required at instant.Otherwise use HIGH Priority.
@@ -475,6 +477,11 @@ AndroidNetworking.disableLogging(); // disable logging
 * Network Execution Logic on the basis of network speed change
 * Integration with other library
 * And of course many many features and bug fixes
+
+### CREDITS
+* [Square](https://square.github.io/) - As both [OkHttp](http://square.github.io/okhttp/) and [Okio](https://github.com/square/okio)
+  used by Android Networking is developed by [Square](https://square.github.io/).
+* [Volley](https://github.com/mcxiaoke/android-volley) - As Android Networking uses ImageLoader that is developed by [Volley](https://github.com/mcxiaoke/android-volley).  
 
 ### License
 ```
