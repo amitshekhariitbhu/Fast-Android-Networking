@@ -482,7 +482,7 @@ AndroidNetworking.initialize(getApplicationContext(),okHttpClient);
 ### CREDITS
 * [Square](https://square.github.io/) - As both [OkHttp](http://square.github.io/okhttp/) and [Okio](https://github.com/square/okio)
   used by Android Networking is developed by [Square](https://square.github.io/).
-* [Volley](https://github.com/mcxiaoke/android-volley) - As Android Networking uses ImageLoader that is developed by [Volley](https://github.com/mcxiaoke/android-volley).  
+* [Volley](https://android.googlesource.com/platform/frameworks/volley/) - As Android Networking uses ImageLoader that is developed by [Volley](https://android.googlesource.com/platform/frameworks/volley/).  
 
 ### License
 ```
