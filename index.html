@@ -86,14 +86,6 @@ OkHttpClient okHttpClient = new OkHttpClient() .newBuilder()
 AndroidNetworking.initialize(getApplicationContext(),okHttpClient);                        
 </code></pre>
 
-<pre><code># Enabling GZIP for Request (Not needed if your server doesn't support GZIP Compression), anyway responses from server are automatically unGzipped if required. So enable it only
-if you need your request to be Gzipped before sending to server(Make sure your server support GZIP Compression).
-OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
-                .addInterceptor(new GzipRequestInterceptor())
-                .build();
-AndroidNetworking.initialize(getApplicationContext(),okHttpClient);                
-</code></pre>
-
 <p>If you are using proguard, then add this rule in proguard-project.txt</p>
 
 <pre><code>-dontwarn okio.**
@@ -519,6 +511,18 @@ AndroidNetworking.disableLogging(); // disable logging
 </code></pre>
 
 <h3>
+<a id="enabling-gzip-from-client-to-server" class="anchor" href="#enabling-gzip-from-client-to-server" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Enabling GZIP From Client to Server</h3>
+
+<pre><code># Enabling GZIP for Request (Not needed if your server doesn't support GZIP Compression), anyway responses 
+from server are automatically unGzipped if required. So enable it only if you need your request to be 
+Gzipped before sending to server(Make sure your server support GZIP Compression).
+OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
+                .addInterceptor(new GzipRequestInterceptor())
+                .build();
+AndroidNetworking.initialize(getApplicationContext(),okHttpClient);                
+</code></pre>
+
+<h3>
 <a id="important-note" class="anchor" href="#important-note" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>IMPORTANT NOTE</h3>
 
 <ul>
@@ -566,6 +570,19 @@ image from network in ImageView, etc. There are libraries but they are outdated.
 <li>Network Execution Logic on the basis of network speed change</li>
 <li>Integration with other library</li>
 <li>And of course many many features and bug fixes</li>
+<li>Json Parser - It is not present as you can use any parser on the basis of your requirement</li>
+</ul>
+
+<h3>
+<a id="credits" class="anchor" href="#credits" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>CREDITS</h3>
+
+<ul>
+<li>
+<a href="https://square.github.io/">Square</a> - As both <a href="http://square.github.io/okhttp/">OkHttp</a> and <a href="https://github.com/square/okio">Okio</a>
+used by Android Networking is developed by <a href="https://square.github.io/">Square</a>.</li>
+<li>
+<a href="https://android.googlesource.com/platform/frameworks/volley/">Volley</a> - As Android Networking uses ImageLoader that is developed by <a href="https://android.googlesource.com/platform/frameworks/volley/">Volley</a>.<br>
+</li>
 </ul>
 
 <h3>
