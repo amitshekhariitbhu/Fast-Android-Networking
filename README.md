@@ -474,6 +474,7 @@ AndroidNetworking.initialize(getApplicationContext(),okHttpClient);
 * As it uses [OkHttp](http://square.github.io/okhttp/) , most important it supports HTTP/2.  
 
 ### TODO
+* [RxJava](https://github.com/ReactiveX/RxJava) Support
 * Network Execution Logic on the basis of network speed change
 * Integration with other library
 * And of course many many features and bug fixes
