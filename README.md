@@ -34,19 +34,19 @@ Android Networking supports Android 2.3 (Gingerbread) and later.
 ## Using Android Networking in your application
 
 Add this in your build.gradle
-```
+```groovy
 compile 'com.amitshekhar.android:android-networking:0.0.1'
 ```
 Do not forget to add internet permission in manifest if already not present
-```
+```xml
 <uses-permission android:name="android.permission.INTERNET" />
 ```
 Then initialize it in onCreate() Method of application class, :
-```
+```java
 AndroidNetworking.initialize(getApplicationContext());
 ```
 Initializing it with some customization , as it uses [OkHttp](http://square.github.io/okhttp/) as newtorking layer, you can pass custom okHttpClient while initializing it.
-```
+```java
 # Adding an Network Interceptor for Debugging purpose :
 OkHttpClient okHttpClient = new OkHttpClient() .newBuilder()
                         .addNetworkInterceptor(new StethoInterceptor())
@@ -58,7 +58,7 @@ If you are using proguard, then add this rule in proguard-project.txt
 -dontwarn okio.**
 ```
 ### Making a GET Request
-```
+```java
 AndroidNetworking.get("http://api.localhost.com/{pageNumber}/test")
                  .addPathParameter("pageNumber", "0")
                  .addQueryParameter("limit", "3")
@@ -78,7 +78,7 @@ AndroidNetworking.get("http://api.localhost.com/{pageNumber}/test")
                 });
 ```
 ### Making a POST Request
-```
+```java
 AndroidNetworking.post("http://api.localhost.com/createAnUser")
                  .addBodyParameter("firstname", "Amit")
                  .addBodyParameter("lastname", "Shekhar")
@@ -97,7 +97,7 @@ AndroidNetworking.post("http://api.localhost.com/createAnUser")
                 });
 ```
 You can also post json, file ,etc in POST request like this.
-```
+```java
 JSONObject jsonObject = new JSONObject();
 try {
     jsonObject.put("firstname", "Rohit");
@@ -139,7 +139,7 @@ AndroidNetworking.post("http://api.localhost.com/postFile")
                 });               
 ```
 ### Downloading a file from server
-```
+```java
 AndroidNetworking.download(url,dirPath,fileName)
                  .setTag("downloadTest")
                  .setPriority(Priority.MEDIUM)
@@ -162,7 +162,7 @@ AndroidNetworking.download(url,dirPath,fileName)
                 });                 
 ```
 ### Uploading a file to server
-```
+```java
 AndroidNetworking.upload(url)
                  .addMultipartFile("image",file)    
                  .setTag("uploadTest")
@@ -187,7 +187,7 @@ AndroidNetworking.upload(url)
 ```
 ### Getting Response and completion in an another thread executor 
 (Note : Error and Progress will always be returned in main thread of application)
-```
+```java
 AndroidNetworking.upload(url)
                  .addMultipartFile("image",file)    
                  .setTag("uploadTest")
@@ -213,7 +213,7 @@ AndroidNetworking.upload(url)
                  }); 
 ```
 ### Setting a Percentage Threshold For Not Cancelling the request if it has completed the given threshold
-```
+```java
 AndroidNetworking.download(url,dirPath,fileName)
                  .setTag("downloadTest")
                  .setPriority(Priority.MEDIUM)
@@ -238,7 +238,7 @@ AndroidNetworking.download(url,dirPath,fileName)
 ```
 ### Cancelling a request.
 Any request with a given tag can be cancelled. Just do like this.
-```
+```java
 AndroidNetworking.cancel("tag"); // All the requests with the given tag will be cancelled.
 AndroidNetworking.forceCancel("tag");  // All the requests with the given tag will be cancelled , even if any percent threshold is
                                        // set , it will be cancelled forcefully. 
@@ -247,7 +247,7 @@ AndroidNetworking.forceCancelAll(); // All the requests will be cancelled , even
                                // set , it will be cancelled forcefully.                           
 ```
 ### Loading image from network into ImageView
-```
+```xml
       <com.androidnetworking.widget.ANImageView
           android:id="@+id/imageView"
           android:layout_width="100dp"
@@ -259,7 +259,7 @@ AndroidNetworking.forceCancelAll(); // All the requests will be cancelled , even
       imageView.setImageUrl(imageUrl);          
 ```
 ### Getting Bitmap from url with some specified parameters
-```
+```java
 AndroidNetworking.get(imageUrl)
                  .setTag("imageRequestTag")
                  .setPriority(Priority.MEDIUM)
@@ -279,7 +279,7 @@ AndroidNetworking.get(imageUrl)
                 });
 ```
 ### Error Code Handling
-```
+```java
 public void onError(ANError error) {
                            if (error.getErrorCode() != 0) {
                            // received error from server
@@ -296,12 +296,12 @@ public void onError(ANError error) {
                         }
 ```
 ### Remove Bitmap from cache or clear cache
-```
+```java
 AndroidNetworking.evictBitmap(key); // remove a bitmap with key from LruCache
 AndroidNetworking.evictAllBitmap(); // clear LruCache
 ```
 ### Prefetch a request (so that it can return from cache when required at instant)
-```
+```java
 AndroidNetworking.get(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_ARRAY)
                 .addPathParameter("pageNumber", "0")
                 .addQueryParameter("limit", "30")
@@ -311,7 +311,7 @@ AndroidNetworking.get(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_ARRAY)
                 .prefetch();
 ```
 ### Customizing OkHttpClient for a particular request
-```
+```java
 OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
                 .addInterceptor(new GzipRequestInterceptor())
                 .build();
@@ -336,7 +336,7 @@ AndroidNetworking.get("http://api.localhost.com/{pageNumber}/test")
                 });
 ```
 ### Making a conditional request (Building a request)
-```
+```java
 ANRequest.GetRequestBuilder getRequestBuilder = new ANRequest.GetRequestBuilder(ApiEndPoint.BASE_URL + ApiEndPoint.CHECK_FOR_HEADER);
                
 if(isHeaderRequired){
@@ -361,7 +361,7 @@ anRequest.getAsJSONObject(new JSONObjectRequestListener() {
 });
 ```
 ### ConnectionClass Listener to get current network quality and bandwidth
-```
+```java
 // Adding Listener
 AndroidNetworking.setConnectionQualityChangeListener(new ConnectionQualityChangeListener() {
             @Override
@@ -386,7 +386,7 @@ if(connectionQuality == ConnectionQuality.EXCELLENT){
 int currentBandwidth = AndroidNetworking.getCurrentBandwidth(); // Note : if (currentBandwidth == 0) : means UNKNOWN
 ```
 ### Getting Analytics of a request by setting AnalyticsListener on that
-```
+```java
 AndroidNetworking.download(url,dirPath,fileName)
                  .setTag("downloadTest")
                  .setPriority(Priority.MEDIUM)
@@ -430,13 +430,13 @@ Note : If bytesSent or bytesReceived is -1 , it means it is unknown
 * If internet is NOT connected only way to get cache Response is by using getResponseOnlyIfCached().
 
 ### Enabling Logging
-```
+```java
 AndroidNetworking.enableLogging(); // simply enable logging
 AndroidNetworking.enableLogging("tag"); // enabling logging with some tag
 AndroidNetworking.disableLogging(); // disable logging
 ```
 ### Enabling GZIP From Client to Server
-```
+```java
 # Enabling GZIP for Request (Not needed if your server doesn't support GZIP Compression), anyway responses 
 from server are automatically unGzipped if required. So enable it only if you need your request to be 
 Gzipped before sending to server(Make sure your server support GZIP Compression).
