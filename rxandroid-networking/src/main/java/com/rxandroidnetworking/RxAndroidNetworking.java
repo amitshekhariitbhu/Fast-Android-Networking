@@ -15,29 +15,11 @@
  *    limitations under the License.
  */
 
-apply plugin: 'com.android.library'
+package com.rxandroidnetworking;
 
-android {
-    compileSdkVersion 23
-    buildToolsVersion '23.0.3'
+/**
+ * Created by amitshekhar on 10/06/16.
+ */
+public class RxAndroidNetworking {
 
-    defaultConfig {
-        minSdkVersion 9
-        targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
-    }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-}
-
-dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
-    androidTestCompile 'com.squareup.okhttp3:mockwebserver:3.2.0'
-    compile project(':android-networking')
 }
