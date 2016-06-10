@@ -120,7 +120,9 @@ public class InternalRunnable implements Runnable {
                 ANError.setErrorCode(data.code);
                 ANError.setErrorDetail(ANConstants.RESPONSE_FROM_SERVER_ERROR);
                 deliverError(request, ANError);
+                return;
             }
+            request.updateDownloadCompletion();
         } catch (ANError se) {
             se.setErrorDetail(ANConstants.CONNECTION_ERROR);
             se.setErrorCode(0);

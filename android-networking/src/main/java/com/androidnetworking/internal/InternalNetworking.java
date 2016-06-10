@@ -218,7 +218,6 @@ public class InternalNetworking {
             } else if (request.getAnalyticsListener() != null) {
                 sendAnalytics(request.getAnalyticsListener(), timeTaken, -1, 0, true);
             }
-            request.updateDownloadCompletion();
         } catch (IOException ioe) {
             if (okHttpRequest != null) {
                 data.url = okHttpRequest.url();
