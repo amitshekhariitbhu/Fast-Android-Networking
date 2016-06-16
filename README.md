@@ -1,6 +1,7 @@
 # Android Networking 
 
 [![Build Status](https://travis-ci.org/amitshekhariitbhu/AndroidNetworking.svg?branch=master)](https://travis-ci.org/amitshekhariitbhu/AndroidNetworking)
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Android%20Networking-blue.svg?style=flat)](http://android-arsenal.com/details/1/3695)
 
 <img src=https://raw.githubusercontent.com/amitshekhariitbhu/AndroidNetworking/master/assets/androidnetworking.png width=500 height=300 />
 
