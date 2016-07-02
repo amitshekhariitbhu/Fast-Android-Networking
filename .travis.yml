@@ -7,9 +7,9 @@ env:
 android:
   components:
     - tools
-    - build-tools-24.0.0
+    - build-tools-23.0.3
     - extra-android-m2repository
-    - android-24
+    - android-23
 
 # Emulator Management: Create, Start and Wait
 before_script:
