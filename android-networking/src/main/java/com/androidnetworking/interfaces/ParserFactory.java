@@ -15,30 +15,20 @@
  *    limitations under the License.
  */
 
-apply plugin: 'com.android.library'
+package com.androidnetworking.interfaces;
 
-android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.0"
+import java.lang.reflect.Type;
 
-    defaultConfig {
-        minSdkVersion 9
-        targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
-    }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-}
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 
-dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
-    androidTestCompile 'com.squareup.okhttp3:mockwebserver:3.2.0'
-    compile 'io.reactivex:rxjava:1.1.0'
-    compile project(':android-networking')
+/**
+ * Created by amitshekhar on 02/07/16.
+ */
+public interface ParserFactory<T> {
+
+    RequestBody getRequestBody(Type type, T value);
+
+    T parse(ResponseBody responseBody, Type type);
+
 }
