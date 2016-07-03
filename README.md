@@ -487,6 +487,14 @@ AndroidNetworking.initialize(getApplicationContext(),okHttpClient);
   used by Android Networking is developed by [Square](https://square.github.io/).
 * [Volley](https://android.googlesource.com/platform/frameworks/volley/) - As Android Networking uses ImageLoader that is developed by [Volley](https://android.googlesource.com/platform/frameworks/volley/).  
 
+### Contact
+- [Twitter](https://twitter.com/amitiitbhu)
+- [Medium](https://medium.com/@amitshekhar)
+- [Facebook](https://www.facebook.com/amit.shekhar.iitbhu)
+
+### Have an issue or need a feature in Android Networking
+- Best way to do so is - [Create an issue](https://github.com/amitshekhariitbhu/AndroidNetworking/issues/new)
+
 ### License
 ```
    Copyright (C) 2016 Amit Shekhar
