@@ -48,13 +48,13 @@ public final class GsonParserFactory extends Parser.Factory {
     }
 
     @Override
-    public Parser<ResponseBody, ?> responseBodyConverter(Type type) {
+    public Parser<ResponseBody, ?> responseBodyParser(Type type) {
         TypeAdapter<?> adapter = gson.getAdapter(TypeToken.get(type));
         return new GsonResponseBodyParser<>(gson, adapter);
     }
 
     @Override
-    public Parser<?, RequestBody> requestBodyConverter(Type type) {
+    public Parser<?, RequestBody> requestBodyParser(Type type) {
         TypeAdapter<?> adapter = gson.getAdapter(TypeToken.get(type));
         return new GsonRequestBodyParser<>(gson, adapter);
     }

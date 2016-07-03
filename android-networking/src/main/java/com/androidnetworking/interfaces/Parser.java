@@ -32,11 +32,11 @@ public interface Parser<F, T> {
 
     abstract class Factory {
 
-        public Parser<ResponseBody, ?> responseBodyConverter(Type type) {
+        public Parser<ResponseBody, ?> responseBodyParser(Type type) {
             return null;
         }
 
-        public Parser<?, RequestBody> requestBodyConverter(Type type) {
+        public Parser<?, RequestBody> requestBodyParser(Type type) {
             return null;
         }
 
