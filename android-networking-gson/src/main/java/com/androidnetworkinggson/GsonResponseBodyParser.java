@@ -21,7 +21,7 @@ package com.androidnetworkinggson;
  * Created by amitshekhar on 03/07/16.
  */
 
-import com.androidnetworking.interfaces.Converter;
+import com.androidnetworking.interfaces.Parser;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
@@ -30,11 +30,11 @@ import java.io.IOException;
 
 import okhttp3.ResponseBody;
 
-final class GsonResponseBodyConverter<T> implements Converter<ResponseBody, T> {
+final class GsonResponseBodyParser<T> implements Parser<ResponseBody, T> {
     private final Gson gson;
     private final TypeAdapter<T> adapter;
 
-    GsonResponseBodyConverter(Gson gson, TypeAdapter<T> adapter) {
+    GsonResponseBodyParser(Gson gson, TypeAdapter<T> adapter) {
         this.gson = gson;
         this.adapter = adapter;
     }

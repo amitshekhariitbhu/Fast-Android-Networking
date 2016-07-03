@@ -17,7 +17,7 @@
 
 package com.androidnetworkinggson;
 
-import com.androidnetworking.interfaces.Converter;
+import com.androidnetworking.interfaces.Parser;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.reflect.TypeToken;
@@ -30,32 +30,32 @@ import okhttp3.ResponseBody;
 /**
  * Created by amitshekhar on 02/07/16.
  */
-public final class GsonConverterFactory extends Converter.Factory {
+public final class GsonParserFactory extends Parser.Factory {
 
-    public static GsonConverterFactory create() {
+    public static GsonParserFactory create() {
         return create(new Gson());
     }
 
-    public static GsonConverterFactory create(Gson gson) {
-        return new GsonConverterFactory(gson);
+    public static GsonParserFactory create(Gson gson) {
+        return new GsonParserFactory(gson);
     }
 
     private final Gson gson;
 
-    private GsonConverterFactory(Gson gson) {
+    private GsonParserFactory(Gson gson) {
         if (gson == null) throw new NullPointerException("gson == null");
         this.gson = gson;
     }
 
     @Override
-    public Converter<ResponseBody, ?> responseBodyConverter(Type type) {
+    public Parser<ResponseBody, ?> responseBodyConverter(Type type) {
         TypeAdapter<?> adapter = gson.getAdapter(TypeToken.get(type));
-        return new GsonResponseBodyConverter<>(gson, adapter);
+        return new GsonResponseBodyParser<>(gson, adapter);
     }
 
     @Override
-    public Converter<?, RequestBody> requestBodyConverter(Type type) {
+    public Parser<?, RequestBody> requestBodyConverter(Type type) {
         TypeAdapter<?> adapter = gson.getAdapter(TypeToken.get(type));
-        return new GsonRequestBodyConverter<>(gson, adapter);
+        return new GsonRequestBodyParser<>(gson, adapter);
     }
 }

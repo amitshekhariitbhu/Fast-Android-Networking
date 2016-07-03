@@ -17,7 +17,7 @@
 
 package com.androidnetworkinggson;
 
-import com.androidnetworking.interfaces.Converter;
+import com.androidnetworking.interfaces.Parser;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonWriter;
@@ -34,14 +34,14 @@ import okio.Buffer;
 /**
  * Created by amitshekhar on 03/07/16.
  */
-final class GsonRequestBodyConverter<T> implements Converter<T, RequestBody> {
+final class GsonRequestBodyParser<T> implements Parser<T, RequestBody> {
     private static final MediaType MEDIA_TYPE = MediaType.parse("application/json; charset=UTF-8");
     private static final Charset UTF_8 = Charset.forName("UTF-8");
 
     private final Gson gson;
     private final TypeAdapter<T> adapter;
 
-    GsonRequestBodyConverter(Gson gson, TypeAdapter<T> adapter) {
+    GsonRequestBodyParser(Gson gson, TypeAdapter<T> adapter) {
         this.gson = gson;
         this.adapter = adapter;
     }

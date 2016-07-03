@@ -26,17 +26,17 @@ import okhttp3.ResponseBody;
 /**
  * Created by amitshekhar on 02/07/16.
  */
-public interface Converter<F, T> {
+public interface Parser<F, T> {
 
     T convert(F value) throws IOException;
 
     abstract class Factory {
 
-        public Converter<ResponseBody, ?> responseBodyConverter(Type type) {
+        public Parser<ResponseBody, ?> responseBodyConverter(Type type) {
             return null;
         }
 
-        public Converter<?, RequestBody> requestBodyConverter(Type type) {
+        public Parser<?, RequestBody> requestBodyConverter(Type type) {
             return null;
         }
 
