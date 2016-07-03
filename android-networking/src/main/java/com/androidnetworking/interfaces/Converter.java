@@ -17,6 +17,7 @@
 
 package com.androidnetworking.interfaces;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
 
 import okhttp3.RequestBody;
@@ -25,10 +26,20 @@ import okhttp3.ResponseBody;
 /**
  * Created by amitshekhar on 02/07/16.
  */
-public interface ParserFactory<T> {
+public interface Converter<F, T> {
 
-    RequestBody getRequestBody(Type type, T value);
+    T convert(F value) throws IOException;
 
-    T parse(ResponseBody responseBody, Type type);
+    abstract class Factory {
+
+        public Converter<ResponseBody, ?> responseBodyConverter(Type type) {
+            return null;
+        }
+
+        public Converter<?, RequestBody> requestBodyConverter(Type type) {
+            return null;
+        }
+
+    }
 
 }
