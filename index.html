@@ -22,7 +22,9 @@
       <h1>
 <a id="android-networking" class="anchor" href="#android-networking" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Android Networking</h1>
 
-<p><a href="https://travis-ci.org/amitshekhariitbhu/AndroidNetworking"><img src="https://travis-ci.org/amitshekhariitbhu/AndroidNetworking.svg?branch=master" alt="Build Status"></a></p>
+<p><a href="https://travis-ci.org/amitshekhariitbhu/AndroidNetworking"><img src="https://travis-ci.org/amitshekhariitbhu/AndroidNetworking.svg?branch=master" alt="Build Status"></a>
+<a href="http://android-arsenal.com/details/1/3695"><img src="https://img.shields.io/badge/Android%20Arsenal-Android%20Networking-blue.svg?style=flat" alt="Android Arsenal"></a>
+<a href="https://github.com/amitshekhariitbhu/AndroidNetworking/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-Apache%202.0-blue.svg" alt="License"></a></p>
 
 <p><img src="https://raw.githubusercontent.com/amitshekhariitbhu/AndroidNetworking/master/assets/androidnetworking.png" width="500" height="300"></p>
 
@@ -52,6 +54,40 @@
 <li>Response caching avoids the network completely for repeat requests</li>
 </ul>
 
+<h3>
+<a id="why-this-library-" class="anchor" href="#why-this-library-" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Why this library :</h3>
+
+<ul>
+<li>Recent removal of HttpClient in Android Marshmallow(Android M) made other networking library obsolete.</li>
+<li>No other single library do each and everything like making request, downloading any type of file, uploading file, loading
+image from network in ImageView, etc. There are libraries but they are outdated.</li>
+<li>No other library provided simple interface for doing all types of things in networking like setting priority, cancelling, etc.</li>
+<li>As it uses <a href="https://github.com/square/okio">Okio</a> , No more GC overhead in android application.
+<a href="https://github.com/square/okio">Okio</a> is made to handle GC overhead while allocating memory.
+<a href="https://github.com/square/okio">Okio</a> do some clever things to save CPU and memory.</li>
+<li>As it uses <a href="http://square.github.io/okhttp/">OkHttp</a> , most important it supports HTTP/2.<br>
+</li>
+</ul>
+
+<h3>
+<a id="difference-over-other-networking-library" class="anchor" href="#difference-over-other-networking-library" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Difference over other Networking Library</h3>
+
+<ul>
+<li>OkHttpClient can be customized for every request easily.</li>
+<li>As it uses <a href="http://square.github.io/okhttp/">OkHttp</a> and <a href="https://github.com/square/okio">Okio</a>, it is faster.</li>
+<li>Single library for all type of networking.</li>
+<li>Current bandwidth and connection quality can be obtained to decide logic of code.</li>
+<li>Executor can be passed to any request to get response in another thread.</li>
+<li>Complete analytics of any request can be obtained.</li>
+<li>All types of customization is possible.</li>
+<li>Immediate Request is really immediate now.</li>
+<li>Prefetching of any request can be done so that it gives instant data when required from cache.</li>
+<li>Proper cancellation of request.</li>
+<li>Do not cancel a request if completed more than a threshold percentage.</li>
+<li>Simple interface to make any type of request.</li>
+<li>Proper Response Caching, hence reducing bandwidth usage.</li>
+</ul>
+
 <h2>
 <a id="requirements" class="anchor" href="#requirements" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Requirements</h2>
 
@@ -64,27 +100,23 @@
 
 <p>Add this in your build.gradle</p>
 
-<pre><code>compile 'com.amitshekhar.android:android-networking:0.0.1'
-</code></pre>
+<div class="highlight highlight-source-groovy"><pre>compile <span class="pl-s"><span class="pl-pds">'</span>com.amitshekhar.android:android-networking:0.0.1<span class="pl-pds">'</span></span></pre></div>
 
 <p>Do not forget to add internet permission in manifest if already not present</p>
 
-<pre><code>&lt;uses-permission android:name="android.permission.INTERNET" /&gt;
-</code></pre>
+<div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">uses-permission</span> <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>android.permission.INTERNET<span class="pl-pds">"</span></span> /&gt;</pre></div>
 
 <p>Then initialize it in onCreate() Method of application class, :</p>
 
-<pre><code>AndroidNetworking.initialize(getApplicationContext());
-</code></pre>
+<div class="highlight highlight-source-java"><pre><span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>initialize(getApplicationContext());</pre></div>
 
 <p>Initializing it with some customization , as it uses <a href="http://square.github.io/okhttp/">OkHttp</a> as newtorking layer, you can pass custom okHttpClient while initializing it.</p>
 
-<pre><code># Adding an Network Interceptor for Debugging purpose :
-OkHttpClient okHttpClient = new OkHttpClient() .newBuilder()
-                        .addNetworkInterceptor(new StethoInterceptor())
+<div class="highlight highlight-source-java"><pre># <span class="pl-smi">Adding</span> an <span class="pl-smi">Network</span> <span class="pl-smi">Interceptor</span> <span class="pl-k">for</span> <span class="pl-smi">Debugging</span> purpose <span class="pl-k">:</span>
+<span class="pl-smi">OkHttpClient</span> okHttpClient <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">OkHttpClient</span>() .newBuilder()
+                        .addNetworkInterceptor(<span class="pl-k">new</span> <span class="pl-smi">StethoInterceptor</span>())
                         .build();
-AndroidNetworking.initialize(getApplicationContext(),okHttpClient);                        
-</code></pre>
+<span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>initialize(getApplicationContext(),okHttpClient);                        </pre></div>
 
 <p>If you are using proguard, then add this rule in proguard-project.txt</p>
 
@@ -94,398 +126,381 @@ AndroidNetworking.initialize(getApplicationContext(),okHttpClient);
 <h3>
 <a id="making-a-get-request" class="anchor" href="#making-a-get-request" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Making a GET Request</h3>
 
-<pre><code>AndroidNetworking.get("http://api.localhost.com/{pageNumber}/test")
-                 .addPathParameter("pageNumber", "0")
-                 .addQueryParameter("limit", "3")
-                 .addHeaders("token", "1234")
-                 .setTag("test")
-                 .setPriority(Priority.LOW)
+<div class="highlight highlight-source-java"><pre><span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>get(<span class="pl-s"><span class="pl-pds">"</span>http://api.localhost.com/{pageNumber}/test<span class="pl-pds">"</span></span>)
+                 .addPathParameter(<span class="pl-s"><span class="pl-pds">"</span>pageNumber<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span>)
+                 .addQueryParameter(<span class="pl-s"><span class="pl-pds">"</span>limit<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>3<span class="pl-pds">"</span></span>)
+                 .addHeaders(<span class="pl-s"><span class="pl-pds">"</span>token<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>1234<span class="pl-pds">"</span></span>)
+                 .setTag(<span class="pl-s"><span class="pl-pds">"</span>test<span class="pl-pds">"</span></span>)
+                 .setPriority(<span class="pl-smi">Priority</span><span class="pl-c1"><span class="pl-k">.</span>LOW</span>)
                  .build()
-                 .getAsJSONArray(new JSONArrayRequestListener() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                    // do anything with response
+                 .getAsJSONArray(<span class="pl-k">new</span> <span class="pl-smi">JSONArrayRequestListener</span>() {
+                    <span class="pl-k">@Override</span>
+                    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onResponse</span>(<span class="pl-smi">JSONArray</span> <span class="pl-v">response</span>) {
+                    <span class="pl-c">// do anything with response</span>
                     }
-                    @Override
-                    public void onError(ANError error) {
-                    // handle error
+                    <span class="pl-k">@Override</span>
+                    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onError</span>(<span class="pl-smi">ANError</span> <span class="pl-v">error</span>) {
+                    <span class="pl-c">// handle error</span>
                     }
-                });
-</code></pre>
+                });</pre></div>
 
 <h3>
 <a id="making-a-post-request" class="anchor" href="#making-a-post-request" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Making a POST Request</h3>
 
-<pre><code>AndroidNetworking.post("http://api.localhost.com/createAnUser")
-                 .addBodyParameter("firstname", "Amit")
-                 .addBodyParameter("lastname", "Shekhar")
-                 .setTag("test")
-                 .setPriority(Priority.MEDIUM)
+<div class="highlight highlight-source-java"><pre><span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>post(<span class="pl-s"><span class="pl-pds">"</span>http://api.localhost.com/createAnUser<span class="pl-pds">"</span></span>)
+                 .addBodyParameter(<span class="pl-s"><span class="pl-pds">"</span>firstname<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Amit<span class="pl-pds">"</span></span>)
+                 .addBodyParameter(<span class="pl-s"><span class="pl-pds">"</span>lastname<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Shekhar<span class="pl-pds">"</span></span>)
+                 .setTag(<span class="pl-s"><span class="pl-pds">"</span>test<span class="pl-pds">"</span></span>)
+                 .setPriority(<span class="pl-smi">Priority</span><span class="pl-c1"><span class="pl-k">.</span>MEDIUM</span>)
                  .build()
-                 .getAsJSONArray(new JSONArrayRequestListener() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                    // do anything with response
+                 .getAsJSONArray(<span class="pl-k">new</span> <span class="pl-smi">JSONArrayRequestListener</span>() {
+                    <span class="pl-k">@Override</span>
+                    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onResponse</span>(<span class="pl-smi">JSONArray</span> <span class="pl-v">response</span>) {
+                    <span class="pl-c">// do anything with response</span>
                     }
-                    @Override
-                    public void onError(ANError error) {
-                    // handle error
+                    <span class="pl-k">@Override</span>
+                    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onError</span>(<span class="pl-smi">ANError</span> <span class="pl-v">error</span>) {
+                    <span class="pl-c">// handle error</span>
                     }
-                });
-</code></pre>
+                });</pre></div>
 
 <p>You can also post json, file ,etc in POST request like this.</p>
 
-<pre><code>JSONObject jsonObject = new JSONObject();
-try {
-    jsonObject.put("firstname", "Rohit");
-    jsonObject.put("lastname", "Kumar");
-    } catch (JSONException e) {
-    e.printStackTrace();
+<div class="highlight highlight-source-java"><pre><span class="pl-smi">JSONObject</span> jsonObject <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">JSONObject</span>();
+<span class="pl-k">try</span> {
+    jsonObject<span class="pl-k">.</span>put(<span class="pl-s"><span class="pl-pds">"</span>firstname<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Rohit<span class="pl-pds">"</span></span>);
+    jsonObject<span class="pl-k">.</span>put(<span class="pl-s"><span class="pl-pds">"</span>lastname<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Kumar<span class="pl-pds">"</span></span>);
+    } <span class="pl-k">catch</span> (<span class="pl-smi">JSONException</span> e) {
+    e<span class="pl-k">.</span>printStackTrace();
     }
 
-AndroidNetworking.post("http://api.localhost.com/createAnUser")
-                 .addJSONObjectBody(jsonObject) // posting json
-                 .setTag("test")
-                 .setPriority(Priority.MEDIUM)
+<span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>post(<span class="pl-s"><span class="pl-pds">"</span>http://api.localhost.com/createAnUser<span class="pl-pds">"</span></span>)
+                 .addJSONObjectBody(jsonObject) <span class="pl-c">// posting json</span>
+                 .setTag(<span class="pl-s"><span class="pl-pds">"</span>test<span class="pl-pds">"</span></span>)
+                 .setPriority(<span class="pl-smi">Priority</span><span class="pl-c1"><span class="pl-k">.</span>MEDIUM</span>)
                  .build()
-                 .getAsJSONArray(new JSONArrayRequestListener() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                    // do anything with response
+                 .getAsJSONArray(<span class="pl-k">new</span> <span class="pl-smi">JSONArrayRequestListener</span>() {
+                    <span class="pl-k">@Override</span>
+                    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onResponse</span>(<span class="pl-smi">JSONArray</span> <span class="pl-v">response</span>) {
+                    <span class="pl-c">// do anything with response</span>
                     }
-                    @Override
-                    public void onError(ANError error) {
-                    // handle error
+                    <span class="pl-k">@Override</span>
+                    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onError</span>(<span class="pl-smi">ANError</span> <span class="pl-v">error</span>) {
+                    <span class="pl-c">// handle error</span>
                     }
                 });
 
-AndroidNetworking.post("http://api.localhost.com/postFile")
-                 .addFileBody(file) // posting any type of file
-                 .setTag("test")
-                 .setPriority(Priority.MEDIUM)
+<span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>post(<span class="pl-s"><span class="pl-pds">"</span>http://api.localhost.com/postFile<span class="pl-pds">"</span></span>)
+                 .addFileBody(file) <span class="pl-c">// posting any type of file</span>
+                 .setTag(<span class="pl-s"><span class="pl-pds">"</span>test<span class="pl-pds">"</span></span>)
+                 .setPriority(<span class="pl-smi">Priority</span><span class="pl-c1"><span class="pl-k">.</span>MEDIUM</span>)
                  .build()
-                 .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                    // do anything with response
+                 .getAsJSONObject(<span class="pl-k">new</span> <span class="pl-smi">JSONObjectRequestListener</span>() {
+                    <span class="pl-k">@Override</span>
+                    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onResponse</span>(<span class="pl-smi">JSONObject</span> <span class="pl-v">response</span>) {
+                    <span class="pl-c">// do anything with response</span>
                     }
-                    @Override
-                    public void onError(ANError error) {
-                    // handle error
+                    <span class="pl-k">@Override</span>
+                    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onError</span>(<span class="pl-smi">ANError</span> <span class="pl-v">error</span>) {
+                    <span class="pl-c">// handle error</span>
                     }
-                });               
-</code></pre>
+                });               </pre></div>
 
 <h3>
 <a id="downloading-a-file-from-server" class="anchor" href="#downloading-a-file-from-server" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Downloading a file from server</h3>
 
-<pre><code>AndroidNetworking.download(url,dirPath,fileName)
-                 .setTag("downloadTest")
-                 .setPriority(Priority.MEDIUM)
+<div class="highlight highlight-source-java"><pre><span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>download(url,dirPath,fileName)
+                 .setTag(<span class="pl-s"><span class="pl-pds">"</span>downloadTest<span class="pl-pds">"</span></span>)
+                 .setPriority(<span class="pl-smi">Priority</span><span class="pl-c1"><span class="pl-k">.</span>MEDIUM</span>)
                  .build()
-                 .setDownloadProgressListener(new DownloadProgressListener() {
-                    @Override
-                    public void onProgress(long bytesDownloaded, long totalBytes) {
-                    // do anything with progress  
+                 .setDownloadProgressListener(<span class="pl-k">new</span> <span class="pl-smi">DownloadProgressListener</span>() {
+                    <span class="pl-k">@Override</span>
+                    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onProgress</span>(<span class="pl-k">long</span> <span class="pl-v">bytesDownloaded</span>, <span class="pl-k">long</span> <span class="pl-v">totalBytes</span>) {
+                    <span class="pl-c">// do anything with progress  </span>
                     }
                  })
-                 .startDownload(new DownloadListener() {
-                    @Override
-                    public void onDownloadComplete() {
-                    // do anything after completion
+                 .startDownload(<span class="pl-k">new</span> <span class="pl-smi">DownloadListener</span>() {
+                    <span class="pl-k">@Override</span>
+                    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onDownloadComplete</span>() {
+                    <span class="pl-c">// do anything after completion</span>
                     }
-                    @Override
-                    public void onError(ANError error) {
-                    // handle error    
+                    <span class="pl-k">@Override</span>
+                    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onError</span>(<span class="pl-smi">ANError</span> <span class="pl-v">error</span>) {
+                    <span class="pl-c">// handle error    </span>
                     }
-                });                 
-</code></pre>
+                });                 </pre></div>
 
 <h3>
 <a id="uploading-a-file-to-server" class="anchor" href="#uploading-a-file-to-server" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Uploading a file to server</h3>
 
-<pre><code>AndroidNetworking.upload(url)
-                 .addMultipartFile("image",file)    
-                 .setTag("uploadTest")
-                 .setPriority(Priority.IMMEDIATE)
+<div class="highlight highlight-source-java"><pre><span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>upload(url)
+                 .addMultipartFile(<span class="pl-s"><span class="pl-pds">"</span>image<span class="pl-pds">"</span></span>,file)    
+                 .setTag(<span class="pl-s"><span class="pl-pds">"</span>uploadTest<span class="pl-pds">"</span></span>)
+                 .setPriority(<span class="pl-smi">Priority</span><span class="pl-c1"><span class="pl-k">.</span>IMMEDIATE</span>)
                  .build()
-                 .setUploadProgressListener(new UploadProgressListener() {
-                    @Override
-                    public void onProgress(long bytesUploaded, long totalBytes) {
-                    // do anything with progress 
+                 .setUploadProgressListener(<span class="pl-k">new</span> <span class="pl-smi">UploadProgressListener</span>() {
+                    <span class="pl-k">@Override</span>
+                    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onProgress</span>(<span class="pl-k">long</span> <span class="pl-v">bytesUploaded</span>, <span class="pl-k">long</span> <span class="pl-v">totalBytes</span>) {
+                    <span class="pl-c">// do anything with progress </span>
                     }
                  })
-                 .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                    // do anything with response                
+                 .getAsJSONObject(<span class="pl-k">new</span> <span class="pl-smi">JSONObjectRequestListener</span>() {
+                    <span class="pl-k">@Override</span>
+                    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onResponse</span>(<span class="pl-smi">JSONObject</span> <span class="pl-v">response</span>) {
+                    <span class="pl-c">// do anything with response                </span>
                     }
-                    @Override
-                    public void onError(ANError error) {
-                    // handle error 
+                    <span class="pl-k">@Override</span>
+                    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onError</span>(<span class="pl-smi">ANError</span> <span class="pl-v">error</span>) {
+                    <span class="pl-c">// handle error </span>
                     }
-                 }); 
-</code></pre>
+                 }); </pre></div>
 
 <h3>
 <a id="getting-response-and-completion-in-an-another-thread-executor" class="anchor" href="#getting-response-and-completion-in-an-another-thread-executor" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Getting Response and completion in an another thread executor</h3>
 
 <p>(Note : Error and Progress will always be returned in main thread of application)</p>
 
-<pre><code>AndroidNetworking.upload(url)
-                 .addMultipartFile("image",file)    
-                 .setTag("uploadTest")
-                 .setPriority(Priority.IMMEDIATE)
+<div class="highlight highlight-source-java"><pre><span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>upload(url)
+                 .addMultipartFile(<span class="pl-s"><span class="pl-pds">"</span>image<span class="pl-pds">"</span></span>,file)    
+                 .setTag(<span class="pl-s"><span class="pl-pds">"</span>uploadTest<span class="pl-pds">"</span></span>)
+                 .setPriority(<span class="pl-smi">Priority</span><span class="pl-c1"><span class="pl-k">.</span>IMMEDIATE</span>)
                  .build()
-                 .setExecutor(Executors.newSingleThreadExecutor()) // setting an executor to get response or completion on that executor thread
-                 .setUploadProgressListener(new UploadProgressListener() {
-                    @Override
-                    public void onProgress(long bytesUploaded, long totalBytes) {
-                    // do anything with progress 
+                 .setExecutor(<span class="pl-smi">Executors</span><span class="pl-k">.</span>newSingleThreadExecutor()) <span class="pl-c">// setting an executor to get response or completion on that executor thread</span>
+                 .setUploadProgressListener(<span class="pl-k">new</span> <span class="pl-smi">UploadProgressListener</span>() {
+                    <span class="pl-k">@Override</span>
+                    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onProgress</span>(<span class="pl-k">long</span> <span class="pl-v">bytesUploaded</span>, <span class="pl-k">long</span> <span class="pl-v">totalBytes</span>) {
+                    <span class="pl-c">// do anything with progress </span>
                     }
                  })
-                 .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                    // below code will be executed in the executor provided
-                    // do anything with response                
+                 .getAsJSONObject(<span class="pl-k">new</span> <span class="pl-smi">JSONObjectRequestListener</span>() {
+                    <span class="pl-k">@Override</span>
+                    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onResponse</span>(<span class="pl-smi">JSONObject</span> <span class="pl-v">response</span>) {
+                    <span class="pl-c">// below code will be executed in the executor provided</span>
+                    <span class="pl-c">// do anything with response                </span>
                     }
-                    @Override
-                    public void onError(ANError error) {
-                    // handle error 
+                    <span class="pl-k">@Override</span>
+                    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onError</span>(<span class="pl-smi">ANError</span> <span class="pl-v">error</span>) {
+                    <span class="pl-c">// handle error </span>
                     }
-                 }); 
-</code></pre>
+                 }); </pre></div>
 
 <h3>
 <a id="setting-a-percentage-threshold-for-not-cancelling-the-request-if-it-has-completed-the-given-threshold" class="anchor" href="#setting-a-percentage-threshold-for-not-cancelling-the-request-if-it-has-completed-the-given-threshold" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Setting a Percentage Threshold For Not Cancelling the request if it has completed the given threshold</h3>
 
-<pre><code>AndroidNetworking.download(url,dirPath,fileName)
-                 .setTag("downloadTest")
-                 .setPriority(Priority.MEDIUM)
-                 .setPercentageThresholdForCancelling(50) // even if at the time of cancelling it will not cancel if 50% 
-                 .build()                                 // downloading is done.But can be cancalled with forceCancel.
-                 .setDownloadProgressListener(new DownloadProgressListener() {
-                    @Override
-                    public void onProgress(long bytesDownloaded, long totalBytes) {
-                    // do anything with progress  
+<div class="highlight highlight-source-java"><pre><span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>download(url,dirPath,fileName)
+                 .setTag(<span class="pl-s"><span class="pl-pds">"</span>downloadTest<span class="pl-pds">"</span></span>)
+                 .setPriority(<span class="pl-smi">Priority</span><span class="pl-c1"><span class="pl-k">.</span>MEDIUM</span>)
+                 .setPercentageThresholdForCancelling(<span class="pl-c1">50</span>) <span class="pl-c">// even if at the time of cancelling it will not cancel if 50% </span>
+                 .build()                                 <span class="pl-c">// downloading is done.But can be cancalled with forceCancel.</span>
+                 .setDownloadProgressListener(<span class="pl-k">new</span> <span class="pl-smi">DownloadProgressListener</span>() {
+                    <span class="pl-k">@Override</span>
+                    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onProgress</span>(<span class="pl-k">long</span> <span class="pl-v">bytesDownloaded</span>, <span class="pl-k">long</span> <span class="pl-v">totalBytes</span>) {
+                    <span class="pl-c">// do anything with progress  </span>
                     }
                  })
-                 .startDownload(new DownloadListener() {
-                    @Override
-                    public void onDownloadComplete() {
-                    // do anything after completion
+                 .startDownload(<span class="pl-k">new</span> <span class="pl-smi">DownloadListener</span>() {
+                    <span class="pl-k">@Override</span>
+                    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onDownloadComplete</span>() {
+                    <span class="pl-c">// do anything after completion</span>
                     }
-                    @Override
-                    public void onError(ANError error) {
-                    // handle error    
+                    <span class="pl-k">@Override</span>
+                    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onError</span>(<span class="pl-smi">ANError</span> <span class="pl-v">error</span>) {
+                    <span class="pl-c">// handle error    </span>
                     }
-                });   
-</code></pre>
+                });   </pre></div>
 
 <h3>
 <a id="cancelling-a-request" class="anchor" href="#cancelling-a-request" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Cancelling a request.</h3>
 
 <p>Any request with a given tag can be cancelled. Just do like this.</p>
 
-<pre><code>AndroidNetworking.cancel("tag"); // All the requests with the given tag will be cancelled.
-AndroidNetworking.forceCancel("tag");  // All the requests with the given tag will be cancelled , even if any percent threshold is
-                                       // set , it will be cancelled forcefully. 
-AndroidNetworking.cancelAll(); // All the requests will be cancelled.  
-AndroidNetworking.forceCancelAll(); // All the requests will be cancelled , even if any percent threshold is
-                               // set , it will be cancelled forcefully.                           
-</code></pre>
+<div class="highlight highlight-source-java"><pre><span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>cancel(<span class="pl-s"><span class="pl-pds">"</span>tag<span class="pl-pds">"</span></span>); <span class="pl-c">// All the requests with the given tag will be cancelled.</span>
+<span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>forceCancel(<span class="pl-s"><span class="pl-pds">"</span>tag<span class="pl-pds">"</span></span>);  <span class="pl-c">// All the requests with the given tag will be cancelled , even if any percent threshold is</span>
+                                       <span class="pl-c">// set , it will be cancelled forcefully. </span>
+<span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>cancelAll(); <span class="pl-c">// All the requests will be cancelled.  </span>
+<span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>forceCancelAll(); <span class="pl-c">// All the requests will be cancelled , even if any percent threshold is</span>
+                               <span class="pl-c">// set , it will be cancelled forcefully.                           </span></pre></div>
 
 <h3>
 <a id="loading-image-from-network-into-imageview" class="anchor" href="#loading-image-from-network-into-imageview" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Loading image from network into ImageView</h3>
 
-<pre><code>      &lt;com.androidnetworking.widget.ANImageView
-          android:id="@+id/imageView"
-          android:layout_width="100dp"
-          android:layout_height="100dp"
-          android:layout_gravity="center" /&gt;
+<div class="highlight highlight-text-xml"><pre>      &lt;<span class="pl-ent">com</span>.androidnetworking.widget.ANImageView
+          <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">id</span>=<span class="pl-s"><span class="pl-pds">"</span>@+id/imageView<span class="pl-pds">"</span></span>
+          <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">layout_width</span>=<span class="pl-s"><span class="pl-pds">"</span>100dp<span class="pl-pds">"</span></span>
+          <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">layout_height</span>=<span class="pl-s"><span class="pl-pds">"</span>100dp<span class="pl-pds">"</span></span>
+          <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">layout_gravity</span>=<span class="pl-s"><span class="pl-pds">"</span>center<span class="pl-pds">"</span></span> /&gt;
 
       imageView.setDefaultImageResId(R.drawable.default);
       imageView.setErrorImageResId(R.drawable.error);
-      imageView.setImageUrl(imageUrl);          
-</code></pre>
+      imageView.setImageUrl(imageUrl);          </pre></div>
 
 <h3>
 <a id="getting-bitmap-from-url-with-some-specified-parameters" class="anchor" href="#getting-bitmap-from-url-with-some-specified-parameters" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Getting Bitmap from url with some specified parameters</h3>
 
-<pre><code>AndroidNetworking.get(imageUrl)
-                 .setTag("imageRequestTag")
-                 .setPriority(Priority.MEDIUM)
-                 .setBitmapMaxHeight(100)
-                 .setBitmapMaxWidth(100)
-                 .setBitmapConfig(Bitmap.Config.ARGB_8888)
+<div class="highlight highlight-source-java"><pre><span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>get(imageUrl)
+                 .setTag(<span class="pl-s"><span class="pl-pds">"</span>imageRequestTag<span class="pl-pds">"</span></span>)
+                 .setPriority(<span class="pl-smi">Priority</span><span class="pl-c1"><span class="pl-k">.</span>MEDIUM</span>)
+                 .setBitmapMaxHeight(<span class="pl-c1">100</span>)
+                 .setBitmapMaxWidth(<span class="pl-c1">100</span>)
+                 .setBitmapConfig(<span class="pl-smi">Bitmap</span><span class="pl-k">.</span><span class="pl-smi">Config</span><span class="pl-c1"><span class="pl-k">.</span>ARGB_8888</span>)
                  .build()
-                 .getAsBitmap(new BitmapRequestListener() {
-                    @Override
-                    public void onResponse(Bitmap bitmap) {
-                    // do anything with bitmap
+                 .getAsBitmap(<span class="pl-k">new</span> <span class="pl-smi">BitmapRequestListener</span>() {
+                    <span class="pl-k">@Override</span>
+                    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onResponse</span>(<span class="pl-smi">Bitmap</span> <span class="pl-v">bitmap</span>) {
+                    <span class="pl-c">// do anything with bitmap</span>
                     }
-                    @Override
-                    public void onError(ANError error) {
-                    // handle error
+                    <span class="pl-k">@Override</span>
+                    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onError</span>(<span class="pl-smi">ANError</span> <span class="pl-v">error</span>) {
+                    <span class="pl-c">// handle error</span>
                     }
-                });
-</code></pre>
+                });</pre></div>
 
 <h3>
 <a id="error-code-handling" class="anchor" href="#error-code-handling" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Error Code Handling</h3>
 
-<pre><code>public void onError(ANError error) {
-                           if (error.getErrorCode() != 0) {
-                           // received error from server
-                           // error.getErrorCode() - the error code from server
-                           // error.getErrorBody() - the error body from server
-                           // error.getErrorDetail() - just an error detail
-                                Log.d(TAG, "onError errorCode : " + error.getErrorCode());
-                                Log.d(TAG, "onError errorBody : " + error.getErrorBody());
-                                Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
-                           } else {
-                                // error.getErrorDetail() : connectionError, parseError, requestCancelledError
-                                Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+<div class="highlight highlight-source-java"><pre><span class="pl-k">public</span> <span class="pl-k">void</span> onError(<span class="pl-smi">ANError</span> error) {
+                           <span class="pl-k">if</span> (error<span class="pl-k">.</span>getErrorCode() <span class="pl-k">!=</span> <span class="pl-c1">0</span>) {
+                           <span class="pl-c">// received error from server</span>
+                           <span class="pl-c">// error.getErrorCode() - the error code from server</span>
+                           <span class="pl-c">// error.getErrorBody() - the error body from server</span>
+                           <span class="pl-c">// error.getErrorDetail() - just an error detail</span>
+                                <span class="pl-smi">Log</span><span class="pl-k">.</span>d(<span class="pl-c1">TAG</span>, <span class="pl-s"><span class="pl-pds">"</span>onError errorCode : <span class="pl-pds">"</span></span> <span class="pl-k">+</span> error<span class="pl-k">.</span>getErrorCode());
+                                <span class="pl-smi">Log</span><span class="pl-k">.</span>d(<span class="pl-c1">TAG</span>, <span class="pl-s"><span class="pl-pds">"</span>onError errorBody : <span class="pl-pds">"</span></span> <span class="pl-k">+</span> error<span class="pl-k">.</span>getErrorBody());
+                                <span class="pl-smi">Log</span><span class="pl-k">.</span>d(<span class="pl-c1">TAG</span>, <span class="pl-s"><span class="pl-pds">"</span>onError errorDetail : <span class="pl-pds">"</span></span> <span class="pl-k">+</span> error<span class="pl-k">.</span>getErrorDetail());
+                           } <span class="pl-k">else</span> {
+                                <span class="pl-c">// error.getErrorDetail() : connectionError, parseError, requestCancelledError</span>
+                                <span class="pl-smi">Log</span><span class="pl-k">.</span>d(<span class="pl-c1">TAG</span>, <span class="pl-s"><span class="pl-pds">"</span>onError errorDetail : <span class="pl-pds">"</span></span> <span class="pl-k">+</span> error<span class="pl-k">.</span>getErrorDetail());
                            }
-                        }
-</code></pre>
+                        }</pre></div>
 
 <h3>
 <a id="remove-bitmap-from-cache-or-clear-cache" class="anchor" href="#remove-bitmap-from-cache-or-clear-cache" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Remove Bitmap from cache or clear cache</h3>
 
-<pre><code>AndroidNetworking.evictBitmap(key); // remove a bitmap with key from LruCache
-AndroidNetworking.evictAllBitmap(); // clear LruCache
-</code></pre>
+<div class="highlight highlight-source-java"><pre><span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>evictBitmap(key); <span class="pl-c">// remove a bitmap with key from LruCache</span>
+<span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>evictAllBitmap(); <span class="pl-c">// clear LruCache</span></pre></div>
 
 <h3>
 <a id="prefetch-a-request-so-that-it-can-return-from-cache-when-required-at-instant" class="anchor" href="#prefetch-a-request-so-that-it-can-return-from-cache-when-required-at-instant" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Prefetch a request (so that it can return from cache when required at instant)</h3>
 
-<pre><code>AndroidNetworking.get(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_ARRAY)
-                .addPathParameter("pageNumber", "0")
-                .addQueryParameter("limit", "30")
-                .setTag(this)
-                .setPriority(Priority.LOW)
+<div class="highlight highlight-source-java"><pre><span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>get(<span class="pl-smi">ApiEndPoint</span><span class="pl-c1"><span class="pl-k">.</span>BASE_URL</span> <span class="pl-k">+</span> <span class="pl-smi">ApiEndPoint</span><span class="pl-c1"><span class="pl-k">.</span>GET_JSON_ARRAY</span>)
+                .addPathParameter(<span class="pl-s"><span class="pl-pds">"</span>pageNumber<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span>)
+                .addQueryParameter(<span class="pl-s"><span class="pl-pds">"</span>limit<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>30<span class="pl-pds">"</span></span>)
+                .setTag(<span class="pl-v">this</span>)
+                .setPriority(<span class="pl-smi">Priority</span><span class="pl-c1"><span class="pl-k">.</span>LOW</span>)
                 .build()
-                .prefetch();
-</code></pre>
+                .prefetch();</pre></div>
 
 <h3>
 <a id="customizing-okhttpclient-for-a-particular-request" class="anchor" href="#customizing-okhttpclient-for-a-particular-request" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Customizing OkHttpClient for a particular request</h3>
 
-<pre><code>OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
-                .addInterceptor(new GzipRequestInterceptor())
+<div class="highlight highlight-source-java"><pre><span class="pl-smi">OkHttpClient</span> okHttpClient <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">OkHttpClient</span>()<span class="pl-k">.</span>newBuilder()
+                .addInterceptor(<span class="pl-k">new</span> <span class="pl-smi">GzipRequestInterceptor</span>())
                 .build();
 
-AndroidNetworking.get("http://api.localhost.com/{pageNumber}/test")
-                 .addPathParameter("pageNumber", "0")
-                 .addQueryParameter("limit", "3")
-                 .addHeaders("token", "1234")
-                 .setTag("test")
-                 .setPriority(Priority.LOW)
-                 .setOkHttpClient(okHttpClient) // passing a custom okHttpClient 
+<span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>get(<span class="pl-s"><span class="pl-pds">"</span>http://api.localhost.com/{pageNumber}/test<span class="pl-pds">"</span></span>)
+                 .addPathParameter(<span class="pl-s"><span class="pl-pds">"</span>pageNumber<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span>)
+                 .addQueryParameter(<span class="pl-s"><span class="pl-pds">"</span>limit<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>3<span class="pl-pds">"</span></span>)
+                 .addHeaders(<span class="pl-s"><span class="pl-pds">"</span>token<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>1234<span class="pl-pds">"</span></span>)
+                 .setTag(<span class="pl-s"><span class="pl-pds">"</span>test<span class="pl-pds">"</span></span>)
+                 .setPriority(<span class="pl-smi">Priority</span><span class="pl-c1"><span class="pl-k">.</span>LOW</span>)
+                 .setOkHttpClient(okHttpClient) <span class="pl-c">// passing a custom okHttpClient </span>
                  .build()
-                 .getAsJSONArray(new JSONArrayRequestListener() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                    // do anything with response
+                 .getAsJSONArray(<span class="pl-k">new</span> <span class="pl-smi">JSONArrayRequestListener</span>() {
+                    <span class="pl-k">@Override</span>
+                    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onResponse</span>(<span class="pl-smi">JSONArray</span> <span class="pl-v">response</span>) {
+                    <span class="pl-c">// do anything with response</span>
                     }
-                    @Override
-                    public void onError(ANError error) {
-                    // handle error
+                    <span class="pl-k">@Override</span>
+                    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onError</span>(<span class="pl-smi">ANError</span> <span class="pl-v">error</span>) {
+                    <span class="pl-c">// handle error</span>
                     }
-                });
-</code></pre>
+                });</pre></div>
 
 <h3>
 <a id="making-a-conditional-request-building-a-request" class="anchor" href="#making-a-conditional-request-building-a-request" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Making a conditional request (Building a request)</h3>
 
-<pre><code>ANRequest.GetRequestBuilder getRequestBuilder = new ANRequest.GetRequestBuilder(ApiEndPoint.BASE_URL + ApiEndPoint.CHECK_FOR_HEADER);
+<div class="highlight highlight-source-java"><pre><span class="pl-smi">ANRequest</span><span class="pl-k">.</span><span class="pl-smi">GetRequestBuilder</span> getRequestBuilder <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">ANRequest</span>.<span class="pl-smi">GetRequestBuilder</span>(<span class="pl-smi">ApiEndPoint</span><span class="pl-c1"><span class="pl-k">.</span>BASE_URL</span> <span class="pl-k">+</span> <span class="pl-smi">ApiEndPoint</span><span class="pl-c1"><span class="pl-k">.</span>CHECK_FOR_HEADER</span>);
 
-if(isHeaderRequired){
- getRequestBuilder.addHeaders("token", "1234");
+<span class="pl-k">if</span>(isHeaderRequired){
+ getRequestBuilder<span class="pl-k">.</span>addHeaders(<span class="pl-s"><span class="pl-pds">"</span>token<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>1234<span class="pl-pds">"</span></span>);
 }
 
-if(executorRequired){
- getRequestBuilder.setExecutor(Executors.newSingleThreadExecutor());
+<span class="pl-k">if</span>(executorRequired){
+ getRequestBuilder<span class="pl-k">.</span>setExecutor(<span class="pl-smi">Executors</span><span class="pl-k">.</span>newSingleThreadExecutor());
 }
 
-ANRequest anRequest = getRequestBuilder.build();       
+<span class="pl-smi">ANRequest</span> anRequest <span class="pl-k">=</span> getRequestBuilder<span class="pl-k">.</span>build();       
 
-anRequest.getAsJSONObject(new JSONObjectRequestListener() {
-    @Override
-    public void onResponse(JSONObject response) {
-        // do anything with response
+anRequest<span class="pl-k">.</span>getAsJSONObject(<span class="pl-k">new</span> <span class="pl-smi">JSONObjectRequestListener</span>() {
+    <span class="pl-k">@Override</span>
+    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onResponse</span>(<span class="pl-smi">JSONObject</span> <span class="pl-v">response</span>) {
+        <span class="pl-c">// do anything with response</span>
     }
-    @Override
-    public void onError(ANError error) {
-        // handle error
+    <span class="pl-k">@Override</span>
+    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onError</span>(<span class="pl-smi">ANError</span> <span class="pl-v">error</span>) {
+        <span class="pl-c">// handle error</span>
     }
-});
-</code></pre>
+});</pre></div>
 
 <h3>
 <a id="connectionclass-listener-to-get-current-network-quality-and-bandwidth" class="anchor" href="#connectionclass-listener-to-get-current-network-quality-and-bandwidth" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>ConnectionClass Listener to get current network quality and bandwidth</h3>
 
-<pre><code>// Adding Listener
-AndroidNetworking.setConnectionQualityChangeListener(new ConnectionQualityChangeListener() {
-            @Override
-            public void onChange(ConnectionQuality currentConnectionQuality, int currentBandwidth) {
-                // do something on change in connectionQuality
+<div class="highlight highlight-source-java"><pre><span class="pl-c">// Adding Listener</span>
+<span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>setConnectionQualityChangeListener(<span class="pl-k">new</span> <span class="pl-smi">ConnectionQualityChangeListener</span>() {
+            <span class="pl-k">@Override</span>
+            <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onChange</span>(<span class="pl-smi">ConnectionQuality</span> <span class="pl-v">currentConnectionQuality</span>, <span class="pl-k">int</span> <span class="pl-v">currentBandwidth</span>) {
+                <span class="pl-c">// do something on change in connectionQuality</span>
             }
         });
 
-// Removing Listener   
-AndroidNetworking.removeConnectionQualityChangeListener();
+<span class="pl-c">// Removing Listener   </span>
+<span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>removeConnectionQualityChangeListener();
 
-// Getting current ConnectionQuality
-ConnectionQuality connectionQuality = AndroidNetworking.getCurrentConnectionQuality();
-if(connectionQuality == ConnectionQuality.EXCELLENT){
-// do something
-}else if (connectionQuality == ConnectionQuality.POOR){
-// do something
-}else if (connectionQuality == ConnectionQuality.UNKNOWN){
-// do something
+<span class="pl-c">// Getting current ConnectionQuality</span>
+<span class="pl-smi">ConnectionQuality</span> connectionQuality <span class="pl-k">=</span> <span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>getCurrentConnectionQuality();
+<span class="pl-k">if</span>(connectionQuality <span class="pl-k">==</span> <span class="pl-smi">ConnectionQuality</span><span class="pl-c1"><span class="pl-k">.</span>EXCELLENT</span>){
+<span class="pl-c">// do something</span>
+}<span class="pl-k">else</span> <span class="pl-k">if</span> (connectionQuality <span class="pl-k">==</span> <span class="pl-smi">ConnectionQuality</span><span class="pl-c1"><span class="pl-k">.</span>POOR</span>){
+<span class="pl-c">// do something</span>
+}<span class="pl-k">else</span> <span class="pl-k">if</span> (connectionQuality <span class="pl-k">==</span> <span class="pl-smi">ConnectionQuality</span><span class="pl-c1"><span class="pl-k">.</span>UNKNOWN</span>){
+<span class="pl-c">// do something</span>
 }
-// Getting current bandwidth
-int currentBandwidth = AndroidNetworking.getCurrentBandwidth(); // Note : if (currentBandwidth == 0) : means UNKNOWN
-</code></pre>
+<span class="pl-c">// Getting current bandwidth</span>
+<span class="pl-k">int</span> currentBandwidth <span class="pl-k">=</span> <span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>getCurrentBandwidth(); <span class="pl-c">// Note : if (currentBandwidth == 0) : means UNKNOWN</span></pre></div>
 
 <h3>
 <a id="getting-analytics-of-a-request-by-setting-analyticslistener-on-that" class="anchor" href="#getting-analytics-of-a-request-by-setting-analyticslistener-on-that" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Getting Analytics of a request by setting AnalyticsListener on that</h3>
 
-<pre><code>AndroidNetworking.download(url,dirPath,fileName)
-                 .setTag("downloadTest")
-                 .setPriority(Priority.MEDIUM)
+<div class="highlight highlight-source-java"><pre><span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>download(url,dirPath,fileName)
+                 .setTag(<span class="pl-s"><span class="pl-pds">"</span>downloadTest<span class="pl-pds">"</span></span>)
+                 .setPriority(<span class="pl-smi">Priority</span><span class="pl-c1"><span class="pl-k">.</span>MEDIUM</span>)
                  .build()
-                 .setAnalyticsListener(new AnalyticsListener() {
-                      @Override
-                      public void onReceived(long timeTakenInMillis, long bytesSent, long bytesReceived, boolean isFromCache) {
-                          Log.d(TAG, " timeTakenInMillis : " + timeTakenInMillis);
-                          Log.d(TAG, " bytesSent : " + bytesSent);
-                          Log.d(TAG, " bytesReceived : " + bytesReceived);
-                          Log.d(TAG, " isFromCache : " + isFromCache);
+                 .setAnalyticsListener(<span class="pl-k">new</span> <span class="pl-smi">AnalyticsListener</span>() {
+                      <span class="pl-k">@Override</span>
+                      <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onReceived</span>(<span class="pl-k">long</span> <span class="pl-v">timeTakenInMillis</span>, <span class="pl-k">long</span> <span class="pl-v">bytesSent</span>, <span class="pl-k">long</span> <span class="pl-v">bytesReceived</span>, <span class="pl-k">boolean</span> <span class="pl-v">isFromCache</span>) {
+                          <span class="pl-smi">Log</span><span class="pl-k">.</span>d(<span class="pl-c1">TAG</span>, <span class="pl-s"><span class="pl-pds">"</span> timeTakenInMillis : <span class="pl-pds">"</span></span> <span class="pl-k">+</span> timeTakenInMillis);
+                          <span class="pl-smi">Log</span><span class="pl-k">.</span>d(<span class="pl-c1">TAG</span>, <span class="pl-s"><span class="pl-pds">"</span> bytesSent : <span class="pl-pds">"</span></span> <span class="pl-k">+</span> bytesSent);
+                          <span class="pl-smi">Log</span><span class="pl-k">.</span>d(<span class="pl-c1">TAG</span>, <span class="pl-s"><span class="pl-pds">"</span> bytesReceived : <span class="pl-pds">"</span></span> <span class="pl-k">+</span> bytesReceived);
+                          <span class="pl-smi">Log</span><span class="pl-k">.</span>d(<span class="pl-c1">TAG</span>, <span class="pl-s"><span class="pl-pds">"</span> isFromCache : <span class="pl-pds">"</span></span> <span class="pl-k">+</span> isFromCache);
                       }
                   })
-                 .setDownloadProgressListener(new DownloadProgressListener() {
-                    @Override
-                    public void onProgress(long bytesDownloaded, long totalBytes) {
-                    // do anything with progress  
+                 .setDownloadProgressListener(<span class="pl-k">new</span> <span class="pl-smi">DownloadProgressListener</span>() {
+                    <span class="pl-k">@Override</span>
+                    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onProgress</span>(<span class="pl-k">long</span> <span class="pl-v">bytesDownloaded</span>, <span class="pl-k">long</span> <span class="pl-v">totalBytes</span>) {
+                    <span class="pl-c">// do anything with progress  </span>
                     }
                  })
-                 .startDownload(new DownloadListener() {
-                    @Override
-                    public void onDownloadComplete() {
-                    // do anything after completion
+                 .startDownload(<span class="pl-k">new</span> <span class="pl-smi">DownloadListener</span>() {
+                    <span class="pl-k">@Override</span>
+                    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onDownloadComplete</span>() {
+                    <span class="pl-c">// do anything after completion</span>
                     }
-                    @Override
-                    public void onError(ANError error) {
-                    // handle error    
+                    <span class="pl-k">@Override</span>
+                    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onError</span>(<span class="pl-smi">ANError</span> <span class="pl-v">error</span>) {
+                    <span class="pl-c">// handle error    </span>
                     }
                 });  
-Note : If bytesSent or bytesReceived is -1 , it means it is unknown                
-</code></pre>
+<span class="pl-smi">Note</span> <span class="pl-k">:</span> <span class="pl-smi">If</span> bytesSent or bytesReceived is <span class="pl-k">-</span><span class="pl-c1">1</span> , it means it is unknown                </pre></div>
 
 <h3>
 <a id="how-caching-works-" class="anchor" href="#how-caching-works-" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How caching works ?</h3>
@@ -505,22 +520,20 @@ Note : If bytesSent or bytesReceived is -1 , it means it is unknown
 <h3>
 <a id="enabling-logging" class="anchor" href="#enabling-logging" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Enabling Logging</h3>
 
-<pre><code>AndroidNetworking.enableLogging(); // simply enable logging
-AndroidNetworking.enableLogging("tag"); // enabling logging with some tag
-AndroidNetworking.disableLogging(); // disable logging
-</code></pre>
+<div class="highlight highlight-source-java"><pre><span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>enableLogging(); <span class="pl-c">// simply enable logging</span>
+<span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>enableLogging(<span class="pl-s"><span class="pl-pds">"</span>tag<span class="pl-pds">"</span></span>); <span class="pl-c">// enabling logging with some tag</span>
+<span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>disableLogging(); <span class="pl-c">// disable logging</span></pre></div>
 
 <h3>
 <a id="enabling-gzip-from-client-to-server" class="anchor" href="#enabling-gzip-from-client-to-server" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Enabling GZIP From Client to Server</h3>
 
-<pre><code># Enabling GZIP for Request (Not needed if your server doesn't support GZIP Compression), anyway responses 
-from server are automatically unGzipped if required. So enable it only if you need your request to be 
-Gzipped before sending to server(Make sure your server support GZIP Compression).
-OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
-                .addInterceptor(new GzipRequestInterceptor())
+<div class="highlight highlight-source-java"><pre><span class="pl-c">// Enabling GZIP for Request (Not needed if your server doesn't support GZIP Compression), anyway responses </span>
+from server are automatically unGzipped <span class="pl-k">if</span> required. <span class="pl-smi">So</span> enable it only <span class="pl-k">if</span> you need your request to be 
+<span class="pl-smi">Gzipped</span> before sending to server(<span class="pl-smi">Make</span> sure your server support <span class="pl-c1">GZIP</span> <span class="pl-smi">Compression</span>)<span class="pl-c1">.</span>
+<span class="pl-smi">OkHttpClient</span> okHttpClient <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">OkHttpClient</span>()<span class="pl-k">.</span>newBuilder()
+                .addInterceptor(<span class="pl-k">new</span> <span class="pl-smi">GzipRequestInterceptor</span>())
                 .build();
-AndroidNetworking.initialize(getApplicationContext(),okHttpClient);                
-</code></pre>
+<span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>initialize(getApplicationContext(),okHttpClient);                </pre></div>
 
 <h3>
 <a id="important-note" class="anchor" href="#important-note" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>IMPORTANT NOTE</h3>
@@ -530,37 +543,6 @@ AndroidNetworking.initialize(getApplicationContext(),okHttpClient);
 1 or 2 (at max 2)IMMEDIATE request is required at instant.Otherwise use HIGH Priority.</li>
 <li>Known Bug : As present if you are using GZIP Interceptor from client to server, Upload progress
 is not working perfectly in Multipart.</li>
-</ul>
-
-<h3>
-<a id="differences-over-other-network-library" class="anchor" href="#differences-over-other-network-library" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>DIFFERENCES OVER OTHER NETWORK LIBRARY</h3>
-
-<ul>
-<li>OkHttpClient can be customized for every request easily.</li>
-<li>Complete analytics of any request can be obtained.</li>
-<li>Current bandwidth and connection quality can be obtained to decide logic of code.</li>
-<li>Executor can be passed to any request to get response in another thread.</li>
-<li>Single library for all type of networking.</li>
-<li>Prefetching of any request can be done so that it gives instant data when required from cache.</li>
-<li>All types of customization is possible.</li>
-<li>Proper cancellation of request.</li>
-<li>Do not cancel a request if completed more than a threshold percentage.</li>
-<li>Simple interface to make any type of request.</li>
-</ul>
-
-<h3>
-<a id="inspiration-behind-making-of-this-library-" class="anchor" href="#inspiration-behind-making-of-this-library-" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Inspiration behind making of this library :</h3>
-
-<ul>
-<li>Recent removal of HttpClient in Android Marshmallow(Android M) made other networking library obsolete.</li>
-<li>No other single library do each and everything like making request, downloading any type of file, uploading file, loading
-image from network in ImageView, etc. There are libraries but they are outdated.</li>
-<li>No other library provided simple interface for doing all types of things in networking like setting priority, cancelling, etc.</li>
-<li>As it uses <a href="https://github.com/square/okio">Okio</a> , No more GC overhead in android application.
-<a href="https://github.com/square/okio">Okio</a> is made to handle GC overhead while allocating memory.
-<a href="https://github.com/square/okio">Okio</a> do some clever things to save CPU and memory.</li>
-<li>As it uses <a href="http://square.github.io/okhttp/">OkHttp</a> , most important it supports HTTP/2.<br>
-</li>
 </ul>
 
 <h3>
@@ -584,6 +566,23 @@ image from network in ImageView, etc. There are libraries but they are outdated.
 used by Android Networking is developed by <a href="https://square.github.io/">Square</a>.</li>
 <li>
 <a href="https://android.googlesource.com/platform/frameworks/volley/">Volley</a> - As Android Networking uses ImageLoader that is developed by <a href="https://android.googlesource.com/platform/frameworks/volley/">Volley</a>.<br>
+</li>
+</ul>
+
+<h3>
+<a id="contact" class="anchor" href="#contact" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Contact</h3>
+
+<ul>
+<li><a href="https://twitter.com/amitiitbhu">Twitter</a></li>
+<li><a href="https://medium.com/@amitshekhar">Medium</a></li>
+<li><a href="https://www.facebook.com/amit.shekhar.iitbhu">Facebook</a></li>
+</ul>
+
+<h3>
+<a id="have-an-issue-or-need-a-feature-in-android-networking" class="anchor" href="#have-an-issue-or-need-a-feature-in-android-networking" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Have an issue or need a feature in Android Networking</h3>
+
+<ul>
+<li>Best way to do so is - <a href="https://github.com/amitshekhariitbhu/AndroidNetworking/issues/new">Create an issue</a>
 </li>
 </ul>
 
