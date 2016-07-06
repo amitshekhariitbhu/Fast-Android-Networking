@@ -14,18 +14,18 @@ Android Networking Library takes care of each and everything. So you don't have 
 
 Android Networking Library supports:
 
-* All type of HTTP/HTTPS request like GET,POST,etc
-* Downloading any type of file
-* Uploading any type of file (supports multipart upload)
-* Cancelling a request
-* Setting priority to any request (LOW, MEDIUM, HIGH, IMMEDIATE)
+* Android Networking Library supports all type of HTTP/HTTPS request like GET,POST,etc
+* Android Networking Library supports downloading any type of file
+* Android Networking Library supports uploading any type of file (supports multipart upload)
+* Android Networking Library supports cancelling a request
+* Android Networking Library supports setting priority to any request (LOW, MEDIUM, HIGH, IMMEDIATE)
 
 As it uses [OkHttp](http://square.github.io/okhttp/) as a networking layer, it supports:
 
-* HTTP/2 support allows all requests to the same host to share a socket
-* Connection pooling reduces request latency (if HTTP/2 isn’t available)
+* Android Networking Library supports HTTP/2 support allows all requests to the same host to share a socket
+* Android Networking Library uses connection pooling which reduces request latency (if HTTP/2 isn’t available)
 * Transparent GZIP shrinks download sizes
-* Response caching avoids the network completely for repeat requests
+* Android Networking Library supports response caching which avoids the network completely for repeat requests
 
 ### Why this library :
 * Recent removal of HttpClient in Android Marshmallow(Android M) made other networking library obsolete.
@@ -38,8 +38,8 @@ As it uses [OkHttp](http://square.github.io/okhttp/) as a networking layer, it s
 * As it uses [OkHttp](http://square.github.io/okhttp/) , most important it supports HTTP/2.  
 
 ### Difference over other Networking Library
-* OkHttpClient can be customized for every request easily.
-* As it uses [OkHttp](http://square.github.io/okhttp/) and [Okio](https://github.com/square/okio), it is faster.
+* In Android Networking Library, OkHttpClient can be customized for every request easily.
+* As Android Networking Library uses [OkHttp](http://square.github.io/okhttp/) and [Okio](https://github.com/square/okio), it is faster.
 * Single library for all type of networking.
 * Current bandwidth and connection quality can be obtained to decide logic of code.
 * Executor can be passed to any request to get response in another thread.
