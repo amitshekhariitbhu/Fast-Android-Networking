@@ -1,4 +1,4 @@
-# Android Networking 
+# Android Networking Library
 
 [![Build Status](https://travis-ci.org/amitshekhariitbhu/AndroidNetworking.svg?branch=master)](https://travis-ci.org/amitshekhariitbhu/AndroidNetworking)
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Android%20Networking-blue.svg?style=flat)](http://android-arsenal.com/details/1/3695)
@@ -6,13 +6,13 @@
 
 <img src=https://raw.githubusercontent.com/amitshekhariitbhu/AndroidNetworking/master/assets/androidnetworking.png width=500 height=300 />
 
-### About Android Networking
+### About Android Networking Library
 
-Android Networking is a powerful library for doing any type of networking in Android applications which is made on top of [OkHttp Networking Layer](http://square.github.io/okhttp/).
+Android Networking Library is a powerful library for doing any type of networking in Android applications which is made on top of [OkHttp Networking Layer](http://square.github.io/okhttp/).
 
-Android Networking takes care of each and everything. So you don't have to do anything, just make request and listen for the response.
+Android Networking Library takes care of each and everything. So you don't have to do anything, just make request and listen for the response.
 
-Android Networking supports:
+Android Networking Library supports:
 
 * All type of HTTP/HTTPS request like GET,POST,etc
 * Downloading any type of file
@@ -54,11 +54,11 @@ As it uses [OkHttp](http://square.github.io/okhttp/) as a networking layer, it s
 
 ## Requirements
 
-Android Networking can be included in any Android application. 
+Android Networking Library can be included in any Android application. 
 
-Android Networking supports Android 2.3 (Gingerbread) and later. 
+Android Networking Library supports Android 2.3 (Gingerbread) and later. 
 
-## Using Android Networking in your application
+## Using Android Networking Library in your application
 
 Add this in your build.gradle
 ```groovy
@@ -480,10 +480,9 @@ AndroidNetworking.initialize(getApplicationContext(),okHttpClient);
 
 ### TODO
 * [RxJava](https://github.com/ReactiveX/RxJava) Support
-* Network Execution Logic on the basis of network speed change
 * Integration with other library
 * And of course many many features and bug fixes
-* Json Parser - It is not present as you can use any parser on the basis of your requirement
+* Json Parser
 
 ### CREDITS
 * [Square](https://square.github.io/) - As both [OkHttp](http://square.github.io/okhttp/) and [Okio](https://github.com/square/okio)
