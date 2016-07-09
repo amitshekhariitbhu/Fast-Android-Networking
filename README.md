@@ -14,7 +14,7 @@ Android Networking Library takes care of each and everything. So you don't have 
 
 Android Networking Library supports:
 
-* Android Networking Library supports all type of HTTP/HTTPS request like GET,POST,etc
+* Android Networking Library supports all types of HTTP/HTTPS request like GET, POST, DELETE, HEAD, PUT, PATCH
 * Android Networking Library supports downloading any type of file
 * Android Networking Library supports uploading any type of file (supports multipart upload)
 * Android Networking Library supports cancelling a request
