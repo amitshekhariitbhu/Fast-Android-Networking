@@ -228,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
         AndroidNetworking.post("http://192.168.1.25:8089/getFacialPoints")
                 .addHeaders("Authorization", "")
                 .addJSONObjectBody(jsonObject)
-                .setPriority(Priority.IMMEDIATE)
+                .setPriority(Priority.HIGH)
                 .setTag(TAG)
                 .build()
                 .setAnalyticsListener(new AnalyticsListener() {

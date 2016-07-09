@@ -193,7 +193,7 @@ AndroidNetworking.download(url,dirPath,fileName)
 AndroidNetworking.upload(url)
                  .addMultipartFile("image",file)    
                  .setTag("uploadTest")
-                 .setPriority(Priority.IMMEDIATE)
+                 .setPriority(Priority.HIGH)
                  .build()
                  .setUploadProgressListener(new UploadProgressListener() {
                     @Override
@@ -218,7 +218,7 @@ AndroidNetworking.upload(url)
 AndroidNetworking.upload(url)
                  .addMultipartFile("image",file)    
                  .setTag("uploadTest")
-                 .setPriority(Priority.IMMEDIATE)
+                 .setPriority(Priority.HIGH)
                  .build()
                  .setExecutor(Executors.newSingleThreadExecutor()) // setting an executor to get response or completion on that executor thread
                  .setUploadProgressListener(new UploadProgressListener() {

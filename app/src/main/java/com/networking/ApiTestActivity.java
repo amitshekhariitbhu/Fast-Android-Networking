@@ -83,7 +83,7 @@ public class ApiTestActivity extends AppCompatActivity {
     private void prefetchDownload() {
         String url = "http://www.colorado.edu/conflict/peace/download/peace_problem.ZIP";
         AndroidNetworking.download(url, Utils.getRootDirPath(getApplicationContext()), "file1.zip")
-                .setPriority(Priority.IMMEDIATE)
+                .setPriority(Priority.HIGH)
                 .setTag(this)
                 .build()
                 .setAnalyticsListener(new AnalyticsListener() {
@@ -360,7 +360,7 @@ public class ApiTestActivity extends AppCompatActivity {
     public void downloadFile(final View view) {
         String url = "http://www.colorado.edu/conflict/peace/download/peace_problem.ZIP";
         AndroidNetworking.download(url, Utils.getRootDirPath(getApplicationContext()), "file1.zip")
-                .setPriority(Priority.IMMEDIATE)
+                .setPriority(Priority.HIGH)
                 .setTag(this)
                 .build()
                 .setAnalyticsListener(new AnalyticsListener() {
@@ -704,7 +704,7 @@ public class ApiTestActivity extends AppCompatActivity {
     public void cleanupDestinationTest(View view) {
         String url = "http://i.imgur.com/m6K1DCQ.jpg";
         AndroidNetworking.download(url, Utils.getRootDirPath(getApplicationContext()), "cleanupDestinationTest.jpg")
-                .setPriority(Priority.IMMEDIATE)
+                .setPriority(Priority.HIGH)
                 .setTag("cleanupDestinationTest")
                 .build()
                 .setAnalyticsListener(new AnalyticsListener() {
@@ -797,7 +797,7 @@ public class ApiTestActivity extends AppCompatActivity {
     public void checkCacheForCustomClient(View view) {
         String url = "http://www.colorado.edu/conflict/peace/download/peace_problem.ZIP";
         AndroidNetworking.download(url, Utils.getRootDirPath(getApplicationContext()), "file1.zip")
-                .setPriority(Priority.IMMEDIATE)
+                .setPriority(Priority.HIGH)
                 .setTag(this)
                 .setOkHttpClient(new OkHttpClient())
                 .build()
