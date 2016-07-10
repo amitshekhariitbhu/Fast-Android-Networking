@@ -13,9 +13,9 @@
     <section class="page-header">
       <h1 class="project-name">Android Networking Library</h1>
       <h2 class="project-tagline">Android Networking Library is a powerful library for doing any type of networking in Android Applications</h2>
-      <a href="https://github.com/amitshekhariitbhu/AndroidNetworking" class="btn">View on GitHub</a>
-      <a href="https://github.com/amitshekhariitbhu/AndroidNetworking/zipball/master" class="btn">Download .zip</a>
-      <a href="https://github.com/amitshekhariitbhu/AndroidNetworking/tarball/master" class="btn">Download .tar.gz</a>
+      <a href="https://github.com/amitshekhariitbhu/Android-Networking" class="btn">View on GitHub</a>
+      <a href="https://github.com/amitshekhariitbhu/Android-Networking/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/amitshekhariitbhu/Android-Networking/tarball/master" class="btn">Download .tar.gz</a>
     </section>
 
     <section class="main-content">
@@ -38,20 +38,20 @@
 <p>Android Networking Library supports:</p>
 
 <ul>
-<li>All type of HTTP/HTTPS request like GET,POST,etc</li>
-<li>Downloading any type of file</li>
-<li>Uploading any type of file (supports multipart upload)</li>
-<li>Cancelling a request</li>
-<li>Setting priority to any request (LOW, MEDIUM, HIGH, IMMEDIATE)</li>
+<li>Android Networking Library supports all types of HTTP/HTTPS request like GET, POST, DELETE, HEAD, PUT, PATCH</li>
+<li>Android Networking Library supports downloading any type of file</li>
+<li>Android Networking Library supports uploading any type of file (supports multipart upload)</li>
+<li>Android Networking Library supports cancelling a request</li>
+<li>Android Networking Library supports setting priority to any request (LOW, MEDIUM, HIGH, IMMEDIATE)</li>
 </ul>
 
 <p>As it uses <a href="http://square.github.io/okhttp/">OkHttp</a> as a networking layer, it supports:</p>
 
 <ul>
-<li>HTTP/2 support allows all requests to the same host to share a socket</li>
-<li>Connection pooling reduces request latency (if HTTP/2 isn’t available)</li>
+<li>Android Networking Library supports HTTP/2 support allows all requests to the same host to share a socket</li>
+<li>Android Networking Library uses connection pooling which reduces request latency (if HTTP/2 isn’t available)</li>
 <li>Transparent GZIP shrinks download sizes</li>
-<li>Response caching avoids the network completely for repeat requests</li>
+<li>Android Networking Library supports response caching which avoids the network completely for repeat requests</li>
 </ul>
 
 <h3>
@@ -73,8 +73,8 @@ image from network in ImageView, etc. There are libraries but they are outdated.
 <a id="difference-over-other-networking-library" class="anchor" href="#difference-over-other-networking-library" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Difference over other Networking Library</h3>
 
 <ul>
-<li>OkHttpClient can be customized for every request easily.</li>
-<li>As it uses <a href="http://square.github.io/okhttp/">OkHttp</a> and <a href="https://github.com/square/okio">Okio</a>, it is faster.</li>
+<li>In Android Networking Library, OkHttpClient can be customized for every request easily.</li>
+<li>As Android Networking Library uses <a href="http://square.github.io/okhttp/">OkHttp</a> and <a href="https://github.com/square/okio">Okio</a>, it is faster.</li>
 <li>Single library for all type of networking.</li>
 <li>Current bandwidth and connection quality can be obtained to decide logic of code.</li>
 <li>Executor can be passed to any request to get response in another thread.</li>
@@ -236,7 +236,7 @@ image from network in ImageView, etc. There are libraries but they are outdated.
 <div class="highlight highlight-source-java"><pre><span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>upload(url)
                  .addMultipartFile(<span class="pl-s"><span class="pl-pds">"</span>image<span class="pl-pds">"</span></span>,file)    
                  .setTag(<span class="pl-s"><span class="pl-pds">"</span>uploadTest<span class="pl-pds">"</span></span>)
-                 .setPriority(<span class="pl-smi">Priority</span><span class="pl-c1"><span class="pl-k">.</span>IMMEDIATE</span>)
+                 .setPriority(<span class="pl-smi">Priority</span><span class="pl-c1"><span class="pl-k">.</span>HIGH</span>)
                  .build()
                  .setUploadProgressListener(<span class="pl-k">new</span> <span class="pl-smi">UploadProgressListener</span>() {
                     <span class="pl-k">@Override</span>
@@ -263,7 +263,7 @@ image from network in ImageView, etc. There are libraries but they are outdated.
 <div class="highlight highlight-source-java"><pre><span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>upload(url)
                  .addMultipartFile(<span class="pl-s"><span class="pl-pds">"</span>image<span class="pl-pds">"</span></span>,file)    
                  .setTag(<span class="pl-s"><span class="pl-pds">"</span>uploadTest<span class="pl-pds">"</span></span>)
-                 .setPriority(<span class="pl-smi">Priority</span><span class="pl-c1"><span class="pl-k">.</span>IMMEDIATE</span>)
+                 .setPriority(<span class="pl-smi">Priority</span><span class="pl-c1"><span class="pl-k">.</span>HIGH</span>)
                  .build()
                  .setExecutor(<span class="pl-smi">Executors</span><span class="pl-k">.</span>newSingleThreadExecutor()) <span class="pl-c">// setting an executor to get response or completion on that executor thread</span>
                  .setUploadProgressListener(<span class="pl-k">new</span> <span class="pl-smi">UploadProgressListener</span>() {
@@ -610,7 +610,7 @@ used by Android Networking is developed by <a href="https://square.github.io/">S
 <p>Just make pull request. You are in!</p>
 
       <footer class="site-footer">
-        <span class="site-footer-owner"><a href="https://github.com/amitshekhariitbhu/AndroidNetworking">Android Networking Library</a> is maintained by <a href="https://github.com/amitshekhariitbhu">amitshekhariitbhu</a>.</span>
+        <span class="site-footer-owner"><a href="https://github.com/amitshekhariitbhu/Android-Networking">Android Networking Library</a> is maintained by <a href="https://github.com/amitshekhariitbhu">amitshekhariitbhu</a>.</span>
 
         <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
       </footer>
