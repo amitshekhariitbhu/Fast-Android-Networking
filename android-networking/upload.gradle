@@ -18,8 +18,8 @@
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: "com.jfrog.bintray"
 
-def siteUrl = 'https://github.com/amitshekhariitbhu/AndroidNetworking'
-def gitUrl = 'https://github.com/amitshekhariitbhu/AndroidNetworking.git'
+def siteUrl = 'https://github.com/amitshekhariitbhu/Android-Networking'
+def gitUrl = 'https://github.com/amitshekhariitbhu/Android-Networking.git'
 
 group = "com.amitshekhar.android"
 version = '0.0.1'
