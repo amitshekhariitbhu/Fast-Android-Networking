@@ -1,6 +1,6 @@
 # Android Networking Library
 
-[![Build Status](https://travis-ci.org/amitshekhariitbhu/AndroidNetworking.svg?branch=master)](https://travis-ci.org/amitshekhariitbhu/AndroidNetworking)
+[![Build Status](https://travis-ci.org/amitshekhariitbhu/Android-Networking.svg?branch=master)](https://travis-ci.org/amitshekhariitbhu/AndroidNetworking)
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Android%20Networking-blue.svg?style=flat)](http://android-arsenal.com/details/1/3695)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/amitshekhariitbhu/Android-Networking/blob/master/LICENSE)
 
