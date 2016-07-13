@@ -52,6 +52,14 @@ As it uses [OkHttp](http://square.github.io/okhttp/) as a networking layer, it s
 * Simple interface to make any type of request.
 * Proper Response Caching, hence reducing bandwidth usage.
 
+### Have an issue or need a feature in Android Networking
+- Best way to do so is - [Create an issue](https://github.com/amitshekhariitbhu/AndroidNetworking/issues/new)
+
+### Loved the Android Networking Library
+- Do me a favor by giving a star on this project.
+- You can find the star button at the top-right on this page.
+- Giving a star makes it more searchable to you and other developers.
+
 ## Requirements
 
 Android Networking Library can be included in any Android application. 
@@ -493,9 +501,6 @@ AndroidNetworking.initialize(getApplicationContext(),okHttpClient);
 - [Twitter](https://twitter.com/amitiitbhu)
 - [Medium](https://medium.com/@amitshekhar)
 - [Facebook](https://www.facebook.com/amit.shekhar.iitbhu)
-
-### Have an issue or need a feature in Android Networking
-- Best way to do so is - [Create an issue](https://github.com/amitshekhariitbhu/AndroidNetworking/issues/new)
 
 ### License
 ```
