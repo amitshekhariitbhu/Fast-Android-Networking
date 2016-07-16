@@ -1,31 +1,31 @@
-# Android Networking Library
+# Fast Android Networking Library
 
-[![Build Status](https://travis-ci.org/amitshekhariitbhu/Android-Networking.svg?branch=master)](https://travis-ci.org/amitshekhariitbhu/Android-Networking)
+[![Build Status](https://travis-ci.org/amitshekhariitbhu/Fast-Android-Networking.svg?branch=master)](https://travis-ci.org/amitshekhariitbhu/Fast-Android-Networking)
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Android%20Networking-blue.svg?style=flat)](http://android-arsenal.com/details/1/3695)
-[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/amitshekhariitbhu/Android-Networking/blob/master/LICENSE)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/amitshekhariitbhu/Fast-Android-Networking/blob/master/LICENSE)
 
-<img src=https://raw.githubusercontent.com/amitshekhariitbhu/Android-Networking/master/assets/androidnetworking.png width=1000 height=130 />
+<img src=https://raw.githubusercontent.com/amitshekhariitbhu/Fast-Android-Networking/master/assets/fastandroidnetworking.png width=1000 height=91 />
 
-### About Android Networking Library
+### About Fast Android Networking Library
 
-Android Networking Library is a powerful library for doing any type of networking in Android applications which is made on top of [OkHttp Networking Layer](http://square.github.io/okhttp/).
+Fast Android Networking Library is a powerful library for doing any type of networking in Android applications which is made on top of [OkHttp Networking Layer](http://square.github.io/okhttp/).
 
-Android Networking Library takes care of each and everything. So you don't have to do anything, just make request and listen for the response.
+Fast Android Networking Library takes care of each and everything. So you don't have to do anything, just make request and listen for the response.
 
-Android Networking Library supports:
+Fast Android Networking Library supports:
 
-* Android Networking Library supports all types of HTTP/HTTPS request like GET, POST, DELETE, HEAD, PUT, PATCH
-* Android Networking Library supports downloading any type of file
-* Android Networking Library supports uploading any type of file (supports multipart upload)
-* Android Networking Library supports cancelling a request
-* Android Networking Library supports setting priority to any request (LOW, MEDIUM, HIGH, IMMEDIATE)
+* Fast Android Networking Library supports all types of HTTP/HTTPS request like GET, POST, DELETE, HEAD, PUT, PATCH
+* Fast Android Networking Library supports downloading any type of file
+* Fast Android Networking Library supports uploading any type of file (supports multipart upload)
+* Fast Android Networking Library supports cancelling a request
+* Fast Android Networking Library supports setting priority to any request (LOW, MEDIUM, HIGH, IMMEDIATE)
 
 As it uses [OkHttp](http://square.github.io/okhttp/) as a networking layer, it supports:
 
-* Android Networking Library supports HTTP/2 support allows all requests to the same host to share a socket
-* Android Networking Library uses connection pooling which reduces request latency (if HTTP/2 isn’t available)
+* Fast Android Networking Library supports HTTP/2 support allows all requests to the same host to share a socket
+* Fast Android Networking Library uses connection pooling which reduces request latency (if HTTP/2 isn’t available)
 * Transparent GZIP shrinks download sizes
-* Android Networking Library supports response caching which avoids the network completely for repeat requests
+* Fast Android Networking Library supports response caching which avoids the network completely for repeat requests
 
 ### Why this library :
 * Recent removal of HttpClient in Android Marshmallow(Android M) made other networking library obsolete.
@@ -38,8 +38,8 @@ As it uses [OkHttp](http://square.github.io/okhttp/) as a networking layer, it s
 * As it uses [OkHttp](http://square.github.io/okhttp/) , most important it supports HTTP/2.  
 
 ### Difference over other Networking Library
-* In Android Networking Library, OkHttpClient can be customized for every request easily.
-* As Android Networking Library uses [OkHttp](http://square.github.io/okhttp/) and [Okio](https://github.com/square/okio), it is faster.
+* In Fast Android Networking Library, OkHttpClient can be customized for every request easily.
+* As Fast Android Networking Library uses [OkHttp](http://square.github.io/okhttp/) and [Okio](https://github.com/square/okio), it is faster.
 * Single library for all type of networking.
 * Current bandwidth and connection quality can be obtained to decide logic of code.
 * Executor can be passed to any request to get response in another thread.
@@ -52,21 +52,21 @@ As it uses [OkHttp](http://square.github.io/okhttp/) as a networking layer, it s
 * Simple interface to make any type of request.
 * Proper Response Caching, hence reducing bandwidth usage.
 
-### Have an issue or need a feature in Android Networking
-- Best way to do so is - [Create an issue](https://github.com/amitshekhariitbhu/AndroidNetworking/issues/new)
+### Have an issue or need a feature in Fast Android Networking
+- Best way to do so is - [Create an issue](https://github.com/amitshekhariitbhu/Fast-Android-Networking/issues/new)
 
-### Loved the Android Networking Library
+### Loved the Fast Android Networking Library
 - Do me a favor by giving a star on this project.
 - You can find the star button at the top-right on this page.
 - Giving a star makes it more searchable to you and other developers.
 
 ## Requirements
 
-Android Networking Library can be included in any Android application. 
+Fast Android Networking Library can be included in any Android application. 
 
-Android Networking Library supports Android 2.3 (Gingerbread) and later. 
+Fast Android Networking Library supports Android 2.3 (Gingerbread) and later. 
 
-## Using Android Networking Library in your application
+## Using Fast Android Networking Library in your application
 
 Add this in your build.gradle
 ```groovy
@@ -494,8 +494,8 @@ AndroidNetworking.initialize(getApplicationContext(),okHttpClient);
 
 ### CREDITS
 * [Square](https://square.github.io/) - As both [OkHttp](http://square.github.io/okhttp/) and [Okio](https://github.com/square/okio)
-  used by Android Networking is developed by [Square](https://square.github.io/).
-* [Volley](https://android.googlesource.com/platform/frameworks/volley/) - As Android Networking uses ImageLoader that is developed by [Volley](https://android.googlesource.com/platform/frameworks/volley/).  
+  used by Fast Android Networking is developed by [Square](https://square.github.io/).
+* [Volley](https://android.googlesource.com/platform/frameworks/volley/) - As Fast Android Networking uses ImageLoader that is developed by [Volley](https://android.googlesource.com/platform/frameworks/volley/).  
 
 ### Contact
 - [Twitter](https://twitter.com/amitiitbhu)
@@ -520,6 +520,6 @@ AndroidNetworking.initialize(getApplicationContext(),okHttpClient);
    limitations under the License.
 ```
 
-### Contributing to Android Networking
+### Contributing to Fast Android Networking
 Just make pull request. You are in!
 
