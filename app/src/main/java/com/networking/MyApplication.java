@@ -50,7 +50,6 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         appInstance = this;
-        setVariableFromEnv();
         //For testing purpose only: network interceptor : enable it only for non-images request checking
 //        Stetho.initializeWithDefaults(getApplicationContext());
 //        OkHttpClient okHttpClient = new OkHttpClient().newBuilder().addNetworkInterceptor(new StethoInterceptor()).addInterceptor(new GzipRequestInterceptor()).build();
@@ -67,42 +66,6 @@ public class MyApplication extends Application {
             }
         });
 
-    }
-
-    private void setVariableFromEnv() {
-        try {
-            File sdcard = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-            File file = new File(sdcard, "env.txt");
-            if (!file.exists()) {
-                Log.d(TAG, "Env file is not present in download folder");
-                Toast.makeText(getApplicationContext(), "Env file is not present in download folder", Toast.LENGTH_LONG).show();
-                return;
-            }
-            StringBuilder text = new StringBuilder();
-            try {
-                BufferedReader br = new BufferedReader(new FileReader(file));
-                String line;
-                while ((line = br.readLine()) != null) {
-                    text.append(line);
-                    text.append('\n');
-                }
-                br.close();
-                try {
-                    JSONObject jsonObject = new JSONObject(text.toString());
-                    ApiEndPoint.BASE_URL = jsonObject.getString("baseUrl");
-                    ApiEndPoint.UPLOAD_IMAGE_URL = jsonObject.getString("uploadImageUrl");
-                } catch (JSONException e) {
-                    Log.d(TAG, "Check env file json in download folder");
-                    Toast.makeText(getApplicationContext(), "Check env file json in download folder", Toast.LENGTH_LONG).show();
-                }
-            } catch (IOException e) {
-                Log.d(TAG, "Check env file in download folder");
-                Toast.makeText(getApplicationContext(), "Check env file in download folder", Toast.LENGTH_LONG).show();
-            }
-        } catch (Exception e) {
-            Log.d(TAG, "Exception in loading settingVariableFromEnv");
-            Toast.makeText(getApplicationContext(), "Exception in loading settingVariableFromEnv", Toast.LENGTH_LONG).show();
-        }
     }
 
 }

@@ -445,7 +445,7 @@ public class ApiTestActivity extends AppCompatActivity {
     }
 
     public void uploadImage(final View view) {
-        AndroidNetworking.upload(ApiEndPoint.UPLOAD_IMAGE_URL)
+        AndroidNetworking.upload(ApiEndPoint.BASE_URL + ApiEndPoint.UPLOAD_IMAGE)
                 .setPriority(Priority.MEDIUM)
                 .addMultipartFile("image", new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "test.png"))
                 .setTag(this)
