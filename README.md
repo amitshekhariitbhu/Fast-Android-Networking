@@ -55,11 +55,6 @@ As it uses [OkHttp](http://square.github.io/okhttp/) as a networking layer, it s
 ### Have an issue or need a feature in Fast Android Networking
 - Best way to do so is - [Create an issue](https://github.com/amitshekhariitbhu/Fast-Android-Networking/issues/new)
 
-### Loved the Fast Android Networking Library
-- Do me a favor by giving a star on this project.
-- You can find the star button at the top-right on this page.
-- Giving a star makes it more searchable to you and other developers.
-
 ## Requirements
 
 Fast Android Networking Library can be included in any Android application. 
