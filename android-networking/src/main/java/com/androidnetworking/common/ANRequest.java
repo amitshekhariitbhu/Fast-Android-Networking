@@ -111,7 +111,7 @@ public class ANRequest {
     private OkHttpClient mOkHttpClient = null;
     private String mUserAgent = null;
 
-    private ANRequest(GetRequestBuilder builder) {
+    public ANRequest(GetRequestBuilder builder) {
         this.mRequestType = RequestType.SIMPLE;
         this.mMethod = builder.mMethod;
         this.mPriority = builder.mPriority;
@@ -130,7 +130,7 @@ public class ANRequest {
         this.mUserAgent = builder.mUserAgent;
     }
 
-    private ANRequest(PostRequestBuilder builder) {
+    public ANRequest(PostRequestBuilder builder) {
         this.mRequestType = RequestType.SIMPLE;
         this.mMethod = builder.mMethod;
         this.mPriority = builder.mPriority;
@@ -152,7 +152,7 @@ public class ANRequest {
         this.mUserAgent = builder.mUserAgent;
     }
 
-    private ANRequest(DownloadBuilder builder) {
+    public ANRequest(DownloadBuilder builder) {
         this.mRequestType = RequestType.DOWNLOAD;
         this.mMethod = Method.GET;
         this.mPriority = builder.mPriority;
@@ -170,7 +170,7 @@ public class ANRequest {
         this.mUserAgent = builder.mUserAgent;
     }
 
-    private ANRequest(MultiPartBuilder builder) {
+    public ANRequest(MultiPartBuilder builder) {
         this.mRequestType = RequestType.MULTIPART;
         this.mMethod = Method.POST;
         this.mPriority = builder.mPriority;
@@ -621,7 +621,7 @@ public class ANRequest {
         }
     }
 
-    public static class GetRequestBuilder implements RequestBuilder {
+    public static class GetRequestBuilder<T extends GetRequestBuilder> implements RequestBuilder {
         private Priority mPriority = Priority.MEDIUM;
         private int mMethod = Method.GET;
         private String mUrl;
@@ -649,121 +649,121 @@ public class ANRequest {
         }
 
         @Override
-        public GetRequestBuilder setPriority(Priority priority) {
-            this.mPriority = priority;
-            return this;
+        public T setPriority(Priority priority) {
+            mPriority = priority;
+            return (T) this;
         }
 
         @Override
-        public GetRequestBuilder setTag(Object tag) {
-            this.mTag = tag;
-            return this;
+        public T setTag(Object tag) {
+            mTag = tag;
+            return (T) this;
         }
 
         @Override
-        public GetRequestBuilder addQueryParameter(String key, String value) {
+        public T addQueryParameter(String key, String value) {
             mQueryParameterMap.put(key, value);
-            return this;
+            return (T) this;
         }
 
         @Override
-        public GetRequestBuilder addQueryParameter(HashMap<String, String> queryParameterMap) {
+        public T addQueryParameter(HashMap<String, String> queryParameterMap) {
             if (queryParameterMap != null) {
                 for (HashMap.Entry<String, String> entry : queryParameterMap.entrySet()) {
                     mQueryParameterMap.put(entry.getKey(), entry.getValue());
                 }
             }
-            return this;
+            return (T) this;
         }
 
         @Override
-        public GetRequestBuilder addPathParameter(String key, String value) {
+        public T addPathParameter(String key, String value) {
             mPathParameterMap.put(key, value);
-            return this;
+            return (T) this;
         }
 
         @Override
-        public GetRequestBuilder addHeaders(String key, String value) {
+        public T addHeaders(String key, String value) {
             mHeadersMap.put(key, value);
-            return this;
+            return (T) this;
         }
 
         @Override
-        public GetRequestBuilder addHeaders(HashMap<String, String> headerMap) {
+        public T addHeaders(HashMap<String, String> headerMap) {
             if (headerMap != null) {
                 for (HashMap.Entry<String, String> entry : headerMap.entrySet()) {
                     mHeadersMap.put(entry.getKey(), entry.getValue());
                 }
             }
-            return this;
+            return (T) this;
         }
 
         @Override
-        public GetRequestBuilder doNotCacheResponse() {
+        public T doNotCacheResponse() {
             mCacheControl = new CacheControl.Builder().noStore().build();
-            return this;
+            return (T) this;
         }
 
         @Override
-        public GetRequestBuilder getResponseOnlyIfCached() {
+        public T getResponseOnlyIfCached() {
             mCacheControl = CacheControl.FORCE_CACHE;
-            return this;
+            return (T) this;
         }
 
         @Override
-        public GetRequestBuilder getResponseOnlyFromNetwork() {
+        public T getResponseOnlyFromNetwork() {
             mCacheControl = CacheControl.FORCE_NETWORK;
-            return this;
+            return (T) this;
         }
 
         @Override
-        public GetRequestBuilder setMaxAgeCacheControl(int maxAge, TimeUnit timeUnit) {
+        public T setMaxAgeCacheControl(int maxAge, TimeUnit timeUnit) {
             mCacheControl = new CacheControl.Builder().maxAge(maxAge, timeUnit).build();
-            return this;
+            return (T) this;
         }
 
         @Override
-        public GetRequestBuilder setMaxStaleCacheControl(int maxStale, TimeUnit timeUnit) {
+        public T setMaxStaleCacheControl(int maxStale, TimeUnit timeUnit) {
             mCacheControl = new CacheControl.Builder().maxStale(maxStale, timeUnit).build();
-            return this;
+            return (T) this;
         }
 
         @Override
-        public GetRequestBuilder setExecutor(Executor executor) {
+        public T setExecutor(Executor executor) {
             mExecutor = executor;
-            return this;
+            return (T) this;
         }
 
         @Override
-        public GetRequestBuilder setOkHttpClient(OkHttpClient okHttpClient) {
+        public T setOkHttpClient(OkHttpClient okHttpClient) {
             mOkHttpClient = okHttpClient;
-            return this;
+            return (T) this;
         }
 
         @Override
-        public GetRequestBuilder setUserAgent(String userAgent) {
+        public T setUserAgent(String userAgent) {
             mUserAgent = userAgent;
-            return this;
+            return (T) this;
         }
 
-        public GetRequestBuilder setBitmapConfig(Bitmap.Config bitmapConfig) {
-            this.mDecodeConfig = bitmapConfig;
-            return this;
+        public T setBitmapConfig(Bitmap.Config bitmapConfig) {
+            mDecodeConfig = bitmapConfig;
+            return (T) this;
         }
 
-        public GetRequestBuilder setBitmapMaxHeight(int maxHeight) {
-            this.mMaxHeight = maxHeight;
-            return this;
+        public T setBitmapMaxHeight(int maxHeight) {
+            mMaxHeight = maxHeight;
+            return (T) this;
         }
 
-        public GetRequestBuilder setBitmapMaxWidth(int maxWidth) {
-            this.mMaxWidth = maxWidth;
-            return this;
+        public T setBitmapMaxWidth(int maxWidth) {
+            mMaxWidth = maxWidth;
+            return (T) this;
         }
 
-        public GetRequestBuilder setImageScaleType(ImageView.ScaleType imageScaleType) {
-            this.mScaleType = imageScaleType;
-            return this;
+        public T setImageScaleType(ImageView.ScaleType imageScaleType) {
+            mScaleType = imageScaleType;
+            return (T) this;
         }
 
         public ANRequest build() {
@@ -792,7 +792,7 @@ public class ANRequest {
         }
     }
 
-    public static class PostRequestBuilder implements RequestBuilder {
+    public static class PostRequestBuilder<T extends PostRequestBuilder> implements RequestBuilder {
 
         private Priority mPriority = Priority.MEDIUM;
         private int mMethod = Method.POST;
@@ -824,154 +824,154 @@ public class ANRequest {
         }
 
         @Override
-        public PostRequestBuilder setPriority(Priority priority) {
-            this.mPriority = priority;
-            return this;
+        public T setPriority(Priority priority) {
+            mPriority = priority;
+            return (T) this;
         }
 
         @Override
-        public PostRequestBuilder setTag(Object tag) {
-            this.mTag = tag;
-            return this;
+        public T setTag(Object tag) {
+            mTag = tag;
+            return (T) this;
         }
 
         @Override
-        public PostRequestBuilder addQueryParameter(String key, String value) {
+        public T addQueryParameter(String key, String value) {
             mQueryParameterMap.put(key, value);
-            return this;
+            return (T) this;
         }
 
         @Override
-        public PostRequestBuilder addQueryParameter(HashMap<String, String> queryParameterMap) {
+        public T addQueryParameter(HashMap<String, String> queryParameterMap) {
             if (queryParameterMap != null) {
                 for (HashMap.Entry<String, String> entry : queryParameterMap.entrySet()) {
                     mQueryParameterMap.put(entry.getKey(), entry.getValue());
                 }
             }
-            return this;
+            return (T) this;
         }
 
         @Override
-        public PostRequestBuilder addPathParameter(String key, String value) {
+        public T addPathParameter(String key, String value) {
             mPathParameterMap.put(key, value);
-            return this;
+            return (T) this;
         }
 
         @Override
-        public PostRequestBuilder addHeaders(String key, String value) {
+        public T addHeaders(String key, String value) {
             mHeadersMap.put(key, value);
-            return this;
+            return (T) this;
         }
 
         @Override
-        public PostRequestBuilder addHeaders(HashMap<String, String> headerMap) {
+        public T addHeaders(HashMap<String, String> headerMap) {
             if (headerMap != null) {
                 for (HashMap.Entry<String, String> entry : headerMap.entrySet()) {
                     mHeadersMap.put(entry.getKey(), entry.getValue());
                 }
             }
-            return this;
+            return (T) this;
         }
 
         @Override
-        public PostRequestBuilder doNotCacheResponse() {
+        public T doNotCacheResponse() {
             mCacheControl = new CacheControl.Builder().noStore().build();
-            return this;
+            return (T) this;
         }
 
         @Override
-        public PostRequestBuilder getResponseOnlyIfCached() {
+        public T getResponseOnlyIfCached() {
             mCacheControl = CacheControl.FORCE_CACHE;
-            return this;
+            return (T) this;
         }
 
         @Override
-        public PostRequestBuilder getResponseOnlyFromNetwork() {
+        public T getResponseOnlyFromNetwork() {
             mCacheControl = CacheControl.FORCE_NETWORK;
-            return this;
+            return (T) this;
         }
 
         @Override
-        public PostRequestBuilder setMaxAgeCacheControl(int maxAge, TimeUnit timeUnit) {
+        public T setMaxAgeCacheControl(int maxAge, TimeUnit timeUnit) {
             mCacheControl = new CacheControl.Builder().maxAge(maxAge, timeUnit).build();
-            return this;
+            return (T) this;
         }
 
         @Override
-        public PostRequestBuilder setMaxStaleCacheControl(int maxStale, TimeUnit timeUnit) {
+        public T setMaxStaleCacheControl(int maxStale, TimeUnit timeUnit) {
             mCacheControl = new CacheControl.Builder().maxStale(maxStale, timeUnit).build();
-            return this;
+            return (T) this;
         }
 
         @Override
-        public PostRequestBuilder setExecutor(Executor executor) {
+        public T setExecutor(Executor executor) {
             mExecutor = executor;
-            return this;
+            return (T) this;
         }
 
         @Override
-        public PostRequestBuilder setOkHttpClient(OkHttpClient okHttpClient) {
+        public T setOkHttpClient(OkHttpClient okHttpClient) {
             mOkHttpClient = okHttpClient;
-            return this;
+            return (T) this;
         }
 
         @Override
-        public PostRequestBuilder setUserAgent(String userAgent) {
+        public T setUserAgent(String userAgent) {
             mUserAgent = userAgent;
-            return this;
+            return (T) this;
         }
 
-        public PostRequestBuilder addBodyParameter(String key, String value) {
+        public T addBodyParameter(String key, String value) {
             mBodyParameterMap.put(key, value);
-            return this;
+            return (T) this;
         }
 
-        public PostRequestBuilder addUrlEncodeFormBodyParameter(String key, String value) {
+        public T addUrlEncodeFormBodyParameter(String key, String value) {
             mUrlEncodedFormBodyParameterMap.put(key, value);
-            return this;
+            return (T) this;
         }
 
-        public PostRequestBuilder addBodyParameter(HashMap<String, String> bodyParameterMap) {
+        public T addBodyParameter(HashMap<String, String> bodyParameterMap) {
             if (bodyParameterMap != null) {
                 for (HashMap.Entry<String, String> entry : bodyParameterMap.entrySet()) {
                     mBodyParameterMap.put(entry.getKey(), entry.getValue());
                 }
             }
-            return this;
+            return (T) this;
         }
 
-        public PostRequestBuilder addUrlEncodeFormBodyParameter(HashMap<String, String> bodyParameterMap) {
+        public T addUrlEncodeFormBodyParameter(HashMap<String, String> bodyParameterMap) {
             if (bodyParameterMap != null) {
                 for (HashMap.Entry<String, String> entry : bodyParameterMap.entrySet()) {
                     mUrlEncodedFormBodyParameterMap.put(entry.getKey(), entry.getValue());
                 }
             }
-            return this;
+            return (T) this;
         }
 
-        public PostRequestBuilder addJSONObjectBody(JSONObject jsonObject) {
+        public T addJSONObjectBody(JSONObject jsonObject) {
             mJsonObject = jsonObject;
-            return this;
+            return (T) this;
         }
 
-        public PostRequestBuilder addJSONArrayBody(JSONArray jsonArray) {
+        public T addJSONArrayBody(JSONArray jsonArray) {
             mJsonArray = jsonArray;
-            return this;
+            return (T) this;
         }
 
-        public PostRequestBuilder addStringBody(String stringBody) {
+        public T addStringBody(String stringBody) {
             mStringBody = stringBody;
-            return this;
+            return (T) this;
         }
 
-        public PostRequestBuilder addFileBody(File file) {
+        public T addFileBody(File file) {
             mFile = file;
-            return this;
+            return (T) this;
         }
 
-        public PostRequestBuilder addByteBody(byte[] bytes) {
+        public T addByteBody(byte[] bytes) {
             mByte = bytes;
-            return this;
+            return (T) this;
         }
 
         public ANRequest build() {
@@ -979,7 +979,7 @@ public class ANRequest {
         }
     }
 
-    public static class DownloadBuilder implements RequestBuilder {
+    public static class DownloadBuilder<T extends DownloadBuilder> implements RequestBuilder {
 
         private Priority mPriority = Priority.MEDIUM;
         private String mUrl;
@@ -1002,106 +1002,106 @@ public class ANRequest {
         }
 
         @Override
-        public DownloadBuilder setPriority(Priority priority) {
-            this.mPriority = priority;
-            return this;
+        public T setPriority(Priority priority) {
+            mPriority = priority;
+            return (T) this;
         }
 
         @Override
-        public DownloadBuilder setTag(Object tag) {
-            this.mTag = tag;
-            return this;
+        public T setTag(Object tag) {
+            mTag = tag;
+            return (T) this;
         }
 
         @Override
-        public DownloadBuilder addHeaders(String key, String value) {
+        public T addHeaders(String key, String value) {
             mHeadersMap.put(key, value);
-            return this;
+            return (T) this;
         }
 
         @Override
-        public DownloadBuilder addHeaders(HashMap<String, String> headerMap) {
+        public T addHeaders(HashMap<String, String> headerMap) {
             if (headerMap != null) {
                 for (HashMap.Entry<String, String> entry : headerMap.entrySet()) {
                     mHeadersMap.put(entry.getKey(), entry.getValue());
                 }
             }
-            return this;
+            return (T) this;
         }
 
         @Override
-        public DownloadBuilder addQueryParameter(String key, String value) {
+        public T addQueryParameter(String key, String value) {
             mQueryParameterMap.put(key, value);
-            return this;
+            return (T) this;
         }
 
         @Override
-        public DownloadBuilder addQueryParameter(HashMap<String, String> queryParameterMap) {
+        public T addQueryParameter(HashMap<String, String> queryParameterMap) {
             if (queryParameterMap != null) {
                 for (HashMap.Entry<String, String> entry : queryParameterMap.entrySet()) {
                     mQueryParameterMap.put(entry.getKey(), entry.getValue());
                 }
             }
-            return this;
+            return (T) this;
         }
 
         @Override
-        public DownloadBuilder addPathParameter(String key, String value) {
+        public T addPathParameter(String key, String value) {
             mPathParameterMap.put(key, value);
-            return this;
+            return (T) this;
         }
 
         @Override
-        public DownloadBuilder doNotCacheResponse() {
+        public T doNotCacheResponse() {
             mCacheControl = new CacheControl.Builder().noStore().build();
-            return this;
+            return (T) this;
         }
 
         @Override
-        public DownloadBuilder getResponseOnlyIfCached() {
+        public T getResponseOnlyIfCached() {
             mCacheControl = CacheControl.FORCE_CACHE;
-            return this;
+            return (T) this;
         }
 
         @Override
-        public DownloadBuilder getResponseOnlyFromNetwork() {
+        public T getResponseOnlyFromNetwork() {
             mCacheControl = CacheControl.FORCE_NETWORK;
-            return this;
+            return (T) this;
         }
 
         @Override
-        public DownloadBuilder setMaxAgeCacheControl(int maxAge, TimeUnit timeUnit) {
+        public T setMaxAgeCacheControl(int maxAge, TimeUnit timeUnit) {
             mCacheControl = new CacheControl.Builder().maxAge(maxAge, timeUnit).build();
-            return this;
+            return (T) this;
         }
 
         @Override
-        public DownloadBuilder setMaxStaleCacheControl(int maxStale, TimeUnit timeUnit) {
+        public T setMaxStaleCacheControl(int maxStale, TimeUnit timeUnit) {
             mCacheControl = new CacheControl.Builder().maxStale(maxStale, timeUnit).build();
-            return this;
+            return (T) this;
         }
 
         @Override
-        public DownloadBuilder setExecutor(Executor executor) {
+        public T setExecutor(Executor executor) {
             mExecutor = executor;
-            return this;
+            return (T) this;
         }
 
         @Override
-        public DownloadBuilder setOkHttpClient(OkHttpClient okHttpClient) {
+        public T setOkHttpClient(OkHttpClient okHttpClient) {
             mOkHttpClient = okHttpClient;
-            return this;
+            return (T) this;
         }
 
         @Override
-        public DownloadBuilder setUserAgent(String userAgent) {
+        public T setUserAgent(String userAgent) {
             mUserAgent = userAgent;
-            return this;
+            return (T) this;
         }
 
-        public DownloadBuilder setPercentageThresholdForCancelling(int percentageThresholdForCancelling) {
-            this.mPercentageThresholdForCancelling = percentageThresholdForCancelling;
-            return this;
+        public T setPercentageThresholdForCancelling(int percentageThresholdForCancelling) {
+            mPercentageThresholdForCancelling = percentageThresholdForCancelling;
+            return (T) this;
         }
 
         public ANRequest build() {
@@ -1109,7 +1109,7 @@ public class ANRequest {
         }
     }
 
-    public static class MultiPartBuilder implements RequestBuilder {
+    public static class MultiPartBuilder<T extends MultiPartBuilder> implements RequestBuilder {
 
         private Priority mPriority = Priority.MEDIUM;
         private String mUrl;
@@ -1131,133 +1131,133 @@ public class ANRequest {
 
         @Override
         public MultiPartBuilder setPriority(Priority priority) {
-            this.mPriority = priority;
+            mPriority = priority;
             return this;
         }
 
         @Override
-        public MultiPartBuilder setTag(Object tag) {
-            this.mTag = tag;
-            return this;
+        public T setTag(Object tag) {
+            mTag = tag;
+            return (T) this;
         }
 
         @Override
-        public MultiPartBuilder addQueryParameter(String key, String value) {
+        public T addQueryParameter(String key, String value) {
             mQueryParameterMap.put(key, value);
-            return this;
+            return (T) this;
         }
 
         @Override
-        public MultiPartBuilder addQueryParameter(HashMap<String, String> queryParameterMap) {
+        public T addQueryParameter(HashMap<String, String> queryParameterMap) {
             if (queryParameterMap != null) {
                 for (HashMap.Entry<String, String> entry : queryParameterMap.entrySet()) {
                     mQueryParameterMap.put(entry.getKey(), entry.getValue());
                 }
             }
-            return this;
+            return (T) this;
         }
 
         @Override
-        public MultiPartBuilder addPathParameter(String key, String value) {
+        public T addPathParameter(String key, String value) {
             mPathParameterMap.put(key, value);
-            return this;
+            return (T) this;
         }
 
         @Override
-        public MultiPartBuilder addHeaders(String key, String value) {
+        public T addHeaders(String key, String value) {
             mHeadersMap.put(key, value);
-            return this;
+            return (T) this;
         }
 
         @Override
-        public MultiPartBuilder addHeaders(HashMap<String, String> headerMap) {
+        public T addHeaders(HashMap<String, String> headerMap) {
             if (headerMap != null) {
                 for (HashMap.Entry<String, String> entry : headerMap.entrySet()) {
                     mHeadersMap.put(entry.getKey(), entry.getValue());
                 }
             }
-            return this;
+            return (T) this;
         }
 
         @Override
-        public MultiPartBuilder doNotCacheResponse() {
+        public T doNotCacheResponse() {
             mCacheControl = new CacheControl.Builder().noStore().build();
-            return this;
+            return (T) this;
         }
 
         @Override
-        public MultiPartBuilder getResponseOnlyIfCached() {
+        public T getResponseOnlyIfCached() {
             mCacheControl = CacheControl.FORCE_CACHE;
-            return this;
+            return (T) this;
         }
 
         @Override
-        public MultiPartBuilder getResponseOnlyFromNetwork() {
+        public T getResponseOnlyFromNetwork() {
             mCacheControl = CacheControl.FORCE_NETWORK;
-            return this;
+            return (T) this;
         }
 
         @Override
-        public MultiPartBuilder setMaxAgeCacheControl(int maxAge, TimeUnit timeUnit) {
+        public T setMaxAgeCacheControl(int maxAge, TimeUnit timeUnit) {
             mCacheControl = new CacheControl.Builder().maxAge(maxAge, timeUnit).build();
-            return this;
+            return (T) this;
         }
 
         @Override
-        public MultiPartBuilder setMaxStaleCacheControl(int maxStale, TimeUnit timeUnit) {
+        public T setMaxStaleCacheControl(int maxStale, TimeUnit timeUnit) {
             mCacheControl = new CacheControl.Builder().maxStale(maxStale, timeUnit).build();
-            return this;
+            return (T) this;
         }
 
         @Override
-        public MultiPartBuilder setExecutor(Executor executor) {
+        public T setExecutor(Executor executor) {
             mExecutor = executor;
-            return this;
+            return (T) this;
         }
 
         @Override
-        public MultiPartBuilder setOkHttpClient(OkHttpClient okHttpClient) {
+        public T setOkHttpClient(OkHttpClient okHttpClient) {
             mOkHttpClient = okHttpClient;
-            return this;
+            return (T) this;
         }
 
         @Override
-        public MultiPartBuilder setUserAgent(String userAgent) {
+        public T setUserAgent(String userAgent) {
             mUserAgent = userAgent;
-            return this;
+            return (T) this;
         }
 
-        public MultiPartBuilder addMultipartParameter(String key, String value) {
+        public T addMultipartParameter(String key, String value) {
             mMultiPartParameterMap.put(key, value);
-            return this;
+            return (T) this;
         }
 
-        public MultiPartBuilder addMultipartParameter(HashMap<String, String> multiPartParameterMap) {
+        public T addMultipartParameter(HashMap<String, String> multiPartParameterMap) {
             if (multiPartParameterMap != null) {
                 for (HashMap.Entry<String, String> entry : multiPartParameterMap.entrySet()) {
                     mMultiPartParameterMap.put(entry.getKey(), entry.getValue());
                 }
             }
-            return this;
+            return (T) this;
         }
 
-        public MultiPartBuilder addMultipartFile(String key, File file) {
+        public T addMultipartFile(String key, File file) {
             mMultiPartFileMap.put(key, file);
-            return this;
+            return (T) this;
         }
 
-        public MultiPartBuilder addMultipartFile(HashMap<String, File> multiPartFileMap) {
+        public T addMultipartFile(HashMap<String, File> multiPartFileMap) {
             if (multiPartFileMap != null) {
                 for (HashMap.Entry<String, File> entry : multiPartFileMap.entrySet()) {
                     mMultiPartFileMap.put(entry.getKey(), entry.getValue());
                 }
             }
-            return this;
+            return (T) this;
         }
 
-        public MultiPartBuilder setPercentageThresholdForCancelling(int percentageThresholdForCancelling) {
+        public T setPercentageThresholdForCancelling(int percentageThresholdForCancelling) {
             this.mPercentageThresholdForCancelling = percentageThresholdForCancelling;
-            return this;
+            return (T) this;
         }
 
         public ANRequest build() {

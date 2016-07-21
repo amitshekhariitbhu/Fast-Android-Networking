@@ -19,10 +19,8 @@ package com.networking;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -39,10 +37,7 @@ import com.androidnetworking.widget.ANImageView;
 import com.networking.provider.Images;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.ByteArrayOutputStream;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -62,86 +57,93 @@ public class MainActivity extends AppCompatActivity {
         ANImageView.setDefaultImageResId(R.drawable.ic_toys_black_24dp);
         ANImageView.setErrorImageResId(R.drawable.ic_error_outline_black_24dp);
         ANImageView.setImageUrl(Images.imageThumbUrls[0]);
+        makeJSONArrayRequest();
+        makeJSONObjectRequest();
+    }
+
+    private void makeJSONArrayRequest() {
+        AndroidNetworking.get(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_ARRAY)
+                .setTag(this)
+                .addPathParameter("pageNumber", "0")
+                .addQueryParameter("limit", "3")
+                .setPriority(Priority.LOW)
+                .build()
+                .setAnalyticsListener(new AnalyticsListener() {
+                    @Override
+                    public void onReceived(long timeTakenInMillis, long bytesSent, long bytesReceived, boolean isFromCache) {
+                        Log.d(TAG, " timeTakenInMillis : " + timeTakenInMillis);
+                        Log.d(TAG, " bytesSent : " + bytesSent);
+                        Log.d(TAG, " bytesReceived : " + bytesReceived);
+                        Log.d(TAG, " isFromCache : " + isFromCache);
+                    }
+                })
+                .getAsJSONArray(new JSONArrayRequestListener() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Log.d(TAG, "onResponse array : " + response.toString());
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        if (error.getErrorCode() != 0) {
+                            // received ANError from server
+                            // error.getErrorCode() - the ANError code from server
+                            // error.getErrorBody() - the ANError body from server
+                            // error.getErrorDetail() - just a ANError detail
+                            Log.d(TAG, "onError errorCode : " + error.getErrorCode());
+                            Log.d(TAG, "onError errorBody : " + error.getErrorBody());
+                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                        } else {
+                            // error.getErrorDetail() : connectionError, parseError, requestCancelledError
+                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                        }
+                    }
+                });
+    }
+
+    private void makeJSONObjectRequest() {
+        AndroidNetworking.get(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_OBJECT)
+                .setTag(this)
+                .addPathParameter("userId", "1")
+                .setPriority(Priority.HIGH)
+                .build()
+                .setAnalyticsListener(new AnalyticsListener() {
+                    @Override
+                    public void onReceived(long timeTakenInMillis, long bytesSent, long bytesReceived, boolean isFromCache) {
+                        Log.d(TAG, " timeTakenInMillis : " + timeTakenInMillis);
+                        Log.d(TAG, " bytesSent : " + bytesSent);
+                        Log.d(TAG, " bytesReceived : " + bytesReceived);
+                        Log.d(TAG, " isFromCache : " + isFromCache);
+                    }
+                })
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, "onResponse object : " + response.toString());
+                    }
+
+                    @Override
+                    public void onError(ANError error) {
+                        if (error.getErrorCode() != 0) {
+                            // received ANError from server
+                            // error.getErrorCode() - the ANError code from server
+                            // error.getErrorBody() - the ANError body from server
+                            // error.getErrorDetail() - just a ANError detail
+                            Log.d(TAG, "onError errorCode : " + error.getErrorCode());
+                            Log.d(TAG, "onError errorBody : " + error.getErrorBody());
+                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                        } else {
+                            // error.getErrorDetail() : connectionError, parseError, requestCancelledError
+                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+                        }
+                    }
+                });
     }
 
     public void makeRequests(View view) {
         for (int i = 0; i < 10; i++) {
-            AndroidNetworking.get(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_ARRAY)
-                    .setTag(this)
-                    .addPathParameter("pageNumber", "0")
-                    .addQueryParameter("limit", "3")
-                    .setPriority(Priority.LOW)
-                    .build()
-                    .setAnalyticsListener(new AnalyticsListener() {
-                        @Override
-                        public void onReceived(long timeTakenInMillis, long bytesSent, long bytesReceived, boolean isFromCache) {
-                            Log.d(TAG, " timeTakenInMillis : " + timeTakenInMillis);
-                            Log.d(TAG, " bytesSent : " + bytesSent);
-                            Log.d(TAG, " bytesReceived : " + bytesReceived);
-                            Log.d(TAG, " isFromCache : " + isFromCache);
-                        }
-                    })
-                    .getAsJSONArray(new JSONArrayRequestListener() {
-                        @Override
-                        public void onResponse(JSONArray response) {
-                            Log.d(TAG, "onResponse array : " + response.toString());
-                        }
-
-                        @Override
-                        public void onError(ANError error) {
-                            if (error.getErrorCode() != 0) {
-                                // received ANError from server
-                                // error.getErrorCode() - the ANError code from server
-                                // error.getErrorBody() - the ANError body from server
-                                // error.getErrorDetail() - just a ANError detail
-                                Log.d(TAG, "onError errorCode : " + error.getErrorCode());
-                                Log.d(TAG, "onError errorBody : " + error.getErrorBody());
-                                Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
-                            } else {
-                                // error.getErrorDetail() : connectionError, parseError, requestCancelledError
-                                Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
-                            }
-                        }
-                    });
-
-
-            AndroidNetworking.get(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_OBJECT)
-                    .setTag(this)
-                    .addPathParameter("userId", "1")
-                    .setPriority(Priority.HIGH)
-                    .build()
-                    .setAnalyticsListener(new AnalyticsListener() {
-                        @Override
-                        public void onReceived(long timeTakenInMillis, long bytesSent, long bytesReceived, boolean isFromCache) {
-                            Log.d(TAG, " timeTakenInMillis : " + timeTakenInMillis);
-                            Log.d(TAG, " bytesSent : " + bytesSent);
-                            Log.d(TAG, " bytesReceived : " + bytesReceived);
-                            Log.d(TAG, " isFromCache : " + isFromCache);
-                        }
-                    })
-                    .getAsJSONObject(new JSONObjectRequestListener() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            Log.d(TAG, "onResponse object : " + response.toString());
-                        }
-
-                        @Override
-                        public void onError(ANError error) {
-                            if (error.getErrorCode() != 0) {
-                                // received ANError from server
-                                // error.getErrorCode() - the ANError code from server
-                                // error.getErrorBody() - the ANError body from server
-                                // error.getErrorDetail() - just a ANError detail
-                                Log.d(TAG, "onError errorCode : " + error.getErrorCode());
-                                Log.d(TAG, "onError errorBody : " + error.getErrorBody());
-                                Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
-                            } else {
-                                // error.getErrorDetail() : connectionError, parseError, requestCancelledError
-                                Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
-                            }
-                        }
-                    });
-
+            makeJSONArrayRequest();
+            makeJSONObjectRequest();
         }
     }
 
@@ -203,65 +205,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void startApiTestActivity(View view) {
         startActivity(new Intent(MainActivity.this, ApiTestActivity.class));
-    }
-
-    public void testGZIP(View view) {
-        Bitmap bitmap = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
-
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, bos);
-        byte[] data = bos.toByteArray();
-        String imageEncoded = Base64.encodeToString(data, Base64.DEFAULT);
-
-        JSONObject jsonObject = new JSONObject();
-
-        try {
-            jsonObject.put("image", imageEncoded);
-            jsonObject.put("deviceId", "");
-            jsonObject.put("deviceType", "android");
-            jsonObject.put("featurePointsType", "dlibv1");
-            jsonObject.put("sdkVersion", Build.VERSION.RELEASE);
-            jsonObject.put("appVersion", "");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        AndroidNetworking.post("http://192.168.1.25:8089/getFacialPoints")
-                .addHeaders("Authorization", "")
-                .addJSONObjectBody(jsonObject)
-                .setPriority(Priority.HIGH)
-                .setTag(TAG)
-                .build()
-                .setAnalyticsListener(new AnalyticsListener() {
-                    @Override
-                    public void onReceived(long timeTakenInMillis, long bytesSent, long bytesReceived, boolean isFromCache) {
-                        Log.d(TAG, " timeTakenInMillis : " + timeTakenInMillis);
-                        Log.d(TAG, " bytesSent : " + bytesSent);
-                        Log.d(TAG, " bytesReceived : " + bytesReceived);
-                        Log.d(TAG, " isFromCache : " + isFromCache);
-                    }
-                })
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d(TAG, "onResponse: " + response.toString());
-                    }
-
-                    @Override
-                    public void onError(ANError error) {
-                        if (error.getErrorCode() != 0) {
-                            // received ANError from server
-                            // error.getErrorCode() - the ANError code from server
-                            // error.getErrorBody() - the ANError body from server
-                            // error.getErrorDetail() - just a ANError detail
-                            Log.d(TAG, "onError errorCode : " + error.getErrorCode());
-                            Log.d(TAG, "onError errorBody : " + error.getErrorBody());
-                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
-                        } else {
-                            // error.getErrorDetail() : connectionError, parseError, requestCancelledError
-                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
-                        }
-                    }
-                });
     }
 
 }
