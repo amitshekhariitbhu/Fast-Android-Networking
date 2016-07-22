@@ -492,8 +492,9 @@ AndroidNetworking.initialize(getApplicationContext(),okHttpClient);
   used by Fast Android Networking is developed by [Square](https://square.github.io/).
 * [Volley](https://android.googlesource.com/platform/frameworks/volley/) - As Fast Android Networking uses ImageLoader that is developed by [Volley](https://android.googlesource.com/platform/frameworks/volley/).  
 
-### Contact
+### Contact - Let's become friend
 - [Twitter](https://twitter.com/amitiitbhu)
+- [Github](https://github.com/amitshekhariitbhu)
 - [Medium](https://medium.com/@amitshekhar)
 - [Facebook](https://www.facebook.com/amit.shekhar.iitbhu)
 
