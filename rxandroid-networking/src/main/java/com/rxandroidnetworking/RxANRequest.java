@@ -17,9 +17,42 @@
 
 package com.rxandroidnetworking;
 
+import com.androidnetworking.common.ANRequest;
+import com.androidnetworking.common.RESPONSE;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import rx.Observable;
+import rx.Scheduler;
+
 /**
  * Created by amitshekhar on 10/06/16.
  */
-public class RxANRequest {
+public class RxANRequest extends ANRequest {
 
+    public RxANRequest(GetRequestBuilder builder) {
+        super(builder);
+    }
+
+    public Observable<JSONObject> getJsonObjectObservable(Scheduler scheduler) {
+        this.setResponseAs(RESPONSE.JSON_OBJECT);
+        return RxInternalNetworking.generateSimpleObservable(this, scheduler);
+    }
+
+    public Observable<JSONArray> getJsonArrayObservable(Scheduler scheduler) {
+        this.setResponseAs(RESPONSE.JSON_ARRAY);
+        return RxInternalNetworking.generateSimpleObservable(this, scheduler);
+    }
+
+    public static class GetRequestBuilder extends ANRequest.GetRequestBuilder<GetRequestBuilder> {
+
+        public GetRequestBuilder(String url) {
+            super(url);
+        }
+
+        public RxANRequest build() {
+            return new RxANRequest(this);
+        }
+    }
 }

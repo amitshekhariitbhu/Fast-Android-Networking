@@ -17,9 +17,29 @@
 
 package com.rxandroidnetworking;
 
+import android.content.Context;
+
 /**
  * Created by amitshekhar on 10/06/16.
  */
 public class RxAndroidNetworking {
 
+    /**
+     * Initializes RxAndroidNetworking with the default config.
+     *
+     * @param context The context
+     */
+    public static void initialize(Context context) {
+        RxInternalNetworking.setClientWithCache(context.getApplicationContext());
+    }
+
+    /**
+     * Method to make GET request
+     *
+     * @param url The url on which request is to be made
+     * @return The GetRequestBuilder
+     */
+    public static RxANRequest.GetRequestBuilder get(String url) {
+        return new RxANRequest.GetRequestBuilder(url);
+    }
 }

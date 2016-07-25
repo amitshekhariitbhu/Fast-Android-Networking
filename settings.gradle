@@ -15,4 +15,4 @@
  *    limitations under the License.
  */
 
-include ':app', ':android-networking', ':rxandroid-networking'
+include ':app', ':android-networking', ':rxandroid-networking', ':rxsampleapp'

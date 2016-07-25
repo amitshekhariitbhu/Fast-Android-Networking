@@ -273,6 +273,10 @@ public class ANRequest {
         this.mProgress = progress;
     }
 
+    public void setResponseAs(RESPONSE responseAs) {
+        this.mResponseAs = responseAs;
+    }
+
     public Object getTag() {
         return mTag;
     }

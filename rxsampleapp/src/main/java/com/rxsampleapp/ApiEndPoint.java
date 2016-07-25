@@ -15,30 +15,18 @@
  *    limitations under the License.
  */
 
-apply plugin: 'com.android.library'
+package com.rxsampleapp;
 
-android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+/**
+ * Created by amitshekhar on 29/03/16.
+ */
+public class ApiEndPoint {
 
-    defaultConfig {
-        minSdkVersion 9
-        targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
-    }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-}
+    public static final String BASE_URL = "https://fierce-cove-29863.herokuapp.com";
+    public static final String GET_JSON_ARRAY = "/getAllUsers/{pageNumber}";
+    public static final String GET_JSON_OBJECT = "/getAnUser/{userId}";
+    public static final String CHECK_FOR_HEADER = "/checkForHeader";
+    public static final String POST_CREATE_AN_USER = "/createAnUser";
+    public static final String UPLOAD_IMAGE = "/uploadImage";
 
-dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
-    androidTestCompile 'com.squareup.okhttp3:mockwebserver:3.2.0'
-    compile 'io.reactivex:rxjava:1.1.6'
-    compile project(':android-networking')
 }
