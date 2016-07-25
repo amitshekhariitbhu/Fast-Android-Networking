@@ -51,19 +51,6 @@
             android:onClick="checkForHeaderGet"
             android:text="GET : checkForHeader" />
 
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center" />
-
-        <Button
-            android:id="@+id/doNotCacheResponse"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_margin="8dp"
-            android:onClick="doNotCacheResponse"
-            android:text="doNotCacheResponse" />
-
     </LinearLayout>
 
 </ScrollView>
