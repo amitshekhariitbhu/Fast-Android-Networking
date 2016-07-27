@@ -68,7 +68,7 @@ public class RxInternalNetworking {
                 .build();
     }
 
-    public static <T> Observable<T> generateSimpleObservable(RxANRequest request, Scheduler scheduler) {
+    public static <T> Observable<T> generateSimpleObservable(RxANRequest request) {
         Request okHttpRequest = null;
         Request.Builder builder = new Request.Builder().url(request.getUrl());
         if (request.getUserAgent() != null) {
@@ -123,9 +123,6 @@ public class RxInternalNetworking {
         }
         ANLog.d("call generated successfully for simple observale");
         Observable<T> observable = Observable.create(new ANOnSubscribe<T>(request));
-        if (scheduler != null) {
-            return observable.subscribeOn(scheduler);
-        }
         return observable;
     }
 

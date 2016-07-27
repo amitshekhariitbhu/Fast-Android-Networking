@@ -35,14 +35,14 @@ public class RxANRequest extends ANRequest {
         super(builder);
     }
 
-    public Observable<JSONObject> getJsonObjectObservable(Scheduler scheduler) {
+    public Observable<JSONObject> getJsonObjectObservable() {
         this.setResponseAs(RESPONSE.JSON_OBJECT);
-        return RxInternalNetworking.generateSimpleObservable(this, scheduler);
+        return RxInternalNetworking.generateSimpleObservable(this);
     }
 
-    public Observable<JSONArray> getJsonArrayObservable(Scheduler scheduler) {
+    public Observable<JSONArray> getJsonArrayObservable() {
         this.setResponseAs(RESPONSE.JSON_ARRAY);
-        return RxInternalNetworking.generateSimpleObservable(this, scheduler);
+        return RxInternalNetworking.generateSimpleObservable(this);
     }
 
     public static class GetRequestBuilder extends ANRequest.GetRequestBuilder<GetRequestBuilder> {
