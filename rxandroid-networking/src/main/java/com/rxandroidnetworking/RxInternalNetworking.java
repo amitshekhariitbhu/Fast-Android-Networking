@@ -1,6 +1,8 @@
 package com.rxandroidnetworking;
 
 import android.content.Context;
+import android.os.Build;
+import android.os.NetworkOnMainThreadException;
 
 import com.androidnetworking.common.ANConstants;
 import com.androidnetworking.common.ANData;
@@ -24,6 +26,7 @@ import rx.Producer;
 import rx.Scheduler;
 import rx.Subscriber;
 import rx.Subscription;
+import rx.exceptions.Exceptions;
 
 import static com.androidnetworking.common.Method.DELETE;
 import static com.androidnetworking.common.Method.GET;
@@ -210,8 +213,13 @@ public class RxInternalNetworking {
                     subscriber.onError(se);
                 }
             } catch (Exception e) {
+                Exceptions.throwIfFatal(e);
                 ANError se = new ANError(e);
-                se.setErrorDetail(ANConstants.CONNECTION_ERROR);
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB && e instanceof NetworkOnMainThreadException) {
+                    se.setErrorDetail(ANConstants.NETWORK_ON_MAIN_THREAD_ERROR);
+                } else {
+                    se.setErrorDetail(ANConstants.CONNECTION_ERROR);
+                }
                 se.setErrorCode(0);
                 if (!subscriber.isUnsubscribed()) {
                     ANLog.d("delivering error to subscriber from simple observable");
