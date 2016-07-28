@@ -40,7 +40,7 @@ public class RxTestActivity extends AppCompatActivity {
                 .setPriority(Priority.LOW)
                 .build()
                 .getJsonArrayObservable()
-                .subscribeOn(Schedulers.computation())
+                .subscribeOn(Schedulers.io())
                 .subscribe(new Observer<JSONArray>() {
                     @Override
                     public void onCompleted() {
@@ -84,7 +84,7 @@ public class RxTestActivity extends AppCompatActivity {
                 .setUserAgent("getAnUser")
                 .build()
                 .getJsonObjectObservable()
-                .subscribeOn(Schedulers.computation())
+                .subscribeOn(Schedulers.io())
                 .subscribe(new Observer<JSONObject>() {
                     @Override
                     public void onCompleted() {
@@ -129,7 +129,7 @@ public class RxTestActivity extends AppCompatActivity {
                 .setPriority(Priority.LOW)
                 .build()
                 .getJsonObjectObservable()
-                .subscribeOn(Schedulers.computation())
+                .subscribeOn(Schedulers.io())
                 .subscribe(new Observer<JSONObject>() {
                     @Override
                     public void onCompleted() {
