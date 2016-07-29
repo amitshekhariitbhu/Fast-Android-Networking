@@ -7,14 +7,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.ANRequest;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.AnalyticsListener;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.rxandroidnetworking.RxANRequest;
 import com.rxandroidnetworking.RxAndroidNetworking;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.concurrent.Executors;
 
 import rx.Observer;
 import rx.schedulers.Schedulers;
@@ -39,6 +44,15 @@ public class RxTestActivity extends AppCompatActivity {
                 .setTag(this)
                 .setPriority(Priority.LOW)
                 .build()
+                .setAnalyticsListener(new AnalyticsListener() {
+                    @Override
+                    public void onReceived(long timeTakenInMillis, long bytesSent, long bytesReceived, boolean isFromCache) {
+                        Log.d(TAG, " timeTakenInMillis : " + timeTakenInMillis);
+                        Log.d(TAG, " bytesSent : " + bytesSent);
+                        Log.d(TAG, " bytesReceived : " + bytesReceived);
+                        Log.d(TAG, " isFromCache : " + isFromCache);
+                    }
+                })
                 .getJsonArrayObservable()
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Observer<JSONArray>() {
@@ -83,6 +97,15 @@ public class RxTestActivity extends AppCompatActivity {
                 .setPriority(Priority.LOW)
                 .setUserAgent("getAnUser")
                 .build()
+                .setAnalyticsListener(new AnalyticsListener() {
+                    @Override
+                    public void onReceived(long timeTakenInMillis, long bytesSent, long bytesReceived, boolean isFromCache) {
+                        Log.d(TAG, " timeTakenInMillis : " + timeTakenInMillis);
+                        Log.d(TAG, " bytesSent : " + bytesSent);
+                        Log.d(TAG, " bytesReceived : " + bytesReceived);
+                        Log.d(TAG, " isFromCache : " + isFromCache);
+                    }
+                })
                 .getJsonObjectObservable()
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Observer<JSONObject>() {
@@ -128,12 +151,131 @@ public class RxTestActivity extends AppCompatActivity {
                 .setTag(this)
                 .setPriority(Priority.LOW)
                 .build()
+                .setAnalyticsListener(new AnalyticsListener() {
+                    @Override
+                    public void onReceived(long timeTakenInMillis, long bytesSent, long bytesReceived, boolean isFromCache) {
+                        Log.d(TAG, " timeTakenInMillis : " + timeTakenInMillis);
+                        Log.d(TAG, " bytesSent : " + bytesSent);
+                        Log.d(TAG, " bytesReceived : " + bytesReceived);
+                        Log.d(TAG, " isFromCache : " + isFromCache);
+                    }
+                })
                 .getJsonObjectObservable()
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Observer<JSONObject>() {
                     @Override
                     public void onCompleted() {
                         Log.d(TAG, "onComplete Detail : checkForHeaderGet completed");
+                    }
+
+                    @Override
+                    public void onError(Throwable error) {
+                        if (error instanceof ANError) {
+                            ANError anError = (ANError) error;
+                            if (anError.getErrorCode() != 0) {
+                                // received ANError from server
+                                // error.getErrorCode() - the ANError code from server
+                                // error.getErrorBody() - the ANError body from server
+                                // error.getErrorDetail() - just a ANError detail
+                                Log.d(TAG, "onError errorCode : " + anError.getErrorCode());
+                                Log.d(TAG, "onError errorBody : " + anError.getErrorBody());
+                                Log.d(TAG, "onError errorDetail : " + anError.getErrorDetail());
+                            } else {
+                                // error.getErrorDetail() : connectionError, parseError, requestCancelledError
+                                Log.d(TAG, "onError errorDetail : " + anError.getErrorDetail());
+                            }
+                        } else {
+                            Log.d(TAG, "onError errorMessage : " + error.getMessage());
+                        }
+                    }
+
+                    @Override
+                    public void onNext(JSONObject response) {
+                        Log.d(TAG, "onResponse object : " + response.toString());
+                        Log.d(TAG, "onResponse isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
+                    }
+                });
+    }
+
+    public void checkForHeaderPost(View view) {
+
+        RxANRequest.PostRequestBuilder postRequestBuilder = RxAndroidNetworking.post(ApiEndPoint.BASE_URL + ApiEndPoint.CHECK_FOR_HEADER);
+
+        postRequestBuilder.addHeaders("token", "1234");
+
+        RxANRequest rxAnRequest = postRequestBuilder.setTag(this)
+                .setPriority(Priority.LOW)
+                .build();
+
+        rxAnRequest.setAnalyticsListener(new AnalyticsListener() {
+            @Override
+            public void onReceived(long timeTakenInMillis, long bytesSent, long bytesReceived, boolean isFromCache) {
+                Log.d(TAG, " timeTakenInMillis : " + timeTakenInMillis);
+                Log.d(TAG, " bytesSent : " + bytesSent);
+                Log.d(TAG, " bytesReceived : " + bytesReceived);
+                Log.d(TAG, " isFromCache : " + isFromCache);
+            }
+        });
+
+        rxAnRequest.getJsonObjectObservable()
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<JSONObject>() {
+                    @Override
+                    public void onCompleted() {
+                        Log.d(TAG, "onComplete Detail : checkForHeaderPost completed");
+                    }
+
+                    @Override
+                    public void onError(Throwable error) {
+                        if (error instanceof ANError) {
+                            ANError anError = (ANError) error;
+                            if (anError.getErrorCode() != 0) {
+                                // received ANError from server
+                                // error.getErrorCode() - the ANError code from server
+                                // error.getErrorBody() - the ANError body from server
+                                // error.getErrorDetail() - just a ANError detail
+                                Log.d(TAG, "onError errorCode : " + anError.getErrorCode());
+                                Log.d(TAG, "onError errorBody : " + anError.getErrorBody());
+                                Log.d(TAG, "onError errorDetail : " + anError.getErrorDetail());
+                            } else {
+                                // error.getErrorDetail() : connectionError, parseError, requestCancelledError
+                                Log.d(TAG, "onError errorDetail : " + anError.getErrorDetail());
+                            }
+                        } else {
+                            Log.d(TAG, "onError errorMessage : " + error.getMessage());
+                        }
+                    }
+
+                    @Override
+                    public void onNext(JSONObject response) {
+                        Log.d(TAG, "onResponse object : " + response.toString());
+                        Log.d(TAG, "onResponse isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
+                    }
+                });
+    }
+
+    public void createAnUser(View view) {
+        RxAndroidNetworking.post(ApiEndPoint.BASE_URL + ApiEndPoint.POST_CREATE_AN_USER)
+                .addBodyParameter("firstname", "Suman")
+                .addBodyParameter("lastname", "Shekhar")
+                .setTag(this)
+                .setPriority(Priority.LOW)
+                .build()
+                .setAnalyticsListener(new AnalyticsListener() {
+                    @Override
+                    public void onReceived(long timeTakenInMillis, long bytesSent, long bytesReceived, boolean isFromCache) {
+                        Log.d(TAG, " timeTakenInMillis : " + timeTakenInMillis);
+                        Log.d(TAG, " bytesSent : " + bytesSent);
+                        Log.d(TAG, " bytesReceived : " + bytesReceived);
+                        Log.d(TAG, " isFromCache : " + isFromCache);
+                    }
+                })
+                .getJsonObjectObservable()
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<JSONObject>() {
+                    @Override
+                    public void onCompleted() {
+                        Log.d(TAG, "onComplete Detail : createAnUser completed");
                     }
 
                     @Override
