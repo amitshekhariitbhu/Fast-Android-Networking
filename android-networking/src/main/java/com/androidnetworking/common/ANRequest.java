@@ -212,9 +212,9 @@ public class ANRequest<T extends ANRequest> {
         ANRequestQueue.getInstance().addRequest(this);
     }
 
-    public ANRequest setDownloadProgressListener(DownloadProgressListener downloadProgressListener) {
+    public T setDownloadProgressListener(DownloadProgressListener downloadProgressListener) {
         this.mDownloadProgressListener = downloadProgressListener;
-        return this;
+        return (T) this;
     }
 
     public void startDownload(DownloadListener downloadListener) {
