@@ -19,6 +19,8 @@ package com.rxandroidnetworking;
 
 import android.content.Context;
 
+import com.androidnetworking.common.ANRequest;
+
 /**
  * Created by amitshekhar on 10/06/16.
  */
@@ -51,5 +53,15 @@ public class RxAndroidNetworking {
      */
     public static RxANRequest.PostRequestBuilder post(String url) {
         return new RxANRequest.PostRequestBuilder(url);
+    }
+
+    /**
+     * Method to make PUT request
+     *
+     * @param url The url on which request is to be made
+     * @return The PutRequestBuilder
+     */
+    public static ANRequest.PutRequestBuilder put(String url) {
+        return new ANRequest.PutRequestBuilder(url);
     }
 }

@@ -18,6 +18,7 @@
 package com.rxandroidnetworking;
 
 import com.androidnetworking.common.ANRequest;
+import com.androidnetworking.common.Method;
 import com.androidnetworking.common.RESPONSE;
 
 import org.json.JSONArray;
@@ -66,8 +67,19 @@ public class RxANRequest extends ANRequest<RxANRequest> {
             super(url);
         }
 
+        private PostRequestBuilder(String url, int method) {
+            super(url, method);
+        }
+
         public RxANRequest build() {
             return new RxANRequest(this);
+        }
+    }
+
+    public static class PutRequestBuilder extends PostRequestBuilder {
+
+        public PutRequestBuilder(String url) {
+            super(url, Method.PUT);
         }
     }
 }
