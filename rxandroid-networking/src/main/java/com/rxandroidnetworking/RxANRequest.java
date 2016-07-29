@@ -40,6 +40,10 @@ public class RxANRequest extends ANRequest<RxANRequest> {
         super(builder);
     }
 
+    public RxANRequest(DownloadBuilder builder) {
+        super(builder);
+    }
+
     public Observable<JSONObject> getJsonObjectObservable() {
         this.setResponseAs(RESPONSE.JSON_OBJECT);
         return RxInternalNetworking.generateSimpleObservable(this);
@@ -48,6 +52,10 @@ public class RxANRequest extends ANRequest<RxANRequest> {
     public Observable<JSONArray> getJsonArrayObservable() {
         this.setResponseAs(RESPONSE.JSON_ARRAY);
         return RxInternalNetworking.generateSimpleObservable(this);
+    }
+
+    public Observable getDownloadObservable() {
+        return RxInternalNetworking.generateDownloadObservable(this);
     }
 
     public static class GetRequestBuilder extends ANRequest.GetRequestBuilder<GetRequestBuilder> {
@@ -101,6 +109,10 @@ public class RxANRequest extends ANRequest<RxANRequest> {
 
         public DownloadBuilder(String url, String dirPath, String fileName) {
             super(url, dirPath, fileName);
+        }
+
+        public RxANRequest build() {
+            return new RxANRequest(this);
         }
     }
 }
