@@ -822,7 +822,7 @@ public class ANRequest<T extends ANRequest> {
             this.mMethod = Method.POST;
         }
 
-        private PostRequestBuilder(String url, int method) {
+        public PostRequestBuilder(String url, int method) {
             this.mUrl = url;
             this.mMethod = method;
         }
