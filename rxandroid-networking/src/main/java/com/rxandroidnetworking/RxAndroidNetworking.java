@@ -84,4 +84,16 @@ public class RxAndroidNetworking {
     public static RxANRequest.PatchRequestBuilder patch(String url) {
         return new RxANRequest.PatchRequestBuilder(url);
     }
+
+    /**
+     * Method to make download request
+     *
+     * @param url      The url on which request is to be made
+     * @param dirPath  The directory path on which file is to be saved
+     * @param fileName The file name with which file is to be saved
+     * @return The DownloadBuilder
+     */
+    public static RxANRequest.DownloadBuilder download(String url, String dirPath, String fileName) {
+        return new RxANRequest.DownloadBuilder(url, dirPath, fileName);
+    }
 }

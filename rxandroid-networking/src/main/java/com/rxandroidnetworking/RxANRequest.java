@@ -96,4 +96,11 @@ public class RxANRequest extends ANRequest<RxANRequest> {
             super(url, Method.PATCH);
         }
     }
+
+    public static class DownloadBuilder extends ANRequest.DownloadBuilder<DownloadBuilder> {
+
+        public DownloadBuilder(String url, String dirPath, String fileName) {
+            super(url, dirPath, fileName);
+        }
+    }
 }
