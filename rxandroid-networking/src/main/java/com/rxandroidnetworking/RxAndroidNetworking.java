@@ -61,7 +61,27 @@ public class RxAndroidNetworking {
      * @param url The url on which request is to be made
      * @return The PutRequestBuilder
      */
-    public static ANRequest.PutRequestBuilder put(String url) {
-        return new ANRequest.PutRequestBuilder(url);
+    public static RxANRequest.PutRequestBuilder put(String url) {
+        return new RxANRequest.PutRequestBuilder(url);
+    }
+
+    /**
+     * Method to make DELETE request
+     *
+     * @param url The url on which request is to be made
+     * @return The DeleteRequestBuilder
+     */
+    public static RxANRequest.DeleteRequestBuilder delete(String url) {
+        return new RxANRequest.DeleteRequestBuilder(url);
+    }
+
+    /**
+     * Method to make PATCH request
+     *
+     * @param url The url on which request is to be made
+     * @return The PatchRequestBuilder
+     */
+    public static RxANRequest.PatchRequestBuilder patch(String url) {
+        return new RxANRequest.PatchRequestBuilder(url);
     }
 }

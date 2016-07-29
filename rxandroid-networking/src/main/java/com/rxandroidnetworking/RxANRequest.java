@@ -82,4 +82,18 @@ public class RxANRequest extends ANRequest<RxANRequest> {
             super(url, Method.PUT);
         }
     }
+
+    public static class DeleteRequestBuilder extends PostRequestBuilder {
+
+        public DeleteRequestBuilder(String url) {
+            super(url, Method.DELETE);
+        }
+    }
+
+    public static class PatchRequestBuilder extends PostRequestBuilder {
+
+        public PatchRequestBuilder(String url) {
+            super(url, Method.PATCH);
+        }
+    }
 }
