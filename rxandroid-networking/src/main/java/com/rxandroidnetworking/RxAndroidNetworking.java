@@ -42,4 +42,14 @@ public class RxAndroidNetworking {
     public static RxANRequest.GetRequestBuilder get(String url) {
         return new RxANRequest.GetRequestBuilder(url);
     }
+
+    /**
+     * Method to make POST request
+     *
+     * @param url The url on which request is to be made
+     * @return The PostRequestBuilder
+     */
+    public static RxANRequest.PostRequestBuilder post(String url) {
+        return new RxANRequest.PostRequestBuilder(url);
+    }
 }

@@ -1,6 +1,7 @@
 package com.rxandroidnetworking;
 
 import android.content.Context;
+import android.net.TrafficStats;
 import android.os.Build;
 import android.os.NetworkOnMainThreadException;
 
@@ -8,7 +9,10 @@ import com.androidnetworking.common.ANConstants;
 import com.androidnetworking.common.ANData;
 import com.androidnetworking.common.ANLog;
 import com.androidnetworking.common.ANResponse;
+import com.androidnetworking.common.ConnectionClassManager;
+import com.androidnetworking.core.Core;
 import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.AnalyticsListener;
 import com.androidnetworking.utils.Utils;
 
 import java.io.IOException;
@@ -161,12 +165,32 @@ public class RxInternalNetworking {
             ANData data = new ANData();
             try {
                 ANLog.d("initiate simple network call observable");
+                final long startTime = System.currentTimeMillis();
+                final long startBytes = TrafficStats.getTotalRxBytes();
                 Response okResponse = call.execute();
                 data.url = okResponse.request().url();
                 data.code = okResponse.code();
                 data.headers = okResponse.headers();
                 data.source = okResponse.body().source();
                 data.length = okResponse.body().contentLength();
+                final long timeTaken = System.currentTimeMillis() - startTime;
+                if (okResponse.cacheResponse() == null) {
+                    final long finalBytes = TrafficStats.getTotalRxBytes();
+                    final long diffBytes;
+                    if (startBytes == TrafficStats.UNSUPPORTED || finalBytes == TrafficStats.UNSUPPORTED) {
+                        diffBytes = data.length;
+                    } else {
+                        diffBytes = finalBytes - startBytes;
+                    }
+                    ConnectionClassManager.getInstance().updateBandwidth(diffBytes, timeTaken);
+                    sendAnalytics(request.getAnalyticsListener(), timeTaken, (request.getRequestBody() != null && request.getRequestBody().contentLength() != 0) ? request.getRequestBody().contentLength() : -1, data.length, false);
+                } else if (request.getAnalyticsListener() != null) {
+                    if (okResponse.networkResponse() == null) {
+                        sendAnalytics(request.getAnalyticsListener(), timeTaken, 0, 0, true);
+                    } else {
+                        sendAnalytics(request.getAnalyticsListener(), timeTaken, (request.getRequestBody() != null && request.getRequestBody().contentLength() != 0) ? request.getRequestBody().contentLength() : -1, 0, true);
+                    }
+                }
                 if (data.code == 304) {
                     ANLog.d("error code 304 simple observable");
                 } else if (data.code >= 400) {
@@ -243,5 +267,16 @@ public class RxInternalNetworking {
         public boolean isUnsubscribed() {
             return call.isCanceled();
         }
+    }
+
+    private static void sendAnalytics(final AnalyticsListener analyticsListener, final long timeTakenInMillis, final long bytesSent, final long bytesReceived, final boolean isFromCache) {
+        Core.getInstance().getExecutorSupplier().forMainThreadTasks().execute(new Runnable() {
+            @Override
+            public void run() {
+                if (analyticsListener != null) {
+                    analyticsListener.onReceived(timeTakenInMillis, bytesSent, bytesReceived, isFromCache);
+                }
+            }
+        });
     }
 }
