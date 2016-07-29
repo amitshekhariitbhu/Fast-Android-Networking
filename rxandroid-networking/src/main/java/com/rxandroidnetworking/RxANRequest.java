@@ -29,9 +29,13 @@ import rx.Scheduler;
 /**
  * Created by amitshekhar on 10/06/16.
  */
-public class RxANRequest extends ANRequest {
+public class RxANRequest extends ANRequest<RxANRequest> {
 
     public RxANRequest(GetRequestBuilder builder) {
+        super(builder);
+    }
+
+    public RxANRequest(PostRequestBuilder builder) {
         super(builder);
     }
 
@@ -48,6 +52,17 @@ public class RxANRequest extends ANRequest {
     public static class GetRequestBuilder extends ANRequest.GetRequestBuilder<GetRequestBuilder> {
 
         public GetRequestBuilder(String url) {
+            super(url);
+        }
+
+        public RxANRequest build() {
+            return new RxANRequest(this);
+        }
+    }
+
+    public static class PostRequestBuilder extends ANRequest.PostRequestBuilder<PostRequestBuilder> {
+
+        public PostRequestBuilder(String url) {
             super(url);
         }
 
