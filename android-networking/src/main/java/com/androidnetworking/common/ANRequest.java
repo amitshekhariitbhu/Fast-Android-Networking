@@ -58,7 +58,7 @@ import okio.Okio;
 /**
  * Created by amitshekhar on 26/03/16.
  */
-public class ANRequest {
+public class ANRequest<T extends ANRequest> {
 
     private final static String TAG = ANRequest.class.getSimpleName();
 
@@ -232,9 +232,9 @@ public class ANRequest {
         return this;
     }
 
-    public ANRequest setAnalyticsListener(AnalyticsListener analyticsListener) {
+    public T setAnalyticsListener(AnalyticsListener analyticsListener) {
         this.mAnalyticsListener = analyticsListener;
-        return this;
+        return (T) this;
     }
 
     public AnalyticsListener getAnalyticsListener() {
