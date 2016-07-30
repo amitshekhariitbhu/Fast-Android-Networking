@@ -43,6 +43,8 @@
 <li>Fast Android Networking Library supports uploading any type of file (supports multipart upload)</li>
 <li>Fast Android Networking Library supports cancelling a request</li>
 <li>Fast Android Networking Library supports setting priority to any request (LOW, MEDIUM, HIGH, IMMEDIATE)</li>
+<li>Fast Android Networking Library supports <a href="https://github.com/amitshekhariitbhu/Fast-Android-Networking/blob/master/RxAndroidNetworking.md">RxJava</a>
+</li>
 </ul>
 
 <p>As it uses <a href="http://square.github.io/okhttp/">OkHttp</a> as a networking layer, it supports:</p>
@@ -76,6 +78,8 @@ image from network in ImageView, etc. There are libraries but they are outdated.
 <li>In Fast Android Networking Library, OkHttpClient can be customized for every request easily.</li>
 <li>As Fast Android Networking Library uses <a href="http://square.github.io/okhttp/">OkHttp</a> and <a href="https://github.com/square/okio">Okio</a>, it is faster.</li>
 <li>Single library for all type of networking.</li>
+<li>Supports RxJava -&gt; <a href="https://github.com/amitshekhariitbhu/Fast-Android-Networking/blob/master/RxAndroidNetworking.md">Check here</a>
+</li>
 <li>Current bandwidth and connection quality can be obtained to decide logic of code.</li>
 <li>Executor can be passed to any request to get response in another thread.</li>
 <li>Complete analytics of any request can be obtained.</li>
@@ -108,7 +112,7 @@ image from network in ImageView, etc. There are libraries but they are outdated.
 
 <p>Add this in your build.gradle</p>
 
-<div class="highlight highlight-source-groovy"><pre>compile <span class="pl-s"><span class="pl-pds">'</span>com.amitshekhar.android:android-networking:0.0.1<span class="pl-pds">'</span></span></pre></div>
+<div class="highlight highlight-source-groovy"><pre>compile <span class="pl-s"><span class="pl-pds">'</span>com.amitshekhar.android:android-networking:0.1.0<span class="pl-pds">'</span></span></pre></div>
 
 <p>Do not forget to add internet permission in manifest if already not present</p>
 
@@ -130,6 +134,10 @@ image from network in ImageView, etc. There are libraries but they are outdated.
 
 <pre><code>-dontwarn okio.**
 </code></pre>
+
+<h2>
+<a id="rxjava-support----rxjava-fans-click-here" class="anchor" href="#rxjava-support----rxjava-fans-click-here" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><a href="https://github.com/amitshekhariitbhu/Fast-Android-Networking/blob/master/RxAndroidNetworking.md">RxJava Support --&gt; RxJava Fans Click Here</a>
+</h2>
 
 <h3>
 <a id="making-a-get-request" class="anchor" href="#making-a-get-request" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Making a GET Request</h3>
@@ -557,8 +565,6 @@ is not working perfectly in Multipart.</li>
 <a id="todo" class="anchor" href="#todo" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>TODO</h3>
 
 <ul>
-<li>
-<a href="https://github.com/ReactiveX/RxJava">RxJava</a> Support</li>
 <li>Integration with other library</li>
 <li>And of course many many features and bug fixes</li>
 <li>Json Parser</li>
@@ -573,6 +579,9 @@ is not working perfectly in Multipart.</li>
 used by Fast Android Networking is developed by <a href="https://square.github.io/">Square</a>.</li>
 <li>
 <a href="https://android.googlesource.com/platform/frameworks/volley/">Volley</a> - As Fast Android Networking uses ImageLoader that is developed by <a href="https://android.googlesource.com/platform/frameworks/volley/">Volley</a>.<br>
+</li>
+<li>
+<a href="https://github.com/PrashantGupta17">Prashant Gupta</a> - For RxJava Support - <a href="https://github.com/amitshekhariitbhu/Fast-Android-Networking/blob/master/RxAndroidNetworking.md">RxJava Support</a>
 </li>
 </ul>
 
