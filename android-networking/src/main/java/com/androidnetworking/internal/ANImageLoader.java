@@ -67,7 +67,9 @@ public class ANImageLoader {
     public static ANImageLoader getInstance() {
         if (sInstance == null) {
             synchronized (ANImageLoader.class) {
-                sInstance = new ANImageLoader(new LruBitmapCache(cacheSize));
+                if (sInstance == null) {
+                    sInstance = new ANImageLoader(new LruBitmapCache(cacheSize));
+                }
             }
         }
         return sInstance;
@@ -104,7 +106,7 @@ public class ANImageLoader {
             }
 
             @Override
-            public void onError(ANError ANError) {
+            public void onError(ANError anError) {
                 if (errorImageResId != 0) {
                     view.setImageResource(errorImageResId);
                 }
@@ -116,7 +118,7 @@ public class ANImageLoader {
 
         void onResponse(ImageContainer response, boolean isImmediate);
 
-        void onError(ANError ANError);
+        void onError(ANError anError);
     }
 
     public boolean isCached(String requestUrl, int maxWidth, int maxHeight) {
@@ -190,8 +192,8 @@ public class ANImageLoader {
             }
 
             @Override
-            public void onError(ANError ANError) {
-                onGetImageError(cacheKey, ANError);
+            public void onError(ANError anError) {
+                onGetImageError(cacheKey, anError);
             }
         });
 
@@ -216,11 +218,11 @@ public class ANImageLoader {
         }
     }
 
-    protected void onGetImageError(String cacheKey, ANError ANError) {
+    protected void onGetImageError(String cacheKey, ANError anError) {
         BatchedImageRequest request = mInFlightRequests.remove(cacheKey);
 
         if (request != null) {
-            request.setError(ANError);
+            request.setError(anError);
             batchResponse(cacheKey, request);
         }
     }
@@ -290,8 +292,8 @@ public class ANImageLoader {
             mContainers.add(container);
         }
 
-        public void setError(ANError ANError) {
-            mANError = ANError;
+        public void setError(ANError anError) {
+            mANError = anError;
         }
 
         public ANError getError() {

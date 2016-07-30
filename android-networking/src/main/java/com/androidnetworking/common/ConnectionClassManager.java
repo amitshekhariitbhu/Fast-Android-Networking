@@ -43,7 +43,9 @@ public class ConnectionClassManager {
     public static ConnectionClassManager getInstance() {
         if (sInstance == null) {
             synchronized (ConnectionClassManager.class) {
-                sInstance = new ConnectionClassManager();
+                if (sInstance == null) {
+                    sInstance = new ConnectionClassManager();
+                }
             }
         }
         return sInstance;

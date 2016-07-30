@@ -24,7 +24,9 @@ import android.widget.ImageView;
 
 import com.androidnetworking.common.ANData;
 import com.androidnetworking.common.ANResponse;
+import com.androidnetworking.core.Core;
 import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.AnalyticsListener;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -184,5 +186,16 @@ public class Utils {
                 e.printStackTrace();
             }
         }
+    }
+
+    public static void sendAnalytics(final AnalyticsListener analyticsListener, final long timeTakenInMillis, final long bytesSent, final long bytesReceived, final boolean isFromCache) {
+        Core.getInstance().getExecutorSupplier().forMainThreadTasks().execute(new Runnable() {
+            @Override
+            public void run() {
+                if (analyticsListener != null) {
+                    analyticsListener.onReceived(timeTakenInMillis, bytesSent, bytesReceived, isFromCache);
+                }
+            }
+        });
     }
 }

@@ -28,9 +28,7 @@ import com.androidnetworking.common.ANConstants;
 import com.androidnetworking.common.ANData;
 import com.androidnetworking.common.ANRequest;
 import com.androidnetworking.common.ConnectionClassManager;
-import com.androidnetworking.core.Core;
 import com.androidnetworking.error.ANError;
-import com.androidnetworking.interfaces.AnalyticsListener;
 import com.androidnetworking.utils.Utils;
 
 import java.io.File;
@@ -53,9 +51,10 @@ import static com.androidnetworking.common.Method.PUT;
 
 public class InternalNetworking {
 
-    private static final String USER_AGENT = "User-Agent";
 
-    private static OkHttpClient sHttpClient = getClient();
+    public static OkHttpClient sHttpClient = getClient();
+
+    public static String sUserAgent = null;
 
     public static ANData performSimpleRequest(ANRequest request) throws ANError {
         ANData data = new ANData();
@@ -63,13 +62,16 @@ public class InternalNetworking {
         try {
             Request.Builder builder = new Request.Builder().url(request.getUrl());
             if (request.getUserAgent() != null) {
-                builder.addHeader(USER_AGENT, request.getUserAgent());
+                builder.addHeader(ANConstants.USER_AGENT, request.getUserAgent());
+            } else if (sUserAgent != null) {
+                request.setUserAgent(sUserAgent);
+                builder.addHeader(ANConstants.USER_AGENT, sUserAgent);
             }
             Headers requestHeaders = request.getHeaders();
             if (requestHeaders != null) {
                 builder.headers(requestHeaders);
-                if (request.getUserAgent() != null && !requestHeaders.names().contains(USER_AGENT)) {
-                    builder.addHeader(USER_AGENT, request.getUserAgent());
+                if (request.getUserAgent() != null && !requestHeaders.names().contains(ANConstants.USER_AGENT)) {
+                    builder.addHeader(ANConstants.USER_AGENT, request.getUserAgent());
                 }
             }
             RequestBody requestBody = null;
@@ -131,12 +133,12 @@ public class InternalNetworking {
                     diffBytes = finalBytes - startBytes;
                 }
                 ConnectionClassManager.getInstance().updateBandwidth(diffBytes, timeTaken);
-                sendAnalytics(request.getAnalyticsListener(), timeTaken, (requestBody != null && requestBody.contentLength() != 0) ? requestBody.contentLength() : -1, data.length, false);
+                Utils.sendAnalytics(request.getAnalyticsListener(), timeTaken, (requestBody != null && requestBody.contentLength() != 0) ? requestBody.contentLength() : -1, data.length, false);
             } else if (request.getAnalyticsListener() != null) {
                 if (okResponse.networkResponse() == null) {
-                    sendAnalytics(request.getAnalyticsListener(), timeTaken, 0, 0, true);
+                    Utils.sendAnalytics(request.getAnalyticsListener(), timeTaken, 0, 0, true);
                 } else {
-                    sendAnalytics(request.getAnalyticsListener(), timeTaken, (requestBody != null && requestBody.contentLength() != 0) ? requestBody.contentLength() : -1, 0, true);
+                    Utils.sendAnalytics(request.getAnalyticsListener(), timeTaken, (requestBody != null && requestBody.contentLength() != 0) ? requestBody.contentLength() : -1, 0, true);
                 }
             }
         } catch (IOException ioe) {
@@ -155,13 +157,16 @@ public class InternalNetworking {
         try {
             Request.Builder builder = new Request.Builder().url(request.getUrl());
             if (request.getUserAgent() != null) {
-                builder.addHeader(USER_AGENT, request.getUserAgent());
+                builder.addHeader(ANConstants.USER_AGENT, request.getUserAgent());
+            } else if (sUserAgent != null) {
+                request.setUserAgent(sUserAgent);
+                builder.addHeader(ANConstants.USER_AGENT, sUserAgent);
             }
             Headers requestHeaders = request.getHeaders();
             if (requestHeaders != null) {
                 builder.headers(requestHeaders);
-                if (request.getUserAgent() != null && !requestHeaders.names().contains(USER_AGENT)) {
-                    builder.addHeader(USER_AGENT, request.getUserAgent());
+                if (request.getUserAgent() != null && !requestHeaders.names().contains(ANConstants.USER_AGENT)) {
+                    builder.addHeader(ANConstants.USER_AGENT, request.getUserAgent());
                 }
             }
             builder = builder.get();
@@ -214,9 +219,9 @@ public class InternalNetworking {
                     diffBytes = finalBytes - startBytes;
                 }
                 ConnectionClassManager.getInstance().updateBandwidth(diffBytes, timeTaken);
-                sendAnalytics(request.getAnalyticsListener(), timeTaken, -1, data.length, false);
+                Utils.sendAnalytics(request.getAnalyticsListener(), timeTaken, -1, data.length, false);
             } else if (request.getAnalyticsListener() != null) {
-                sendAnalytics(request.getAnalyticsListener(), timeTaken, -1, 0, true);
+                Utils.sendAnalytics(request.getAnalyticsListener(), timeTaken, -1, 0, true);
             }
         } catch (IOException ioe) {
             if (okHttpRequest != null) {
@@ -242,13 +247,16 @@ public class InternalNetworking {
         try {
             Request.Builder builder = new Request.Builder().url(request.getUrl());
             if (request.getUserAgent() != null) {
-                builder.addHeader(USER_AGENT, request.getUserAgent());
+                builder.addHeader(ANConstants.USER_AGENT, request.getUserAgent());
+            } else if (sUserAgent != null) {
+                request.setUserAgent(sUserAgent);
+                builder.addHeader(ANConstants.USER_AGENT, sUserAgent);
             }
             Headers requestHeaders = request.getHeaders();
             if (requestHeaders != null) {
                 builder.headers(requestHeaders);
-                if (request.getUserAgent() != null && !requestHeaders.names().contains(USER_AGENT)) {
-                    builder.addHeader(USER_AGENT, request.getUserAgent());
+                if (request.getUserAgent() != null && !requestHeaders.names().contains(ANConstants.USER_AGENT)) {
+                    builder.addHeader(ANConstants.USER_AGENT, request.getUserAgent());
                 }
             }
             final RequestBody requestBody = request.getMultiPartRequestBody();
@@ -273,12 +281,12 @@ public class InternalNetworking {
             final long timeTaken = System.currentTimeMillis() - startTime;
             if (request.getAnalyticsListener() != null) {
                 if (okResponse.cacheResponse() == null) {
-                    sendAnalytics(request.getAnalyticsListener(), timeTaken, requestBodyLength, data.length, false);
+                    Utils.sendAnalytics(request.getAnalyticsListener(), timeTaken, requestBodyLength, data.length, false);
                 } else {
                     if (okResponse.networkResponse() == null) {
-                        sendAnalytics(request.getAnalyticsListener(), timeTaken, 0, 0, true);
+                        Utils.sendAnalytics(request.getAnalyticsListener(), timeTaken, 0, 0, true);
                     } else {
-                        sendAnalytics(request.getAnalyticsListener(), timeTaken, requestBodyLength != 0 ? requestBodyLength : -1, 0, true);
+                        Utils.sendAnalytics(request.getAnalyticsListener(), timeTaken, requestBodyLength != 0 ? requestBodyLength : -1, 0, true);
                     }
                 }
             }
@@ -289,17 +297,6 @@ public class InternalNetworking {
             throw new ANError(data, ioe);
         }
         return data;
-    }
-
-    private static void sendAnalytics(final AnalyticsListener analyticsListener, final long timeTakenInMillis, final long bytesSent, final long bytesReceived, final boolean isFromCache) {
-        Core.getInstance().getExecutorSupplier().forMainThreadTasks().execute(new Runnable() {
-            @Override
-            public void run() {
-                if (analyticsListener != null) {
-                    analyticsListener.onReceived(timeTakenInMillis, bytesSent, bytesReceived, isFromCache);
-                }
-            }
-        });
     }
 
     public static OkHttpClient getClient() {
@@ -324,6 +321,10 @@ public class InternalNetworking {
                 .readTimeout(60, TimeUnit.SECONDS)
                 .writeTimeout(60, TimeUnit.SECONDS)
                 .build();
+    }
+
+    public static void setUserAgent(String userAgent) {
+        sUserAgent = userAgent;
     }
 
     public static void setClient(OkHttpClient okHttpClient) {

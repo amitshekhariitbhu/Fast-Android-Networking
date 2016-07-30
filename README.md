@@ -65,7 +65,7 @@ Fast Android Networking Library supports Android 2.3 (Gingerbread) and later.
 
 Add this in your build.gradle
 ```groovy
-compile 'com.amitshekhar.android:android-networking:0.0.1'
+compile 'com.amitshekhar.android:android-networking:0.1.0'
 ```
 Do not forget to add internet permission in manifest if already not present
 ```xml
@@ -87,6 +87,9 @@ If you are using proguard, then add this rule in proguard-project.txt
 ```
 -dontwarn okio.**
 ```
+
+## [RxJava Support --> RxJava Fan Read Here](https://github.com/amitshekhariitbhu/Fast-Android-Networking/blob/master/RxAndroidNetworking.md)
+
 ### Making a GET Request
 ```java
 AndroidNetworking.get("http://api.localhost.com/{pageNumber}/test")
@@ -482,7 +485,6 @@ AndroidNetworking.initialize(getApplicationContext(),okHttpClient);
   is not working perfectly in Multipart.
 
 ### TODO
-* [RxJava](https://github.com/ReactiveX/RxJava) Support
 * Integration with other library
 * And of course many many features and bug fixes
 * Json Parser
@@ -491,6 +493,7 @@ AndroidNetworking.initialize(getApplicationContext(),okHttpClient);
 * [Square](https://square.github.io/) - As both [OkHttp](http://square.github.io/okhttp/) and [Okio](https://github.com/square/okio)
   used by Fast Android Networking is developed by [Square](https://square.github.io/).
 * [Volley](https://android.googlesource.com/platform/frameworks/volley/) - As Fast Android Networking uses ImageLoader that is developed by [Volley](https://android.googlesource.com/platform/frameworks/volley/).  
+* [Prashant Gupta](https://github.com/PrashantGupta17) - For RxJava Support - [RxJava Support](https://github.com/amitshekhariitbhu/Fast-Android-Networking/blob/master/RxAndroidNetworking.md)
 
 ### Contact - Let's become friend
 - [Twitter](https://twitter.com/amitiitbhu)

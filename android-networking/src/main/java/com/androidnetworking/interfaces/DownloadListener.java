@@ -26,5 +26,5 @@ public interface DownloadListener {
 
     void onDownloadComplete();
 
-    void onError(ANError ANError);
+    void onError(ANError anError);
 }

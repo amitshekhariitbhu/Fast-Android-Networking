@@ -30,8 +30,12 @@ public class Core {
     }
 
     public static Core getInstance() {
-        if(sInstance == null){
-            sInstance = new Core();
+        if (sInstance == null) {
+            synchronized (Core.class) {
+                if (sInstance == null) {
+                    sInstance = new Core();
+                }
+            }
         }
         return sInstance;
     }
