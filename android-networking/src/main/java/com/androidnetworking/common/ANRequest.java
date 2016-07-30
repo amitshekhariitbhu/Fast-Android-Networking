@@ -467,36 +467,36 @@ public class ANRequest<T extends ANRequest> {
         return null;
     }
 
-    public ANError parseNetworkError(ANError ANError) {
+    public ANError parseNetworkError(ANError anError) {
         try {
-            if (ANError.getData() != null && ANError.getData().source != null) {
-                ANError.setErrorBody(Okio.buffer(ANError.getData().source).readUtf8());
+            if (anError.getData() != null && anError.getData().source != null) {
+                anError.setErrorBody(Okio.buffer(anError.getData().source).readUtf8());
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return ANError;
+        return anError;
     }
 
-    public synchronized void deliverError(ANError ANError) {
+    public synchronized void deliverError(ANError anError) {
         try {
             if (!isDelivered) {
                 if (isCancelled) {
-                    ANError.setCancellationMessageInError();
-                    ANError.setErrorCode(0);
+                    anError.setCancellationMessageInError();
+                    anError.setErrorCode(0);
                 }
                 if (mJSONObjectRequestListener != null) {
-                    mJSONObjectRequestListener.onError(ANError);
+                    mJSONObjectRequestListener.onError(anError);
                 } else if (mJSONArrayRequestListener != null) {
-                    mJSONArrayRequestListener.onError(ANError);
+                    mJSONArrayRequestListener.onError(anError);
                 } else if (mStringRequestListener != null) {
-                    mStringRequestListener.onError(ANError);
+                    mStringRequestListener.onError(anError);
                 } else if (mBitmapRequestListener != null) {
-                    mBitmapRequestListener.onError(ANError);
+                    mBitmapRequestListener.onError(anError);
                 } else if (mDownloadListener != null) {
-                    mDownloadListener.onError(ANError);
+                    mDownloadListener.onError(anError);
                 }
-                ANLog.d("Delivering ANError : " + toString());
+                ANLog.d("Delivering anError : " + toString());
             }
             isDelivered = true;
         } catch (Exception e) {

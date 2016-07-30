@@ -256,13 +256,13 @@ public class RxInternalNetworking {
                 if (data.code == 304) {
                     ANLog.d("error code 304 simple observable");
                 } else if (data.code >= 400) {
-                    ANError ANError = new ANError(data);
-                    ANError = request.parseNetworkError(ANError);
-                    ANError.setErrorCode(data.code);
-                    ANError.setErrorDetail(ANConstants.RESPONSE_FROM_SERVER_ERROR);
+                    ANError anError = new ANError(data);
+                    anError = request.parseNetworkError(anError);
+                    anError.setErrorCode(data.code);
+                    anError.setErrorDetail(ANConstants.RESPONSE_FROM_SERVER_ERROR);
                     if (!subscriber.isUnsubscribed()) {
                         ANLog.d("delivering error to subscriber from simple observable");
-                        subscriber.onError(ANError);
+                        subscriber.onError(anError);
                     }
                 } else {
                     ANResponse<T> response = request.parseResponse(data);
@@ -373,12 +373,12 @@ public class RxInternalNetworking {
                     sendAnalytics(request.getAnalyticsListener(), timeTaken, -1, 0, true);
                 }
                 if (data.code >= 400) {
-                    ANError ANError = new ANError();
-                    ANError = request.parseNetworkError(ANError);
-                    ANError.setErrorCode(data.code);
-                    ANError.setErrorDetail(ANConstants.RESPONSE_FROM_SERVER_ERROR);
+                    ANError anError = new ANError();
+                    anError = request.parseNetworkError(anError);
+                    anError.setErrorCode(data.code);
+                    anError.setErrorDetail(ANConstants.RESPONSE_FROM_SERVER_ERROR);
                     if (!subscriber.isUnsubscribed()) {
-                        subscriber.onError(ANError);
+                        subscriber.onError(anError);
                     }
                 } else {
                     if (!subscriber.isUnsubscribed()) {

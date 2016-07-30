@@ -26,6 +26,6 @@ public interface StringRequestListener {
 
     void onResponse(String response);
 
-    void onError(ANError ANError);
+    void onError(ANError anError);
 
 }

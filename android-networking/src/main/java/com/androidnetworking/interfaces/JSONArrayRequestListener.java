@@ -28,6 +28,6 @@ public interface JSONArrayRequestListener {
 
     void onResponse(JSONArray response);
 
-    void onError(ANError ANError);
+    void onError(ANError anError);
 
 }

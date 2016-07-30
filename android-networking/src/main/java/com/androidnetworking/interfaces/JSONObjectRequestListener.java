@@ -28,6 +28,6 @@ public interface JSONObjectRequestListener {
 
     void onResponse(JSONObject response);
 
-    void onError(ANError ANError);
+    void onError(ANError anError);
 
 }
