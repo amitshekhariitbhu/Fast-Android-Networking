@@ -44,6 +44,10 @@ public class RxANRequest extends ANRequest<RxANRequest> {
         super(builder);
     }
 
+    public RxANRequest(MultiPartBuilder builder) {
+        super(builder);
+    }
+
     public Observable<JSONObject> getJsonObjectObservable() {
         this.setResponseAs(RESPONSE.JSON_OBJECT);
         return RxInternalNetworking.generateSimpleObservable(this);
@@ -109,6 +113,17 @@ public class RxANRequest extends ANRequest<RxANRequest> {
 
         public DownloadBuilder(String url, String dirPath, String fileName) {
             super(url, dirPath, fileName);
+        }
+
+        public RxANRequest build() {
+            return new RxANRequest(this);
+        }
+    }
+
+    public static class MultiPartBuilder extends ANRequest.MultiPartBuilder<MultiPartBuilder> {
+
+        public MultiPartBuilder(String url) {
+            super(url);
         }
 
         public RxANRequest build() {
