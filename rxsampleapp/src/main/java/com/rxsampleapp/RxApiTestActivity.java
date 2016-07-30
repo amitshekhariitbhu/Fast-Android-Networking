@@ -16,6 +16,7 @@
  */
 package com.rxsampleapp;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
@@ -611,5 +612,9 @@ public class RxApiTestActivity extends AppCompatActivity {
                     }
                 });
 
+    }
+
+    public void startSubscriptionActivity(View view) {
+        startActivity(new Intent(RxApiTestActivity.this,SubscriptionActivity.class));
     }
 }

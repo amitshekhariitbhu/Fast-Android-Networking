@@ -36,6 +36,7 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".SubscriptionActivity"></activity>
     </application>
 
 </manifest>

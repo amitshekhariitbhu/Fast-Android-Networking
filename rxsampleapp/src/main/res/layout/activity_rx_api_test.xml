@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~    Copyright (C) 2016 Amit Shekhar
   ~    Copyright (C) 2011 Android Open Source Project
   ~
@@ -173,6 +172,13 @@
             android:layout_height="200dp"
             android:layout_gravity="center" />
 
+        <Button
+            android:id="@+id/startSubscriptionActivity"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_margin="8dp"
+            android:onClick="startSubscriptionActivity"
+            android:text="startSubscriptionActivity" />
 
     </LinearLayout>
 
