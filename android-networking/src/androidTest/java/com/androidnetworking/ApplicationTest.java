@@ -68,7 +68,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
                     }
 
                     @Override
-                    public void onError(ANError ANError) {
+                    public void onError(ANError anError) {
                         assertTrue(false);
                     }
                 });
@@ -96,10 +96,10 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
                     }
 
                     @Override
-                    public void onError(ANError ANError) {
-                        errorBodyRef.set(ANError.getErrorBody());
-                        errorDetailRef.set(ANError.getErrorDetail());
-                        errorCodeRef.set(ANError.getErrorCode());
+                    public void onError(ANError anError) {
+                        errorBodyRef.set(anError.getErrorBody());
+                        errorDetailRef.set(anError.getErrorDetail());
+                        errorCodeRef.set(anError.getErrorCode());
                         latch.countDown();
                     }
                 });
@@ -133,7 +133,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
                     }
 
                     @Override
-                    public void onError(ANError ANError) {
+                    public void onError(ANError anError) {
                         assertTrue(false);
                     }
                 });
@@ -164,10 +164,10 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
                     }
 
                     @Override
-                    public void onError(ANError ANError) {
-                        errorBodyRef.set(ANError.getErrorBody());
-                        errorDetailRef.set(ANError.getErrorDetail());
-                        errorCodeRef.set(ANError.getErrorCode());
+                    public void onError(ANError anError) {
+                        errorBodyRef.set(anError.getErrorBody());
+                        errorDetailRef.set(anError.getErrorDetail());
+                        errorCodeRef.set(anError.getErrorCode());
                         latch.countDown();
                     }
                 });

@@ -74,11 +74,11 @@ public class InternalRunnable implements Runnable {
                 return;
             }
             if (data.code >= 400) {
-                ANError ANError = new ANError(data);
-                ANError = request.parseNetworkError(ANError);
-                ANError.setErrorCode(data.code);
-                ANError.setErrorDetail(ANConstants.RESPONSE_FROM_SERVER_ERROR);
-                deliverError(request, ANError);
+                ANError anError = new ANError(data);
+                anError = request.parseNetworkError(anError);
+                anError.setErrorCode(data.code);
+                anError.setErrorDetail(ANConstants.RESPONSE_FROM_SERVER_ERROR);
+                deliverError(request, anError);
                 return;
             }
 
@@ -115,11 +115,11 @@ public class InternalRunnable implements Runnable {
         try {
             data = InternalNetworking.performDownloadRequest(request);
             if (data.code >= 400) {
-                ANError ANError = new ANError();
-                ANError = request.parseNetworkError(ANError);
-                ANError.setErrorCode(data.code);
-                ANError.setErrorDetail(ANConstants.RESPONSE_FROM_SERVER_ERROR);
-                deliverError(request, ANError);
+                ANError anError = new ANError();
+                anError = request.parseNetworkError(anError);
+                anError.setErrorCode(data.code);
+                anError.setErrorDetail(ANConstants.RESPONSE_FROM_SERVER_ERROR);
+                deliverError(request, anError);
                 return;
             }
             request.updateDownloadCompletion();
@@ -144,11 +144,11 @@ public class InternalRunnable implements Runnable {
                 return;
             }
             if (data.code >= 400) {
-                ANError ANError = new ANError(data);
-                ANError = request.parseNetworkError(ANError);
-                ANError.setErrorCode(data.code);
-                ANError.setErrorDetail(ANConstants.RESPONSE_FROM_SERVER_ERROR);
-                deliverError(request, ANError);
+                ANError anError = new ANError(data);
+                anError = request.parseNetworkError(anError);
+                anError.setErrorCode(data.code);
+                anError.setErrorDetail(ANConstants.RESPONSE_FROM_SERVER_ERROR);
+                deliverError(request, anError);
                 return;
             }
             ANResponse response = request.parseResponse(data);
@@ -182,10 +182,10 @@ public class InternalRunnable implements Runnable {
         return priority;
     }
 
-    private void deliverError(final ANRequest request, final ANError ANError) {
+    private void deliverError(final ANRequest request, final ANError anError) {
         Core.getInstance().getExecutorSupplier().forMainThreadTasks().execute(new Runnable() {
             public void run() {
-                request.deliverError(ANError);
+                request.deliverError(anError);
                 request.finish();
             }
         });

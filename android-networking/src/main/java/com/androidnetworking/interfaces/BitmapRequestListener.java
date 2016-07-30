@@ -28,6 +28,6 @@ public interface BitmapRequestListener {
 
     void onResponse(Bitmap response);
 
-    void onError(ANError ANError);
+    void onError(ANError anError);
 
 }
