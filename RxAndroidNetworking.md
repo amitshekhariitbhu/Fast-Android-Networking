@@ -176,4 +176,27 @@ public class SubscriptionActivity extends Activity {
 
 ```
 
+### Error Code Handling
+```java
+public void onError(Throwable e) {
+        if (e instanceof ANError) {
+            ANError anError = (ANError) e;
+            if (anError.getErrorCode() != 0) {
+                // received ANError from server
+                // error.getErrorCode() - the ANError code from server
+                // error.getErrorBody() - the ANError body from server
+                // error.getErrorDetail() - just a ANError detail
+                Log.d(TAG, "onError errorCode : " + anError.getErrorCode());
+                Log.d(TAG, "onError errorBody : " + anError.getErrorBody());
+                Log.d(TAG, "onError errorDetail : " + anError.getErrorDetail());
+            } else {
+                // error.getErrorDetail() : connectionError, parseError, requestCancelledError
+                Log.d(TAG, "onError errorDetail : " + anError.getErrorDetail());
+            }
+        } else {
+            Log.d(TAG, "onError errorMessage : " + e.getMessage());
+        }
+   }
+```
+
 ### In RxJava, you can do too many things by applying the operators (flatMap,filter,map,mapMany,zip,etc) available in RxJava.
