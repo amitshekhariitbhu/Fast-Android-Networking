@@ -96,4 +96,14 @@ public class RxAndroidNetworking {
     public static RxANRequest.DownloadBuilder download(String url, String dirPath, String fileName) {
         return new RxANRequest.DownloadBuilder(url, dirPath, fileName);
     }
+
+    /**
+     * Method to make upload request
+     *
+     * @param url The url on which request is to be made
+     * @return The MultiPartBuilder
+     */
+    public static RxANRequest.MultiPartBuilder upload(String url) {
+        return new RxANRequest.MultiPartBuilder(url);
+    }
 }
