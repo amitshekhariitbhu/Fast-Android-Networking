@@ -1,5 +1,6 @@
 package com.rxsampleapp;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Looper;
@@ -7,9 +8,9 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.androidnetworking.AndroidNetworking;
-import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.AnalyticsListener;
 import com.androidnetworking.interfaces.DownloadProgressListener;
@@ -32,14 +33,14 @@ import rx.schedulers.Schedulers;
 /**
  * Created by Prashant Gupta on 25-07-2016.
  */
-public class RxTestActivity extends AppCompatActivity {
+public class RxApiTestActivity extends AppCompatActivity {
 
-    private static final String TAG = RxTestActivity.class.getSimpleName();
+    private static final String TAG = RxApiTestActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_rx_test);
+        setContentView(R.layout.activity_rx_api_test);
     }
 
     public void getAllUsers(View view) {
@@ -66,9 +67,9 @@ public class RxTestActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onError(Throwable error) {
-                        if (error instanceof ANError) {
-                            ANError anError = (ANError) error;
+                    public void onError(Throwable e) {
+                        if (e instanceof ANError) {
+                            ANError anError = (ANError) e;
                             if (anError.getErrorCode() != 0) {
                                 // received ANError from server
                                 // error.getErrorCode() - the ANError code from server
@@ -82,7 +83,7 @@ public class RxTestActivity extends AppCompatActivity {
                                 Log.d(TAG, "onError errorDetail : " + anError.getErrorDetail());
                             }
                         } else {
-                            Log.d(TAG, "onError errorMessage : " + error.getMessage());
+                            Log.d(TAG, "onError errorMessage : " + e.getMessage());
                         }
                     }
 
@@ -118,9 +119,9 @@ public class RxTestActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onError(Throwable error) {
-                        if (error instanceof ANError) {
-                            ANError anError = (ANError) error;
+                    public void onError(Throwable e) {
+                        if (e instanceof ANError) {
+                            ANError anError = (ANError) e;
                             if (anError.getErrorCode() != 0) {
                                 // received ANError from server
                                 // error.getErrorCode() - the ANError code from server
@@ -134,7 +135,7 @@ public class RxTestActivity extends AppCompatActivity {
                                 Log.d(TAG, "onError errorDetail : " + anError.getErrorDetail());
                             }
                         } else {
-                            Log.d(TAG, "onError errorMessage : " + error.getMessage());
+                            Log.d(TAG, "onError errorMessage : " + e.getMessage());
                         }
                     }
 
@@ -171,9 +172,9 @@ public class RxTestActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onError(Throwable error) {
-                        if (error instanceof ANError) {
-                            ANError anError = (ANError) error;
+                    public void onError(Throwable e) {
+                        if (e instanceof ANError) {
+                            ANError anError = (ANError) e;
                             if (anError.getErrorCode() != 0) {
                                 // received ANError from server
                                 // error.getErrorCode() - the ANError code from server
@@ -187,7 +188,7 @@ public class RxTestActivity extends AppCompatActivity {
                                 Log.d(TAG, "onError errorDetail : " + anError.getErrorDetail());
                             }
                         } else {
-                            Log.d(TAG, "onError errorMessage : " + error.getMessage());
+                            Log.d(TAG, "onError errorMessage : " + e.getMessage());
                         }
                     }
 
@@ -228,9 +229,9 @@ public class RxTestActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onError(Throwable error) {
-                        if (error instanceof ANError) {
-                            ANError anError = (ANError) error;
+                    public void onError(Throwable e) {
+                        if (e instanceof ANError) {
+                            ANError anError = (ANError) e;
                             if (anError.getErrorCode() != 0) {
                                 // received ANError from server
                                 // error.getErrorCode() - the ANError code from server
@@ -244,7 +245,7 @@ public class RxTestActivity extends AppCompatActivity {
                                 Log.d(TAG, "onError errorDetail : " + anError.getErrorDetail());
                             }
                         } else {
-                            Log.d(TAG, "onError errorMessage : " + error.getMessage());
+                            Log.d(TAG, "onError errorMessage : " + e.getMessage());
                         }
                     }
 
@@ -280,9 +281,9 @@ public class RxTestActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onError(Throwable error) {
-                        if (error instanceof ANError) {
-                            ANError anError = (ANError) error;
+                    public void onError(Throwable e) {
+                        if (e instanceof ANError) {
+                            ANError anError = (ANError) e;
                             if (anError.getErrorCode() != 0) {
                                 // received ANError from server
                                 // error.getErrorCode() - the ANError code from server
@@ -296,7 +297,7 @@ public class RxTestActivity extends AppCompatActivity {
                                 Log.d(TAG, "onError errorDetail : " + anError.getErrorDetail());
                             }
                         } else {
-                            Log.d(TAG, "onError errorMessage : " + error.getMessage());
+                            Log.d(TAG, "onError errorMessage : " + e.getMessage());
                         }
                     }
 
@@ -338,9 +339,9 @@ public class RxTestActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onError(Throwable error) {
-                        if (error instanceof ANError) {
-                            ANError anError = (ANError) error;
+                    public void onError(Throwable e) {
+                        if (e instanceof ANError) {
+                            ANError anError = (ANError) e;
                             if (anError.getErrorCode() != 0) {
                                 // received ANError from server
                                 // error.getErrorCode() - the ANError code from server
@@ -354,7 +355,7 @@ public class RxTestActivity extends AppCompatActivity {
                                 Log.d(TAG, "onError errorDetail : " + anError.getErrorDetail());
                             }
                         } else {
-                            Log.d(TAG, "onError errorMessage : " + error.getMessage());
+                            Log.d(TAG, "onError errorMessage : " + e.getMessage());
                         }
                     }
 
@@ -397,9 +398,9 @@ public class RxTestActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onError(Throwable error) {
-                        if (error instanceof ANError) {
-                            ANError anError = (ANError) error;
+                    public void onError(Throwable e) {
+                        if (e instanceof ANError) {
+                            ANError anError = (ANError) e;
                             if (anError.getErrorCode() != 0) {
                                 // received ANError from server
                                 // error.getErrorCode() - the ANError code from server
@@ -413,7 +414,7 @@ public class RxTestActivity extends AppCompatActivity {
                                 Log.d(TAG, "onError errorDetail : " + anError.getErrorDetail());
                             }
                         } else {
-                            Log.d(TAG, "onError errorMessage : " + error.getMessage());
+                            Log.d(TAG, "onError errorMessage : " + e.getMessage());
                         }
                     }
 
@@ -448,9 +449,9 @@ public class RxTestActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onError(Throwable error) {
-                        if (error instanceof ANError) {
-                            ANError anError = (ANError) error;
+                    public void onError(Throwable e) {
+                        if (e instanceof ANError) {
+                            ANError anError = (ANError) e;
                             if (anError.getErrorCode() != 0) {
                                 // received ANError from server
                                 // error.getErrorCode() - the ANError code from server
@@ -464,7 +465,7 @@ public class RxTestActivity extends AppCompatActivity {
                                 Log.d(TAG, "onError errorDetail : " + anError.getErrorDetail());
                             }
                         } else {
-                            Log.d(TAG, "onError errorMessage : " + error.getMessage());
+                            Log.d(TAG, "onError errorMessage : " + e.getMessage());
                         }
                     }
 
@@ -505,9 +506,9 @@ public class RxTestActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onError(Throwable error) {
-                        if (error instanceof ANError) {
-                            ANError anError = (ANError) error;
+                    public void onError(Throwable e) {
+                        if (e instanceof ANError) {
+                            ANError anError = (ANError) e;
                             if (anError.getErrorCode() != 0) {
                                 // received ANError from server
                                 // error.getErrorCode() - the ANError code from server
@@ -521,7 +522,7 @@ public class RxTestActivity extends AppCompatActivity {
                                 Log.d(TAG, "onError errorDetail : " + anError.getErrorDetail());
                             }
                         } else {
-                            Log.d(TAG, "onError errorMessage : " + error.getMessage());
+                            Log.d(TAG, "onError errorMessage : " + e.getMessage());
                         }
                     }
 
@@ -535,5 +536,64 @@ public class RxTestActivity extends AppCompatActivity {
 
     public void getCurrentConnectionQuality(View view) {
         Log.d(TAG, "getCurrentConnectionQuality : " + AndroidNetworking.getCurrentConnectionQuality() + " currentBandwidth : " + AndroidNetworking.getCurrentBandwidth());
+    }
+
+    public void loadImage(View view) {
+        final String URL_IMAGE = "http://i.imgur.com/2M7Hasn.png";
+        RxAndroidNetworking.get(URL_IMAGE)
+                .setImageScaleType(null)
+                .setBitmapMaxHeight(0)
+                .setBitmapMaxWidth(0)
+                .setBitmapConfig(Bitmap.Config.ARGB_8888)
+                .build()
+                .setAnalyticsListener(new AnalyticsListener() {
+                    @Override
+                    public void onReceived(long timeTakenInMillis, long bytesSent, long bytesReceived, boolean isFromCache) {
+                        Log.d(TAG, " timeTakenInMillis : " + timeTakenInMillis);
+                        Log.d(TAG, " bytesSent : " + bytesSent);
+                        Log.d(TAG, " bytesReceived : " + bytesReceived);
+                        Log.d(TAG, " isFromCache : " + isFromCache);
+                    }
+                })
+                .getBitmapObservable()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Bitmap>() {
+                    @Override
+                    public void onCompleted() {
+                        Log.d(TAG, "onComplete Bitmap");
+
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        if (e instanceof ANError) {
+                            ANError anError = (ANError) e;
+                            if (anError.getErrorCode() != 0) {
+                                // received ANError from server
+                                // error.getErrorCode() - the ANError code from server
+                                // error.getErrorBody() - the ANError body from server
+                                // error.getErrorDetail() - just a ANError detail
+                                Log.d(TAG, "onError errorCode : " + anError.getErrorCode());
+                                Log.d(TAG, "onError errorBody : " + anError.getErrorBody());
+                                Log.d(TAG, "onError errorDetail : " + anError.getErrorDetail());
+                            } else {
+                                // error.getErrorDetail() : connectionError, parseError, requestCancelledError
+                                Log.d(TAG, "onError errorDetail : " + anError.getErrorDetail());
+                            }
+                        } else {
+                            Log.d(TAG, "onError errorMessage : " + e.getMessage());
+                        }
+                    }
+
+                    @Override
+                    public void onNext(Bitmap bitmap) {
+                        Log.d(TAG, "onResponse Bitmap");
+                        ImageView imageView = (ImageView) findViewById(R.id.imageView);
+                        imageView.setImageBitmap(bitmap);
+                    }
+                });
+
     }
 }

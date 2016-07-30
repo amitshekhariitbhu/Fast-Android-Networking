@@ -142,6 +142,21 @@
             android:onClick="getCurrentConnectionQuality"
             android:text="getCurrentConnectionQuality" />
 
+        <Button
+            android:id="@+id/loadImage"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_margin="8dp"
+            android:onClick="loadImage"
+            android:text="loadImage" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center" />
+
+
     </LinearLayout>
 
 </ScrollView>

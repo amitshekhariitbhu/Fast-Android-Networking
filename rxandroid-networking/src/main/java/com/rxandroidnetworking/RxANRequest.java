@@ -17,6 +17,8 @@
 
 package com.rxandroidnetworking;
 
+import android.graphics.Bitmap;
+
 import com.androidnetworking.common.ANRequest;
 import com.androidnetworking.common.Method;
 import com.androidnetworking.common.RESPONSE;
@@ -61,6 +63,28 @@ public class RxANRequest extends ANRequest<RxANRequest> {
 
     public Observable<JSONArray> getJSONArrayObservable() {
         this.setResponseAs(RESPONSE.JSON_ARRAY);
+        if (this.getRequestType() == RequestType.SIMPLE) {
+            return RxInternalNetworking.generateSimpleObservable(this);
+        } else if (this.getRequestType() == RequestType.MULTIPART) {
+            return RxInternalNetworking.generateMultipartObservable(this);
+        } else {
+            return null;
+        }
+    }
+
+    public Observable<Bitmap> getBitmapObservable() {
+        this.setResponseAs(RESPONSE.BITMAP);
+        if (this.getRequestType() == RequestType.SIMPLE) {
+            return RxInternalNetworking.generateSimpleObservable(this);
+        } else if (this.getRequestType() == RequestType.MULTIPART) {
+            return RxInternalNetworking.generateMultipartObservable(this);
+        } else {
+            return null;
+        }
+    }
+
+    public Observable<String> getStringObservable() {
+        this.setResponseAs(RESPONSE.STRING);
         if (this.getRequestType() == RequestType.SIMPLE) {
             return RxInternalNetworking.generateSimpleObservable(this);
         } else if (this.getRequestType() == RequestType.MULTIPART) {
