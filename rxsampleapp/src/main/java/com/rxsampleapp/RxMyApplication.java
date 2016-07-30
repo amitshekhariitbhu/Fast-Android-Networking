@@ -6,14 +6,13 @@ import android.util.Log;
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.ConnectionQuality;
 import com.androidnetworking.interfaces.ConnectionQualityChangeListener;
-import com.rxandroidnetworking.RxAndroidNetworking;
 
-public class MyApplication extends Application {
+public class RxMyApplication extends Application {
 
-    private static final String TAG = MyApplication.class.getSimpleName();
-    private static MyApplication appInstance = null;
+    private static final String TAG = RxMyApplication.class.getSimpleName();
+    private static RxMyApplication appInstance = null;
 
-    public static MyApplication getInstance() {
+    public static RxMyApplication getInstance() {
         return appInstance;
     }
 
@@ -28,7 +27,14 @@ public class MyApplication extends Application {
 //                .addInterceptor(new GzipRequestInterceptor())
 //                .build();
 //        AndroidNetworking.initialize(getApplicationContext(), okHttpClient);
-        RxAndroidNetworking.initialize(getApplicationContext());
+        AndroidNetworking.initialize(getApplicationContext());
+        AndroidNetworking.enableLogging();
+        AndroidNetworking.setConnectionQualityChangeListener(new ConnectionQualityChangeListener() {
+            @Override
+            public void onChange(ConnectionQuality currentConnectionQuality, int currentBandwidth) {
+                Log.d(TAG, "onChange: currentConnectionQuality : " + currentConnectionQuality + " currentBandwidth : " + currentBandwidth);
+            }
+        });
     }
 
 }

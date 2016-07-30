@@ -258,7 +258,7 @@ public class AndroidNetworking {
      * @param userAgent The userAgent
      */
     public static void setUserAgent(String userAgent) {
-        ANRequestQueue.getInstance().setUserAgent(userAgent);
+        InternalNetworking.setUserAgent(userAgent);
     }
 
     /**

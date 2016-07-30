@@ -647,7 +647,7 @@ public class ANRequest<T extends ANRequest> {
             this.mMethod = Method.GET;
         }
 
-        private GetRequestBuilder(String url, int method) {
+        public GetRequestBuilder(String url, int method) {
             this.mUrl = url;
             this.mMethod = method;
         }

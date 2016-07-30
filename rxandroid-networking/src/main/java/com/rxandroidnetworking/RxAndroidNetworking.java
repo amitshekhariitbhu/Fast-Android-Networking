@@ -17,22 +17,21 @@
 
 package com.rxandroidnetworking;
 
-import android.content.Context;
-
-import com.androidnetworking.common.ANRequest;
-
 /**
  * Created by amitshekhar on 10/06/16.
+ */
+
+/**
+ * RxAndroidNetworking entry point.
+ * You must initialize this class before use. The simplest way is to just do
+ * {#code RxAndroidNetworking.initialize(context)}.
  */
 public class RxAndroidNetworking {
 
     /**
-     * Initializes RxAndroidNetworking with the default config.
-     *
-     * @param context The context
+     * private constructor to prevent instantiation of this class
      */
-    public static void initialize(Context context) {
-        RxInternalNetworking.setClientWithCache(context.getApplicationContext());
+    private RxAndroidNetworking() {
     }
 
     /**
@@ -43,6 +42,16 @@ public class RxAndroidNetworking {
      */
     public static RxANRequest.GetRequestBuilder get(String url) {
         return new RxANRequest.GetRequestBuilder(url);
+    }
+
+    /**
+     * Method to make HEAD request
+     *
+     * @param url The url on which request is to be made
+     * @return The HeadRequestBuilder
+     */
+    public static RxANRequest.HeadRequestBuilder head(String url) {
+        return new RxANRequest.HeadRequestBuilder(url);
     }
 
     /**

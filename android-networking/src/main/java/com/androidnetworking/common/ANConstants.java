@@ -31,4 +31,5 @@ public final class ANConstants {
     public static final String NETWORK_ON_MAIN_THREAD_ERROR = "networkOnMainThreadError";
     public static final String PREFETCH = "prefetch";
     public static final String ANDROID_NETWORKING = "AndroidNetworking";
+    public static final String USER_AGENT = "User-Agent";
 }

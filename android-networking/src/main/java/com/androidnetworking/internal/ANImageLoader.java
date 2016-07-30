@@ -67,7 +67,9 @@ public class ANImageLoader {
     public static ANImageLoader getInstance() {
         if (sInstance == null) {
             synchronized (ANImageLoader.class) {
-                sInstance = new ANImageLoader(new LruBitmapCache(cacheSize));
+                if (sInstance == null) {
+                    sInstance = new ANImageLoader(new LruBitmapCache(cacheSize));
+                }
             }
         }
         return sInstance;

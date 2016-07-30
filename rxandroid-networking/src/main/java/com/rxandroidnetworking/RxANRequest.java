@@ -26,7 +26,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import rx.Observable;
-import rx.Scheduler;
 
 /**
  * Created by amitshekhar on 10/06/16.
@@ -49,7 +48,7 @@ public class RxANRequest extends ANRequest<RxANRequest> {
         super(builder);
     }
 
-    public Observable<JSONObject> getJsonObjectObservable() {
+    public Observable<JSONObject> getJSONObjectObservable() {
         this.setResponseAs(RESPONSE.JSON_OBJECT);
         if (this.getRequestType() == RequestType.SIMPLE) {
             return RxInternalNetworking.generateSimpleObservable(this);
@@ -60,7 +59,7 @@ public class RxANRequest extends ANRequest<RxANRequest> {
         }
     }
 
-    public Observable<JSONArray> getJsonArrayObservable() {
+    public Observable<JSONArray> getJSONArrayObservable() {
         this.setResponseAs(RESPONSE.JSON_ARRAY);
         if (this.getRequestType() == RequestType.SIMPLE) {
             return RxInternalNetworking.generateSimpleObservable(this);
@@ -81,8 +80,19 @@ public class RxANRequest extends ANRequest<RxANRequest> {
             super(url);
         }
 
+        private GetRequestBuilder(String url, int method) {
+            super(url, method);
+        }
+
         public RxANRequest build() {
             return new RxANRequest(this);
+        }
+    }
+
+    public static class HeadRequestBuilder extends GetRequestBuilder {
+
+        public HeadRequestBuilder(String url) {
+            super(url, Method.HEAD);
         }
     }
 

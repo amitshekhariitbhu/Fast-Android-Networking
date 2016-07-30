@@ -12,9 +12,7 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.AnalyticsListener;
-import com.androidnetworking.interfaces.DownloadListener;
 import com.androidnetworking.interfaces.DownloadProgressListener;
-import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.androidnetworking.interfaces.UploadProgressListener;
 import com.rxandroidnetworking.RxANRequest;
 import com.rxandroidnetworking.RxAndroidNetworking;
@@ -28,6 +26,7 @@ import java.io.File;
 
 import rx.Observer;
 import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
@@ -47,8 +46,6 @@ public class RxTestActivity extends AppCompatActivity {
         RxAndroidNetworking.get(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_ARRAY)
                 .addPathParameter("pageNumber", "0")
                 .addQueryParameter("limit", "3")
-                .setTag(this)
-                .setPriority(Priority.LOW)
                 .build()
                 .setAnalyticsListener(new AnalyticsListener() {
                     @Override
@@ -59,8 +56,9 @@ public class RxTestActivity extends AppCompatActivity {
                         Log.d(TAG, " isFromCache : " + isFromCache);
                     }
                 })
-                .getJsonArrayObservable()
+                .getJSONArrayObservable()
                 .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<JSONArray>() {
                     @Override
                     public void onCompleted() {
@@ -99,8 +97,6 @@ public class RxTestActivity extends AppCompatActivity {
     public void getAnUser(View view) {
         RxAndroidNetworking.get(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_OBJECT)
                 .addPathParameter("userId", "1")
-                .setTag(this)
-                .setPriority(Priority.LOW)
                 .setUserAgent("getAnUser")
                 .build()
                 .setAnalyticsListener(new AnalyticsListener() {
@@ -112,8 +108,9 @@ public class RxTestActivity extends AppCompatActivity {
                         Log.d(TAG, " isFromCache : " + isFromCache);
                     }
                 })
-                .getJsonObjectObservable()
+                .getJSONObjectObservable()
                 .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<JSONObject>() {
                     @Override
                     public void onCompleted() {
@@ -154,8 +151,6 @@ public class RxTestActivity extends AppCompatActivity {
         RxANRequest.GetRequestBuilder getRequestBuilder = new RxANRequest.GetRequestBuilder(ApiEndPoint.BASE_URL + ApiEndPoint.CHECK_FOR_HEADER);
 
         getRequestBuilder.addHeaders("token", "1234")
-                .setTag(this)
-                .setPriority(Priority.LOW)
                 .build()
                 .setAnalyticsListener(new AnalyticsListener() {
                     @Override
@@ -166,8 +161,9 @@ public class RxTestActivity extends AppCompatActivity {
                         Log.d(TAG, " isFromCache : " + isFromCache);
                     }
                 })
-                .getJsonObjectObservable()
+                .getJSONObjectObservable()
                 .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<JSONObject>() {
                     @Override
                     public void onCompleted() {
@@ -210,7 +206,6 @@ public class RxTestActivity extends AppCompatActivity {
         postRequestBuilder.addHeaders("token", "1234");
 
         RxANRequest rxAnRequest = postRequestBuilder.setTag(this)
-                .setPriority(Priority.LOW)
                 .build();
 
         rxAnRequest.setAnalyticsListener(new AnalyticsListener() {
@@ -223,8 +218,9 @@ public class RxTestActivity extends AppCompatActivity {
             }
         });
 
-        rxAnRequest.getJsonObjectObservable()
+        rxAnRequest.getJSONObjectObservable()
                 .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<JSONObject>() {
                     @Override
                     public void onCompleted() {
@@ -262,10 +258,8 @@ public class RxTestActivity extends AppCompatActivity {
 
     public void createAnUser(View view) {
         RxAndroidNetworking.post(ApiEndPoint.BASE_URL + ApiEndPoint.POST_CREATE_AN_USER)
-                .addBodyParameter("firstname", "Suman")
+                .addBodyParameter("firstname", "Amit")
                 .addBodyParameter("lastname", "Shekhar")
-                .setTag(this)
-                .setPriority(Priority.LOW)
                 .build()
                 .setAnalyticsListener(new AnalyticsListener() {
                     @Override
@@ -276,8 +270,9 @@ public class RxTestActivity extends AppCompatActivity {
                         Log.d(TAG, " isFromCache : " + isFromCache);
                     }
                 })
-                .getJsonObjectObservable()
+                .getJSONObjectObservable()
                 .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<JSONObject>() {
                     @Override
                     public void onCompleted() {
@@ -323,8 +318,6 @@ public class RxTestActivity extends AppCompatActivity {
         }
         RxAndroidNetworking.post(ApiEndPoint.BASE_URL + ApiEndPoint.POST_CREATE_AN_USER)
                 .addJSONObjectBody(jsonObject)
-                .setTag(this)
-                .setPriority(Priority.LOW)
                 .build()
                 .setAnalyticsListener(new AnalyticsListener() {
                     @Override
@@ -335,8 +328,9 @@ public class RxTestActivity extends AppCompatActivity {
                         Log.d(TAG, " isFromCache : " + isFromCache);
                     }
                 })
-                .getJsonObjectObservable()
+                .getJSONObjectObservable()
                 .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<JSONObject>() {
                     @Override
                     public void onCompleted() {
@@ -375,8 +369,6 @@ public class RxTestActivity extends AppCompatActivity {
     public void downloadFile(final View view) {
         String url = "http://www.colorado.edu/conflict/peace/download/peace_problem.ZIP";
         RxAndroidNetworking.download(url, Utils.getRootDirPath(getApplicationContext()), "file1.zip")
-                .setPriority(Priority.HIGH)
-                .setTag(this)
                 .build()
                 .setAnalyticsListener(new AnalyticsListener() {
                     @Override
@@ -396,6 +388,7 @@ public class RxTestActivity extends AppCompatActivity {
                 })
                 .getDownloadObservable()
                 .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Object>() {
                     @Override
                     public void onCompleted() {
@@ -434,8 +427,6 @@ public class RxTestActivity extends AppCompatActivity {
     public void downloadImage(final View view) {
         String url = "http://i.imgur.com/AtbX9iX.png";
         RxAndroidNetworking.download(url, Utils.getRootDirPath(getApplicationContext()), "image1.png")
-                .setPriority(Priority.MEDIUM)
-                .setTag(this)
                 .build()
                 .setAnalyticsListener(new AnalyticsListener() {
                     @Override
@@ -448,6 +439,7 @@ public class RxTestActivity extends AppCompatActivity {
                 })
                 .getDownloadObservable()
                 .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer() {
                     @Override
                     public void onCompleted() {
@@ -485,9 +477,7 @@ public class RxTestActivity extends AppCompatActivity {
 
     public void uploadImage(final View view) {
         RxAndroidNetworking.upload(ApiEndPoint.BASE_URL + ApiEndPoint.UPLOAD_IMAGE)
-                .setPriority(Priority.MEDIUM)
                 .addMultipartFile("image", new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "test.png"))
-                .setTag(this)
                 .build()
                 .setAnalyticsListener(new AnalyticsListener() {
                     @Override
@@ -505,8 +495,9 @@ public class RxTestActivity extends AppCompatActivity {
                         Log.d(TAG, "setUploadProgressListener isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }
                 })
-                .getJsonObjectObservable()
+                .getJSONObjectObservable()
                 .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<JSONObject>() {
                     @Override
                     public void onCompleted() {
@@ -540,5 +531,9 @@ public class RxTestActivity extends AppCompatActivity {
                         Log.d(TAG, "onResponse object : " + response.toString());
                     }
                 });
+    }
+
+    public void getCurrentConnectionQuality(View view) {
+        Log.d(TAG, "getCurrentConnectionQuality : " + AndroidNetworking.getCurrentConnectionQuality() + " currentBandwidth : " + AndroidNetworking.getCurrentBandwidth());
     }
 }
