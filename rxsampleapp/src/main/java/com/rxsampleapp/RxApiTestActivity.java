@@ -406,7 +406,7 @@ public class RxApiTestActivity extends AppCompatActivity {
                 .getDownloadObservable()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Object>() {
+                .subscribe(new Observer<String>() {
                     @Override
                     public void onCompleted() {
                         Log.d(TAG, "File download Completed");
@@ -435,8 +435,8 @@ public class RxApiTestActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onNext(Object o) {
-
+                    public void onNext(String s) {
+                        Log.d(TAG, "onNext : " + s);
                     }
                 });
     }
@@ -457,10 +457,10 @@ public class RxApiTestActivity extends AppCompatActivity {
                 .getDownloadObservable()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer() {
+                .subscribe(new Observer<String>() {
                     @Override
                     public void onCompleted() {
-                        Log.d(TAG, "Image download Completed");
+                        Log.d(TAG, "File download Completed");
                         Log.d(TAG, "onDownloadComplete isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }
 
@@ -486,8 +486,8 @@ public class RxApiTestActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onNext(Object o) {
-
+                    public void onNext(String s) {
+                        Log.d(TAG, "onNext : " + s);
                     }
                 });
     }

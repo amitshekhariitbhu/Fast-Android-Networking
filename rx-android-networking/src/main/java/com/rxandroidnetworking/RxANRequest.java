@@ -94,7 +94,7 @@ public class RxANRequest extends ANRequest<RxANRequest> {
         }
     }
 
-    public Observable getDownloadObservable() {
+    public Observable<String> getDownloadObservable() {
         return RxInternalNetworking.generateDownloadObservable(this);
     }
 

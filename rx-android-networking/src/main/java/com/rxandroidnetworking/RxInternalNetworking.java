@@ -122,7 +122,7 @@ public class RxInternalNetworking {
         return observable;
     }
 
-    public static Observable generateDownloadObservable(final RxANRequest request) {
+    public static <T> Observable<T> generateDownloadObservable(final RxANRequest request) {
         Request okHttpRequest = null;
         Request.Builder builder = new Request.Builder().url(request.getUrl());
         if (request.getUserAgent() != null) {
@@ -170,7 +170,7 @@ public class RxInternalNetworking {
                     }).build();
         }
         request.setCall(okHttpClient.newCall(okHttpRequest));
-        Observable observable = Observable.create(new ANOnSubscribe(request));
+        Observable<T> observable = Observable.create(new ANOnSubscribe<T>(request));
         return observable;
     }
 
@@ -196,12 +196,12 @@ public class RxInternalNetworking {
                     subscriber.setProducer(anResolver);
                     break;
                 case RequestType.DOWNLOAD:
-                    DownloadANResolver downloadANResolver = new DownloadANResolver(request, subscriber);
+                    DownloadANResolver<T> downloadANResolver = new DownloadANResolver<>(request, subscriber);
                     subscriber.add(downloadANResolver);
                     subscriber.setProducer(downloadANResolver);
                     break;
                 case RequestType.MULTIPART:
-                    MultipartANResolver multipartANResolver = new MultipartANResolver(request, subscriber);
+                    MultipartANResolver<T> multipartANResolver = new MultipartANResolver<>(request, subscriber);
                     subscriber.add(multipartANResolver);
                     subscriber.setProducer(multipartANResolver);
                     break;
@@ -332,12 +332,12 @@ public class RxInternalNetworking {
         }
     }
 
-    static final class DownloadANResolver extends AtomicBoolean implements Subscription, Producer {
+    static final class DownloadANResolver<T> extends AtomicBoolean implements Subscription, Producer {
         private final Call call;
         private final RxANRequest request;
-        private final Subscriber subscriber;
+        private final Subscriber<? super T> subscriber;
 
-        DownloadANResolver(RxANRequest request, Subscriber subscriber) {
+        DownloadANResolver(RxANRequest request, Subscriber<? super T> subscriber) {
             this.request = request;
             this.call = request.getCall();
             this.subscriber = subscriber;
@@ -382,6 +382,10 @@ public class RxInternalNetworking {
                         subscriber.onError(anError);
                     }
                 } else {
+                    if (!subscriber.isUnsubscribed()) {
+                        ANResponse<T> response = (ANResponse<T>) ANResponse.success(ANConstants.SUCCESS);
+                        subscriber.onNext(response.getResult());
+                    }
                     if (!subscriber.isUnsubscribed()) {
                         subscriber.onCompleted();
                     }
