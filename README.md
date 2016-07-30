@@ -88,7 +88,7 @@ If you are using proguard, then add this rule in proguard-project.txt
 -dontwarn okio.**
 ```
 
-## [RxJava Support --> RxJava Fan Read Here](https://github.com/amitshekhariitbhu/Fast-Android-Networking/blob/master/RxAndroidNetworking.md)
+## [RxJava Support --> RxJava Fans Click Here](https://github.com/amitshekhariitbhu/Fast-Android-Networking/blob/master/RxAndroidNetworking.md)
 
 ### Making a GET Request
 ```java
