@@ -383,7 +383,7 @@ public class RxInternalNetworking {
                     }
                 } else {
                     if (!subscriber.isUnsubscribed()) {
-                        ANResponse<T> response = (ANResponse<T>) ANResponse.success(ANConstants.SUCCESS);
+                        ANResponse<T> response = (ANResponse<T>) ANResponse.success("success");
                         subscriber.onNext(response.getResult());
                     }
                     if (!subscriber.isUnsubscribed()) {
