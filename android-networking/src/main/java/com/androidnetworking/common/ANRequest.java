@@ -227,9 +227,9 @@ public class ANRequest<T extends ANRequest> {
         ANRequestQueue.getInstance().addRequest(this);
     }
 
-    public ANRequest setUploadProgressListener(UploadProgressListener uploadProgressListener) {
+    public T setUploadProgressListener(UploadProgressListener uploadProgressListener) {
         this.mUploadProgressListener = uploadProgressListener;
-        return this;
+        return (T) this;
     }
 
     public T setAnalyticsListener(AnalyticsListener analyticsListener) {
@@ -1134,9 +1134,9 @@ public class ANRequest<T extends ANRequest> {
         }
 
         @Override
-        public MultiPartBuilder setPriority(Priority priority) {
+        public T setPriority(Priority priority) {
             mPriority = priority;
-            return this;
+            return (T) this;
         }
 
         @Override

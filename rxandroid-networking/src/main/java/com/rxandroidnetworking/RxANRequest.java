@@ -20,6 +20,7 @@ package com.rxandroidnetworking;
 import com.androidnetworking.common.ANRequest;
 import com.androidnetworking.common.Method;
 import com.androidnetworking.common.RESPONSE;
+import com.androidnetworking.common.RequestType;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -50,12 +51,24 @@ public class RxANRequest extends ANRequest<RxANRequest> {
 
     public Observable<JSONObject> getJsonObjectObservable() {
         this.setResponseAs(RESPONSE.JSON_OBJECT);
-        return RxInternalNetworking.generateSimpleObservable(this);
+        if (this.getRequestType() == RequestType.SIMPLE) {
+            return RxInternalNetworking.generateSimpleObservable(this);
+        } else if (this.getRequestType() == RequestType.MULTIPART) {
+            return RxInternalNetworking.generateMultipartObservable(this);
+        } else {
+            return null;
+        }
     }
 
     public Observable<JSONArray> getJsonArrayObservable() {
         this.setResponseAs(RESPONSE.JSON_ARRAY);
-        return RxInternalNetworking.generateSimpleObservable(this);
+        if (this.getRequestType() == RequestType.SIMPLE) {
+            return RxInternalNetworking.generateSimpleObservable(this);
+        } else if (this.getRequestType() == RequestType.MULTIPART) {
+            return RxInternalNetworking.generateMultipartObservable(this);
+        } else {
+            return null;
+        }
     }
 
     public Observable getDownloadObservable() {

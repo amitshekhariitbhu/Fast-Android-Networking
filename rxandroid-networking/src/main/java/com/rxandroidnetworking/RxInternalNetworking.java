@@ -14,6 +14,7 @@ import com.androidnetworking.common.RequestType;
 import com.androidnetworking.core.Core;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.AnalyticsListener;
+import com.androidnetworking.internal.RequestProgressBody;
 import com.androidnetworking.internal.ResponseProgressBody;
 import com.androidnetworking.utils.Utils;
 
@@ -183,6 +184,11 @@ public class RxInternalNetworking {
         return observable;
     }
 
+    public static <T> Observable<T> generateMultipartObservable(final RxANRequest request) {
+        Observable<T> observable = Observable.create(new ANOnSubscribe<T>(request));
+        return observable;
+    }
+
     static final class ANOnSubscribe<T> implements Observable.OnSubscribe<T> {
 
         private final RxANRequest request;
@@ -203,6 +209,11 @@ public class RxInternalNetworking {
                     DownloadANResolver downloadANResolver = new DownloadANResolver(request, subscriber);
                     subscriber.add(downloadANResolver);
                     subscriber.setProducer(downloadANResolver);
+                    break;
+                case RequestType.MULTIPART:
+                    MultipartANResolver multipartANResolver = new MultipartANResolver(request, subscriber);
+                    subscriber.add(multipartANResolver);
+                    subscriber.setProducer(multipartANResolver);
                     break;
             }
         }
@@ -400,7 +411,6 @@ public class RxInternalNetworking {
                     e.printStackTrace();
                 }
                 if (!subscriber.isUnsubscribed()) {
-                    ANLog.d("delivering error to subscriber from simple observable");
                     subscriber.onError(se);
                 }
             } catch (Exception e) {
@@ -413,7 +423,6 @@ public class RxInternalNetworking {
                 }
                 se.setErrorCode(0);
                 if (!subscriber.isUnsubscribed()) {
-                    ANLog.d("delivering error to subscriber from simple observable");
                     subscriber.onError(se);
                 }
             }
@@ -421,13 +430,137 @@ public class RxInternalNetworking {
 
         @Override
         public void unsubscribe() {
-            ANLog.d("unsubscribed from simple observable");
             call.cancel();
         }
 
         @Override
         public boolean isUnsubscribed() {
             return call.isCanceled();
+        }
+    }
+
+    static final class MultipartANResolver<T> extends AtomicBoolean implements Subscription, Producer {
+        private final RxANRequest request;
+        private final Subscriber<? super T> subscriber;
+
+        MultipartANResolver(RxANRequest request, Subscriber<? super T> subscriber) {
+            this.request = request;
+            this.subscriber = subscriber;
+        }
+
+        @Override
+        public void request(long n) {
+            if (n < 0) throw new IllegalArgumentException("n < 0: " + n);
+            if (n == 0) return; // Nothing to do when requesting 0.
+            if (!compareAndSet(false, true)) return; // Request was already triggered.
+            ANData data = new ANData();
+            Request okHttpRequest = null;
+            try {
+                Request.Builder builder = new Request.Builder().url(request.getUrl());
+                if (request.getUserAgent() != null) {
+                    builder.addHeader(USER_AGENT, request.getUserAgent());
+                }
+                Headers requestHeaders = request.getHeaders();
+                if (requestHeaders != null) {
+                    builder.headers(requestHeaders);
+                    if (request.getUserAgent() != null && !requestHeaders.names().contains(USER_AGENT)) {
+                        builder.addHeader(USER_AGENT, request.getUserAgent());
+                    }
+                }
+                final RequestBody requestBody = request.getMultiPartRequestBody();
+                final long requestBodyLength = requestBody.contentLength();
+                builder = builder.post(new RequestProgressBody(requestBody, request.getUploadProgressListener()));
+                if (request.getCacheControl() != null) {
+                    builder.cacheControl(request.getCacheControl());
+                }
+                okHttpRequest = builder.build();
+                if (request.getOkHttpClient() != null) {
+                    request.setCall(request.getOkHttpClient().newBuilder().cache(sHttpClient.cache()).build().newCall(okHttpRequest));
+                } else {
+                    request.setCall(sHttpClient.newCall(okHttpRequest));
+                }
+                final long startTime = System.currentTimeMillis();
+                Response okResponse = request.getCall().execute();
+                data.url = okResponse.request().url();
+                data.code = okResponse.code();
+                data.headers = okResponse.headers();
+                data.source = okResponse.body().source();
+                data.length = okResponse.body().contentLength();
+                final long timeTaken = System.currentTimeMillis() - startTime;
+                if (request.getAnalyticsListener() != null) {
+                    if (okResponse.cacheResponse() == null) {
+                        sendAnalytics(request.getAnalyticsListener(), timeTaken, requestBodyLength, data.length, false);
+                    } else {
+                        if (okResponse.networkResponse() == null) {
+                            sendAnalytics(request.getAnalyticsListener(), timeTaken, 0, 0, true);
+                        } else {
+                            sendAnalytics(request.getAnalyticsListener(), timeTaken, requestBodyLength != 0 ? requestBodyLength : -1, 0, true);
+                        }
+                    }
+                }
+                if (data.code >= 400) {
+                    ANError ANError = new ANError(data);
+                    ANError = request.parseNetworkError(ANError);
+                    ANError.setErrorCode(data.code);
+                    ANError.setErrorDetail(ANConstants.RESPONSE_FROM_SERVER_ERROR);
+                    if (!subscriber.isUnsubscribed()) {
+                        subscriber.onError(ANError);
+                    }
+                } else {
+                    ANResponse<T> response = request.parseResponse(data);
+                    if (!response.isSuccess()) {
+                        if (!subscriber.isUnsubscribed()) {
+                            subscriber.onError(response.getError());
+                        }
+                    } else {
+                        if (!subscriber.isUnsubscribed()) {
+                            subscriber.onNext(response.getResult());
+                        }
+                        if (!subscriber.isUnsubscribed()) {
+                            subscriber.onCompleted();
+                        }
+                    }
+                }
+            } catch (IOException ioe) {
+                if (okHttpRequest != null) {
+                    data.url = okHttpRequest.url();
+                }
+                if (!subscriber.isUnsubscribed()) {
+                    subscriber.onError(new ANError(data, ioe));
+                }
+            } catch (Exception e) {
+                Exceptions.throwIfFatal(e);
+                ANError se = new ANError(e);
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB && e instanceof NetworkOnMainThreadException) {
+                    se.setErrorDetail(ANConstants.NETWORK_ON_MAIN_THREAD_ERROR);
+                } else {
+                    se.setErrorDetail(ANConstants.CONNECTION_ERROR);
+                }
+                se.setErrorCode(0);
+                if (!subscriber.isUnsubscribed()) {
+                    subscriber.onError(se);
+                }
+            } finally {
+                if (data != null && data.source != null) {
+                    try {
+                        data.source.close();
+                    } catch (IOException ignored) {
+                        ANLog.d("Unable to close source data");
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void unsubscribe() {
+            if (request.getCall() != null) {
+                request.getCall().cancel();
+            }
+        }
+
+        @Override
+        public boolean isUnsubscribed() {
+            return request.getCall() != null && request.getCall().isCanceled();
         }
     }
 

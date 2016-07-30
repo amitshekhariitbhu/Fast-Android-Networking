@@ -1,6 +1,7 @@
 package com.rxsampleapp;
 
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,8 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.AnalyticsListener;
 import com.androidnetworking.interfaces.DownloadListener;
 import com.androidnetworking.interfaces.DownloadProgressListener;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.androidnetworking.interfaces.UploadProgressListener;
 import com.rxandroidnetworking.RxANRequest;
 import com.rxandroidnetworking.RxAndroidNetworking;
 import com.rxsampleapp.utils.Utils;
@@ -20,6 +23,8 @@ import com.rxsampleapp.utils.Utils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.File;
 
 import rx.Observer;
 import rx.Subscriber;
@@ -422,6 +427,117 @@ public class RxTestActivity extends AppCompatActivity {
                     @Override
                     public void onNext(Object o) {
 
+                    }
+                });
+    }
+
+    public void downloadImage(final View view) {
+        String url = "http://i.imgur.com/AtbX9iX.png";
+        RxAndroidNetworking.download(url, Utils.getRootDirPath(getApplicationContext()), "image1.png")
+                .setPriority(Priority.MEDIUM)
+                .setTag(this)
+                .build()
+                .setAnalyticsListener(new AnalyticsListener() {
+                    @Override
+                    public void onReceived(long timeTakenInMillis, long bytesSent, long bytesReceived, boolean isFromCache) {
+                        Log.d(TAG, " timeTakenInMillis : " + timeTakenInMillis);
+                        Log.d(TAG, " bytesSent : " + bytesSent);
+                        Log.d(TAG, " bytesReceived : " + bytesReceived);
+                        Log.d(TAG, " isFromCache : " + isFromCache);
+                    }
+                })
+                .getDownloadObservable()
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer() {
+                    @Override
+                    public void onCompleted() {
+                        Log.d(TAG, "Image download Completed");
+                        Log.d(TAG, "onDownloadComplete isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
+                    }
+
+                    @Override
+                    public void onError(Throwable error) {
+                        if (error instanceof ANError) {
+                            ANError anError = (ANError) error;
+                            if (anError.getErrorCode() != 0) {
+                                // received ANError from server
+                                // error.getErrorCode() - the ANError code from server
+                                // error.getErrorBody() - the ANError body from server
+                                // error.getErrorDetail() - just a ANError detail
+                                Log.d(TAG, "onError errorCode : " + anError.getErrorCode());
+                                Log.d(TAG, "onError errorBody : " + anError.getErrorBody());
+                                Log.d(TAG, "onError errorDetail : " + anError.getErrorDetail());
+                            } else {
+                                // error.getErrorDetail() : connectionError, parseError, requestCancelledError
+                                Log.d(TAG, "onError errorDetail : " + anError.getErrorDetail());
+                            }
+                        } else {
+                            Log.d(TAG, "onError errorMessage : " + error.getMessage());
+                        }
+                    }
+
+                    @Override
+                    public void onNext(Object o) {
+
+                    }
+                });
+    }
+
+    public void uploadImage(final View view) {
+        RxAndroidNetworking.upload(ApiEndPoint.BASE_URL + ApiEndPoint.UPLOAD_IMAGE)
+                .setPriority(Priority.MEDIUM)
+                .addMultipartFile("image", new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "test.png"))
+                .setTag(this)
+                .build()
+                .setAnalyticsListener(new AnalyticsListener() {
+                    @Override
+                    public void onReceived(long timeTakenInMillis, long bytesSent, long bytesReceived, boolean isFromCache) {
+                        Log.d(TAG, " timeTakenInMillis : " + timeTakenInMillis);
+                        Log.d(TAG, " bytesSent : " + bytesSent);
+                        Log.d(TAG, " bytesReceived : " + bytesReceived);
+                        Log.d(TAG, " isFromCache : " + isFromCache);
+                    }
+                })
+                .setUploadProgressListener(new UploadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesUploaded, long totalBytes) {
+                        Log.d(TAG, "bytesUploaded : " + bytesUploaded + " totalBytes : " + totalBytes);
+                        Log.d(TAG, "setUploadProgressListener isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
+                    }
+                })
+                .getJsonObjectObservable()
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<JSONObject>() {
+                    @Override
+                    public void onCompleted() {
+                        Log.d(TAG, "onComplete Detail : createAnUserJSONObject completed");
+                    }
+
+                    @Override
+                    public void onError(Throwable error) {
+                        if (error instanceof ANError) {
+                            ANError anError = (ANError) error;
+                            if (anError.getErrorCode() != 0) {
+                                // received ANError from server
+                                // error.getErrorCode() - the ANError code from server
+                                // error.getErrorBody() - the ANError body from server
+                                // error.getErrorDetail() - just a ANError detail
+                                Log.d(TAG, "onError errorCode : " + anError.getErrorCode());
+                                Log.d(TAG, "onError errorBody : " + anError.getErrorBody());
+                                Log.d(TAG, "onError errorDetail : " + anError.getErrorDetail());
+                            } else {
+                                // error.getErrorDetail() : connectionError, parseError, requestCancelledError
+                                Log.d(TAG, "onError errorDetail : " + anError.getErrorDetail());
+                            }
+                        } else {
+                            Log.d(TAG, "onError errorMessage : " + error.getMessage());
+                        }
+                    }
+
+                    @Override
+                    public void onNext(JSONObject response) {
+                        Log.d(TAG, "Image upload Completed");
+                        Log.d(TAG, "onResponse object : " + response.toString());
                     }
                 });
     }
