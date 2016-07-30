@@ -18,8 +18,8 @@
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: "com.jfrog.bintray"
 
-def siteUrl = 'https://github.com/amitshekhariitbhu/Android-Networking'
-def gitUrl = 'https://github.com/amitshekhariitbhu/Android-Networking.git'
+def siteUrl = 'https://github.com/amitshekhariitbhu/Fast-Android-Networking'
+def gitUrl = 'https://github.com/amitshekhariitbhu/Fast-Android-Networking.git'
 
 group = "com.amitshekhar.android"
 version = '0.0.1'
@@ -29,8 +29,8 @@ install {
         pom.project {
             packaging 'aar'
 
-            name 'Android Networking'
-            description 'Android Networking is a powerful library for doing any type of networking in Android applications'
+            name 'Fast Android Networking'
+            description 'Fast Android Networking is a powerful library for doing any type of networking in Android applications'
 
             url siteUrl
 
