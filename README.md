@@ -51,8 +51,6 @@ If you are using proguard, then add this rule in proguard-project.txt
 -dontwarn okio.**
 ```
 
-## [RxJava Support --> RxJava Fans Click Here](https://github.com/amitshekhariitbhu/Fast-Android-Networking/blob/master/RxAndroidNetworking.md)
-
 ### Making a GET Request
 ```java
 AndroidNetworking.get("http://api.localhost.com/{pageNumber}/test")
@@ -229,6 +227,9 @@ AndroidNetworking.upload(url)
                     }
                  }); 
 ```
+
+### [How to use Fast Android Networking with RxJava? - Click Here](https://github.com/amitshekhariitbhu/Fast-Android-Networking/blob/master/RxAndroidNetworking.md)
+
 ### Getting Response and completion in an another thread executor 
 (Note : Error and Progress will always be returned in main thread of application)
 ```java
