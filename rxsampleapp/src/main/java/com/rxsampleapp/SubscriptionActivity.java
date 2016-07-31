@@ -19,7 +19,9 @@ package com.rxsampleapp;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 
 import com.rxandroidnetworking.RxAndroidNetworking;
 import com.rxsampleapp.utils.Utils;
@@ -33,7 +35,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by amitshekhar on 31/07/16.
  */
-public class SubscriptionActivity extends Activity {
+public class SubscriptionActivity extends AppCompatActivity {
 
     private static final String TAG = SubscriptionActivity.class.getSimpleName();
     private static final String URL = "http://www.colorado.edu/conflict/peace/download/peace_problem.ZIP";
@@ -44,11 +46,8 @@ public class SubscriptionActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_subscription);
         dirPath = Utils.getRootDirPath(getApplicationContext());
-        subscription = getObservable()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(getObserver());
     }
 
 
@@ -83,5 +82,12 @@ public class SubscriptionActivity extends Activity {
                 Log.d(TAG, "onResponse response : " + response);
             }
         };
+    }
+
+    public void downloadFile(View view) {
+        subscription = getObservable()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(getObserver());
     }
 }

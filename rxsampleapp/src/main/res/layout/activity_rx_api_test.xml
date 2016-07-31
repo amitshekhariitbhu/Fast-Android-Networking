@@ -180,6 +180,14 @@
             android:onClick="startSubscriptionActivity"
             android:text="startSubscriptionActivity" />
 
+        <Button
+            android:id="@+id/startRxOperatorActivity"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_margin="8dp"
+            android:onClick="startRxOperatorActivity"
+            android:text="startRxOperatorActivity" />
+
     </LinearLayout>
 
 </ScrollView>

@@ -37,6 +37,7 @@
         </activity>
 
         <activity android:name=".SubscriptionActivity"></activity>
+        <activity android:name=".RxOperatorExampleActivity"></activity>
     </application>
 
 </manifest>
