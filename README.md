@@ -12,50 +12,11 @@ Fast Android Networking Library is a powerful library for doing any type of netw
 
 Fast Android Networking Library takes care of each and everything. So you don't have to do anything, just make request and listen for the response.
 
-Fast Android Networking Library supports:
-
-* Fast Android Networking Library supports all types of HTTP/HTTPS request like GET, POST, DELETE, HEAD, PUT, PATCH
-* Fast Android Networking Library supports downloading any type of file
-* Fast Android Networking Library supports uploading any type of file (supports multipart upload)
-* Fast Android Networking Library supports cancelling a request
-* Fast Android Networking Library supports setting priority to any request (LOW, MEDIUM, HIGH, IMMEDIATE)
-* Fast Android Networking Library supports [RxJava](https://github.com/amitshekhariitbhu/Fast-Android-Networking/blob/master/RxAndroidNetworking.md)
-
-As it uses [OkHttp](http://square.github.io/okhttp/) as a networking layer, it supports:
-
-* Fast Android Networking Library supports HTTP/2 support allows all requests to the same host to share a socket
-* Fast Android Networking Library uses connection pooling which reduces request latency (if HTTP/2 isn’t available)
-* Transparent GZIP shrinks download sizes
-* Fast Android Networking Library supports response caching which avoids the network completely for repeat requests
-
-### Why this library :
-* Recent removal of HttpClient in Android Marshmallow(Android M) made other networking library obsolete.
-* No other single library do each and everything like making request, downloading any type of file, uploading file, loading
-  image from network in ImageView, etc. There are libraries but they are outdated.
-* No other library provided simple interface for doing all types of things in networking like setting priority, cancelling, etc.
-* As it uses [Okio](https://github.com/square/okio) , No more GC overhead in android application.
-  [Okio](https://github.com/square/okio) is made to handle GC overhead while allocating memory.
-  [Okio](https://github.com/square/okio) do some clever things to save CPU and memory.
-* As it uses [OkHttp](http://square.github.io/okhttp/) , most important it supports HTTP/2.  
-
-### Difference over other Networking Library
-* In Fast Android Networking Library, OkHttpClient can be customized for every request easily.
-* As Fast Android Networking Library uses [OkHttp](http://square.github.io/okhttp/) and [Okio](https://github.com/square/okio), it is faster.
-* Single library for all type of networking.
-* Supports RxJava -> [Check here](https://github.com/amitshekhariitbhu/Fast-Android-Networking/blob/master/RxAndroidNetworking.md)
-* Current bandwidth and connection quality can be obtained to decide logic of code.
-* Executor can be passed to any request to get response in another thread.
-* Complete analytics of any request can be obtained.
-* All types of customization is possible.
-* Immediate Request is really immediate now.
-* Prefetching of any request can be done so that it gives instant data when required from cache.
-* Proper cancellation of request.
-* Do not cancel a request if completed more than a threshold percentage.
-* Simple interface to make any type of request.
-* Proper Response Caching, hence reducing bandwidth usage.
-
-### Have an issue or need a feature in Fast Android Networking
-- Best way to do so is - [Create an issue](https://github.com/amitshekhariitbhu/Fast-Android-Networking/issues/new)
+- [What Fast Android Networking Library supports?](#fast-android-networking-library-supports)
+- [Why this library?](#why-this-library)
+- [Difference over other Networking Library](#difference-over-other-networking-library)
+- [RxJava Support For Fast Android Networking](https://github.com/amitshekhariitbhu/Fast-Android-Networking/blob/master/RxAndroidNetworking.md)
+- [Have an issue or need a feature in Fast Android Networking : Create an issue](https://github.com/amitshekhariitbhu/Fast-Android-Networking/issues/new)
 
 ## Requirements
 
@@ -533,6 +494,48 @@ AndroidNetworking.initialize(getApplicationContext(),okHttpClient);
   1 or 2 (at max 2)IMMEDIATE request is required at instant.Otherwise use HIGH Priority.
 * Known Bug : As present if you are using GZIP Interceptor from client to server, Upload progress
   is not working perfectly in Multipart.
+  
+### Fast Android Networking Library supports
+
+* Fast Android Networking Library supports all types of HTTP/HTTPS request like GET, POST, DELETE, HEAD, PUT, PATCH
+* Fast Android Networking Library supports downloading any type of file
+* Fast Android Networking Library supports uploading any type of file (supports multipart upload)
+* Fast Android Networking Library supports cancelling a request
+* Fast Android Networking Library supports setting priority to any request (LOW, MEDIUM, HIGH, IMMEDIATE)
+* Fast Android Networking Library supports [RxJava](https://github.com/amitshekhariitbhu/Fast-Android-Networking/blob/master/RxAndroidNetworking.md)
+
+As it uses [OkHttp](http://square.github.io/okhttp/) as a networking layer, it supports:
+
+* Fast Android Networking Library supports HTTP/2 support allows all requests to the same host to share a socket
+* Fast Android Networking Library uses connection pooling which reduces request latency (if HTTP/2 isn’t available)
+* Transparent GZIP shrinks download sizes
+* Fast Android Networking Library supports response caching which avoids the network completely for repeat requests
+
+### Why this library
+* Recent removal of HttpClient in Android Marshmallow(Android M) made other networking library obsolete.
+* No other single library do each and everything like making request, downloading any type of file, uploading file, loading
+  image from network in ImageView, etc. There are libraries but they are outdated.
+* No other library provided simple interface for doing all types of things in networking like setting priority, cancelling, etc.
+* As it uses [Okio](https://github.com/square/okio) , No more GC overhead in android application.
+  [Okio](https://github.com/square/okio) is made to handle GC overhead while allocating memory.
+  [Okio](https://github.com/square/okio) do some clever things to save CPU and memory.
+* As it uses [OkHttp](http://square.github.io/okhttp/) , most important it supports HTTP/2.  
+
+### Difference over other Networking Library
+* In Fast Android Networking Library, OkHttpClient can be customized for every request easily.
+* As Fast Android Networking Library uses [OkHttp](http://square.github.io/okhttp/) and [Okio](https://github.com/square/okio), it is faster.
+* Single library for all type of networking.
+* Supports RxJava -> [Check here](https://github.com/amitshekhariitbhu/Fast-Android-Networking/blob/master/RxAndroidNetworking.md)
+* Current bandwidth and connection quality can be obtained to decide logic of code.
+* Executor can be passed to any request to get response in another thread.
+* Complete analytics of any request can be obtained.
+* All types of customization is possible.
+* Immediate Request is really immediate now.
+* Prefetching of any request can be done so that it gives instant data when required from cache.
+* Proper cancellation of request.
+* Do not cancel a request if completed more than a threshold percentage.
+* Simple interface to make any type of request.
+* Proper Response Caching, hence reducing bandwidth usage.  
 
 ### TODO
 * Integration with other library
