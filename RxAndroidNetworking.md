@@ -90,7 +90,7 @@ RxAndroidNetworking.download(url,dirPath,fileName)
 ```
 
 ### Using it with your own JAVA Object - JSON Parser
-```
+```java
 /*--------------Example One -> Getting the userList----------------*/
 RxAndroidNetworking.get("http://api.localhost.com/getAllUsers/{pageNumber}")
                 .addPathParameter("pageNumber", "0")
@@ -144,7 +144,7 @@ RxAndroidNetworking.get("http://api.localhost.com/getAnUser/{userId}")
                         Log.d(TAG, "lastname : " + user.lastname);
                     }
                 });
-/*-- Note : TypeToken and  getParseObservable is important here--*/              
+/*-- Note : TypeToken and getParseObservable is important here --*/              
 ```
 
 ### Uploading a file to server

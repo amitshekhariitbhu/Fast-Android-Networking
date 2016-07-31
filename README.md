@@ -175,7 +175,7 @@ AndroidNetworking.post("http://api.localhost.com/postFile")
 ```
 
 ### Using it with your own JAVA Object - JSON Parser
-```
+```java
 /*--------------Example One -> Getting the userList----------------*/
 AndroidNetworking.get("http://api.localhost.com/getAllUsers/{pageNumber}")
                 .addPathParameter("pageNumber", "0")
@@ -218,7 +218,7 @@ AndroidNetworking.get("http://api.localhost.com/getAnUser/{userId}")
                       // handle error
                      }
                  }); 
-/*-- Note : TypeToken and  getAsParsed is important here--*/              
+/*-- Note : TypeToken and getAsParsed is important here --*/              
 ```
 
 ### Downloading a file from server
