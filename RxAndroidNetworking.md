@@ -89,6 +89,64 @@ RxAndroidNetworking.download(url,dirPath,fileName)
                   });
 ```
 
+### Using it with your own JAVA Object - JSON Parser
+```
+/*--------------Example One -> Getting the userList----------------*/
+RxAndroidNetworking.get("http://api.localhost.com/getAllUsers/{pageNumber}")
+                .addPathParameter("pageNumber", "0")
+                .addQueryParameter("limit", "3")
+                .build()
+                .getParseObservable(new TypeToken<List<User>>() {})
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<List<User>>() {
+                    @Override
+                    public void onCompleted() {
+                        // do anything onComplete 
+                    }
+                    @Override
+                    public void onError(Throwable e) {
+                        // handle error
+                    }
+                    @Override
+                    public void onNext(List<User> users) {
+                        // do anything with response    
+                        Log.d(TAG, "userList size : " + users.size());
+                        for (User user : users) {
+                            Log.d(TAG, "id : " + user.id);
+                            Log.d(TAG, "firstname : " + user.firstname);
+                            Log.d(TAG, "lastname : " + user.lastname);
+                        }
+                    }
+                });                
+/*--------------Example Two -> Getting an user----------------*/
+RxAndroidNetworking.get("http://api.localhost.com/getAnUser/{userId}")
+                .addPathParameter("userId", "1")
+                .setUserAgent("getAnUser")
+                .build()
+                .getParseObservable(new TypeToken<User>() {})
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<User>() {
+                    @Override
+                    public void onCompleted() {
+                        // do anything onComplete 
+                    }
+                    @Override
+                    public void onError(Throwable e) {
+                        // handle error
+                    }
+                    @Override
+                    public void onNext(User user) {
+                        // do anything with response 
+                        Log.d(TAG, "id : " + user.id);
+                        Log.d(TAG, "firstname : " + user.firstname);
+                        Log.d(TAG, "lastname : " + user.lastname);
+                    }
+                });
+/*-- Note : TypeToken and  getParseObservable is important here--*/              
+```
+
 ### Uploading a file to server
 ```java
 RxAndroidNetworking.upload("http://api.localhost.com/uploadImage")

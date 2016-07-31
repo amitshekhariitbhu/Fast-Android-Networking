@@ -110,7 +110,7 @@ AndroidNetworking.get("http://api.localhost.com/{pageNumber}/test")
                     public void onError(ANError error) {
                     // handle error
                     }
-                });
+                });                
 ```
 ### Making a POST Request
 ```java
@@ -173,6 +173,54 @@ AndroidNetworking.post("http://api.localhost.com/postFile")
                     }
                 });               
 ```
+
+### Using it with your own JAVA Object - JSON Parser
+```
+/*--------------Example One -> Getting the userList----------------*/
+AndroidNetworking.get("http://api.localhost.com/getAllUsers/{pageNumber}")
+                .addPathParameter("pageNumber", "0")
+                .addQueryParameter("limit", "3")
+                .setTag(this)
+                .setPriority(Priority.LOW)
+                .build()
+                .getAsParsed(new TypeToken<List<User>>() {}, new ParsedRequestListener<List<User>>() {
+                    @Override
+                    public void onResponse(List<User> users) {
+                    // do anything with response
+                    Log.d(TAG, "userList size : " + users.size());
+                    for (User user : users) {
+                        Log.d(TAG, "id : " + user.id);
+                        Log.d(TAG, "firstname : " + user.firstname);
+                        Log.d(TAG, "lastname : " + user.lastname);
+                    }
+                    }
+                    @Override
+                    public void onError(ANError anError) {
+                     // handle error
+                    }
+                });
+/*--------------Example Two -> Getting an user----------------*/
+AndroidNetworking.get("http://api.localhost.com/getAnUser/{userId}")
+                .addPathParameter("userId", "1")
+                .setTag(this)
+                .setPriority(Priority.LOW)
+                .build()
+                .getAsParsed(new TypeToken<User>() {}, new ParsedRequestListener<User>() {
+                     @Override
+                     public void onResponse(User user) {
+                     // do anything with response
+                         Log.d(TAG, "id : " + user.id);
+                         Log.d(TAG, "firstname : " + user.firstname);
+                         Log.d(TAG, "lastname : " + user.lastname);
+                     }
+                     @Override
+                     public void onError(ANError anError) {
+                      // handle error
+                     }
+                 }); 
+/*-- Note : TypeToken and  getAsParsed is important here--*/              
+```
+
 ### Downloading a file from server
 ```java
 AndroidNetworking.download(url,dirPath,fileName)
@@ -489,7 +537,6 @@ AndroidNetworking.initialize(getApplicationContext(),okHttpClient);
 ### TODO
 * Integration with other library
 * And of course many many features and bug fixes
-* Json Parser
 
 ### CREDITS
 * [Square](https://square.github.io/) - As both [OkHttp](http://square.github.io/okhttp/) and [Okio](https://github.com/square/okio)
