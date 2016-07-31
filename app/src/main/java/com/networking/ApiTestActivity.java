@@ -33,7 +33,10 @@ import com.androidnetworking.interfaces.DownloadListener;
 import com.androidnetworking.interfaces.DownloadProgressListener;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.androidnetworking.interfaces.ParsedRequestListener;
 import com.androidnetworking.interfaces.UploadProgressListener;
+import com.google.gson.reflect.TypeToken;
+import com.networking.model.User;
 import com.networking.utils.Utils;
 
 import org.json.JSONArray;
@@ -41,6 +44,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
@@ -57,11 +61,9 @@ public class ApiTestActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_api_test);
-        prefetch();
-        prefetchDownload();
     }
 
-    private void prefetch() {
+    public void prefetch(View view) {
         AndroidNetworking.get(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_ARRAY)
                 .addPathParameter("pageNumber", "0")
                 .addQueryParameter("limit", "3")
@@ -80,7 +82,7 @@ public class ApiTestActivity extends AppCompatActivity {
                 .prefetch();
     }
 
-    private void prefetchDownload() {
+    public void prefetchDownload(View view) {
         String url = "http://www.colorado.edu/conflict/peace/download/peace_problem.ZIP";
         AndroidNetworking.download(url, Utils.getRootDirPath(getApplicationContext()), "file1.zip")
                 .setPriority(Priority.HIGH)
@@ -114,27 +116,21 @@ public class ApiTestActivity extends AppCompatActivity {
                         Log.d(TAG, " isFromCache : " + isFromCache);
                     }
                 })
-                .getAsJSONArray(new JSONArrayRequestListener() {
+                .getAsParsed(new TypeToken<List<User>>() {
+                }, new ParsedRequestListener<List<User>>() {
                     @Override
-                    public void onResponse(JSONArray response) {
-                        Log.d(TAG, "onResponse array : " + response.toString());
-                        Log.d(TAG, "onResponse isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
+                    public void onResponse(List<User> users) {
+                        Log.d(TAG, "userList size : " + users.size());
+                        for (User user : users) {
+                            Log.d(TAG, "id : " + user.id);
+                            Log.d(TAG, "firstname : " + user.firstname);
+                            Log.d(TAG, "lastname : " + user.lastname);
+                        }
                     }
 
                     @Override
-                    public void onError(ANError error) {
-                        if (error.getErrorCode() != 0) {
-                            // received ANError from server
-                            // error.getErrorCode() - the ANError code from server
-                            // error.getErrorBody() - the ANError body from server
-                            // error.getErrorDetail() - just a ANError detail
-                            Log.d(TAG, "onError errorCode : " + error.getErrorCode());
-                            Log.d(TAG, "onError errorBody : " + error.getErrorBody());
-                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
-                        } else {
-                            // error.getErrorDetail() : connectionError, parseError, requestCancelledError
-                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
-                        }
+                    public void onError(ANError anError) {
+                        Utils.logError(TAG, anError);
                     }
                 });
     }
@@ -155,27 +151,18 @@ public class ApiTestActivity extends AppCompatActivity {
                         Log.d(TAG, " isFromCache : " + isFromCache);
                     }
                 })
-                .getAsJSONObject(new JSONObjectRequestListener() {
+                .getAsParsed(new TypeToken<User>() {
+                }, new ParsedRequestListener<User>() {
                     @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d(TAG, "onResponse object : " + response.toString());
-                        Log.d(TAG, "onResponse isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
+                    public void onResponse(User user) {
+                        Log.d(TAG, "id : " + user.id);
+                        Log.d(TAG, "firstname : " + user.firstname);
+                        Log.d(TAG, "lastname : " + user.lastname);
                     }
 
                     @Override
-                    public void onError(ANError error) {
-                        if (error.getErrorCode() != 0) {
-                            // received ANError from server
-                            // error.getErrorCode() - the ANError code from server
-                            // error.getErrorBody() - the ANError body from server
-                            // error.getErrorDetail() - just a ANError detail
-                            Log.d(TAG, "onError errorCode : " + error.getErrorCode());
-                            Log.d(TAG, "onError errorBody : " + error.getErrorBody());
-                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
-                        } else {
-                            // error.getErrorDetail() : connectionError, parseError, requestCancelledError
-                            Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
-                        }
+                    public void onError(ANError anError) {
+                        Utils.logError(TAG, anError);
                     }
                 });
     }

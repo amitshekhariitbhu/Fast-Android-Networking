@@ -17,25 +17,15 @@
  *
  */
 
-package com.androidnetworking.common;
-
-import okhttp3.Headers;
-import okhttp3.HttpUrl;
-import okhttp3.ResponseBody;
+package com.networking.model;
 
 /**
- * Created by amitshekhar on 22/03/16.
+ * Created by amitshekhar on 31/07/16.
  */
-public class ANData {
+public class User {
 
-    public int code;
-
-    public Headers headers;
-
-    public long length;
-
-    public ResponseBody body;
-
-    public HttpUrl url;
+    public long id;
+    public String firstname;
+    public String lastname;
 
 }

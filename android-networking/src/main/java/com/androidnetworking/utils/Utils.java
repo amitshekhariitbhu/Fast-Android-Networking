@@ -65,7 +65,7 @@ public class Utils {
     public static ANResponse<Bitmap> decodeBitmap(ANData response, int maxWidth, int maxHeight, Bitmap.Config decodeConfig, ImageView.ScaleType scaleType) {
         byte[] data = new byte[0];
         try {
-            data = Okio.buffer(response.source).readByteArray();
+            data = Okio.buffer(response.body.source()).readByteArray();
         } catch (IOException e) {
             e.printStackTrace();
         }

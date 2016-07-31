@@ -32,15 +32,17 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.AnalyticsListener;
 import com.androidnetworking.interfaces.DownloadProgressListener;
 import com.androidnetworking.interfaces.UploadProgressListener;
+import com.google.gson.reflect.TypeToken;
 import com.rxandroidnetworking.RxANRequest;
 import com.rxandroidnetworking.RxAndroidNetworking;
+import com.rxsampleapp.model.User;
 import com.rxsampleapp.utils.Utils;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.util.List;
 
 import rx.Observer;
 import rx.Subscriber;
@@ -74,10 +76,11 @@ public class RxApiTestActivity extends AppCompatActivity {
                         Log.d(TAG, " isFromCache : " + isFromCache);
                     }
                 })
-                .getJSONArrayObservable()
+                .getParseObservable(new TypeToken<List<User>>() {
+                })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<JSONArray>() {
+                .subscribe(new Observer<List<User>>() {
                     @Override
                     public void onCompleted() {
                         Log.d(TAG, "onComplete Detail : getAllUsers completed");
@@ -85,29 +88,18 @@ public class RxApiTestActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        if (e instanceof ANError) {
-                            ANError anError = (ANError) e;
-                            if (anError.getErrorCode() != 0) {
-                                // received ANError from server
-                                // error.getErrorCode() - the ANError code from server
-                                // error.getErrorBody() - the ANError body from server
-                                // error.getErrorDetail() - just a ANError detail
-                                Log.d(TAG, "onError errorCode : " + anError.getErrorCode());
-                                Log.d(TAG, "onError errorBody : " + anError.getErrorBody());
-                                Log.d(TAG, "onError errorDetail : " + anError.getErrorDetail());
-                            } else {
-                                // error.getErrorDetail() : connectionError, parseError, requestCancelledError
-                                Log.d(TAG, "onError errorDetail : " + anError.getErrorDetail());
-                            }
-                        } else {
-                            Log.d(TAG, "onError errorMessage : " + e.getMessage());
-                        }
+                        Utils.logError(TAG, e);
                     }
 
                     @Override
-                    public void onNext(JSONArray jsonArray) {
-                        Log.d(TAG, "onResponse array : " + jsonArray.toString());
+                    public void onNext(List<User> users) {
                         Log.d(TAG, "onResponse isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
+                        Log.d(TAG, "userList size : " + users.size());
+                        for (User user : users) {
+                            Log.d(TAG, "id : " + user.id);
+                            Log.d(TAG, "firstname : " + user.firstname);
+                            Log.d(TAG, "lastname : " + user.lastname);
+                        }
                     }
                 });
     }
@@ -126,10 +118,11 @@ public class RxApiTestActivity extends AppCompatActivity {
                         Log.d(TAG, " isFromCache : " + isFromCache);
                     }
                 })
-                .getJSONObjectObservable()
+                .getParseObservable(new TypeToken<User>() {
+                })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<JSONObject>() {
+                .subscribe(new Observer<User>() {
                     @Override
                     public void onCompleted() {
                         Log.d(TAG, "onComplete Detail : getAnUser completed");
@@ -137,29 +130,15 @@ public class RxApiTestActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        if (e instanceof ANError) {
-                            ANError anError = (ANError) e;
-                            if (anError.getErrorCode() != 0) {
-                                // received ANError from server
-                                // error.getErrorCode() - the ANError code from server
-                                // error.getErrorBody() - the ANError body from server
-                                // error.getErrorDetail() - just a ANError detail
-                                Log.d(TAG, "onError errorCode : " + anError.getErrorCode());
-                                Log.d(TAG, "onError errorBody : " + anError.getErrorBody());
-                                Log.d(TAG, "onError errorDetail : " + anError.getErrorDetail());
-                            } else {
-                                // error.getErrorDetail() : connectionError, parseError, requestCancelledError
-                                Log.d(TAG, "onError errorDetail : " + anError.getErrorDetail());
-                            }
-                        } else {
-                            Log.d(TAG, "onError errorMessage : " + e.getMessage());
-                        }
+                        Utils.logError(TAG, e);
                     }
 
                     @Override
-                    public void onNext(JSONObject response) {
-                        Log.d(TAG, "onResponse object : " + response.toString());
+                    public void onNext(User user) {
                         Log.d(TAG, "onResponse isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
+                        Log.d(TAG, "id : " + user.id);
+                        Log.d(TAG, "firstname : " + user.firstname);
+                        Log.d(TAG, "lastname : " + user.lastname);
                     }
                 });
     }
@@ -615,6 +594,6 @@ public class RxApiTestActivity extends AppCompatActivity {
     }
 
     public void startSubscriptionActivity(View view) {
-        startActivity(new Intent(RxApiTestActivity.this,SubscriptionActivity.class));
+        startActivity(new Intent(RxApiTestActivity.this, SubscriptionActivity.class));
     }
 }

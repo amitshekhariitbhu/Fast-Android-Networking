@@ -26,8 +26,6 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.core.Core;
 import com.androidnetworking.error.ANError;
 
-import java.io.IOException;
-
 import static com.androidnetworking.common.RequestType.DOWNLOAD;
 import static com.androidnetworking.common.RequestType.MULTIPART;
 import static com.androidnetworking.common.RequestType.SIMPLE;
@@ -37,7 +35,6 @@ import static com.androidnetworking.common.RequestType.SIMPLE;
  */
 public class InternalRunnable implements Runnable {
 
-    private static final String TAG = InternalRunnable.class.getSimpleName();
     private final Priority priority;
     public final int sequence;
     public final ANRequest request;
@@ -100,10 +97,10 @@ public class InternalRunnable implements Runnable {
             deliverError(request, se);
 
         } finally {
-            if (data != null && data.source != null) {
+            if (data != null && data.body != null && data.body.source() != null) {
                 try {
-                    data.source.close();
-                } catch (IOException ignored) {
+                    data.body.source().close();
+                } catch (Exception e) {
                     ANLog.d("Unable to close source data");
                 }
             }
@@ -168,10 +165,10 @@ public class InternalRunnable implements Runnable {
             se.setErrorCode(0);
             deliverError(request, se);
         } finally {
-            if (data != null && data.source != null) {
+            if (data != null && data.body != null && data.body.source() != null) {
                 try {
-                    data.source.close();
-                } catch (IOException ignored) {
+                    data.body.source().close();
+                } catch (Exception e) {
                     ANLog.d("Unable to close source data");
                 }
             }

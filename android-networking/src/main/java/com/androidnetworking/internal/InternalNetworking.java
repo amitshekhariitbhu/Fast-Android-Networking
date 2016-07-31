@@ -121,8 +121,8 @@ public class InternalNetworking {
             data.url = okResponse.request().url();
             data.code = okResponse.code();
             data.headers = okResponse.headers();
-            data.source = okResponse.body().source();
-            data.length = okResponse.body().contentLength();
+            data.body = okResponse.body();
+            data.length = data.body.contentLength();
             final long timeTaken = System.currentTimeMillis() - startTime;
             if (okResponse.cacheResponse() == null) {
                 final long finalBytes = TrafficStats.getTotalRxBytes();
@@ -276,8 +276,8 @@ public class InternalNetworking {
             data.url = okResponse.request().url();
             data.code = okResponse.code();
             data.headers = okResponse.headers();
-            data.source = okResponse.body().source();
-            data.length = okResponse.body().contentLength();
+            data.body = okResponse.body();
+            data.length = data.body.contentLength();
             final long timeTaken = System.currentTimeMillis() - startTime;
             if (request.getAnalyticsListener() != null) {
                 if (okResponse.cacheResponse() == null) {

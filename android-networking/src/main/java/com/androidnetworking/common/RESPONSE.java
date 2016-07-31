@@ -25,5 +25,6 @@ public enum RESPONSE {
     JSON_OBJECT,
     JSON_ARRAY,
     BITMAP,
-    PREFETCH
+    PREFETCH,
+    PARSED
 }

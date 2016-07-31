@@ -23,6 +23,7 @@ import com.androidnetworking.common.ANRequest;
 import com.androidnetworking.common.Method;
 import com.androidnetworking.common.RESPONSE;
 import com.androidnetworking.common.RequestType;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -96,6 +97,18 @@ public class RxANRequest extends ANRequest<RxANRequest> {
 
     public Observable<String> getDownloadObservable() {
         return RxInternalNetworking.generateDownloadObservable(this);
+    }
+
+    public <T> Observable<T> getParseObservable(TypeToken<T> typeToken) {
+        this.setType(typeToken.getType());
+        this.setResponseAs(RESPONSE.PARSED);
+        if (this.getRequestType() == RequestType.SIMPLE) {
+            return RxInternalNetworking.generateSimpleObservable(this);
+        } else if (this.getRequestType() == RequestType.MULTIPART) {
+            return RxInternalNetworking.generateMultipartObservable(this);
+        } else {
+            return null;
+        }
     }
 
     public static class GetRequestBuilder extends ANRequest.GetRequestBuilder<GetRequestBuilder> {

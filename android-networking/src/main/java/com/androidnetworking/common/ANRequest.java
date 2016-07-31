@@ -28,17 +28,19 @@ import com.androidnetworking.interfaces.DownloadListener;
 import com.androidnetworking.interfaces.DownloadProgressListener;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.androidnetworking.interfaces.ParsedRequestListener;
 import com.androidnetworking.interfaces.StringRequestListener;
 import com.androidnetworking.interfaces.UploadProgressListener;
 import com.androidnetworking.internal.ANRequestQueue;
+import com.androidnetworking.internal.GsonParserFactory;
 import com.androidnetworking.utils.Utils;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Future;
@@ -97,6 +99,7 @@ public class ANRequest<T extends ANRequest> {
     private JSONObjectRequestListener mJSONObjectRequestListener;
     private StringRequestListener mStringRequestListener;
     private BitmapRequestListener mBitmapRequestListener;
+    private ParsedRequestListener mParsedRequestListener;
     private DownloadProgressListener mDownloadProgressListener;
     private UploadProgressListener mUploadProgressListener;
     private DownloadListener mDownloadListener;
@@ -110,6 +113,7 @@ public class ANRequest<T extends ANRequest> {
     private Executor mExecutor = null;
     private OkHttpClient mOkHttpClient = null;
     private String mUserAgent = null;
+    private Type mType = null;
 
     public ANRequest(GetRequestBuilder builder) {
         this.mRequestType = RequestType.SIMPLE;
@@ -212,6 +216,13 @@ public class ANRequest<T extends ANRequest> {
         ANRequestQueue.getInstance().addRequest(this);
     }
 
+    public void getAsParsed(TypeToken typeToken, ParsedRequestListener parsedRequestListener) {
+        this.mType = typeToken.getType();
+        this.mResponseAs = RESPONSE.PARSED;
+        this.mParsedRequestListener = parsedRequestListener;
+        ANRequestQueue.getInstance().addRequest(this);
+    }
+
     public T setDownloadProgressListener(DownloadProgressListener downloadProgressListener) {
         this.mDownloadProgressListener = downloadProgressListener;
         return (T) this;
@@ -295,6 +306,14 @@ public class ANRequest<T extends ANRequest> {
 
     public String getUserAgent() {
         return mUserAgent;
+    }
+
+    public Type getType() {
+        return mType;
+    }
+
+    public void setType(Type type) {
+        this.mType = type;
     }
 
     public DownloadProgressListener getDownloadProgressListener() {
@@ -420,6 +439,7 @@ public class ANRequest<T extends ANRequest> {
         mJSONArrayRequestListener = null;
         mStringRequestListener = null;
         mBitmapRequestListener = null;
+        mParsedRequestListener = null;
         mDownloadProgressListener = null;
         mUploadProgressListener = null;
         mDownloadListener = null;
@@ -435,31 +455,37 @@ public class ANRequest<T extends ANRequest> {
         switch (mResponseAs) {
             case JSON_ARRAY:
                 try {
-                    JSONArray json = new JSONArray(Okio.buffer(data.source).readUtf8());
+                    JSONArray json = new JSONArray(Okio.buffer(data.body.source()).readUtf8());
                     return ANResponse.success(json);
-                } catch (JSONException | IOException e) {
+                } catch (Exception e) {
                     return ANResponse.failed(new ANError(e));
                 }
             case JSON_OBJECT:
                 try {
-                    JSONObject json = new JSONObject(Okio.buffer(data.source).readUtf8());
+                    JSONObject json = new JSONObject(Okio.buffer(data.body.source()).readUtf8());
                     return ANResponse.success(json);
-                } catch (JSONException | IOException e) {
+                } catch (Exception e) {
                     return ANResponse.failed(new ANError(e));
                 }
             case STRING:
                 try {
-                    return ANResponse.success(Okio.buffer(data.source).readUtf8());
-                } catch (IOException e) {
+                    return ANResponse.success(Okio.buffer(data.body.source()).readUtf8());
+                } catch (Exception e) {
                     return ANResponse.failed(new ANError(e));
                 }
             case BITMAP:
                 synchronized (sDecodeLock) {
                     try {
                         return Utils.decodeBitmap(data, mMaxWidth, mMaxHeight, mDecodeConfig, mScaleType);
-                    } catch (OutOfMemoryError e) {
+                    } catch (Exception e) {
                         return ANResponse.failed(new ANError(e));
                     }
+                }
+            case PARSED:
+                try {
+                    return ANResponse.success(GsonParserFactory.getInstance().responseBodyParser(mType).convert(data.body));
+                } catch (Exception e) {
+                    return ANResponse.failed(new ANError(e));
                 }
             case PREFETCH:
                 return ANResponse.success(ANConstants.PREFETCH);
@@ -469,8 +495,8 @@ public class ANRequest<T extends ANRequest> {
 
     public ANError parseNetworkError(ANError anError) {
         try {
-            if (anError.getData() != null && anError.getData().source != null) {
-                anError.setErrorBody(Okio.buffer(anError.getData().source).readUtf8());
+            if (anError.getData() != null && anError.getData().body != null && anError.getData().body.source() != null) {
+                anError.setErrorBody(Okio.buffer(anError.getData().body.source()).readUtf8());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -495,6 +521,8 @@ public class ANRequest<T extends ANRequest> {
                     mBitmapRequestListener.onError(anError);
                 } else if (mDownloadListener != null) {
                     mDownloadListener.onError(anError);
+                } else if (mParsedRequestListener != null) {
+                    mParsedRequestListener.onError(anError);
                 }
                 ANLog.d("Delivering anError : " + toString());
             }
@@ -520,6 +548,8 @@ public class ANRequest<T extends ANRequest> {
                                 mStringRequestListener.onResponse((String) response.getResult());
                             } else if (mBitmapRequestListener != null) {
                                 mBitmapRequestListener.onResponse((Bitmap) response.getResult());
+                            } else if (mParsedRequestListener != null) {
+                                mParsedRequestListener.onResponse(response.getResult());
                             }
                             finish();
                         }
@@ -535,6 +565,8 @@ public class ANRequest<T extends ANRequest> {
                                 mStringRequestListener.onResponse((String) response.getResult());
                             } else if (mBitmapRequestListener != null) {
                                 mBitmapRequestListener.onResponse((Bitmap) response.getResult());
+                            } else if (mParsedRequestListener != null) {
+                                mParsedRequestListener.onResponse(response.getResult());
                             }
                             finish();
                         }
@@ -553,6 +585,8 @@ public class ANRequest<T extends ANRequest> {
                     mStringRequestListener.onError(anError);
                 } else if (mBitmapRequestListener != null) {
                     mBitmapRequestListener.onError(anError);
+                } else if (mParsedRequestListener != null) {
+                    mParsedRequestListener.onError(anError);
                 }
                 finish();
                 ANLog.d("Delivering cancelled : " + toString());
