@@ -35,69 +35,12 @@
 
 <p>Fast Android Networking Library takes care of each and everything. So you don't have to do anything, just make request and listen for the response.</p>
 
-<p>Fast Android Networking Library supports:</p>
-
 <ul>
-<li>Fast Android Networking Library supports all types of HTTP/HTTPS request like GET, POST, DELETE, HEAD, PUT, PATCH</li>
-<li>Fast Android Networking Library supports downloading any type of file</li>
-<li>Fast Android Networking Library supports uploading any type of file (supports multipart upload)</li>
-<li>Fast Android Networking Library supports cancelling a request</li>
-<li>Fast Android Networking Library supports setting priority to any request (LOW, MEDIUM, HIGH, IMMEDIATE)</li>
-<li>Fast Android Networking Library supports <a href="https://github.com/amitshekhariitbhu/Fast-Android-Networking/blob/master/RxAndroidNetworking.md">RxJava</a>
-</li>
-</ul>
-
-<p>As it uses <a href="http://square.github.io/okhttp/">OkHttp</a> as a networking layer, it supports:</p>
-
-<ul>
-<li>Fast Android Networking Library supports HTTP/2 support allows all requests to the same host to share a socket</li>
-<li>Fast Android Networking Library uses connection pooling which reduces request latency (if HTTP/2 isn’t available)</li>
-<li>Transparent GZIP shrinks download sizes</li>
-<li>Fast Android Networking Library supports response caching which avoids the network completely for repeat requests</li>
-</ul>
-
-<h3>
-<a id="why-this-library-" class="anchor" href="#why-this-library-" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Why this library :</h3>
-
-<ul>
-<li>Recent removal of HttpClient in Android Marshmallow(Android M) made other networking library obsolete.</li>
-<li>No other single library do each and everything like making request, downloading any type of file, uploading file, loading
-image from network in ImageView, etc. There are libraries but they are outdated.</li>
-<li>No other library provided simple interface for doing all types of things in networking like setting priority, cancelling, etc.</li>
-<li>As it uses <a href="https://github.com/square/okio">Okio</a> , No more GC overhead in android application.
-<a href="https://github.com/square/okio">Okio</a> is made to handle GC overhead while allocating memory.
-<a href="https://github.com/square/okio">Okio</a> do some clever things to save CPU and memory.</li>
-<li>As it uses <a href="http://square.github.io/okhttp/">OkHttp</a> , most important it supports HTTP/2.<br>
-</li>
-</ul>
-
-<h3>
-<a id="difference-over-other-networking-library" class="anchor" href="#difference-over-other-networking-library" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Difference over other Networking Library</h3>
-
-<ul>
-<li>In Fast Android Networking Library, OkHttpClient can be customized for every request easily.</li>
-<li>As Fast Android Networking Library uses <a href="http://square.github.io/okhttp/">OkHttp</a> and <a href="https://github.com/square/okio">Okio</a>, it is faster.</li>
-<li>Single library for all type of networking.</li>
-<li>Supports RxJava -&gt; <a href="https://github.com/amitshekhariitbhu/Fast-Android-Networking/blob/master/RxAndroidNetworking.md">Check here</a>
-</li>
-<li>Current bandwidth and connection quality can be obtained to decide logic of code.</li>
-<li>Executor can be passed to any request to get response in another thread.</li>
-<li>Complete analytics of any request can be obtained.</li>
-<li>All types of customization is possible.</li>
-<li>Immediate Request is really immediate now.</li>
-<li>Prefetching of any request can be done so that it gives instant data when required from cache.</li>
-<li>Proper cancellation of request.</li>
-<li>Do not cancel a request if completed more than a threshold percentage.</li>
-<li>Simple interface to make any type of request.</li>
-<li>Proper Response Caching, hence reducing bandwidth usage.</li>
-</ul>
-
-<h3>
-<a id="have-an-issue-or-need-a-feature-in-fast-android-networking" class="anchor" href="#have-an-issue-or-need-a-feature-in-fast-android-networking" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Have an issue or need a feature in Fast Android Networking</h3>
-
-<ul>
-<li>Best way to do so is - <a href="https://github.com/amitshekhariitbhu/Fast-Android-Networking/issues/new">Create an issue</a>
-</li>
+<li><a href="#fast-android-networking-library-supports">What Fast Android Networking Library supports?</a></li>
+<li><a href="#why-this-library">Why this library?</a></li>
+<li><a href="#difference-over-other-networking-library">Difference over other Networking Library</a></li>
+<li><a href="https://github.com/amitshekhariitbhu/Fast-Android-Networking/blob/master/RxAndroidNetworking.md">RxJava Support For Fast Android Networking</a></li>
+<li><a href="https://github.com/amitshekhariitbhu/Fast-Android-Networking/issues/new">Have an issue or need a feature in Fast Android Networking : Create an issue</a></li>
 </ul>
 
 <h2>
@@ -135,10 +78,6 @@ image from network in ImageView, etc. There are libraries but they are outdated.
 <pre><code>-dontwarn okio.**
 </code></pre>
 
-<h2>
-<a id="rxjava-support----rxjava-fans-click-here" class="anchor" href="#rxjava-support----rxjava-fans-click-here" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><a href="https://github.com/amitshekhariitbhu/Fast-Android-Networking/blob/master/RxAndroidNetworking.md">RxJava Support --&gt; RxJava Fans Click Here</a>
-</h2>
-
 <h3>
 <a id="making-a-get-request" class="anchor" href="#making-a-get-request" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Making a GET Request</h3>
 
@@ -158,7 +97,7 @@ image from network in ImageView, etc. There are libraries but they are outdated.
                     <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onError</span>(<span class="pl-smi">ANError</span> <span class="pl-v">error</span>) {
                     <span class="pl-c">// handle error</span>
                     }
-                });</pre></div>
+                });                </pre></div>
 
 <h3>
 <a id="making-a-post-request" class="anchor" href="#making-a-post-request" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Making a POST Request</h3>
@@ -223,6 +162,53 @@ image from network in ImageView, etc. There are libraries but they are outdated.
                 });               </pre></div>
 
 <h3>
+<a id="using-it-with-your-own-java-object---json-parser" class="anchor" href="#using-it-with-your-own-java-object---json-parser" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Using it with your own JAVA Object - JSON Parser</h3>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-c">/*--------------Example One -&gt; Getting the userList----------------*/</span>
+<span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>get(<span class="pl-s"><span class="pl-pds">"</span>http://api.localhost.com/getAllUsers/{pageNumber}<span class="pl-pds">"</span></span>)
+                .addPathParameter(<span class="pl-s"><span class="pl-pds">"</span>pageNumber<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span>)
+                .addQueryParameter(<span class="pl-s"><span class="pl-pds">"</span>limit<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>3<span class="pl-pds">"</span></span>)
+                .setTag(<span class="pl-v">this</span>)
+                .setPriority(<span class="pl-smi">Priority</span><span class="pl-c1"><span class="pl-k">.</span>LOW</span>)
+                .build()
+                .getAsParsed(<span class="pl-k">new</span> <span class="pl-k">TypeToken&lt;<span class="pl-k">List&lt;<span class="pl-smi">User</span>&gt;</span>&gt;</span>() {}, <span class="pl-k">new</span> <span class="pl-k">ParsedRequestListener&lt;<span class="pl-k">List&lt;<span class="pl-smi">User</span>&gt;</span>&gt;</span>() {
+                    <span class="pl-k">@Override</span>
+                    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onResponse</span>(<span class="pl-k">List&lt;<span class="pl-smi">User</span>&gt;</span> <span class="pl-v">users</span>) {
+                    <span class="pl-c">// do anything with response</span>
+                    <span class="pl-smi">Log</span><span class="pl-k">.</span>d(<span class="pl-c1">TAG</span>, <span class="pl-s"><span class="pl-pds">"</span>userList size : <span class="pl-pds">"</span></span> <span class="pl-k">+</span> users<span class="pl-k">.</span>size());
+                    <span class="pl-k">for</span> (<span class="pl-smi">User</span> user <span class="pl-k">:</span> users) {
+                        <span class="pl-smi">Log</span><span class="pl-k">.</span>d(<span class="pl-c1">TAG</span>, <span class="pl-s"><span class="pl-pds">"</span>id : <span class="pl-pds">"</span></span> <span class="pl-k">+</span> user<span class="pl-k">.</span>id);
+                        <span class="pl-smi">Log</span><span class="pl-k">.</span>d(<span class="pl-c1">TAG</span>, <span class="pl-s"><span class="pl-pds">"</span>firstname : <span class="pl-pds">"</span></span> <span class="pl-k">+</span> user<span class="pl-k">.</span>firstname);
+                        <span class="pl-smi">Log</span><span class="pl-k">.</span>d(<span class="pl-c1">TAG</span>, <span class="pl-s"><span class="pl-pds">"</span>lastname : <span class="pl-pds">"</span></span> <span class="pl-k">+</span> user<span class="pl-k">.</span>lastname);
+                    }
+                    }
+                    <span class="pl-k">@Override</span>
+                    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onError</span>(<span class="pl-smi">ANError</span> <span class="pl-v">anError</span>) {
+                     <span class="pl-c">// handle error</span>
+                    }
+                });
+<span class="pl-c">/*--------------Example Two -&gt; Getting an user----------------*/</span>
+<span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>get(<span class="pl-s"><span class="pl-pds">"</span>http://api.localhost.com/getAnUser/{userId}<span class="pl-pds">"</span></span>)
+                .addPathParameter(<span class="pl-s"><span class="pl-pds">"</span>userId<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>1<span class="pl-pds">"</span></span>)
+                .setTag(<span class="pl-v">this</span>)
+                .setPriority(<span class="pl-smi">Priority</span><span class="pl-c1"><span class="pl-k">.</span>LOW</span>)
+                .build()
+                .getAsParsed(<span class="pl-k">new</span> <span class="pl-k">TypeToken&lt;<span class="pl-smi">User</span>&gt;</span>() {}, <span class="pl-k">new</span> <span class="pl-k">ParsedRequestListener&lt;<span class="pl-smi">User</span>&gt;</span>() {
+                     <span class="pl-k">@Override</span>
+                     <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onResponse</span>(<span class="pl-smi">User</span> <span class="pl-v">user</span>) {
+                     <span class="pl-c">// do anything with response</span>
+                         <span class="pl-smi">Log</span><span class="pl-k">.</span>d(<span class="pl-c1">TAG</span>, <span class="pl-s"><span class="pl-pds">"</span>id : <span class="pl-pds">"</span></span> <span class="pl-k">+</span> user<span class="pl-k">.</span>id);
+                         <span class="pl-smi">Log</span><span class="pl-k">.</span>d(<span class="pl-c1">TAG</span>, <span class="pl-s"><span class="pl-pds">"</span>firstname : <span class="pl-pds">"</span></span> <span class="pl-k">+</span> user<span class="pl-k">.</span>firstname);
+                         <span class="pl-smi">Log</span><span class="pl-k">.</span>d(<span class="pl-c1">TAG</span>, <span class="pl-s"><span class="pl-pds">"</span>lastname : <span class="pl-pds">"</span></span> <span class="pl-k">+</span> user<span class="pl-k">.</span>lastname);
+                     }
+                     <span class="pl-k">@Override</span>
+                     <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onError</span>(<span class="pl-smi">ANError</span> <span class="pl-v">anError</span>) {
+                      <span class="pl-c">// handle error</span>
+                     }
+                 }); 
+<span class="pl-c">/*-- Note : TypeToken and getAsParsed is important here --*/</span>              </pre></div>
+
+<h3>
 <a id="downloading-a-file-from-server" class="anchor" href="#downloading-a-file-from-server" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Downloading a file from server</h3>
 
 <div class="highlight highlight-source-java"><pre><span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>download(url,dirPath,fileName)
@@ -270,6 +256,10 @@ image from network in ImageView, etc. There are libraries but they are outdated.
                     <span class="pl-c">// handle error </span>
                     }
                  }); </pre></div>
+
+<h3>
+<a id="how-to-use-fast-android-networking-with-rxjava---click-here" class="anchor" href="#how-to-use-fast-android-networking-with-rxjava---click-here" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><a href="https://github.com/amitshekhariitbhu/Fast-Android-Networking/blob/master/RxAndroidNetworking.md">How to use Fast Android Networking with RxJava? - Click Here</a>
+</h3>
 
 <h3>
 <a id="getting-response-and-completion-in-an-another-thread-executor" class="anchor" href="#getting-response-and-completion-in-an-another-thread-executor" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Getting Response and completion in an another thread executor</h3>
@@ -562,12 +552,70 @@ is not working perfectly in Multipart.</li>
 </ul>
 
 <h3>
+<a id="fast-android-networking-library-supports" class="anchor" href="#fast-android-networking-library-supports" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Fast Android Networking Library supports</h3>
+
+<ul>
+<li>Fast Android Networking Library supports all types of HTTP/HTTPS request like GET, POST, DELETE, HEAD, PUT, PATCH</li>
+<li>Fast Android Networking Library supports downloading any type of file</li>
+<li>Fast Android Networking Library supports uploading any type of file (supports multipart upload)</li>
+<li>Fast Android Networking Library supports cancelling a request</li>
+<li>Fast Android Networking Library supports setting priority to any request (LOW, MEDIUM, HIGH, IMMEDIATE)</li>
+<li>Fast Android Networking Library supports <a href="https://github.com/amitshekhariitbhu/Fast-Android-Networking/blob/master/RxAndroidNetworking.md">RxJava</a>
+</li>
+</ul>
+
+<p>As it uses <a href="http://square.github.io/okhttp/">OkHttp</a> as a networking layer, it supports:</p>
+
+<ul>
+<li>Fast Android Networking Library supports HTTP/2 support allows all requests to the same host to share a socket</li>
+<li>Fast Android Networking Library uses connection pooling which reduces request latency (if HTTP/2 isn’t available)</li>
+<li>Transparent GZIP shrinks download sizes</li>
+<li>Fast Android Networking Library supports response caching which avoids the network completely for repeat requests</li>
+</ul>
+
+<h3>
+<a id="why-this-library" class="anchor" href="#why-this-library" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Why this library</h3>
+
+<ul>
+<li>Recent removal of HttpClient in Android Marshmallow(Android M) made other networking library obsolete.</li>
+<li>No other single library do each and everything like making request, downloading any type of file, uploading file, loading
+image from network in ImageView, etc. There are libraries but they are outdated.</li>
+<li>No other library provided simple interface for doing all types of things in networking like setting priority, cancelling, etc.</li>
+<li>As it uses <a href="https://github.com/square/okio">Okio</a> , No more GC overhead in android application.
+<a href="https://github.com/square/okio">Okio</a> is made to handle GC overhead while allocating memory.
+<a href="https://github.com/square/okio">Okio</a> do some clever things to save CPU and memory.</li>
+<li>As it uses <a href="http://square.github.io/okhttp/">OkHttp</a> , most important it supports HTTP/2.<br>
+</li>
+</ul>
+
+<h3>
+<a id="difference-over-other-networking-library" class="anchor" href="#difference-over-other-networking-library" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Difference over other Networking Library</h3>
+
+<ul>
+<li>In Fast Android Networking Library, OkHttpClient can be customized for every request easily.</li>
+<li>As Fast Android Networking Library uses <a href="http://square.github.io/okhttp/">OkHttp</a> and <a href="https://github.com/square/okio">Okio</a>, it is faster.</li>
+<li>Single library for all type of networking.</li>
+<li>Supports RxJava -&gt; <a href="https://github.com/amitshekhariitbhu/Fast-Android-Networking/blob/master/RxAndroidNetworking.md">Check here</a>
+</li>
+<li>Current bandwidth and connection quality can be obtained to decide logic of code.</li>
+<li>Executor can be passed to any request to get response in another thread.</li>
+<li>Complete analytics of any request can be obtained.</li>
+<li>All types of customization is possible.</li>
+<li>Immediate Request is really immediate now.</li>
+<li>Prefetching of any request can be done so that it gives instant data when required from cache.</li>
+<li>Proper cancellation of request.</li>
+<li>Do not cancel a request if completed more than a threshold percentage.</li>
+<li>Simple interface to make any type of request.</li>
+<li>Proper Response Caching, hence reducing bandwidth usage.<br>
+</li>
+</ul>
+
+<h3>
 <a id="todo" class="anchor" href="#todo" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>TODO</h3>
 
 <ul>
 <li>Integration with other library</li>
 <li>And of course many many features and bug fixes</li>
-<li>Json Parser</li>
 </ul>
 
 <h3>
