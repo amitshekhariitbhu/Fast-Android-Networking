@@ -177,6 +177,92 @@ RxAndroidNetworking.upload("http://api.localhost.com/uploadImage")
                   });
 ```
 
+### Using Operator like flatMap,filter and then chaining the Network Request
+```java
+
+    /*
+    * This observable return the list of userId.
+    */
+    private Observable<List<UserId>> getUserIdsObservable() {
+        return RxAndroidNetworking.get("http://api.localhost.com/getAllUsers/{pageNumber}")
+                .addPathParameter("pageNumber", "0")
+                .addQueryParameter("limit", "10")
+                .build()
+                .getParseObservable(new TypeToken<List<UserId>>() {});
+    }
+
+    /*
+    * This observable return the detail of user corresponding to the userId.
+    */
+    private Observable<User> getUserObservable(long id) {
+        return RxAndroidNetworking.get("http://api.localhost.com/getAnUser/{userId}")
+                .addPathParameter("userId", String.valueOf(id))
+                .build()
+                .getParseObservable(new TypeToken<User>() {});
+    }
+
+    /*
+    * This method do the magic - first gets the list of UserId 
+    * from server. Then, it filters the ids not having 0 Id(0 not valid).
+    * Then for each valid Id, it makes network call to get the detail 
+    * of that user. 
+    * Finally, we get User with corresponding UserId one by one
+    */
+    private void doMagic() {
+        getUserIdsObservable()
+                .flatMap(new Func1<List<UserId>, Observable<UserId>>() {
+                    @Override
+                    public Observable<UserId> call(List<UserId> userIds) {
+                        return Observable.from(userIds);
+                    }
+                })
+                .flatMap(new Func1<UserId, Observable<Pair<User, UserId>>>() {
+                    @Override
+                    public Observable<Pair<User, UserId>> call(UserId userId) {
+                        Observable<User> _userObservable = getUserObservable(userId.id)
+                                .filter(new Func1<User, Boolean>() {
+                                    @Override
+                                    public Boolean call(User user) {
+                                        return user.id != 0;
+                                    }
+                                });
+
+                        return Observable.zip(_userObservable,
+                                Observable.just(userId),
+                                new Func2<User, UserId, Pair<User, UserId>>() {
+                                    @Override
+                                    public Pair<User, UserId> call(User user, UserId userId1) {
+                                        return new Pair<>(user, userId1);
+                                    }
+                                });
+                    }
+                })
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Pair<User, UserId>>() {
+                    @Override
+                    public void onCompleted() {
+                        Log.d(TAG, "onCompleted");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Utils.logError(TAG, e);
+                    }
+
+                    @Override
+                    public void onNext(Pair<User, UserId> pair) {
+                        User user = pair.first;
+                        UserId userId = pair.second;
+                        Log.d(TAG, "userId : " + userId.id);
+                        Log.d(TAG, "user id: " + user.id);
+                        Log.d(TAG, "user firstname : " + user.firstname);
+                        Log.d(TAG, "user lastname : " + user.lastname);
+                    }
+                });
+    }
+```
+
 ### Binding Networking with Activity Lifecycle
 ```java
 public class SubscriptionActivity extends Activity {
@@ -233,6 +319,7 @@ public class SubscriptionActivity extends Activity {
 }
 
 ```
+
 
 ### Error Code Handling
 ```java
