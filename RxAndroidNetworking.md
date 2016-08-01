@@ -73,6 +73,13 @@ RxAndroidNetworking.get(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_OBJECT)
 
 ### Using Zip Operator
 ```java
+
+    /*    
+    * Here we are making two network calls 
+    * One returns the list of cricket fans
+    * Another one returns the list of football fans
+    * Then we are finding the list of users who loves both
+    */
     
     /*
     * This observable return the list of User who loves cricket
@@ -133,7 +140,7 @@ RxAndroidNetworking.get(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_OBJECT)
 
     private List<User> filterUserWhoLovesBoth(List<User> cricketFans, List<User> footballFans) {
         List<User> userWhoLovesBoth = new ArrayList<>();
-        // your logic do filter who loves both
+        // your logic to filter who loves both
         return userWhoLovesBoth;
     }
 ``` 
