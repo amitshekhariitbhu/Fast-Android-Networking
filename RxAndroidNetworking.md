@@ -5,7 +5,7 @@ Add this in your build.gradle
 compile 'com.amitshekhar.android:rx-android-networking:0.1.0'
 ```
 
-Then initialize it in onCreate() Method of application class, :
+Then initialize it in onCreate() Method of application class :
 ```java
 AndroidNetworking.initialize(getApplicationContext());
 ```
@@ -33,6 +33,42 @@ RxAndroidNetworking.get("http://api.localhost.com/{pageNumber}/test")
                       //do anything with response
                       }
                   });
+```
+
+### Using Map Operator
+```java
+/*    
+* Here we are getting ApiUser Object from server
+* then we are converting it into User
+* Using Map Operator
+*/
+RxAndroidNetworking.get(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_OBJECT)
+                .addPathParameter("userId", "1")
+                .build()
+                .getParseObservable(new TypeToken<ApiUser>() {})
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(new Func1<ApiUser, User>() {
+                    @Override
+                    public User call(ApiUser apiUser) {
+                        User user = getApiUserToUser(apiUser);
+                        return user;
+                    }
+                })
+                .subscribe(new Observer<User>() {
+                    @Override
+                    public void onCompleted() {
+                    // do anything onComplete    
+                    }
+                    @Override
+                    public void onError(Throwable e) {
+                    // handle error
+                    }
+                    @Override
+                    public void onNext(User user) {
+                    // do anything with user     
+                    }
+                });
 ```
 
 ### Making a POST Request

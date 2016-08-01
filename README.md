@@ -34,7 +34,7 @@ Do not forget to add internet permission in manifest if already not present
 ```xml
 <uses-permission android:name="android.permission.INTERNET" />
 ```
-Then initialize it in onCreate() Method of application class, :
+Then initialize it in onCreate() Method of application class :
 ```java
 AndroidNetworking.initialize(getApplicationContext());
 ```
