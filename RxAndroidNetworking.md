@@ -39,7 +39,7 @@ RxAndroidNetworking.get("http://api.localhost.com/{pageNumber}/test")
 ```java
 /*    
 * Here we are getting ApiUser Object from server
-* then we are converting it into User
+* then we are converting it into User Object
 * Using Map Operator
 */
 RxAndroidNetworking.get(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_OBJECT)
