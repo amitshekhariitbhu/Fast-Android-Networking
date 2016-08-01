@@ -71,6 +71,73 @@ RxAndroidNetworking.get(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_OBJECT)
                 });
 ```
 
+### Using Zip Operator
+```java
+    
+    /*
+    * This observable return the list of User who loves cricket
+    */
+    private Observable<List<User>> getCricketFansObservable() {
+        return RxAndroidNetworking.get("http://api.localhost.com/getAllCricketFans")
+                .build()
+                .getParseObservable(new TypeToken<List<User>>() {
+                });
+    }
+
+    /*
+    * This observable return the list of User who loves Football
+    */
+    private Observable<List<User>> getFootballFansObservable() {
+        return RxAndroidNetworking.get("http://api.localhost.com/getAllFootballFans")
+                .build()
+                .getParseObservable(new TypeToken<List<User>>() {
+                });
+    }
+
+    /*
+    * This do the complete magic, make both network call
+    * and then returns the list of user who loves both
+    * Using zip operator to get both response at a time
+    */
+    private void findUsersWhoLovesBoth() {
+        // here we are using zip operator to combine both request
+        Observable.zip(getCricketFansObservable(), getFootballFansObservable(),
+                new Func2<List<User>, List<User>, List<User>>() {
+                    @Override
+                    public List<User> call(List<User> cricketFans,
+                                           List<User> footballFans) {
+                        List<User> userWhoLovesBoth = 
+                                filterUserWhoLovesBoth(cricketFans, footballFans);
+                        return userWhoLovesBoth;
+                    }
+                }
+        ).subscribeOn(Schedulers.newThread())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new Observer<List<User>>() {
+            @Override
+            public void onCompleted() {
+            // do anything onComplete
+            }
+
+            @Override
+            public void onError(Throwable e) {
+            // handle error
+            }
+
+            @Override
+            public void onNext(List<User> users) {
+            // do anything with user who loves both
+            }
+        });
+    }
+
+    private List<User> filterUserWhoLovesBoth(List<User> cricketFans, List<User> footballFans) {
+        List<User> userWhoLovesBoth = new ArrayList<>();
+        // your logic do filter who loves both
+        return userWhoLovesBoth;
+    }
+``` 
+
 ### Making a POST Request
 ```java
 RxAndroidNetworking.post("http://api.localhost.com/createAnUser")
