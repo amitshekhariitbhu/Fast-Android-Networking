@@ -51,7 +51,7 @@ RxAndroidNetworking.get(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_OBJECT)
                 .map(new Func1<ApiUser, User>() {
                     @Override
                     public User call(ApiUser apiUser) {
-                        User user = getApiUserToUser(apiUser);
+                        User user = convertApiUserToUser(apiUser);
                         return user;
                     }
                 })
