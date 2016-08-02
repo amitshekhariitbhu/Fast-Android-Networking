@@ -10,37 +10,13 @@ Then initialize it in onCreate() Method of application class :
 AndroidNetworking.initialize(getApplicationContext());
 ```
 
-### Making a GET Request
-```java
-RxAndroidNetworking.get("http://api.localhost.com/{pageNumber}/test")
-                 .addPathParameter("pageNumber", "0")
-                 .addQueryParameter("limit", "3")
-                 .build()
-                 .getJSONArrayObservable()
-                 .subscribeOn(Schedulers.io())
-                 .observeOn(AndroidSchedulers.mainThread())
-                 .subscribe(new Observer<JSONArray>() {
-                      @Override
-                      public void onCompleted() {
-                      // do anything onComplete
-                      }
-                      @Override
-                      public void onError(Throwable e) {
-                      // handle error
-                      }
-                      @Override
-                      public void onNext(JSONArray response) {
-                      //do anything with response
-                      }
-                  });
-```
-
 ### Using Map Operator
 ```java
 /*    
-* Here we are getting ApiUser Object from server
-* then we are converting it into User Object
-* Using Map Operator
+* Here we are getting ApiUser Object from api server
+* then we are converting it into User Object because 
+* may be our database support User Not ApiUser Object
+* Here we are using Map Operator to do that
 */
 RxAndroidNetworking.get(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_OBJECT)
                 .addPathParameter("userId", "1")
@@ -51,7 +27,9 @@ RxAndroidNetworking.get(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_OBJECT)
                 .map(new Func1<ApiUser, User>() {
                     @Override
                     public User call(ApiUser apiUser) {
+                        // here we get ApiUser from server 
                         User user = convertApiUserToUser(apiUser);
+                        // then by converting, we are returing user
                         return user;
                     }
                 })
@@ -144,148 +122,6 @@ RxAndroidNetworking.get(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_OBJECT)
         return userWhoLovesBoth;
     }
 ``` 
-
-### Making a POST Request
-```java
-RxAndroidNetworking.post("http://api.localhost.com/createAnUser")
-                 .addBodyParameter("firstname", "Amit")
-                 .addBodyParameter("lastname", "Shekhar")
-                 .build()
-                 .getJSONObjectObservable()
-                 .subscribeOn(Schedulers.io())
-                 .observeOn(AndroidSchedulers.mainThread())
-                 .subscribe(new Observer<JSONObject>() {
-                      @Override
-                      public void onCompleted() {
-                      // do anything onComplete
-                      }
-                      @Override
-                      public void onError(Throwable e) {
-                      // handle error
-                      }
-                      @Override
-                      public void onNext(JSONObject response) {
-                      //do anything with response
-                      }
-                  });
-```
-
-### Downloading a file from server
-```java
-RxAndroidNetworking.download(url,dirPath,fileName)
-                 .build()
-                 .setDownloadProgressListener(new DownloadProgressListener() {
-                    @Override
-                    public void onProgress(long bytesDownloaded, long totalBytes) {
-                    // do anything with progress  
-                    }
-                 })
-                 .getDownloadObservable()
-                 .subscribeOn(Schedulers.io())
-                 .observeOn(AndroidSchedulers.mainThread())
-                 .subscribe(new Observer<String>() {
-                      @Override
-                      public void onCompleted() {
-                      // do anything onComplete
-                      }
-                      @Override
-                      public void onError(Throwable e) {
-                      // handle error
-                      }
-                      @Override
-                      public void onNext(String response) {
-                      //gives response = "success"
-                      }
-                  });
-```
-
-### Using it with your own JAVA Object - JSON Parser
-```java
-/*--------------Example One -> Getting the userList----------------*/
-RxAndroidNetworking.get("http://api.localhost.com/getAllUsers/{pageNumber}")
-                .addPathParameter("pageNumber", "0")
-                .addQueryParameter("limit", "3")
-                .build()
-                .getParseObservable(new TypeToken<List<User>>() {})
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<List<User>>() {
-                    @Override
-                    public void onCompleted() {
-                        // do anything onComplete 
-                    }
-                    @Override
-                    public void onError(Throwable e) {
-                        // handle error
-                    }
-                    @Override
-                    public void onNext(List<User> users) {
-                        // do anything with response    
-                        Log.d(TAG, "userList size : " + users.size());
-                        for (User user : users) {
-                            Log.d(TAG, "id : " + user.id);
-                            Log.d(TAG, "firstname : " + user.firstname);
-                            Log.d(TAG, "lastname : " + user.lastname);
-                        }
-                    }
-                });                
-/*--------------Example Two -> Getting an user----------------*/
-RxAndroidNetworking.get("http://api.localhost.com/getAnUser/{userId}")
-                .addPathParameter("userId", "1")
-                .setUserAgent("getAnUser")
-                .build()
-                .getParseObservable(new TypeToken<User>() {})
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<User>() {
-                    @Override
-                    public void onCompleted() {
-                        // do anything onComplete 
-                    }
-                    @Override
-                    public void onError(Throwable e) {
-                        // handle error
-                    }
-                    @Override
-                    public void onNext(User user) {
-                        // do anything with response 
-                        Log.d(TAG, "id : " + user.id);
-                        Log.d(TAG, "firstname : " + user.firstname);
-                        Log.d(TAG, "lastname : " + user.lastname);
-                    }
-                });
-/*-- Note : TypeToken and getParseObservable is important here --*/              
-```
-
-### Uploading a file to server
-```java
-RxAndroidNetworking.upload("http://api.localhost.com/uploadImage")
-                 .addMultipartFile("image", new File(imageFilePath)) 
-                 .build()
-                 .setUploadProgressListener(new UploadProgressListener() {
-                    @Override
-                    public void onProgress(long bytesUploaded, long totalBytes) {
-                    // do anything with progress  
-                    }
-                 })
-                 .getJSONObjectObservable()
-                 .subscribeOn(Schedulers.io())
-                 .observeOn(AndroidSchedulers.mainThread())
-                 .subscribe(new Observer<JSONObject>() {
-                      @Override
-                      public void onCompleted() {
-                      // do anything onComplete
-                      }
-                      @Override
-                      public void onError(Throwable e) {
-                      // handle error
-                      }
-                      @Override
-                      public void onNext(JSONObject response) {
-                      //do anything with response
-                      }
-                  });
-```
 
 ### Using Operator like flatMap,Zip
 ```java
@@ -398,6 +234,7 @@ public class SubscriptionActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
         if (subscription != null) {
+            // unsubscribe it when activity onDestroy is called
             subscription.unsubscribe();
         }
     }
@@ -430,6 +267,173 @@ public class SubscriptionActivity extends Activity {
 
 ```
 
+### Making a GET Request
+```java
+RxAndroidNetworking.get("http://api.localhost.com/{pageNumber}/test")
+                 .addPathParameter("pageNumber", "0")
+                 .addQueryParameter("limit", "3")
+                 .build()
+                 .getJSONArrayObservable()
+                 .subscribeOn(Schedulers.io())
+                 .observeOn(AndroidSchedulers.mainThread())
+                 .subscribe(new Observer<JSONArray>() {
+                      @Override
+                      public void onCompleted() {
+                      // do anything onComplete
+                      }
+                      @Override
+                      public void onError(Throwable e) {
+                      // handle error
+                      }
+                      @Override
+                      public void onNext(JSONArray response) {
+                      //do anything with response
+                      }
+                  });
+```
+
+### Making a POST Request
+```java
+RxAndroidNetworking.post("http://api.localhost.com/createAnUser")
+                 .addBodyParameter("firstname", "Amit")
+                 .addBodyParameter("lastname", "Shekhar")
+                 .build()
+                 .getJSONObjectObservable()
+                 .subscribeOn(Schedulers.io())
+                 .observeOn(AndroidSchedulers.mainThread())
+                 .subscribe(new Observer<JSONObject>() {
+                      @Override
+                      public void onCompleted() {
+                      // do anything onComplete
+                      }
+                      @Override
+                      public void onError(Throwable e) {
+                      // handle error
+                      }
+                      @Override
+                      public void onNext(JSONObject response) {
+                      //do anything with response
+                      }
+                  });
+```
+
+
+### Downloading a file from server
+```java
+RxAndroidNetworking.download(url,dirPath,fileName)
+                 .build()
+                 .setDownloadProgressListener(new DownloadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesDownloaded, long totalBytes) {
+                    // do anything with progress  
+                    }
+                 })
+                 .getDownloadObservable()
+                 .subscribeOn(Schedulers.io())
+                 .observeOn(AndroidSchedulers.mainThread())
+                 .subscribe(new Observer<String>() {
+                      @Override
+                      public void onCompleted() {
+                      // do anything onComplete
+                      }
+                      @Override
+                      public void onError(Throwable e) {
+                      // handle error
+                      }
+                      @Override
+                      public void onNext(String response) {
+                      //gives response = "success"
+                      }
+                  });
+```
+
+### Uploading a file to server
+```java
+RxAndroidNetworking.upload("http://api.localhost.com/uploadImage")
+                 .addMultipartFile("image", new File(imageFilePath)) 
+                 .build()
+                 .setUploadProgressListener(new UploadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesUploaded, long totalBytes) {
+                    // do anything with progress  
+                    }
+                 })
+                 .getJSONObjectObservable()
+                 .subscribeOn(Schedulers.io())
+                 .observeOn(AndroidSchedulers.mainThread())
+                 .subscribe(new Observer<JSONObject>() {
+                      @Override
+                      public void onCompleted() {
+                      // do anything onComplete
+                      }
+                      @Override
+                      public void onError(Throwable e) {
+                      // handle error
+                      }
+                      @Override
+                      public void onNext(JSONObject response) {
+                      //do anything with response
+                      }
+                  });
+```
+
+### Using it with your own JAVA Object - JSON Parser
+```java
+/*--------------Example One -> Getting the userList----------------*/
+RxAndroidNetworking.get("http://api.localhost.com/getAllUsers/{pageNumber}")
+                .addPathParameter("pageNumber", "0")
+                .addQueryParameter("limit", "3")
+                .build()
+                .getParseObservable(new TypeToken<List<User>>() {})
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<List<User>>() {
+                    @Override
+                    public void onCompleted() {
+                        // do anything onComplete 
+                    }
+                    @Override
+                    public void onError(Throwable e) {
+                        // handle error
+                    }
+                    @Override
+                    public void onNext(List<User> users) {
+                        // do anything with response    
+                        Log.d(TAG, "userList size : " + users.size());
+                        for (User user : users) {
+                            Log.d(TAG, "id : " + user.id);
+                            Log.d(TAG, "firstname : " + user.firstname);
+                            Log.d(TAG, "lastname : " + user.lastname);
+                        }
+                    }
+                });                
+/*--------------Example Two -> Getting an user----------------*/
+RxAndroidNetworking.get("http://api.localhost.com/getAnUser/{userId}")
+                .addPathParameter("userId", "1")
+                .setUserAgent("getAnUser")
+                .build()
+                .getParseObservable(new TypeToken<User>() {})
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<User>() {
+                    @Override
+                    public void onCompleted() {
+                        // do anything onComplete 
+                    }
+                    @Override
+                    public void onError(Throwable e) {
+                        // handle error
+                    }
+                    @Override
+                    public void onNext(User user) {
+                        // do anything with response 
+                        Log.d(TAG, "id : " + user.id);
+                        Log.d(TAG, "firstname : " + user.firstname);
+                        Log.d(TAG, "lastname : " + user.lastname);
+                    }
+                });
+/*-- Note : TypeToken and getParseObservable is important here --*/              
+```
 
 ### Error Code Handling
 ```java
@@ -454,4 +458,4 @@ public void onError(Throwable e) {
    }
 ```
 
-### In RxJava, you can do too many things by applying the operators (flatMap,filter,map,mapMany,zip,etc) available in RxJava.
+### In RxJava, you can do too many things by applying the operators (flatMap, filter, map, mapMany, zip, etc) available in RxJava.
