@@ -287,87 +287,87 @@ RxAndroidNetworking.upload("http://api.localhost.com/uploadImage")
                   });
 ```
 
-### Using Operator like flatMap,filter and then chaining the Network Request
+### Using Operator like flatMap,Zip
 ```java
 
-    /*
-    * This observable return the list of userId.
+    /* Here first of all, we get the list of users from server.
+    * Then for each userId from user, it makes the network call to get the detail 
+    * of that user. 
+    * Finally, we get the userDetail for the corresponding user one by one
     */
-    private Observable<List<UserId>> getUserIdsObservable() {
+
+    /*
+    * This observable return the list of users.
+    */
+    private Observable<List<User>> getUserListObservable() {
         return RxAndroidNetworking.get("http://api.localhost.com/getAllUsers/{pageNumber}")
                 .addPathParameter("pageNumber", "0")
                 .addQueryParameter("limit", "10")
                 .build()
-                .getParseObservable(new TypeToken<List<UserId>>() {});
+                .getParseObservable(new TypeToken<List<User>>() {});
     }
-
+    
     /*
-    * This observable return the detail of user corresponding to the userId.
+    * This observable return the userDetail corresponding to the user.
     */
-    private Observable<User> getUserObservable(long id) {
+    private Observable<UserDetail> getUserDetailObservable(long userId) {
         return RxAndroidNetworking.get("http://api.localhost.com/getAnUser/{userId}")
-                .addPathParameter("userId", String.valueOf(id))
+                .addPathParameter("userId", String.valueOf(userId))
                 .build()
-                .getParseObservable(new TypeToken<User>() {});
+                .getParseObservable(new TypeToken<UserDetail>() {});
     }
-
+    
     /*
-    * This method do the magic - first gets the list of UserId 
-    * from server. Then, it filters the ids not having 0 Id(0 not valid).
-    * Then for each valid Id, it makes network call to get the detail 
-    * of that user. 
-    * Finally, we get User with corresponding UserId one by one
+    * This method do the magic - first gets the list of users
+    * from server.Then, for each user, it makes the network call to get the detail 
+    * of that user.
+    * Finally, we get the UserDetail for the corresponding user one by one
     */
     private void doMagic() {
-        getUserIdsObservable()
-                .flatMap(new Func1<List<UserId>, Observable<UserId>>() {
+        getUserListObservable()
+                .flatMap(new Func1<List<User>, Observable<User>>() { // flatMap - to return users one by one
                     @Override
-                    public Observable<UserId> call(List<UserId> userIds) {
-                        return Observable.from(userIds);
+                    public Observable<User> call(List<User> usersList) {
+                        return Observable.from(usersList); // returning user one by one from usersList.
                     }
                 })
-                .flatMap(new Func1<UserId, Observable<Pair<User, UserId>>>() {
+                .flatMap(new Func1<User, Observable<Pair<UserDetail, User>>>() {
                     @Override
-                    public Observable<Pair<User, UserId>> call(UserId userId) {
-                        Observable<User> _userObservable = getUserObservable(userId.id)
-                                .filter(new Func1<User, Boolean>() {
+                    public Observable<Pair<UserDetail, User>> call(User user) {
+                      // here we get the user one by one and then we are zipping
+                      // two observable - one getUserDetailObservable (network call to get userDetail)
+                      // and another Observable.just(user) - just to emit user
+                        return Observable.zip(getUserDetailObservable(user.id), // zip to combine two observable
+                                Observable.just(user),
+                                new Func2<UserDetail, User, Pair<UserDetail, User>>() {
                                     @Override
-                                    public Boolean call(User user) {
-                                        return user.id != 0;
-                                    }
-                                });
-
-                        return Observable.zip(_userObservable,
-                                Observable.just(userId),
-                                new Func2<User, UserId, Pair<User, UserId>>() {
-                                    @Override
-                                    public Pair<User, UserId> call(User user, UserId userId1) {
-                                        return new Pair<>(user, userId1);
+                                    public Pair<UserDetail, User> call(UserDetail userDetail, User user) {
+                                        // runs when network call completes 
+                                        // we get here userDetail for the corresponding user
+                                        return new Pair<>(userDetail, user); // returning the pair(userDetail, user)
                                     }
                                 });
                     }
                 })
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Pair<User, UserId>>() {
+                .subscribe(new Observer<Pair<UserDetail, User>>() {
                     @Override
                     public void onCompleted() {
-                        Log.d(TAG, "onCompleted");
+                    // do something onCompleted
                     }
-
                     @Override
                     public void onError(Throwable e) {
-                        Utils.logError(TAG, e);
+                    // handle error
                     }
-
                     @Override
-                    public void onNext(Pair<User, UserId> pair) {
-                        User user = pair.first;
-                        UserId userId = pair.second;
-                        Log.d(TAG, "userId : " + userId.id);
-                        Log.d(TAG, "user id: " + user.id);
-                        Log.d(TAG, "user firstname : " + user.firstname);
-                        Log.d(TAG, "user lastname : " + user.lastname);
+                    public void onNext(Pair<UserDetail, User> pair) {
+                        // here we are getting the userDetail for the corresponding user one by one
+                        UserDetail userDetail = pair.first;
+                        User user = pair.second;
+                        Log.d(TAG, "userId : " + user.id);
+                        Log.d(TAG, "userDetail firstname : " + userDetail.firstname);
+                        Log.d(TAG, "userDetail lastname : " + userDetail.lastname);
                     }
                 });
     }

@@ -12,8 +12,17 @@ Fast Android Networking Library is a powerful library for doing any type of netw
 
 Fast Android Networking Library takes care of each and everything. So you don't have to do anything, just make request and listen for the response.
 
+### Why this library
+* Recent removal of HttpClient in Android Marshmallow(Android M) made other networking library obsolete.
+* No other single library do each and everything like making request, downloading any type of file, uploading file, loading
+  image from network in ImageView, etc. There are libraries but they are outdated.
+* No other library provided simple interface for doing all types of things in networking like setting priority, cancelling, etc.
+* As it uses [Okio](https://github.com/square/okio) , No more GC overhead in android application.
+  [Okio](https://github.com/square/okio) is made to handle GC overhead while allocating memory.
+  [Okio](https://github.com/square/okio) do some clever things to save CPU and memory.
+* As it uses [OkHttp](http://square.github.io/okhttp/) , most important it supports HTTP/2.  
+
 - [What Fast Android Networking Library supports?](#fast-android-networking-library-supports)
-- [Why this library?](#why-this-library)
 - [Difference over other Networking Library](#difference-over-other-networking-library)
 - [RxJava Support For Fast Android Networking](https://github.com/amitshekhariitbhu/Fast-Android-Networking/blob/master/RxAndroidNetworking.md)
 - [Have an issue or need a feature in Fast Android Networking : Create an issue](https://github.com/amitshekhariitbhu/Fast-Android-Networking/issues/new)
@@ -50,6 +59,8 @@ If you are using proguard, then add this rule in proguard-project.txt
 ```
 -dontwarn okio.**
 ```
+
+### [How to use Fast Android Networking with RxJava? - Click Here](https://github.com/amitshekhariitbhu/Fast-Android-Networking/blob/master/RxAndroidNetworking.md)
 
 ### Making a GET Request
 ```java
@@ -227,8 +238,6 @@ AndroidNetworking.upload(url)
                     }
                  }); 
 ```
-
-### [How to use Fast Android Networking with RxJava? - Click Here](https://github.com/amitshekhariitbhu/Fast-Android-Networking/blob/master/RxAndroidNetworking.md)
 
 ### Getting Response and completion in an another thread executor 
 (Note : Error and Progress will always be returned in main thread of application)
@@ -511,16 +520,6 @@ As it uses [OkHttp](http://square.github.io/okhttp/) as a networking layer, it s
 * Fast Android Networking Library uses connection pooling which reduces request latency (if HTTP/2 isn’t available)
 * Transparent GZIP shrinks download sizes
 * Fast Android Networking Library supports response caching which avoids the network completely for repeat requests
-
-### Why this library
-* Recent removal of HttpClient in Android Marshmallow(Android M) made other networking library obsolete.
-* No other single library do each and everything like making request, downloading any type of file, uploading file, loading
-  image from network in ImageView, etc. There are libraries but they are outdated.
-* No other library provided simple interface for doing all types of things in networking like setting priority, cancelling, etc.
-* As it uses [Okio](https://github.com/square/okio) , No more GC overhead in android application.
-  [Okio](https://github.com/square/okio) is made to handle GC overhead while allocating memory.
-  [Okio](https://github.com/square/okio) do some clever things to save CPU and memory.
-* As it uses [OkHttp](http://square.github.io/okhttp/) , most important it supports HTTP/2.  
 
 ### Difference over other Networking Library
 * In Fast Android Networking Library, OkHttpClient can be customized for every request easily.
