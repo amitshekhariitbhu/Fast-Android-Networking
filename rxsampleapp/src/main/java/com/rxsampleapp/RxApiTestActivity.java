@@ -593,11 +593,4 @@ public class RxApiTestActivity extends AppCompatActivity {
 
     }
 
-    public void startSubscriptionActivity(View view) {
-        startActivity(new Intent(RxApiTestActivity.this, SubscriptionActivity.class));
-    }
-
-    public void startRxOperatorActivity(View view) {
-        startActivity(new Intent(RxApiTestActivity.this, RxOperatorExampleActivity.class));
-    }
 }

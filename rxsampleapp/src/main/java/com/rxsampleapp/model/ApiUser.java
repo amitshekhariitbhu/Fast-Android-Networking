@@ -20,8 +20,10 @@
 package com.rxsampleapp.model;
 
 /**
- * Created by amitshekhar on 31/07/16.
+ * Created by amitshekhar on 02/08/16.
  */
-public class UserId {
+public class ApiUser {
     public long id;
+    public String firstname;
+    public String lastname;
 }

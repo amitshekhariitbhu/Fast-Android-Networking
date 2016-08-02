@@ -20,16 +20,12 @@
 package com.rxsampleapp.model;
 
 /**
- * Created by amitshekhar on 31/07/16.
+ * Created by amitshekhar on 02/08/16.
  */
-public class User {
+public class UserDetail {
+
     public long id;
     public String firstname;
     public String lastname;
 
-    public User(ApiUser apiUser) {
-        this.id = apiUser.id;
-        this.firstname = apiUser.firstname;
-        this.lastname = apiUser.lastname;
-    }
 }

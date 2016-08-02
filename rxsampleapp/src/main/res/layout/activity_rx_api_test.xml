@@ -172,22 +172,6 @@
             android:layout_height="200dp"
             android:layout_gravity="center" />
 
-        <Button
-            android:id="@+id/startSubscriptionActivity"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_margin="8dp"
-            android:onClick="startSubscriptionActivity"
-            android:text="startSubscriptionActivity" />
-
-        <Button
-            android:id="@+id/startRxOperatorActivity"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_margin="8dp"
-            android:onClick="startRxOperatorActivity"
-            android:text="startRxOperatorActivity" />
-
     </LinearLayout>
 
 </ScrollView>

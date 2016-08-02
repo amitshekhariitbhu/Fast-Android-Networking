@@ -19,16 +19,19 @@
 
 package com.rxsampleapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 
+import com.androidnetworking.interfaces.AnalyticsListener;
 import com.google.gson.reflect.TypeToken;
 import com.rxandroidnetworking.RxAndroidNetworking;
+import com.rxsampleapp.model.ApiUser;
 import com.rxsampleapp.model.User;
-import com.rxsampleapp.model.UserId;
+import com.rxsampleapp.model.UserDetail;
 import com.rxsampleapp.utils.Utils;
 
 import java.util.List;
@@ -51,66 +54,36 @@ public class RxOperatorExampleActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rx_operator_example);
+        testApi();
     }
-
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
     }
 
-    private Observable<List<UserId>> getUserIdsObservable() {
-        return RxAndroidNetworking.get(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_ARRAY)
+    private void testApi() {
+        RxAndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAllUsers/{pageNumber}")
                 .addPathParameter("pageNumber", "0")
-                .addQueryParameter("limit", "10")
+                .addQueryParameter("limit", "3")
                 .build()
-                .getParseObservable(new TypeToken<List<UserId>>() {
-                });
-    }
-
-    private Observable<User> getUserObservable(long id) {
-        return RxAndroidNetworking.get(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_OBJECT)
-                .addPathParameter("userId", String.valueOf(id))
-                .build()
-                .getParseObservable(new TypeToken<User>() {
-                });
-    }
-
-    public void flatMap(View view) {
-        getUserIdsObservable()
-                .flatMap(new Func1<List<UserId>, Observable<UserId>>() {
+                .setAnalyticsListener(new AnalyticsListener() {
                     @Override
-                    public Observable<UserId> call(List<UserId> userIds) {
-                        return Observable.from(userIds);
+                    public void onReceived(long timeTakenInMillis, long bytesSent, long bytesReceived, boolean isFromCache) {
+                        Log.d(TAG, " timeTakenInMillis : " + timeTakenInMillis);
+                        Log.d(TAG, " bytesSent : " + bytesSent);
+                        Log.d(TAG, " bytesReceived : " + bytesReceived);
+                        Log.d(TAG, " isFromCache : " + isFromCache);
                     }
                 })
-                .flatMap(new Func1<UserId, Observable<Pair<User, UserId>>>() {
-                    @Override
-                    public Observable<Pair<User, UserId>> call(UserId userId) {
-                        Observable<User> _userObservable = getUserObservable(userId.id)
-                                .filter(new Func1<User, Boolean>() {
-                                    @Override
-                                    public Boolean call(User user) {
-                                        return user.id != 0;
-                                    }
-                                });
-
-                        return Observable.zip(_userObservable,
-                                Observable.just(userId),
-                                new Func2<User, UserId, Pair<User, UserId>>() {
-                                    @Override
-                                    public Pair<User, UserId> call(User user, UserId userId1) {
-                                        return new Pair<>(user, userId1);
-                                    }
-                                });
-                    }
+                .getParseObservable(new TypeToken<List<User>>() {
                 })
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Pair<User, UserId>>() {
+                .subscribe(new Observer<List<User>>() {
                     @Override
                     public void onCompleted() {
-                        Log.d(TAG, "onCompleted");
+                        Log.d(TAG, "onComplete Detail : getAllUsers completed");
                     }
 
                     @Override
@@ -119,14 +92,131 @@ public class RxOperatorExampleActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onNext(Pair<User, UserId> pair) {
-                        User user = pair.first;
-                        UserId userId = pair.second;
-                        Log.d(TAG, "userId : " + userId.id);
-                        Log.d(TAG, "user id: " + user.id);
+                    public void onNext(List<User> users) {
+                        Log.d(TAG, "userList size : " + users.size());
+                        for (User user : users) {
+                            Log.d(TAG, "id : " + user.id);
+                            Log.d(TAG, "firstname : " + user.firstname);
+                            Log.d(TAG, "lastname : " + user.lastname);
+                        }
+                    }
+                });
+    }
+
+
+    private Observable<List<User>> getUserListObservable() {
+        return RxAndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAllUsers/{pageNumber}")
+                .addPathParameter("pageNumber", "0")
+                .addQueryParameter("limit", "10")
+                .build()
+                .getParseObservable(new TypeToken<List<User>>() {
+                });
+    }
+
+    private Observable<UserDetail> getUserDetailObservable(long id) {
+        return RxAndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAnUserDetail/{userId}")
+                .addPathParameter("userId", String.valueOf(id))
+                .build()
+                .getParseObservable(new TypeToken<UserDetail>() {
+                });
+    }
+
+    public void map(View view) {
+        RxAndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAnUser/{userId}")
+                .addPathParameter("userId", "1")
+                .build()
+                .getParseObservable(new TypeToken<ApiUser>() {
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(new Func1<ApiUser, User>() {
+                    @Override
+                    public User call(ApiUser apiUser) {
+                        // here we get ApiUser from server
+                        User user = new User(apiUser);
+                        // then by converting, we are returing user
+                        return user;
+                    }
+                })
+                .subscribe(new Observer<User>() {
+                    @Override
+                    public void onCompleted() {
+                        // do anything onComplete
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        // handle error
+                        Utils.logError(TAG, e);
+                    }
+
+                    @Override
+                    public void onNext(User user) {
+                        Log.d(TAG, "user id : " + user.id);
                         Log.d(TAG, "user firstname : " + user.firstname);
                         Log.d(TAG, "user lastname : " + user.lastname);
                     }
                 });
     }
+
+    public void flatMap(View view) {
+        getUserListObservable()
+                .flatMap(new Func1<List<User>, Observable<User>>() { // flatMap - to return users one by one
+                    @Override
+                    public Observable<User> call(List<User> usersList) {
+                        return Observable.from(usersList); // returning user one by one from usersList.
+                    }
+                })
+                .flatMap(new Func1<User, Observable<Pair<UserDetail, User>>>() {
+                    @Override
+                    public Observable<Pair<UserDetail, User>> call(User user) {
+                        // here we get the user one by one and then we are zipping
+                        // two observable - one getUserDetailObservable (network call to get userDetail)
+                        // and another Observable.just(user) - just to emit user
+                        return Observable.zip(getUserDetailObservable(user.id), // zip to combine two observable
+                                Observable.just(user),
+                                new Func2<UserDetail, User, Pair<UserDetail, User>>() {
+                                    @Override
+                                    public Pair<UserDetail, User> call(UserDetail userDetail, User user) {
+                                        // runs when network call completes
+                                        // we get here userDetail for the corresponding user
+                                        return new Pair<>(userDetail, user); // returning the pair(userDetail, user)
+                                    }
+                                });
+                    }
+                })
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Pair<UserDetail, User>>() {
+                    @Override
+                    public void onCompleted() {
+                        // do something onCompleted
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        // handle error
+                        Utils.logError(TAG, e);
+                    }
+
+                    @Override
+                    public void onNext(Pair<UserDetail, User> pair) {
+                        // here we are getting the userDetail for the corresponding user one by one
+                        UserDetail userDetail = pair.first;
+                        User user = pair.second;
+                        Log.d(TAG, "userId : " + user.id);
+                        Log.d(TAG, "userDetail firstname : " + userDetail.firstname);
+                        Log.d(TAG, "userDetail lastname : " + userDetail.lastname);
+                    }
+                });
+    }
+
+    public void startRxApiTestActivity(View view) {
+        startActivity(new Intent(RxOperatorExampleActivity.this, RxApiTestActivity.class));
+    }
+
+    public void startSubscriptionActivity(View view) {
+        startActivity(new Intent(RxOperatorExampleActivity.this, SubscriptionActivity.class));
+    }
+
 }

@@ -18,17 +18,18 @@ AndroidNetworking.initialize(getApplicationContext());
 * may be our database support User Not ApiUser Object
 * Here we are using Map Operator to do that
 */
-RxAndroidNetworking.get(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_OBJECT)
+RxAndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAnUser/{userId}")
                 .addPathParameter("userId", "1")
                 .build()
-                .getParseObservable(new TypeToken<ApiUser>() {})
+                .getParseObservable(new TypeToken<ApiUser>() {
+                })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(new Func1<ApiUser, User>() {
                     @Override
                     public User call(ApiUser apiUser) {
-                        // here we get ApiUser from server 
-                        User user = convertApiUserToUser(apiUser);
+                        // here we get ApiUser from server
+                        User user = new User(apiUser);
                         // then by converting, we are returing user
                         return user;
                     }
@@ -36,15 +37,15 @@ RxAndroidNetworking.get(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_OBJECT)
                 .subscribe(new Observer<User>() {
                     @Override
                     public void onCompleted() {
-                    // do anything onComplete    
+                        // do anything onComplete
                     }
                     @Override
                     public void onError(Throwable e) {
-                    // handle error
+                        // handle error
                     }
                     @Override
                     public void onNext(User user) {
-                    // do anything with user     
+                        // do anything with user
                     }
                 });
 ```
@@ -123,7 +124,7 @@ RxAndroidNetworking.get(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_OBJECT)
     }
 ``` 
 
-### Using Operator like flatMap,Zip
+### Using Operator like flatMap, Zip
 ```java
 
     /* Here first of all, we get the list of users from server.
@@ -136,7 +137,7 @@ RxAndroidNetworking.get(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_OBJECT)
     * This observable return the list of users.
     */
     private Observable<List<User>> getUserListObservable() {
-        return RxAndroidNetworking.get("http://api.localhost.com/getAllUsers/{pageNumber}")
+        return RxAndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAllUsers/{pageNumber}")
                 .addPathParameter("pageNumber", "0")
                 .addQueryParameter("limit", "10")
                 .build()
@@ -147,7 +148,7 @@ RxAndroidNetworking.get(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_OBJECT)
     * This observable return the userDetail corresponding to the user.
     */
     private Observable<UserDetail> getUserDetailObservable(long userId) {
-        return RxAndroidNetworking.get("http://api.localhost.com/getAnUser/{userId}")
+        return RxAndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAnUserDetail/{userId}")
                 .addPathParameter("userId", String.valueOf(userId))
                 .build()
                 .getParseObservable(new TypeToken<UserDetail>() {});
