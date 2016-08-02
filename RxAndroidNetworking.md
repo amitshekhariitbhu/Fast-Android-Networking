@@ -378,7 +378,7 @@ RxAndroidNetworking.post("https://fierce-cove-29863.herokuapp.com/createAnUser")
 
 ### Downloading a file from server
 ```java
-RxAndroidNetworking.download(http://i.imgur.com/AtbX9iX.png,dirPath,imgurimage.png)
+RxAndroidNetworking.download("http://i.imgur.com/AtbX9iX.png",dirPath,imgurimage.png)
                  .build()
                  .setDownloadProgressListener(new DownloadProgressListener() {
                     @Override
@@ -387,7 +387,7 @@ RxAndroidNetworking.download(http://i.imgur.com/AtbX9iX.png,dirPath,imgurimage.p
                     }
                  })
                  .getDownloadObservable()
-                 .subscribeOn(Schedulers.io())
+                 .subscribeOn(Schedulers.io()
                  .observeOn(AndroidSchedulers.mainThread())
                  .subscribe(new Observer<String>() {
                       @Override
@@ -407,7 +407,7 @@ RxAndroidNetworking.download(http://i.imgur.com/AtbX9iX.png,dirPath,imgurimage.p
 
 ### Uploading a file to server
 ```java
-RxAndroidNetworking.upload("http://api.localhost.com/uploadImage")
+RxAndroidNetworking.upload("https://fierce-cove-29863.herokuapp.com/uploadImage")
                  .addMultipartFile("image", new File(imageFilePath)) 
                  .build()
                  .setUploadProgressListener(new UploadProgressListener() {
