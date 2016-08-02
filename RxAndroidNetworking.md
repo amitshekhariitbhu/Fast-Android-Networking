@@ -126,7 +126,7 @@ RxAndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAnUser/{user
     }
 ``` 
 
-### Using Operator like flatMap, Zip
+### Using flatMap Operator
 ```java
 
     /* Here first of all, we get the list of users from server.
@@ -156,13 +156,62 @@ RxAndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAnUser/{user
                 .getParseObservable(new TypeToken<UserDetail>() {});
     }
     
+    public void flatMap() {
+            getUserListObservable()
+                    .flatMap(new Func1<List<User>, Observable<User>>() { // flatMap - to return users one by one
+                        @Override
+                        public Observable<User> call(List<User> usersList) {
+                            return Observable.from(usersList); // returning user one by one from usersList.
+                        }
+                    })
+                    .flatMap(new Func1<User, Observable<UserDetail>>() {
+                        @Override
+                        public Observable<UserDetail> call(User user) {
+                            // here we get the user one by one
+                            // and returns corresponding getUserDetailObservable
+                            // for that userId
+                            return getUserDetailObservable(user.id);
+                        }
+                    })
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<UserDetail>() {
+                        @Override
+                        public void onCompleted() {
+                            // do something onCompleted
+                        }
+    
+                        @Override
+                        public void onError(Throwable e) {
+                            // handle error
+                        }
+    
+                        @Override
+                        public void onNext(UserDetail userDetail) {
+                            // do anything with userDetail
+                            Log.d(TAG, "userDetail id : " + userDetail.id);
+                            Log.d(TAG, "userDetail firstname : " + userDetail.firstname);
+                            Log.d(TAG, "userDetail lastname : " + userDetail.lastname);
+                        }
+                    });
+        }
+
+```
+
+### Using combination of flatMap with zip Operator
+```java
+
+    /* Very Similar to above example, only change is 
+    *  that, here we are using zip after flatMap to 
+    */ combine(pair) User and UserDetail
+     
     /*
     * This method do the magic - first gets the list of users
     * from server.Then, for each user, it makes the network call to get the detail 
     * of that user.
     * Finally, we get the UserDetail for the corresponding user one by one
     */
-    private void doMagic() {
+    private void flatMapWithZip() {
         getUserListObservable()
                 .flatMap(new Func1<List<User>, Observable<User>>() { // flatMap - to return users one by one
                     @Override

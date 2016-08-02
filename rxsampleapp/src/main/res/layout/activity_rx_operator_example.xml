@@ -55,6 +55,14 @@
             android:text="flatMap" />
 
         <Button
+            android:id="@+id/flatMapWithZip"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_margin="8dp"
+            android:onClick="flatMapWithZip"
+            android:text="flatMapWithZip" />
+
+        <Button
             android:id="@+id/startRxApiTestActivity"
             android:layout_width="match_parent"
             android:layout_height="48dp"

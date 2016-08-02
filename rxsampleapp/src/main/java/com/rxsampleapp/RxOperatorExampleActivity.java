@@ -251,6 +251,56 @@ public class RxOperatorExampleActivity extends AppCompatActivity {
      * flatMap operator start
      ************************************/
 
+
+    public void flatMap(View view) {
+        getUserListObservable()
+                .flatMap(new Func1<List<User>, Observable<User>>() { // flatMap - to return users one by one
+                    @Override
+                    public Observable<User> call(List<User> usersList) {
+                        return Observable.from(usersList); // returning user one by one from usersList.
+                    }
+                })
+                .flatMap(new Func1<User, Observable<UserDetail>>() {
+                    @Override
+                    public Observable<UserDetail> call(User user) {
+                        // here we get the user one by one
+                        // and returns corresponding getUserDetailObservable
+                        // for that userId
+                        return getUserDetailObservable(user.id);
+                    }
+                })
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<UserDetail>() {
+                    @Override
+                    public void onCompleted() {
+                        // do something onCompleted
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        // handle error
+                        Utils.logError(TAG, e);
+                    }
+
+                    @Override
+                    public void onNext(UserDetail userDetail) {
+                        // do anything with userDetail
+                        Log.d(TAG, "userDetail id : " + userDetail.id);
+                        Log.d(TAG, "userDetail firstname : " + userDetail.firstname);
+                        Log.d(TAG, "userDetail lastname : " + userDetail.lastname);
+                    }
+                });
+    }
+
+    /************************************
+     * flatMap operator end
+     ************************************/
+
+    /************************************
+     * flatMapWithZip operator start
+     ************************************/
+
     private Observable<List<User>> getUserListObservable() {
         return RxAndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAllUsers/{pageNumber}")
                 .addPathParameter("pageNumber", "0")
@@ -268,7 +318,7 @@ public class RxOperatorExampleActivity extends AppCompatActivity {
                 });
     }
 
-    public void flatMap(View view) {
+    public void flatMapWithZip(View view) {
         getUserListObservable()
                 .flatMap(new Func1<List<User>, Observable<User>>() { // flatMap - to return users one by one
                     @Override
@@ -321,7 +371,7 @@ public class RxOperatorExampleActivity extends AppCompatActivity {
     }
 
     /************************************
-     * flatMap operator start
+     * flatMapWithZip operator end
      ************************************/
 
     public void startRxApiTestActivity(View view) {
