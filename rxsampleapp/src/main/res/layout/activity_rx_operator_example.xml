@@ -39,6 +39,14 @@
             android:text="map" />
 
         <Button
+            android:id="@+id/zip"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_margin="8dp"
+            android:onClick="zip"
+            android:text="zip" />
+
+        <Button
             android:id="@+id/flatMap"
             android:layout_width="match_parent"
             android:layout_height="48dp"

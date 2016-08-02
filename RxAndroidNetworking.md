@@ -10,6 +10,8 @@ Then initialize it in onCreate() Method of application class :
 AndroidNetworking.initialize(getApplicationContext());
 ```
 
+### All these below examples are working and available on this repo in rx-sample-app.
+
 ### Using Map Operator
 ```java
 /*    
@@ -64,7 +66,7 @@ RxAndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAnUser/{user
     * This observable return the list of User who loves cricket
     */
     private Observable<List<User>> getCricketFansObservable() {
-        return RxAndroidNetworking.get("http://api.localhost.com/getAllCricketFans")
+        return RxAndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAllCricketFans")
                 .build()
                 .getParseObservable(new TypeToken<List<User>>() {
                 });
@@ -74,7 +76,7 @@ RxAndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAnUser/{user
     * This observable return the list of User who loves Football
     */
     private Observable<List<User>> getFootballFansObservable() {
-        return RxAndroidNetworking.get("http://api.localhost.com/getAllFootballFans")
+        return RxAndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAllFootballFans")
                 .build()
                 .getParseObservable(new TypeToken<List<User>>() {
                 });

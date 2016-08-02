@@ -34,6 +34,7 @@ import com.rxsampleapp.model.User;
 import com.rxsampleapp.model.UserDetail;
 import com.rxsampleapp.utils.Utils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
@@ -61,6 +62,10 @@ public class RxOperatorExampleActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
     }
+
+    /************************************
+     * Just an test api start
+     ************************************/
 
     private void testApi() {
         RxAndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAllUsers/{pageNumber}")
@@ -102,24 +107,14 @@ public class RxOperatorExampleActivity extends AppCompatActivity {
                     }
                 });
     }
+    /************************************
+     * Just an test api end
+     * ************************************/
 
 
-    private Observable<List<User>> getUserListObservable() {
-        return RxAndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAllUsers/{pageNumber}")
-                .addPathParameter("pageNumber", "0")
-                .addQueryParameter("limit", "10")
-                .build()
-                .getParseObservable(new TypeToken<List<User>>() {
-                });
-    }
-
-    private Observable<UserDetail> getUserDetailObservable(long id) {
-        return RxAndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAnUserDetail/{userId}")
-                .addPathParameter("userId", String.valueOf(id))
-                .build()
-                .getParseObservable(new TypeToken<UserDetail>() {
-                });
-    }
+    /************************************
+     * map operator start
+     ************************************/
 
     public void map(View view) {
         RxAndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAnUser/{userId}")
@@ -156,6 +151,120 @@ public class RxOperatorExampleActivity extends AppCompatActivity {
                         Log.d(TAG, "user firstname : " + user.firstname);
                         Log.d(TAG, "user lastname : " + user.lastname);
                     }
+                });
+    }
+
+    /************************************
+     *  map operator end
+     *  *********************************/
+
+
+    /************************************
+     * zip operator start
+     *********************************/
+
+    /*
+    * This observable return the list of User who loves cricket
+    */
+    private Observable<List<User>> getCricketFansObservable() {
+        return RxAndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAllCricketFans")
+                .build()
+                .getParseObservable(new TypeToken<List<User>>() {
+                });
+    }
+
+    /*
+    * This observable return the list of User who loves Football
+    */
+    private Observable<List<User>> getFootballFansObservable() {
+        return RxAndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAllFootballFans")
+                .build()
+                .getParseObservable(new TypeToken<List<User>>() {
+                });
+    }
+
+    /*
+    * This do the complete magic, make both network call
+    * and then returns the list of user who loves both
+    * Using zip operator to get both response at a time
+    */
+    private void findUsersWhoLovesBoth() {
+        // here we are using zip operator to combine both request
+        Observable.zip(getCricketFansObservable(), getFootballFansObservable(),
+                new Func2<List<User>, List<User>, List<User>>() {
+                    @Override
+                    public List<User> call(List<User> cricketFans,
+                                           List<User> footballFans) {
+                        List<User> userWhoLovesBoth =
+                                filterUserWhoLovesBoth(cricketFans, footballFans);
+                        return userWhoLovesBoth;
+                    }
+                }
+        ).subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<List<User>>() {
+                    @Override
+                    public void onCompleted() {
+                        // do anything onComplete
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        // handle error
+                    }
+
+                    @Override
+                    public void onNext(List<User> users) {
+                        // do anything with user who loves both
+                        Log.d(TAG, "userList size : " + users.size());
+                        for (User user : users) {
+                            Log.d(TAG, "id : " + user.id);
+                            Log.d(TAG, "firstname : " + user.firstname);
+                            Log.d(TAG, "lastname : " + user.lastname);
+                        }
+                    }
+                });
+    }
+
+    private List<User> filterUserWhoLovesBoth(List<User> cricketFans, List<User> footballFans) {
+        List<User> userWhoLovesBoth = new ArrayList<User>();
+        for (User cricketFan : cricketFans) {
+            for (User footballFan : footballFans) {
+                if (cricketFan.id == footballFan.id) {
+                    userWhoLovesBoth.add(cricketFan);
+                }
+            }
+        }
+        return userWhoLovesBoth;
+    }
+
+
+    public void zip(View view) {
+        findUsersWhoLovesBoth();
+    }
+
+    /************************************
+     *  zip operator end
+     *  *********************************/
+
+    /************************************
+     * flatMap operator start
+     ************************************/
+
+    private Observable<List<User>> getUserListObservable() {
+        return RxAndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAllUsers/{pageNumber}")
+                .addPathParameter("pageNumber", "0")
+                .addQueryParameter("limit", "10")
+                .build()
+                .getParseObservable(new TypeToken<List<User>>() {
+                });
+    }
+
+    private Observable<UserDetail> getUserDetailObservable(long id) {
+        return RxAndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAnUserDetail/{userId}")
+                .addPathParameter("userId", String.valueOf(id))
+                .build()
+                .getParseObservable(new TypeToken<UserDetail>() {
                 });
     }
 
@@ -210,6 +319,10 @@ public class RxOperatorExampleActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    /************************************
+     * flatMap operator start
+     ************************************/
 
     public void startRxApiTestActivity(View view) {
         startActivity(new Intent(RxOperatorExampleActivity.this, RxApiTestActivity.class));
