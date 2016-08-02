@@ -156,6 +156,12 @@ RxAndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAnUser/{user
                 .getParseObservable(new TypeToken<UserDetail>() {});
     }
     
+    /*
+    * This method do the magic - first gets the list of users
+    * from server.Then, for each user, it makes the network call to get the detail 
+    * of that user.
+    * Finally, we get the UserDetail for the corresponding user one by one
+    */
     public void flatMap() {
             getUserListObservable()
                     .flatMap(new Func1<List<User>, Observable<User>>() { // flatMap - to return users one by one
@@ -188,7 +194,7 @@ RxAndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAnUser/{user
     
                         @Override
                         public void onNext(UserDetail userDetail) {
-                            // do anything with userDetail
+                            // here we get userDetail one by one for all users
                             Log.d(TAG, "userDetail id : " + userDetail.id);
                             Log.d(TAG, "userDetail firstname : " + userDetail.firstname);
                             Log.d(TAG, "userDetail lastname : " + userDetail.lastname);
@@ -266,9 +272,9 @@ RxAndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAnUser/{user
 public class SubscriptionActivity extends Activity {
 
     private static final String TAG = SubscriptionActivity.class.getSimpleName();
-    private static final String URL = "http://api.localhost.com/file.ZIP";
+    private static final String URL = "http://i.imgur.com/AtbX9iX.png";
     private String dirPath;
-    private String fileName = "file1.zip";
+    private String fileName = "imgurimage.png";
     Subscription subscription;
 
     @Override
@@ -321,7 +327,7 @@ public class SubscriptionActivity extends Activity {
 
 ### Making a GET Request
 ```java
-RxAndroidNetworking.get("http://api.localhost.com/{pageNumber}/test")
+RxAndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAllUsers/{pageNumber}")
                  .addPathParameter("pageNumber", "0")
                  .addQueryParameter("limit", "3")
                  .build()
@@ -346,7 +352,7 @@ RxAndroidNetworking.get("http://api.localhost.com/{pageNumber}/test")
 
 ### Making a POST Request
 ```java
-RxAndroidNetworking.post("http://api.localhost.com/createAnUser")
+RxAndroidNetworking.post("https://fierce-cove-29863.herokuapp.com/createAnUser")
                  .addBodyParameter("firstname", "Amit")
                  .addBodyParameter("lastname", "Shekhar")
                  .build()
@@ -372,7 +378,7 @@ RxAndroidNetworking.post("http://api.localhost.com/createAnUser")
 
 ### Downloading a file from server
 ```java
-RxAndroidNetworking.download(url,dirPath,fileName)
+RxAndroidNetworking.download(http://i.imgur.com/AtbX9iX.png,dirPath,imgurimage.png)
                  .build()
                  .setDownloadProgressListener(new DownloadProgressListener() {
                     @Override
@@ -432,7 +438,7 @@ RxAndroidNetworking.upload("http://api.localhost.com/uploadImage")
 ### Using it with your own JAVA Object - JSON Parser
 ```java
 /*--------------Example One -> Getting the userList----------------*/
-RxAndroidNetworking.get("http://api.localhost.com/getAllUsers/{pageNumber}")
+RxAndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAllUsers/{pageNumber}")
                 .addPathParameter("pageNumber", "0")
                 .addQueryParameter("limit", "3")
                 .build()
@@ -460,9 +466,8 @@ RxAndroidNetworking.get("http://api.localhost.com/getAllUsers/{pageNumber}")
                     }
                 });                
 /*--------------Example Two -> Getting an user----------------*/
-RxAndroidNetworking.get("http://api.localhost.com/getAnUser/{userId}")
+RxAndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAnUser/{userId}")
                 .addPathParameter("userId", "1")
-                .setUserAgent("getAnUser")
                 .build()
                 .getParseObservable(new TypeToken<User>() {})
                 .subscribeOn(Schedulers.io())
