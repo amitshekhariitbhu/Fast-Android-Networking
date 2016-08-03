@@ -545,7 +545,7 @@ As it uses [OkHttp](http://square.github.io/okhttp/) as a networking layer, it s
 * [Square](https://square.github.io/) - As both [OkHttp](http://square.github.io/okhttp/) and [Okio](https://github.com/square/okio)
   used by Fast Android Networking is developed by [Square](https://square.github.io/).
 * [Volley](https://android.googlesource.com/platform/frameworks/volley/) - As Fast Android Networking uses ImageLoader that is developed by [Volley](https://android.googlesource.com/platform/frameworks/volley/).  
-* [Prashant Gupta](https://github.com/PrashantGupta17) - For RxJava Support - [RxJava Support](https://github.com/amitshekhariitbhu/Fast-Android-Networking/blob/master/RxAndroidNetworking.md)
+* [Prashant Gupta](https://github.com/PrashantGupta17) - For RxJava Support - [RxJava Support](https://github.com/amitshekhariitbhu/Fast-Android-Networking/wiki/Using-Fast-Android-Networking-Library-With-RxJava)
 
 ### Contact - Let's become friend
 - [Twitter](https://twitter.com/amitiitbhu)
