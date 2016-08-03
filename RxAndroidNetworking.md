@@ -191,8 +191,8 @@ Then initialize it in onCreate() Method of application class :
 ```java
 
     /* Here first of all, we get the list of users from server.
-    * Then using 
-    * of that user. 
+    * Then using using take operator, it only emits
+    * required number of users. 
     */
 
     /*
