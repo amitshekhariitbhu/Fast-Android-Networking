@@ -24,7 +24,7 @@ Fast Android Networking Library takes care of each and everything. So you don't 
 
 - [What Fast Android Networking Library supports?](#fast-android-networking-library-supports)
 - [Difference over other Networking Library](#difference-over-other-networking-library)
-- [RxJava Support For Fast Android Networking](https://github.com/amitshekhariitbhu/Fast-Android-Networking/blob/master/RxAndroidNetworking.md)
+- [RxJava Support For Fast Android Networking](https://github.com/amitshekhariitbhu/Fast-Android-Networking/wiki/Using-Fast-Android-Networking-Library-With-RxJava)
 - [Have an issue or need a feature in Fast Android Networking : Create an issue](https://github.com/amitshekhariitbhu/Fast-Android-Networking/issues/new)
 
 ## Requirements
@@ -60,7 +60,7 @@ If you are using proguard, then add this rule in proguard-project.txt
 -dontwarn okio.**
 ```
 
-### [How to use Fast Android Networking with RxJava? - Click Here](https://github.com/amitshekhariitbhu/Fast-Android-Networking/blob/master/RxAndroidNetworking.md)
+### [How to use Fast Android Networking with RxJava? - Click Here](https://github.com/amitshekhariitbhu/Fast-Android-Networking/wiki/Using-Fast-Android-Networking-Library-With-RxJava)
 
 ### Making a GET Request
 ```java
@@ -525,7 +525,7 @@ As it uses [OkHttp](http://square.github.io/okhttp/) as a networking layer, it s
 * In Fast Android Networking Library, OkHttpClient can be customized for every request easily.
 * As Fast Android Networking Library uses [OkHttp](http://square.github.io/okhttp/) and [Okio](https://github.com/square/okio), it is faster.
 * Single library for all type of networking.
-* Supports RxJava -> [Check here](https://github.com/amitshekhariitbhu/Fast-Android-Networking/blob/master/RxAndroidNetworking.md)
+* Supports RxJava -> [Check here](https://github.com/amitshekhariitbhu/Fast-Android-Networking/wiki/Using-Fast-Android-Networking-Library-With-RxJava)
 * Current bandwidth and connection quality can be obtained to decide logic of code.
 * Executor can be passed to any request to get response in another thread.
 * Complete analytics of any request can be obtained.

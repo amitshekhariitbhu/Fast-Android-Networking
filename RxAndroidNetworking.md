@@ -484,7 +484,6 @@ RxAndroidNetworking.post("https://fierce-cove-29863.herokuapp.com/createAnUser")
                   });
 ```
 
-
 ### Downloading a file from server
 ```java
 RxAndroidNetworking.download("http://i.imgur.com/AtbX9iX.png",dirPath,imgurimage.png)
