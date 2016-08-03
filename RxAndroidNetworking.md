@@ -317,7 +317,8 @@ Then initialize it in onCreate() Method of application class :
 
     /* Very Similar to above example, only change is 
     *  that, here we are using zip after flatMap to 
-    */ combine(pair) User and UserDetail
+    * combine(pair) User and UserDetail
+    */ 
      
     /*
     * This method do the magic - first gets the list of users
