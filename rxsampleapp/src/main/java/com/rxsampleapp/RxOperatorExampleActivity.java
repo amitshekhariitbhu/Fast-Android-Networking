@@ -107,10 +107,6 @@ public class RxOperatorExampleActivity extends AppCompatActivity {
                     }
                 });
     }
-    /************************************
-     * Just an test api end
-     * ************************************/
-
 
     /************************************
      * map operator start
@@ -153,10 +149,6 @@ public class RxOperatorExampleActivity extends AppCompatActivity {
                     }
                 });
     }
-
-    /************************************
-     *  map operator end
-     *  *********************************/
 
 
     /************************************
@@ -244,8 +236,93 @@ public class RxOperatorExampleActivity extends AppCompatActivity {
     }
 
     /************************************
-     *  zip operator end
-     *  *********************************/
+     * flatMap and filter operator start
+     ************************************/
+
+    private Observable<List<User>> getAllMyFriendsObservable() {
+        return RxAndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAllFriends/{userId}")
+                .addPathParameter("userId", "1")
+                .build()
+                .getParseObservable(new TypeToken<List<User>>() {
+                });
+    }
+
+    public void flatMapAndFilter(View view) {
+        getAllMyFriendsObservable()
+                .flatMap(new Func1<List<User>, Observable<User>>() { // flatMap - to return users one by one
+                    @Override
+                    public Observable<User> call(List<User> usersList) {
+                        return Observable.from(usersList); // returning user one by one from usersList.
+                    }
+                })
+                .filter(new Func1<User, Boolean>() {
+                    @Override
+                    public Boolean call(User user) {
+                        // filtering user who follows me.
+                        return user.isFollowing;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<User>() {
+                    @Override
+                    public void onCompleted() {
+                        // do anything onComplete
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        // handle error
+                    }
+
+                    @Override
+                    public void onNext(User user) {
+                        // only the user who is following me comes here one by one
+                        Log.d(TAG, "id : " + user.id);
+                        Log.d(TAG, "firstname : " + user.firstname);
+                        Log.d(TAG, "lastname : " + user.lastname);
+                        Log.d(TAG, "isFollowing : " + user.isFollowing);
+                    }
+                });
+    }
+
+    /************************************
+     * take operator start
+     ************************************/
+
+    public void take(View view) {
+        getUserListObservable()
+                .flatMap(new Func1<List<User>, Observable<User>>() { // flatMap - to return users one by one
+                    @Override
+                    public Observable<User> call(List<User> usersList) {
+                        return Observable.from(usersList); // returning user one by one from usersList.
+                    }
+                })
+                .take(4) // it will only emit first 4 users out of all
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<User>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(User user) {
+                        // only four user comes here one by one
+                        Log.d(TAG, "id : " + user.id);
+                        Log.d(TAG, "firstname : " + user.firstname);
+                        Log.d(TAG, "lastname : " + user.lastname);
+                        Log.d(TAG, "isFollowing : " + user.isFollowing);
+                    }
+                });
+    }
+
 
     /************************************
      * flatMap operator start
@@ -292,10 +369,6 @@ public class RxOperatorExampleActivity extends AppCompatActivity {
                     }
                 });
     }
-
-    /************************************
-     * flatMap operator end
-     ************************************/
 
     /************************************
      * flatMapWithZip operator start
@@ -371,7 +444,7 @@ public class RxOperatorExampleActivity extends AppCompatActivity {
     }
 
     /************************************
-     * flatMapWithZip operator end
+     * others start here
      ************************************/
 
     public void startRxApiTestActivity(View view) {

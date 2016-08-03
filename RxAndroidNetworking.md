@@ -2,57 +2,57 @@
 
 Add this in your build.gradle
 ```groovy
-compile 'com.amitshekhar.android:rx-android-networking:0.1.0'
+    compile 'com.amitshekhar.android:rx-android-networking:0.1.0'
 ```
 
 Then initialize it in onCreate() Method of application class :
 ```java
-AndroidNetworking.initialize(getApplicationContext());
+    AndroidNetworking.initialize(getApplicationContext());
 ```
 
 ### All these below examples are working and available on this repo in rx-sample-app.
 
 ### Using Map Operator
 ```java
-/*    
-* Here we are getting ApiUser Object from api server
-* then we are converting it into User Object because 
-* may be our database support User Not ApiUser Object
-* Here we are using Map Operator to do that
-*/
-RxAndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAnUser/{userId}")
-                .addPathParameter("userId", "1")
-                .build()
-                .getParseObservable(new TypeToken<ApiUser>() {
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .map(new Func1<ApiUser, User>() {
-                    @Override
-                    public User call(ApiUser apiUser) {
-                        // here we get ApiUser from server
-                        User user = new User(apiUser);
-                        // then by converting, we are returing user
-                        return user;
-                    }
-                })
-                .subscribe(new Observer<User>() {
-                    @Override
-                    public void onCompleted() {
-                        // do anything onComplete
-                    }
-                    @Override
-                    public void onError(Throwable e) {
-                        // handle error
-                    }
-                    @Override
-                    public void onNext(User user) {
-                        // do anything with user
-                    }
-                });
+    /*    
+    * Here we are getting ApiUser Object from api server
+    * then we are converting it into User Object because 
+    * may be our database support User Not ApiUser Object
+    * Here we are using Map Operator to do that
+    */
+    RxAndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAnUser/{userId}")
+                    .addPathParameter("userId", "1")
+                    .build()
+                    .getParseObservable(new TypeToken<ApiUser>() {
+                    })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .map(new Func1<ApiUser, User>() { // takes ApiUser and returns User
+                        @Override
+                        public User call(ApiUser apiUser) {
+                            // here we get ApiUser from server
+                            User user = new User(apiUser);
+                            // then by converting, we are returing user
+                            return user;
+                        }
+                    })
+                    .subscribe(new Observer<User>() {
+                        @Override
+                        public void onCompleted() {
+                            // do anything onComplete
+                        }
+                        @Override
+                        public void onError(Throwable e) {
+                            // handle error
+                        }
+                        @Override
+                        public void onNext(User user) {
+                            // do anything with user
+                        }
+                    });
 ```
 
-### Using Zip Operator
+### Using Zip Operator - Combining two network request
 ```java
 
     /*    
@@ -125,6 +125,114 @@ RxAndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAnUser/{user
         return userWhoLovesBoth;
     }
 ``` 
+
+### Using FlatMap And Filter Operators
+```java
+
+       /*    
+       * First of all we are getting my friends list from
+       * server, then by using flatMap we are emitting users
+       * one by one and then after applying filter we are
+       * returning only those who are following me one by one.
+       */
+       
+       /*
+       * This observable return the list of User who are my friends
+       */    
+       private Observable<List<User>> getAllMyFriendsObservable() {
+           return RxAndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAllFriends/{userId}")
+                   .addPathParameter("userId", "1")
+                   .build()
+                   .getParseObservable(new TypeToken<List<User>>() {
+                   });
+       }
+   
+       /*
+       * This method does all
+       */       
+       public void flatMapAndFilter() {
+           getAllMyFriendsObservable()
+                   .flatMap(new Func1<List<User>, Observable<User>>() { // flatMap - to return users one by one
+                       @Override
+                       public Observable<User> call(List<User> usersList) {
+                           return Observable.from(usersList); // returning(emitting) user one by one from usersList.
+                       }
+                   })
+                   .filter(new Func1<User, Boolean>() { // filter operator
+                       @Override
+                       public Boolean call(User user) {
+                           // filtering user who follows me.
+                           return user.isFollowing;
+                       }
+                   })
+                   .subscribeOn(Schedulers.io())
+                   .observeOn(AndroidSchedulers.mainThread())
+                   .subscribe(new Observer<User>() {
+                       @Override
+                       public void onCompleted() {
+                           // do anything onComplete
+                       }
+   
+                       @Override
+                       public void onError(Throwable e) {
+                           // handle error
+                       }
+   
+                       @Override
+                       public void onNext(User user) {
+                           // only the user who is following me comes here one by one
+                       }
+                   });
+       }
+
+```
+
+### Using Take Operator
+```java
+
+    /* Here first of all, we get the list of users from server.
+    * Then using 
+    * of that user. 
+    */
+
+    /*
+    * This observable return the list of users.
+    */
+    private Observable<List<User>> getUserListObservable() {
+        return RxAndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAllUsers/{pageNumber}")
+                .addPathParameter("pageNumber", "0")
+                .addQueryParameter("limit", "10")
+                .build()
+                .getParseObservable(new TypeToken<List<User>>() {});
+    }
+
+    getUserListObservable()
+            .flatMap(new Func1<List<User>, Observable<User>>() { // flatMap - to return users one by one
+                @Override
+                public Observable<User> call(List<User> usersList) {
+                    return Observable.from(usersList); // returning user one by one from usersList.
+                }
+            })
+            .take(4) // it will only emit first 4 users out of all
+            .subscribeOn(Schedulers.newThread())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Observer<User>() {
+                @Override
+                public void onCompleted() {
+                    // do something onCompletion
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    // handle error
+                }
+
+                @Override
+                public void onNext(User user) {
+                    // only four user comes here one by one
+                }
+            });
+```
 
 ### Using flatMap Operator
 ```java

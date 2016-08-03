@@ -47,6 +47,22 @@
             android:text="zip" />
 
         <Button
+            android:id="@+id/flatMapAndFilter"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_margin="8dp"
+            android:onClick="flatMapAndFilter"
+            android:text="flatMapAndFilter" />
+
+        <Button
+            android:id="@+id/take"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_margin="8dp"
+            android:onClick="take"
+            android:text="take" />
+
+        <Button
             android:id="@+id/flatMap"
             android:layout_width="match_parent"
             android:layout_height="48dp"
