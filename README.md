@@ -12,7 +12,7 @@ Fast Android Networking Library is a powerful library for doing any type of netw
 
 Fast Android Networking Library takes care of each and everything. So you don't have to do anything, just make request and listen for the response.
 
-### Why this library
+### Why use Fast Android Networking ?
 * Recent removal of HttpClient in Android Marshmallow(Android M) made other networking library obsolete.
 * No other single library do each and everything like making request, downloading any type of file, uploading file, loading
   image from network in ImageView, etc. There are libraries but they are outdated.
@@ -21,11 +21,14 @@ Fast Android Networking Library takes care of each and everything. So you don't 
   [Okio](https://github.com/square/okio) is made to handle GC overhead while allocating memory.
   [Okio](https://github.com/square/okio) do some clever things to save CPU and memory.
 * As it uses [OkHttp](http://square.github.io/okhttp/) , most important it supports HTTP/2.  
+* What Fast Android Networking Library supports? [Check here](#fast-android-networking-library-supports)
+* Difference over other Networking Library [Check here](#difference-over-other-networking-library)
+* RxJava Support For Fast Android Networking: [Check here](https://github.com/amitshekhariitbhu/Fast-Android-Networking/wiki/Using-Fast-Android-Networking-Library-With-RxJava)
+* Have an issue or need a feature in Fast Android Networking : [Create an issue](https://github.com/amitshekhariitbhu/Fast-Android-Networking/issues/new)
 
-- [What Fast Android Networking Library supports?](#fast-android-networking-library-supports)
-- [Difference over other Networking Library](#difference-over-other-networking-library)
-- [RxJava Support For Fast Android Networking](https://github.com/amitshekhariitbhu/Fast-Android-Networking/wiki/Using-Fast-Android-Networking-Library-With-RxJava)
-- [Have an issue or need a feature in Fast Android Networking : Create an issue](https://github.com/amitshekhariitbhu/Fast-Android-Networking/issues/new)
+### Show some :heart:
+[![GitHub stars](https://img.shields.io/github/stars/amitshekhariitbhu/Fast-Android-Networking.svg?style=social&label=Star)](https://github.com/amitshekhariitbhu/Fast-Android-Networking) [![GitHub forks](https://img.shields.io/github/forks/amitshekhariitbhu/Fast-Android-Networking.svg?style=social&label=Fork)](https://github.com/amitshekhariitbhu/Fast-Android-Networking/fork)  [![GitHub followers](https://img.shields.io/github/followers/amitshekhariitbhu.svg?style=social&label=Follow)](https://github.com/amitshekhariitbhu)  
+[![Twitter Follow](https://img.shields.io/twitter/follow/amitiitbhu.svg?style=social)](https://twitter.com/amitiitbhu)
 
 ## Requirements
 
@@ -64,7 +67,7 @@ If you are using proguard, then add this rule in proguard-project.txt
 
 ### Making a GET Request
 ```java
-AndroidNetworking.get("http://api.localhost.com/{pageNumber}/test")
+AndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAllUsers/{pageNumber}")
                  .addPathParameter("pageNumber", "0")
                  .addQueryParameter("limit", "3")
                  .addHeaders("token", "1234")
@@ -84,7 +87,7 @@ AndroidNetworking.get("http://api.localhost.com/{pageNumber}/test")
 ```
 ### Making a POST Request
 ```java
-AndroidNetworking.post("http://api.localhost.com/createAnUser")
+AndroidNetworking.post("https://fierce-cove-29863.herokuapp.com/createAnUser")
                  .addBodyParameter("firstname", "Amit")
                  .addBodyParameter("lastname", "Shekhar")
                  .setTag("test")
@@ -103,6 +106,7 @@ AndroidNetworking.post("http://api.localhost.com/createAnUser")
 ```
 You can also post json, file ,etc in POST request like this.
 ```java
+
 JSONObject jsonObject = new JSONObject();
 try {
     jsonObject.put("firstname", "Rohit");
@@ -110,8 +114,8 @@ try {
 } catch (JSONException e) {
   e.printStackTrace();
 }
-        
-AndroidNetworking.post("http://api.localhost.com/createUser")
+       
+AndroidNetworking.post("https://fierce-cove-29863.herokuapp.com/createUser")
                  .addJSONObjectBody(jsonObject) // posting json
                  .setTag("test")
                  .setPriority(Priority.MEDIUM)
@@ -127,7 +131,7 @@ AndroidNetworking.post("http://api.localhost.com/createUser")
                     }
                 });
                 
-AndroidNetworking.post("http://api.localhost.com/postFile")
+AndroidNetworking.post("https://fierce-cove-29863.herokuapp.com/postFile")
                  .addFileBody(file) // posting any type of file
                  .setTag("test")
                  .setPriority(Priority.MEDIUM)
@@ -147,7 +151,7 @@ AndroidNetworking.post("http://api.localhost.com/postFile")
 ### Using it with your own JAVA Object - JSON Parser
 ```java
 /*--------------Example One -> Getting the userList----------------*/
-AndroidNetworking.get("http://api.localhost.com/getAllUsers/{pageNumber}")
+AndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAllUsers/{pageNumber}")
                 .addPathParameter("pageNumber", "0")
                 .addQueryParameter("limit", "3")
                 .setTag(this)
@@ -170,7 +174,7 @@ AndroidNetworking.get("http://api.localhost.com/getAllUsers/{pageNumber}")
                     }
                 });
 /*--------------Example Two -> Getting an user----------------*/
-AndroidNetworking.get("http://api.localhost.com/getAnUser/{userId}")
+AndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAnUserDetail/{userId}")
                 .addPathParameter("userId", "1")
                 .setTag(this)
                 .setPriority(Priority.LOW)
@@ -356,7 +360,7 @@ AndroidNetworking.evictAllBitmap(); // clear LruCache
 ```
 ### Prefetch a request (so that it can return from cache when required at instant)
 ```java
-AndroidNetworking.get(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_ARRAY)
+AndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAllUsers/{pageNumber}")
                 .addPathParameter("pageNumber", "0")
                 .addQueryParameter("limit", "30")
                 .setTag(this)
@@ -370,7 +374,7 @@ OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
                 .addInterceptor(new GzipRequestInterceptor())
                 .build();
                 
-AndroidNetworking.get("http://api.localhost.com/{pageNumber}/test")
+AndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAllUsers/{pageNumber}")
                  .addPathParameter("pageNumber", "0")
                  .addQueryParameter("limit", "3")
                  .addHeaders("token", "1234")
