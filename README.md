@@ -74,11 +74,11 @@ AndroidNetworking.get("http://api.localhost.com/{pageNumber}/test")
                  .getAsJSONArray(new JSONArrayRequestListener() {
                     @Override
                     public void onResponse(JSONArray response) {
-                    // do anything with response
+                      // do anything with response
                     }
                     @Override
                     public void onError(ANError error) {
-                    // handle error
+                      // handle error
                     }
                 });                
 ```
@@ -93,11 +93,11 @@ AndroidNetworking.post("http://api.localhost.com/createAnUser")
                  .getAsJSONArray(new JSONArrayRequestListener() {
                     @Override
                     public void onResponse(JSONArray response) {
-                    // do anything with response
+                      // do anything with response
                     }
                     @Override
                     public void onError(ANError error) {
-                    // handle error
+                      // handle error
                     }
                 });
 ```
@@ -107,11 +107,11 @@ JSONObject jsonObject = new JSONObject();
 try {
     jsonObject.put("firstname", "Rohit");
     jsonObject.put("lastname", "Kumar");
-    } catch (JSONException e) {
-    e.printStackTrace();
-    }
+} catch (JSONException e) {
+  e.printStackTrace();
+}
         
-AndroidNetworking.post("http://api.localhost.com/createAnUser")
+AndroidNetworking.post("http://api.localhost.com/createUser")
                  .addJSONObjectBody(jsonObject) // posting json
                  .setTag("test")
                  .setPriority(Priority.MEDIUM)
@@ -119,11 +119,11 @@ AndroidNetworking.post("http://api.localhost.com/createAnUser")
                  .getAsJSONArray(new JSONArrayRequestListener() {
                     @Override
                     public void onResponse(JSONArray response) {
-                    // do anything with response
+                      // do anything with response
                     }
                     @Override
                     public void onError(ANError error) {
-                    // handle error
+                      // handle error
                     }
                 });
                 
@@ -135,11 +135,11 @@ AndroidNetworking.post("http://api.localhost.com/postFile")
                  .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
-                    // do anything with response
+                      // do anything with response
                     }
                     @Override
                     public void onError(ANError error) {
-                    // handle error
+                      // handle error
                     }
                 });               
 ```
@@ -156,13 +156,13 @@ AndroidNetworking.get("http://api.localhost.com/getAllUsers/{pageNumber}")
                 .getAsParsed(new TypeToken<List<User>>() {}, new ParsedRequestListener<List<User>>() {
                     @Override
                     public void onResponse(List<User> users) {
-                    // do anything with response
-                    Log.d(TAG, "userList size : " + users.size());
-                    for (User user : users) {
+                      // do anything with response
+                      Log.d(TAG, "userList size : " + users.size());
+                      for (User user : users) {
                         Log.d(TAG, "id : " + user.id);
                         Log.d(TAG, "firstname : " + user.firstname);
                         Log.d(TAG, "lastname : " + user.lastname);
-                    }
+                      }
                     }
                     @Override
                     public void onError(ANError anError) {
@@ -178,14 +178,14 @@ AndroidNetworking.get("http://api.localhost.com/getAnUser/{userId}")
                 .getAsParsed(new TypeToken<User>() {}, new ParsedRequestListener<User>() {
                      @Override
                      public void onResponse(User user) {
-                     // do anything with response
-                         Log.d(TAG, "id : " + user.id);
-                         Log.d(TAG, "firstname : " + user.firstname);
-                         Log.d(TAG, "lastname : " + user.lastname);
+                        // do anything with response
+                        Log.d(TAG, "id : " + user.id);
+                        Log.d(TAG, "firstname : " + user.firstname);
+                        Log.d(TAG, "lastname : " + user.lastname);
                      }
                      @Override
                      public void onError(ANError anError) {
-                      // handle error
+                        // handle error
                      }
                  }); 
 /*-- Note : TypeToken and getAsParsed is important here --*/              
@@ -200,17 +200,17 @@ AndroidNetworking.download(url,dirPath,fileName)
                  .setDownloadProgressListener(new DownloadProgressListener() {
                     @Override
                     public void onProgress(long bytesDownloaded, long totalBytes) {
-                    // do anything with progress  
+                      // do anything with progress  
                     }
                  })
                  .startDownload(new DownloadListener() {
                     @Override
                     public void onDownloadComplete() {
-                    // do anything after completion
+                      // do anything after completion
                     }
                     @Override
                     public void onError(ANError error) {
-                    // handle error    
+                      // handle error    
                     }
                 });                 
 ```
@@ -224,17 +224,17 @@ AndroidNetworking.upload(url)
                  .setUploadProgressListener(new UploadProgressListener() {
                     @Override
                     public void onProgress(long bytesUploaded, long totalBytes) {
-                    // do anything with progress 
+                      // do anything with progress 
                     }
                  })
                  .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
-                    // do anything with response                
+                      // do anything with response                
                     }
                     @Override
                     public void onError(ANError error) {
-                    // handle error 
+                      // handle error 
                     }
                  }); 
 ```
@@ -251,18 +251,18 @@ AndroidNetworking.upload(url)
                  .setUploadProgressListener(new UploadProgressListener() {
                     @Override
                     public void onProgress(long bytesUploaded, long totalBytes) {
-                    // do anything with progress 
+                      // do anything with progress 
                     }
                  })
                  .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject response) {
-                    // below code will be executed in the executor provided
-                    // do anything with response                
+                      // below code will be executed in the executor provided
+                      // do anything with response                
                     }
                     @Override
                     public void onError(ANError error) {
-                    // handle error 
+                      // handle error 
                     }
                  }); 
 ```
@@ -276,17 +276,17 @@ AndroidNetworking.download(url,dirPath,fileName)
                  .setDownloadProgressListener(new DownloadProgressListener() {
                     @Override
                     public void onProgress(long bytesDownloaded, long totalBytes) {
-                    // do anything with progress  
+                      // do anything with progress  
                     }
                  })
                  .startDownload(new DownloadListener() {
                     @Override
                     public void onDownloadComplete() {
-                    // do anything after completion
+                      // do anything after completion
                     }
                     @Override
                     public void onError(ANError error) {
-                    // handle error    
+                      // handle error    
                     }
                 });   
 ```
@@ -328,7 +328,7 @@ AndroidNetworking.get(imageUrl)
                     }
                     @Override
                     public void onError(ANError error) {
-                    // handle error
+                      // handle error
                     }
                 });
 ```
@@ -336,10 +336,10 @@ AndroidNetworking.get(imageUrl)
 ```java
 public void onError(ANError error) {
                            if (error.getErrorCode() != 0) {
-                           // received error from server
-                           // error.getErrorCode() - the error code from server
-                           // error.getErrorBody() - the error body from server
-                           // error.getErrorDetail() - just an error detail
+                                // received error from server
+                                // error.getErrorCode() - the error code from server
+                                // error.getErrorBody() - the error body from server
+                                // error.getErrorDetail() - just an error detail
                                 Log.d(TAG, "onError errorCode : " + error.getErrorCode());
                                 Log.d(TAG, "onError errorBody : " + error.getErrorBody());
                                 Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
@@ -381,7 +381,7 @@ AndroidNetworking.get("http://api.localhost.com/{pageNumber}/test")
                  .getAsJSONArray(new JSONArrayRequestListener() {
                     @Override
                     public void onResponse(JSONArray response) {
-                    // do anything with response
+                      // do anything with response
                     }
                     @Override
                     public void onError(ANError error) {
@@ -406,11 +406,11 @@ ANRequest anRequest = getRequestBuilder.build();
 anRequest.getAsJSONObject(new JSONObjectRequestListener() {
     @Override
     public void onResponse(JSONObject response) {
-        // do anything with response
+      // do anything with response
     }
     @Override
     public void onError(ANError error) {
-        // handle error
+      // handle error
     }
 });
 ```
@@ -420,7 +420,7 @@ anRequest.getAsJSONObject(new JSONObjectRequestListener() {
 AndroidNetworking.setConnectionQualityChangeListener(new ConnectionQualityChangeListener() {
             @Override
             public void onChange(ConnectionQuality currentConnectionQuality, int currentBandwidth) {
-                // do something on change in connectionQuality
+              // do something on change in connectionQuality
             }
         });
         
@@ -429,12 +429,12 @@ AndroidNetworking.removeConnectionQualityChangeListener();
 
 // Getting current ConnectionQuality
 ConnectionQuality connectionQuality = AndroidNetworking.getCurrentConnectionQuality();
-if(connectionQuality == ConnectionQuality.EXCELLENT){
-// do something
-}else if (connectionQuality == ConnectionQuality.POOR){
-// do something
-}else if (connectionQuality == ConnectionQuality.UNKNOWN){
-// do something
+if(connectionQuality == ConnectionQuality.EXCELLENT) {
+  // do something
+} else if (connectionQuality == ConnectionQuality.POOR) {
+  // do something
+} else if (connectionQuality == ConnectionQuality.UNKNOWN) {
+  // do something
 }
 // Getting current bandwidth
 int currentBandwidth = AndroidNetworking.getCurrentBandwidth(); // Note : if (currentBandwidth == 0) : means UNKNOWN
@@ -457,17 +457,17 @@ AndroidNetworking.download(url,dirPath,fileName)
                  .setDownloadProgressListener(new DownloadProgressListener() {
                     @Override
                     public void onProgress(long bytesDownloaded, long totalBytes) {
-                    // do anything with progress  
+                      // do anything with progress  
                     }
                  })
                  .startDownload(new DownloadListener() {
                     @Override
                     public void onDownloadComplete() {
-                    // do anything after completion
+                      // do anything after completion
                     }
                     @Override
                     public void onError(ANError error) {
-                    // handle error    
+                      // handle error    
                     }
                 });  
 Note : If bytesSent or bytesReceived is -1 , it means it is unknown                
