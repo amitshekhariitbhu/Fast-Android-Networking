@@ -35,13 +35,35 @@
 
 <p>Fast Android Networking Library takes care of each and everything. So you don't have to do anything, just make request and listen for the response.</p>
 
+<h3>
+<a id="why-use-fast-android-networking-" class="anchor" href="#why-use-fast-android-networking-" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Why use Fast Android Networking ?</h3>
+
 <ul>
-<li><a href="#fast-android-networking-library-supports">What Fast Android Networking Library supports?</a></li>
-<li><a href="#why-this-library">Why this library?</a></li>
-<li><a href="#difference-over-other-networking-library">Difference over other Networking Library</a></li>
-<li><a href="https://github.com/amitshekhariitbhu/Fast-Android-Networking/blob/master/RxAndroidNetworking.md">RxJava Support For Fast Android Networking</a></li>
-<li><a href="https://github.com/amitshekhariitbhu/Fast-Android-Networking/issues/new">Have an issue or need a feature in Fast Android Networking : Create an issue</a></li>
+<li>Recent removal of HttpClient in Android Marshmallow(Android M) made other networking library obsolete.</li>
+<li>No other single library do each and everything like making request, downloading any type of file, uploading file, loading
+image from network in ImageView, etc. There are libraries but they are outdated.</li>
+<li>No other library provided simple interface for doing all types of things in networking like setting priority, cancelling, etc.</li>
+<li>As it uses <a href="https://github.com/square/okio">Okio</a> , No more GC overhead in android application.
+<a href="https://github.com/square/okio">Okio</a> is made to handle GC overhead while allocating memory.
+<a href="https://github.com/square/okio">Okio</a> do some clever things to save CPU and memory.</li>
+<li>As it uses <a href="http://square.github.io/okhttp/">OkHttp</a> , most important it supports HTTP/2.<br>
+</li>
+<li>What Fast Android Networking Library supports? <a href="#fast-android-networking-library-supports">Check here</a>
+</li>
+<li>Difference over other Networking Library <a href="#difference-over-other-networking-library">Check here</a>
+</li>
+<li>RxJava Support For Fast Android Networking: <a href="https://github.com/amitshekhariitbhu/Fast-Android-Networking/wiki/Using-Fast-Android-Networking-Library-With-RxJava">Check here</a>
+</li>
+<li>Have an issue or need a feature in Fast Android Networking : <a href="https://github.com/amitshekhariitbhu/Fast-Android-Networking/issues/new">Create an issue</a>
+</li>
 </ul>
+
+<h3>
+<a id="show-some-heart" class="anchor" href="#show-some-heart" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Show some <g-emoji alias="heart" fallback-src="https://assets-cdn.github.com/images/icons/emoji/unicode/2764.png">❤️</g-emoji>
+</h3>
+
+<p><a href="https://github.com/amitshekhariitbhu/Fast-Android-Networking"><img src="https://img.shields.io/github/stars/amitshekhariitbhu/Fast-Android-Networking.svg?style=social&amp;label=Star" alt="GitHub stars"></a> <a href="https://github.com/amitshekhariitbhu/Fast-Android-Networking/fork"><img src="https://img.shields.io/github/forks/amitshekhariitbhu/Fast-Android-Networking.svg?style=social&amp;label=Fork" alt="GitHub forks"></a>  <a href="https://github.com/amitshekhariitbhu"><img src="https://img.shields.io/github/followers/amitshekhariitbhu.svg?style=social&amp;label=Follow" alt="GitHub followers"></a><br>
+<a href="https://twitter.com/amitiitbhu"><img src="https://img.shields.io/twitter/follow/amitiitbhu.svg?style=social" alt="Twitter Follow"></a></p>
 
 <h2>
 <a id="requirements" class="anchor" href="#requirements" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Requirements</h2>
@@ -61,7 +83,7 @@
 
 <div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">uses-permission</span> <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>android.permission.INTERNET<span class="pl-pds">"</span></span> /&gt;</pre></div>
 
-<p>Then initialize it in onCreate() Method of application class, :</p>
+<p>Then initialize it in onCreate() Method of application class :</p>
 
 <div class="highlight highlight-source-java"><pre><span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>initialize(getApplicationContext());</pre></div>
 
@@ -79,9 +101,13 @@
 </code></pre>
 
 <h3>
+<a id="how-to-use-fast-android-networking-with-rxjava---click-here" class="anchor" href="#how-to-use-fast-android-networking-with-rxjava---click-here" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><a href="https://github.com/amitshekhariitbhu/Fast-Android-Networking/wiki/Using-Fast-Android-Networking-Library-With-RxJava">How to use Fast Android Networking with RxJava? - Click Here</a>
+</h3>
+
+<h3>
 <a id="making-a-get-request" class="anchor" href="#making-a-get-request" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Making a GET Request</h3>
 
-<div class="highlight highlight-source-java"><pre><span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>get(<span class="pl-s"><span class="pl-pds">"</span>http://api.localhost.com/{pageNumber}/test<span class="pl-pds">"</span></span>)
+<div class="highlight highlight-source-java"><pre><span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>get(<span class="pl-s"><span class="pl-pds">"</span>https://fierce-cove-29863.herokuapp.com/getAllUsers/{pageNumber}<span class="pl-pds">"</span></span>)
                  .addPathParameter(<span class="pl-s"><span class="pl-pds">"</span>pageNumber<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span>)
                  .addQueryParameter(<span class="pl-s"><span class="pl-pds">"</span>limit<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>3<span class="pl-pds">"</span></span>)
                  .addHeaders(<span class="pl-s"><span class="pl-pds">"</span>token<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>1234<span class="pl-pds">"</span></span>)
@@ -91,18 +117,18 @@
                  .getAsJSONArray(<span class="pl-k">new</span> <span class="pl-smi">JSONArrayRequestListener</span>() {
                     <span class="pl-k">@Override</span>
                     <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onResponse</span>(<span class="pl-smi">JSONArray</span> <span class="pl-v">response</span>) {
-                    <span class="pl-c">// do anything with response</span>
+                      <span class="pl-c">// do anything with response</span>
                     }
                     <span class="pl-k">@Override</span>
                     <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onError</span>(<span class="pl-smi">ANError</span> <span class="pl-v">error</span>) {
-                    <span class="pl-c">// handle error</span>
+                      <span class="pl-c">// handle error</span>
                     }
                 });                </pre></div>
 
 <h3>
 <a id="making-a-post-request" class="anchor" href="#making-a-post-request" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Making a POST Request</h3>
 
-<div class="highlight highlight-source-java"><pre><span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>post(<span class="pl-s"><span class="pl-pds">"</span>http://api.localhost.com/createAnUser<span class="pl-pds">"</span></span>)
+<div class="highlight highlight-source-java"><pre><span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>post(<span class="pl-s"><span class="pl-pds">"</span>https://fierce-cove-29863.herokuapp.com/createAnUser<span class="pl-pds">"</span></span>)
                  .addBodyParameter(<span class="pl-s"><span class="pl-pds">"</span>firstname<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Amit<span class="pl-pds">"</span></span>)
                  .addBodyParameter(<span class="pl-s"><span class="pl-pds">"</span>lastname<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Shekhar<span class="pl-pds">"</span></span>)
                  .setTag(<span class="pl-s"><span class="pl-pds">"</span>test<span class="pl-pds">"</span></span>)
@@ -111,25 +137,26 @@
                  .getAsJSONArray(<span class="pl-k">new</span> <span class="pl-smi">JSONArrayRequestListener</span>() {
                     <span class="pl-k">@Override</span>
                     <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onResponse</span>(<span class="pl-smi">JSONArray</span> <span class="pl-v">response</span>) {
-                    <span class="pl-c">// do anything with response</span>
+                      <span class="pl-c">// do anything with response</span>
                     }
                     <span class="pl-k">@Override</span>
                     <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onError</span>(<span class="pl-smi">ANError</span> <span class="pl-v">error</span>) {
-                    <span class="pl-c">// handle error</span>
+                      <span class="pl-c">// handle error</span>
                     }
                 });</pre></div>
 
 <p>You can also post json, file ,etc in POST request like this.</p>
 
-<div class="highlight highlight-source-java"><pre><span class="pl-smi">JSONObject</span> jsonObject <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">JSONObject</span>();
+<div class="highlight highlight-source-java"><pre>
+<span class="pl-smi">JSONObject</span> jsonObject <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">JSONObject</span>();
 <span class="pl-k">try</span> {
     jsonObject<span class="pl-k">.</span>put(<span class="pl-s"><span class="pl-pds">"</span>firstname<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Rohit<span class="pl-pds">"</span></span>);
     jsonObject<span class="pl-k">.</span>put(<span class="pl-s"><span class="pl-pds">"</span>lastname<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Kumar<span class="pl-pds">"</span></span>);
-    } <span class="pl-k">catch</span> (<span class="pl-smi">JSONException</span> e) {
-    e<span class="pl-k">.</span>printStackTrace();
-    }
+} <span class="pl-k">catch</span> (<span class="pl-smi">JSONException</span> e) {
+  e<span class="pl-k">.</span>printStackTrace();
+}
 
-<span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>post(<span class="pl-s"><span class="pl-pds">"</span>http://api.localhost.com/createAnUser<span class="pl-pds">"</span></span>)
+<span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>post(<span class="pl-s"><span class="pl-pds">"</span>https://fierce-cove-29863.herokuapp.com/createUser<span class="pl-pds">"</span></span>)
                  .addJSONObjectBody(jsonObject) <span class="pl-c">// posting json</span>
                  .setTag(<span class="pl-s"><span class="pl-pds">"</span>test<span class="pl-pds">"</span></span>)
                  .setPriority(<span class="pl-smi">Priority</span><span class="pl-c1"><span class="pl-k">.</span>MEDIUM</span>)
@@ -137,15 +164,15 @@
                  .getAsJSONArray(<span class="pl-k">new</span> <span class="pl-smi">JSONArrayRequestListener</span>() {
                     <span class="pl-k">@Override</span>
                     <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onResponse</span>(<span class="pl-smi">JSONArray</span> <span class="pl-v">response</span>) {
-                    <span class="pl-c">// do anything with response</span>
+                      <span class="pl-c">// do anything with response</span>
                     }
                     <span class="pl-k">@Override</span>
                     <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onError</span>(<span class="pl-smi">ANError</span> <span class="pl-v">error</span>) {
-                    <span class="pl-c">// handle error</span>
+                      <span class="pl-c">// handle error</span>
                     }
                 });
 
-<span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>post(<span class="pl-s"><span class="pl-pds">"</span>http://api.localhost.com/postFile<span class="pl-pds">"</span></span>)
+<span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>post(<span class="pl-s"><span class="pl-pds">"</span>https://fierce-cove-29863.herokuapp.com/postFile<span class="pl-pds">"</span></span>)
                  .addFileBody(file) <span class="pl-c">// posting any type of file</span>
                  .setTag(<span class="pl-s"><span class="pl-pds">"</span>test<span class="pl-pds">"</span></span>)
                  .setPriority(<span class="pl-smi">Priority</span><span class="pl-c1"><span class="pl-k">.</span>MEDIUM</span>)
@@ -153,11 +180,11 @@
                  .getAsJSONObject(<span class="pl-k">new</span> <span class="pl-smi">JSONObjectRequestListener</span>() {
                     <span class="pl-k">@Override</span>
                     <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onResponse</span>(<span class="pl-smi">JSONObject</span> <span class="pl-v">response</span>) {
-                    <span class="pl-c">// do anything with response</span>
+                      <span class="pl-c">// do anything with response</span>
                     }
                     <span class="pl-k">@Override</span>
                     <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onError</span>(<span class="pl-smi">ANError</span> <span class="pl-v">error</span>) {
-                    <span class="pl-c">// handle error</span>
+                      <span class="pl-c">// handle error</span>
                     }
                 });               </pre></div>
 
@@ -165,7 +192,7 @@
 <a id="using-it-with-your-own-java-object---json-parser" class="anchor" href="#using-it-with-your-own-java-object---json-parser" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Using it with your own JAVA Object - JSON Parser</h3>
 
 <div class="highlight highlight-source-java"><pre><span class="pl-c">/*--------------Example One -&gt; Getting the userList----------------*/</span>
-<span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>get(<span class="pl-s"><span class="pl-pds">"</span>http://api.localhost.com/getAllUsers/{pageNumber}<span class="pl-pds">"</span></span>)
+<span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>get(<span class="pl-s"><span class="pl-pds">"</span>https://fierce-cove-29863.herokuapp.com/getAllUsers/{pageNumber}<span class="pl-pds">"</span></span>)
                 .addPathParameter(<span class="pl-s"><span class="pl-pds">"</span>pageNumber<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span>)
                 .addQueryParameter(<span class="pl-s"><span class="pl-pds">"</span>limit<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>3<span class="pl-pds">"</span></span>)
                 .setTag(<span class="pl-v">this</span>)
@@ -174,13 +201,13 @@
                 .getAsParsed(<span class="pl-k">new</span> <span class="pl-k">TypeToken&lt;<span class="pl-k">List&lt;<span class="pl-smi">User</span>&gt;</span>&gt;</span>() {}, <span class="pl-k">new</span> <span class="pl-k">ParsedRequestListener&lt;<span class="pl-k">List&lt;<span class="pl-smi">User</span>&gt;</span>&gt;</span>() {
                     <span class="pl-k">@Override</span>
                     <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onResponse</span>(<span class="pl-k">List&lt;<span class="pl-smi">User</span>&gt;</span> <span class="pl-v">users</span>) {
-                    <span class="pl-c">// do anything with response</span>
-                    <span class="pl-smi">Log</span><span class="pl-k">.</span>d(<span class="pl-c1">TAG</span>, <span class="pl-s"><span class="pl-pds">"</span>userList size : <span class="pl-pds">"</span></span> <span class="pl-k">+</span> users<span class="pl-k">.</span>size());
-                    <span class="pl-k">for</span> (<span class="pl-smi">User</span> user <span class="pl-k">:</span> users) {
+                      <span class="pl-c">// do anything with response</span>
+                      <span class="pl-smi">Log</span><span class="pl-k">.</span>d(<span class="pl-c1">TAG</span>, <span class="pl-s"><span class="pl-pds">"</span>userList size : <span class="pl-pds">"</span></span> <span class="pl-k">+</span> users<span class="pl-k">.</span>size());
+                      <span class="pl-k">for</span> (<span class="pl-smi">User</span> user <span class="pl-k">:</span> users) {
                         <span class="pl-smi">Log</span><span class="pl-k">.</span>d(<span class="pl-c1">TAG</span>, <span class="pl-s"><span class="pl-pds">"</span>id : <span class="pl-pds">"</span></span> <span class="pl-k">+</span> user<span class="pl-k">.</span>id);
                         <span class="pl-smi">Log</span><span class="pl-k">.</span>d(<span class="pl-c1">TAG</span>, <span class="pl-s"><span class="pl-pds">"</span>firstname : <span class="pl-pds">"</span></span> <span class="pl-k">+</span> user<span class="pl-k">.</span>firstname);
                         <span class="pl-smi">Log</span><span class="pl-k">.</span>d(<span class="pl-c1">TAG</span>, <span class="pl-s"><span class="pl-pds">"</span>lastname : <span class="pl-pds">"</span></span> <span class="pl-k">+</span> user<span class="pl-k">.</span>lastname);
-                    }
+                      }
                     }
                     <span class="pl-k">@Override</span>
                     <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onError</span>(<span class="pl-smi">ANError</span> <span class="pl-v">anError</span>) {
@@ -188,7 +215,7 @@
                     }
                 });
 <span class="pl-c">/*--------------Example Two -&gt; Getting an user----------------*/</span>
-<span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>get(<span class="pl-s"><span class="pl-pds">"</span>http://api.localhost.com/getAnUser/{userId}<span class="pl-pds">"</span></span>)
+<span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>get(<span class="pl-s"><span class="pl-pds">"</span>https://fierce-cove-29863.herokuapp.com/getAnUserDetail/{userId}<span class="pl-pds">"</span></span>)
                 .addPathParameter(<span class="pl-s"><span class="pl-pds">"</span>userId<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>1<span class="pl-pds">"</span></span>)
                 .setTag(<span class="pl-v">this</span>)
                 .setPriority(<span class="pl-smi">Priority</span><span class="pl-c1"><span class="pl-k">.</span>LOW</span>)
@@ -196,14 +223,14 @@
                 .getAsParsed(<span class="pl-k">new</span> <span class="pl-k">TypeToken&lt;<span class="pl-smi">User</span>&gt;</span>() {}, <span class="pl-k">new</span> <span class="pl-k">ParsedRequestListener&lt;<span class="pl-smi">User</span>&gt;</span>() {
                      <span class="pl-k">@Override</span>
                      <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onResponse</span>(<span class="pl-smi">User</span> <span class="pl-v">user</span>) {
-                     <span class="pl-c">// do anything with response</span>
-                         <span class="pl-smi">Log</span><span class="pl-k">.</span>d(<span class="pl-c1">TAG</span>, <span class="pl-s"><span class="pl-pds">"</span>id : <span class="pl-pds">"</span></span> <span class="pl-k">+</span> user<span class="pl-k">.</span>id);
-                         <span class="pl-smi">Log</span><span class="pl-k">.</span>d(<span class="pl-c1">TAG</span>, <span class="pl-s"><span class="pl-pds">"</span>firstname : <span class="pl-pds">"</span></span> <span class="pl-k">+</span> user<span class="pl-k">.</span>firstname);
-                         <span class="pl-smi">Log</span><span class="pl-k">.</span>d(<span class="pl-c1">TAG</span>, <span class="pl-s"><span class="pl-pds">"</span>lastname : <span class="pl-pds">"</span></span> <span class="pl-k">+</span> user<span class="pl-k">.</span>lastname);
+                        <span class="pl-c">// do anything with response</span>
+                        <span class="pl-smi">Log</span><span class="pl-k">.</span>d(<span class="pl-c1">TAG</span>, <span class="pl-s"><span class="pl-pds">"</span>id : <span class="pl-pds">"</span></span> <span class="pl-k">+</span> user<span class="pl-k">.</span>id);
+                        <span class="pl-smi">Log</span><span class="pl-k">.</span>d(<span class="pl-c1">TAG</span>, <span class="pl-s"><span class="pl-pds">"</span>firstname : <span class="pl-pds">"</span></span> <span class="pl-k">+</span> user<span class="pl-k">.</span>firstname);
+                        <span class="pl-smi">Log</span><span class="pl-k">.</span>d(<span class="pl-c1">TAG</span>, <span class="pl-s"><span class="pl-pds">"</span>lastname : <span class="pl-pds">"</span></span> <span class="pl-k">+</span> user<span class="pl-k">.</span>lastname);
                      }
                      <span class="pl-k">@Override</span>
                      <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onError</span>(<span class="pl-smi">ANError</span> <span class="pl-v">anError</span>) {
-                      <span class="pl-c">// handle error</span>
+                        <span class="pl-c">// handle error</span>
                      }
                  }); 
 <span class="pl-c">/*-- Note : TypeToken and getAsParsed is important here --*/</span>              </pre></div>
@@ -218,17 +245,17 @@
                  .setDownloadProgressListener(<span class="pl-k">new</span> <span class="pl-smi">DownloadProgressListener</span>() {
                     <span class="pl-k">@Override</span>
                     <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onProgress</span>(<span class="pl-k">long</span> <span class="pl-v">bytesDownloaded</span>, <span class="pl-k">long</span> <span class="pl-v">totalBytes</span>) {
-                    <span class="pl-c">// do anything with progress  </span>
+                      <span class="pl-c">// do anything with progress  </span>
                     }
                  })
                  .startDownload(<span class="pl-k">new</span> <span class="pl-smi">DownloadListener</span>() {
                     <span class="pl-k">@Override</span>
                     <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onDownloadComplete</span>() {
-                    <span class="pl-c">// do anything after completion</span>
+                      <span class="pl-c">// do anything after completion</span>
                     }
                     <span class="pl-k">@Override</span>
                     <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onError</span>(<span class="pl-smi">ANError</span> <span class="pl-v">error</span>) {
-                    <span class="pl-c">// handle error    </span>
+                      <span class="pl-c">// handle error    </span>
                     }
                 });                 </pre></div>
 
@@ -243,23 +270,19 @@
                  .setUploadProgressListener(<span class="pl-k">new</span> <span class="pl-smi">UploadProgressListener</span>() {
                     <span class="pl-k">@Override</span>
                     <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onProgress</span>(<span class="pl-k">long</span> <span class="pl-v">bytesUploaded</span>, <span class="pl-k">long</span> <span class="pl-v">totalBytes</span>) {
-                    <span class="pl-c">// do anything with progress </span>
+                      <span class="pl-c">// do anything with progress </span>
                     }
                  })
                  .getAsJSONObject(<span class="pl-k">new</span> <span class="pl-smi">JSONObjectRequestListener</span>() {
                     <span class="pl-k">@Override</span>
                     <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onResponse</span>(<span class="pl-smi">JSONObject</span> <span class="pl-v">response</span>) {
-                    <span class="pl-c">// do anything with response                </span>
+                      <span class="pl-c">// do anything with response                </span>
                     }
                     <span class="pl-k">@Override</span>
                     <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onError</span>(<span class="pl-smi">ANError</span> <span class="pl-v">error</span>) {
-                    <span class="pl-c">// handle error </span>
+                      <span class="pl-c">// handle error </span>
                     }
                  }); </pre></div>
-
-<h3>
-<a id="how-to-use-fast-android-networking-with-rxjava---click-here" class="anchor" href="#how-to-use-fast-android-networking-with-rxjava---click-here" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><a href="https://github.com/amitshekhariitbhu/Fast-Android-Networking/blob/master/RxAndroidNetworking.md">How to use Fast Android Networking with RxJava? - Click Here</a>
-</h3>
 
 <h3>
 <a id="getting-response-and-completion-in-an-another-thread-executor" class="anchor" href="#getting-response-and-completion-in-an-another-thread-executor" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Getting Response and completion in an another thread executor</h3>
@@ -275,18 +298,18 @@
                  .setUploadProgressListener(<span class="pl-k">new</span> <span class="pl-smi">UploadProgressListener</span>() {
                     <span class="pl-k">@Override</span>
                     <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onProgress</span>(<span class="pl-k">long</span> <span class="pl-v">bytesUploaded</span>, <span class="pl-k">long</span> <span class="pl-v">totalBytes</span>) {
-                    <span class="pl-c">// do anything with progress </span>
+                      <span class="pl-c">// do anything with progress </span>
                     }
                  })
                  .getAsJSONObject(<span class="pl-k">new</span> <span class="pl-smi">JSONObjectRequestListener</span>() {
                     <span class="pl-k">@Override</span>
                     <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onResponse</span>(<span class="pl-smi">JSONObject</span> <span class="pl-v">response</span>) {
-                    <span class="pl-c">// below code will be executed in the executor provided</span>
-                    <span class="pl-c">// do anything with response                </span>
+                      <span class="pl-c">// below code will be executed in the executor provided</span>
+                      <span class="pl-c">// do anything with response                </span>
                     }
                     <span class="pl-k">@Override</span>
                     <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onError</span>(<span class="pl-smi">ANError</span> <span class="pl-v">error</span>) {
-                    <span class="pl-c">// handle error </span>
+                      <span class="pl-c">// handle error </span>
                     }
                  }); </pre></div>
 
@@ -301,17 +324,17 @@
                  .setDownloadProgressListener(<span class="pl-k">new</span> <span class="pl-smi">DownloadProgressListener</span>() {
                     <span class="pl-k">@Override</span>
                     <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onProgress</span>(<span class="pl-k">long</span> <span class="pl-v">bytesDownloaded</span>, <span class="pl-k">long</span> <span class="pl-v">totalBytes</span>) {
-                    <span class="pl-c">// do anything with progress  </span>
+                      <span class="pl-c">// do anything with progress  </span>
                     }
                  })
                  .startDownload(<span class="pl-k">new</span> <span class="pl-smi">DownloadListener</span>() {
                     <span class="pl-k">@Override</span>
                     <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onDownloadComplete</span>() {
-                    <span class="pl-c">// do anything after completion</span>
+                      <span class="pl-c">// do anything after completion</span>
                     }
                     <span class="pl-k">@Override</span>
                     <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onError</span>(<span class="pl-smi">ANError</span> <span class="pl-v">error</span>) {
-                    <span class="pl-c">// handle error    </span>
+                      <span class="pl-c">// handle error    </span>
                     }
                 });   </pre></div>
 
@@ -357,7 +380,7 @@
                     }
                     <span class="pl-k">@Override</span>
                     <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onError</span>(<span class="pl-smi">ANError</span> <span class="pl-v">error</span>) {
-                    <span class="pl-c">// handle error</span>
+                      <span class="pl-c">// handle error</span>
                     }
                 });</pre></div>
 
@@ -366,10 +389,10 @@
 
 <div class="highlight highlight-source-java"><pre><span class="pl-k">public</span> <span class="pl-k">void</span> onError(<span class="pl-smi">ANError</span> error) {
                            <span class="pl-k">if</span> (error<span class="pl-k">.</span>getErrorCode() <span class="pl-k">!=</span> <span class="pl-c1">0</span>) {
-                           <span class="pl-c">// received error from server</span>
-                           <span class="pl-c">// error.getErrorCode() - the error code from server</span>
-                           <span class="pl-c">// error.getErrorBody() - the error body from server</span>
-                           <span class="pl-c">// error.getErrorDetail() - just an error detail</span>
+                                <span class="pl-c">// received error from server</span>
+                                <span class="pl-c">// error.getErrorCode() - the error code from server</span>
+                                <span class="pl-c">// error.getErrorBody() - the error body from server</span>
+                                <span class="pl-c">// error.getErrorDetail() - just an error detail</span>
                                 <span class="pl-smi">Log</span><span class="pl-k">.</span>d(<span class="pl-c1">TAG</span>, <span class="pl-s"><span class="pl-pds">"</span>onError errorCode : <span class="pl-pds">"</span></span> <span class="pl-k">+</span> error<span class="pl-k">.</span>getErrorCode());
                                 <span class="pl-smi">Log</span><span class="pl-k">.</span>d(<span class="pl-c1">TAG</span>, <span class="pl-s"><span class="pl-pds">"</span>onError errorBody : <span class="pl-pds">"</span></span> <span class="pl-k">+</span> error<span class="pl-k">.</span>getErrorBody());
                                 <span class="pl-smi">Log</span><span class="pl-k">.</span>d(<span class="pl-c1">TAG</span>, <span class="pl-s"><span class="pl-pds">"</span>onError errorDetail : <span class="pl-pds">"</span></span> <span class="pl-k">+</span> error<span class="pl-k">.</span>getErrorDetail());
@@ -388,7 +411,7 @@
 <h3>
 <a id="prefetch-a-request-so-that-it-can-return-from-cache-when-required-at-instant" class="anchor" href="#prefetch-a-request-so-that-it-can-return-from-cache-when-required-at-instant" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Prefetch a request (so that it can return from cache when required at instant)</h3>
 
-<div class="highlight highlight-source-java"><pre><span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>get(<span class="pl-smi">ApiEndPoint</span><span class="pl-c1"><span class="pl-k">.</span>BASE_URL</span> <span class="pl-k">+</span> <span class="pl-smi">ApiEndPoint</span><span class="pl-c1"><span class="pl-k">.</span>GET_JSON_ARRAY</span>)
+<div class="highlight highlight-source-java"><pre><span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>get(<span class="pl-s"><span class="pl-pds">"</span>https://fierce-cove-29863.herokuapp.com/getAllUsers/{pageNumber}<span class="pl-pds">"</span></span>)
                 .addPathParameter(<span class="pl-s"><span class="pl-pds">"</span>pageNumber<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span>)
                 .addQueryParameter(<span class="pl-s"><span class="pl-pds">"</span>limit<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>30<span class="pl-pds">"</span></span>)
                 .setTag(<span class="pl-v">this</span>)
@@ -403,7 +426,7 @@
                 .addInterceptor(<span class="pl-k">new</span> <span class="pl-smi">GzipRequestInterceptor</span>())
                 .build();
 
-<span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>get(<span class="pl-s"><span class="pl-pds">"</span>http://api.localhost.com/{pageNumber}/test<span class="pl-pds">"</span></span>)
+<span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>get(<span class="pl-s"><span class="pl-pds">"</span>https://fierce-cove-29863.herokuapp.com/getAllUsers/{pageNumber}<span class="pl-pds">"</span></span>)
                  .addPathParameter(<span class="pl-s"><span class="pl-pds">"</span>pageNumber<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span>)
                  .addQueryParameter(<span class="pl-s"><span class="pl-pds">"</span>limit<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>3<span class="pl-pds">"</span></span>)
                  .addHeaders(<span class="pl-s"><span class="pl-pds">"</span>token<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>1234<span class="pl-pds">"</span></span>)
@@ -414,7 +437,7 @@
                  .getAsJSONArray(<span class="pl-k">new</span> <span class="pl-smi">JSONArrayRequestListener</span>() {
                     <span class="pl-k">@Override</span>
                     <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onResponse</span>(<span class="pl-smi">JSONArray</span> <span class="pl-v">response</span>) {
-                    <span class="pl-c">// do anything with response</span>
+                      <span class="pl-c">// do anything with response</span>
                     }
                     <span class="pl-k">@Override</span>
                     <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onError</span>(<span class="pl-smi">ANError</span> <span class="pl-v">error</span>) {
@@ -440,11 +463,11 @@
 anRequest<span class="pl-k">.</span>getAsJSONObject(<span class="pl-k">new</span> <span class="pl-smi">JSONObjectRequestListener</span>() {
     <span class="pl-k">@Override</span>
     <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onResponse</span>(<span class="pl-smi">JSONObject</span> <span class="pl-v">response</span>) {
-        <span class="pl-c">// do anything with response</span>
+      <span class="pl-c">// do anything with response</span>
     }
     <span class="pl-k">@Override</span>
     <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onError</span>(<span class="pl-smi">ANError</span> <span class="pl-v">error</span>) {
-        <span class="pl-c">// handle error</span>
+      <span class="pl-c">// handle error</span>
     }
 });</pre></div>
 
@@ -455,7 +478,7 @@ anRequest<span class="pl-k">.</span>getAsJSONObject(<span class="pl-k">new</span
 <span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>setConnectionQualityChangeListener(<span class="pl-k">new</span> <span class="pl-smi">ConnectionQualityChangeListener</span>() {
             <span class="pl-k">@Override</span>
             <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onChange</span>(<span class="pl-smi">ConnectionQuality</span> <span class="pl-v">currentConnectionQuality</span>, <span class="pl-k">int</span> <span class="pl-v">currentBandwidth</span>) {
-                <span class="pl-c">// do something on change in connectionQuality</span>
+              <span class="pl-c">// do something on change in connectionQuality</span>
             }
         });
 
@@ -464,12 +487,12 @@ anRequest<span class="pl-k">.</span>getAsJSONObject(<span class="pl-k">new</span
 
 <span class="pl-c">// Getting current ConnectionQuality</span>
 <span class="pl-smi">ConnectionQuality</span> connectionQuality <span class="pl-k">=</span> <span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>getCurrentConnectionQuality();
-<span class="pl-k">if</span>(connectionQuality <span class="pl-k">==</span> <span class="pl-smi">ConnectionQuality</span><span class="pl-c1"><span class="pl-k">.</span>EXCELLENT</span>){
-<span class="pl-c">// do something</span>
-}<span class="pl-k">else</span> <span class="pl-k">if</span> (connectionQuality <span class="pl-k">==</span> <span class="pl-smi">ConnectionQuality</span><span class="pl-c1"><span class="pl-k">.</span>POOR</span>){
-<span class="pl-c">// do something</span>
-}<span class="pl-k">else</span> <span class="pl-k">if</span> (connectionQuality <span class="pl-k">==</span> <span class="pl-smi">ConnectionQuality</span><span class="pl-c1"><span class="pl-k">.</span>UNKNOWN</span>){
-<span class="pl-c">// do something</span>
+<span class="pl-k">if</span>(connectionQuality <span class="pl-k">==</span> <span class="pl-smi">ConnectionQuality</span><span class="pl-c1"><span class="pl-k">.</span>EXCELLENT</span>) {
+  <span class="pl-c">// do something</span>
+} <span class="pl-k">else</span> <span class="pl-k">if</span> (connectionQuality <span class="pl-k">==</span> <span class="pl-smi">ConnectionQuality</span><span class="pl-c1"><span class="pl-k">.</span>POOR</span>) {
+  <span class="pl-c">// do something</span>
+} <span class="pl-k">else</span> <span class="pl-k">if</span> (connectionQuality <span class="pl-k">==</span> <span class="pl-smi">ConnectionQuality</span><span class="pl-c1"><span class="pl-k">.</span>UNKNOWN</span>) {
+  <span class="pl-c">// do something</span>
 }
 <span class="pl-c">// Getting current bandwidth</span>
 <span class="pl-k">int</span> currentBandwidth <span class="pl-k">=</span> <span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>getCurrentBandwidth(); <span class="pl-c">// Note : if (currentBandwidth == 0) : means UNKNOWN</span></pre></div>
@@ -493,17 +516,17 @@ anRequest<span class="pl-k">.</span>getAsJSONObject(<span class="pl-k">new</span
                  .setDownloadProgressListener(<span class="pl-k">new</span> <span class="pl-smi">DownloadProgressListener</span>() {
                     <span class="pl-k">@Override</span>
                     <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onProgress</span>(<span class="pl-k">long</span> <span class="pl-v">bytesDownloaded</span>, <span class="pl-k">long</span> <span class="pl-v">totalBytes</span>) {
-                    <span class="pl-c">// do anything with progress  </span>
+                      <span class="pl-c">// do anything with progress  </span>
                     }
                  })
                  .startDownload(<span class="pl-k">new</span> <span class="pl-smi">DownloadListener</span>() {
                     <span class="pl-k">@Override</span>
                     <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onDownloadComplete</span>() {
-                    <span class="pl-c">// do anything after completion</span>
+                      <span class="pl-c">// do anything after completion</span>
                     }
                     <span class="pl-k">@Override</span>
                     <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onError</span>(<span class="pl-smi">ANError</span> <span class="pl-v">error</span>) {
-                    <span class="pl-c">// handle error    </span>
+                      <span class="pl-c">// handle error    </span>
                     }
                 });  
 <span class="pl-smi">Note</span> <span class="pl-k">:</span> <span class="pl-smi">If</span> bytesSent or bytesReceived is <span class="pl-k">-</span><span class="pl-c1">1</span> , it means it is unknown                </pre></div>
@@ -574,28 +597,13 @@ is not working perfectly in Multipart.</li>
 </ul>
 
 <h3>
-<a id="why-this-library" class="anchor" href="#why-this-library" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Why this library</h3>
-
-<ul>
-<li>Recent removal of HttpClient in Android Marshmallow(Android M) made other networking library obsolete.</li>
-<li>No other single library do each and everything like making request, downloading any type of file, uploading file, loading
-image from network in ImageView, etc. There are libraries but they are outdated.</li>
-<li>No other library provided simple interface for doing all types of things in networking like setting priority, cancelling, etc.</li>
-<li>As it uses <a href="https://github.com/square/okio">Okio</a> , No more GC overhead in android application.
-<a href="https://github.com/square/okio">Okio</a> is made to handle GC overhead while allocating memory.
-<a href="https://github.com/square/okio">Okio</a> do some clever things to save CPU and memory.</li>
-<li>As it uses <a href="http://square.github.io/okhttp/">OkHttp</a> , most important it supports HTTP/2.<br>
-</li>
-</ul>
-
-<h3>
 <a id="difference-over-other-networking-library" class="anchor" href="#difference-over-other-networking-library" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Difference over other Networking Library</h3>
 
 <ul>
 <li>In Fast Android Networking Library, OkHttpClient can be customized for every request easily.</li>
 <li>As Fast Android Networking Library uses <a href="http://square.github.io/okhttp/">OkHttp</a> and <a href="https://github.com/square/okio">Okio</a>, it is faster.</li>
 <li>Single library for all type of networking.</li>
-<li>Supports RxJava -&gt; <a href="https://github.com/amitshekhariitbhu/Fast-Android-Networking/blob/master/RxAndroidNetworking.md">Check here</a>
+<li>Supports RxJava -&gt; <a href="https://github.com/amitshekhariitbhu/Fast-Android-Networking/wiki/Using-Fast-Android-Networking-Library-With-RxJava">Check here</a>
 </li>
 <li>Current bandwidth and connection quality can be obtained to decide logic of code.</li>
 <li>Executor can be passed to any request to get response in another thread.</li>
@@ -629,7 +637,7 @@ used by Fast Android Networking is developed by <a href="https://square.github.i
 <a href="https://android.googlesource.com/platform/frameworks/volley/">Volley</a> - As Fast Android Networking uses ImageLoader that is developed by <a href="https://android.googlesource.com/platform/frameworks/volley/">Volley</a>.<br>
 </li>
 <li>
-<a href="https://github.com/PrashantGupta17">Prashant Gupta</a> - For RxJava Support - <a href="https://github.com/amitshekhariitbhu/Fast-Android-Networking/blob/master/RxAndroidNetworking.md">RxJava Support</a>
+<a href="https://github.com/PrashantGupta17">Prashant Gupta</a> - For RxJava Support - <a href="https://github.com/amitshekhariitbhu/Fast-Android-Networking/wiki/Using-Fast-Android-Networking-Library-With-RxJava">RxJava Support</a>
 </li>
 </ul>
 
