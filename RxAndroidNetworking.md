@@ -517,6 +517,7 @@ RxAndroidNetworking.download("http://i.imgur.com/AtbX9iX.png",dirPath,imgurimage
 ```java
 RxAndroidNetworking.upload("https://fierce-cove-29863.herokuapp.com/uploadImage")
                  .addMultipartFile("image", new File(imageFilePath)) 
+                 .addMultipartParameter("key","value") 
                  .build()
                  .setUploadProgressListener(new UploadProgressListener() {
                     @Override
