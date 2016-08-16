@@ -28,6 +28,7 @@ Fast Android Networking Library takes care of each and everything. So you don't 
 
 ### Show some :heart:
 * Be sure to click the "<b>Star</b>" button in the upper right of this page.
+
 [![GitHub stars](https://img.shields.io/github/stars/amitshekhariitbhu/Fast-Android-Networking.svg?style=social&label=Star)](https://github.com/amitshekhariitbhu/Fast-Android-Networking) [![GitHub forks](https://img.shields.io/github/forks/amitshekhariitbhu/Fast-Android-Networking.svg?style=social&label=Fork)](https://github.com/amitshekhariitbhu/Fast-Android-Networking/fork)  [![GitHub followers](https://img.shields.io/github/followers/amitshekhariitbhu.svg?style=social&label=Follow)](https://github.com/amitshekhariitbhu)  
 [![Twitter Follow](https://img.shields.io/twitter/follow/amitiitbhu.svg?style=social)](https://twitter.com/amitiitbhu)
 
