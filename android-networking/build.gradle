@@ -42,4 +42,4 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.2.0'
     compile 'com.google.code.gson:gson:2.7'
 }
-apply from: 'upload.gradle'
+//apply from: 'upload.gradle'

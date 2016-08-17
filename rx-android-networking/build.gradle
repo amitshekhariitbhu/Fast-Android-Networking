@@ -43,4 +43,4 @@ dependencies {
     compile 'io.reactivex:rxjava:1.1.6'
     compile project(':android-networking')
 }
-apply from: 'rx-upload.gradle'
+//apply from: 'rx-upload.gradle'
