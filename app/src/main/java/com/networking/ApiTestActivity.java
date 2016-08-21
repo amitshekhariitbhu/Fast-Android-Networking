@@ -262,7 +262,6 @@ public class ApiTestActivity extends AppCompatActivity {
         AndroidNetworking.post(ApiEndPoint.BASE_URL + ApiEndPoint.POST_CREATE_AN_USER)
                 .addBodyParameter("firstname", "Suman")
                 .addBodyParameter("lastname", "Shekhar")
-                .setContentType("text/x-markdown; charset=utf-8")
                 .setTag(this)
                 .setPriority(Priority.LOW)
                 .build()
