@@ -28,6 +28,7 @@ import com.androidnetworking.common.ANConstants;
 import com.androidnetworking.common.ANData;
 import com.androidnetworking.common.ANRequest;
 import com.androidnetworking.common.ConnectionClassManager;
+import com.androidnetworking.common.RESPONSE;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.utils.Utils;
 
@@ -121,8 +122,12 @@ public class InternalNetworking {
             data.url = okResponse.request().url();
             data.code = okResponse.code();
             data.headers = okResponse.headers();
-            data.body = okResponse.body();
-            data.length = data.body.contentLength();
+            if (request.getResponseAs() != RESPONSE.OK_HTTP_RESPONSE) {
+                data.body = okResponse.body();
+                data.length = data.body.contentLength();
+            } else {
+                data.length = okResponse.body().contentLength();
+            }
             final long timeTaken = System.currentTimeMillis() - startTime;
             if (okResponse.cacheResponse() == null) {
                 final long finalBytes = TrafficStats.getTotalRxBytes();
@@ -140,6 +145,10 @@ public class InternalNetworking {
                 } else {
                     Utils.sendAnalytics(request.getAnalyticsListener(), timeTaken, (requestBody != null && requestBody.contentLength() != 0) ? requestBody.contentLength() : -1, 0, true);
                 }
+            }
+            if (request.getResponseAs() == RESPONSE.OK_HTTP_RESPONSE) {
+                request.deliverOkHttpResponse(okResponse);
+                return null;
             }
         } catch (IOException ioe) {
             if (okHttpRequest != null) {
@@ -276,8 +285,12 @@ public class InternalNetworking {
             data.url = okResponse.request().url();
             data.code = okResponse.code();
             data.headers = okResponse.headers();
-            data.body = okResponse.body();
-            data.length = data.body.contentLength();
+            if (request.getResponseAs() != RESPONSE.OK_HTTP_RESPONSE) {
+                data.body = okResponse.body();
+                data.length = data.body.contentLength();
+            } else {
+                data.length = okResponse.body().contentLength();
+            }
             final long timeTaken = System.currentTimeMillis() - startTime;
             if (request.getAnalyticsListener() != null) {
                 if (okResponse.cacheResponse() == null) {
@@ -289,6 +302,10 @@ public class InternalNetworking {
                         Utils.sendAnalytics(request.getAnalyticsListener(), timeTaken, requestBodyLength != 0 ? requestBodyLength : -1, 0, true);
                     }
                 }
+            }
+            if (request.getResponseAs() == RESPONSE.OK_HTTP_RESPONSE) {
+                request.deliverOkHttpResponse(okResponse);
+                return null;
             }
         } catch (IOException ioe) {
             if (okHttpRequest != null) {

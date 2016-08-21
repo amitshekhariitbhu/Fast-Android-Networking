@@ -66,6 +66,9 @@ public class InternalRunnable implements Runnable {
         ANData data = null;
         try {
             data = InternalNetworking.performSimpleRequest(request);
+            if (data == null) {
+                return;
+            }
             if (data.code == 304) {
                 request.finish();
                 return;
@@ -111,6 +114,9 @@ public class InternalRunnable implements Runnable {
         ANData data = null;
         try {
             data = InternalNetworking.performDownloadRequest(request);
+            if (data == null) {
+                return;
+            }
             if (data.code >= 400) {
                 ANError anError = new ANError();
                 anError = request.parseNetworkError(anError);
@@ -136,6 +142,9 @@ public class InternalRunnable implements Runnable {
         ANData data = null;
         try {
             data = InternalNetworking.performUploadRequest(request);
+            if (data == null) {
+                return;
+            }
             if (data.code == 304) {
                 request.finish();
                 return;

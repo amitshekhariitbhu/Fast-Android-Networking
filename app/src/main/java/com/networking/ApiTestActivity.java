@@ -33,6 +33,7 @@ import com.androidnetworking.interfaces.DownloadListener;
 import com.androidnetworking.interfaces.DownloadProgressListener;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.androidnetworking.interfaces.OkHttpResponseListener;
 import com.androidnetworking.interfaces.ParsedRequestListener;
 import com.androidnetworking.interfaces.UploadProgressListener;
 import com.google.gson.reflect.TypeToken;
@@ -44,11 +45,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
+import okhttp3.Response;
 
 /**
  * Created by amitshekhar on 30/03/16.
@@ -259,6 +262,7 @@ public class ApiTestActivity extends AppCompatActivity {
         AndroidNetworking.post(ApiEndPoint.BASE_URL + ApiEndPoint.POST_CREATE_AN_USER)
                 .addBodyParameter("firstname", "Suman")
                 .addBodyParameter("lastname", "Shekhar")
+                .setContentType("text/x-markdown; charset=utf-8")
                 .setTag(this)
                 .setPriority(Priority.LOW)
                 .build()
@@ -829,8 +833,136 @@ public class ApiTestActivity extends AppCompatActivity {
                 });
     }
 
+    public void checkOkHttpResponse(View view) {
+
+        AndroidNetworking.get(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_ARRAY)
+                .addPathParameter("pageNumber", "0")
+                .addQueryParameter("limit", "3")
+                .setTag(this)
+                .setPriority(Priority.LOW)
+                .build()
+                .setAnalyticsListener(new AnalyticsListener() {
+                    @Override
+                    public void onReceived(long timeTakenInMillis, long bytesSent, long bytesReceived, boolean isFromCache) {
+                        Log.d(TAG, " timeTakenInMillis : " + timeTakenInMillis);
+                        Log.d(TAG, " bytesSent : " + bytesSent);
+                        Log.d(TAG, " bytesReceived : " + bytesReceived);
+                        Log.d(TAG, " isFromCache : " + isFromCache);
+                    }
+                })
+                .getAsOkHttpResponse(new OkHttpResponseListener() {
+                    @Override
+                    public void onResponse(Response response) {
+                        if (response != null) {
+                            if (response.isSuccessful()) {
+                                Log.d(TAG, "response is successful");
+                                try {
+                                    Log.d(TAG, "response : " + response.body().source().readUtf8());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                Log.d(TAG, "response is not successful");
+                            }
+                        } else {
+                            Log.d(TAG, "response is null");
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Utils.logError(TAG, anError);
+                    }
+                });
+
+        AndroidNetworking.post(ApiEndPoint.BASE_URL + ApiEndPoint.POST_CREATE_AN_USER)
+                .addBodyParameter("firstname", "Suman")
+                .addBodyParameter("lastname", "Shekhar")
+                .setTag(this)
+                .setPriority(Priority.LOW)
+                .build()
+                .setAnalyticsListener(new AnalyticsListener() {
+                    @Override
+                    public void onReceived(long timeTakenInMillis, long bytesSent, long bytesReceived, boolean isFromCache) {
+                        Log.d(TAG, " timeTakenInMillis : " + timeTakenInMillis);
+                        Log.d(TAG, " bytesSent : " + bytesSent);
+                        Log.d(TAG, " bytesReceived : " + bytesReceived);
+                        Log.d(TAG, " isFromCache : " + isFromCache);
+                    }
+                })
+                .getAsOkHttpResponse(new OkHttpResponseListener() {
+                    @Override
+                    public void onResponse(Response response) {
+                        if (response != null) {
+                            if (response.isSuccessful()) {
+                                Log.d(TAG, "response is successful");
+                                try {
+                                    Log.d(TAG, "response : " + response.body().source().readUtf8());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                Log.d(TAG, "response is not successful");
+                            }
+                        } else {
+                            Log.d(TAG, "response is null");
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Utils.logError(TAG, anError);
+                    }
+                });
+
+        AndroidNetworking.upload(ApiEndPoint.BASE_URL + ApiEndPoint.UPLOAD_IMAGE)
+                .setPriority(Priority.MEDIUM)
+                .addMultipartFile("image", new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "test.png"))
+                .setTag(this)
+                .build()
+                .setAnalyticsListener(new AnalyticsListener() {
+                    @Override
+                    public void onReceived(long timeTakenInMillis, long bytesSent, long bytesReceived, boolean isFromCache) {
+                        Log.d(TAG, " timeTakenInMillis : " + timeTakenInMillis);
+                        Log.d(TAG, " bytesSent : " + bytesSent);
+                        Log.d(TAG, " bytesReceived : " + bytesReceived);
+                        Log.d(TAG, " isFromCache : " + isFromCache);
+                    }
+                })
+                .setUploadProgressListener(new UploadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesUploaded, long totalBytes) {
+                        Log.d(TAG, "bytesUploaded : " + bytesUploaded + " totalBytes : " + totalBytes);
+                        Log.d(TAG, "setUploadProgressListener isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
+                    }
+                })
+                .getAsOkHttpResponse(new OkHttpResponseListener() {
+                    @Override
+                    public void onResponse(Response response) {
+                        if (response != null) {
+                            if (response.isSuccessful()) {
+                                Log.d(TAG, "response is successful");
+                                try {
+                                    Log.d(TAG, "response : " + response.body().source().readUtf8());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                Log.d(TAG, "response is not successful");
+                            }
+                        } else {
+                            Log.d(TAG, "response is null");
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Utils.logError(TAG, anError);
+                    }
+                });
+    }
+
     public void getCurrentConnectionQuality(View view) {
         Log.d(TAG, "getCurrentConnectionQuality : " + AndroidNetworking.getCurrentConnectionQuality() + " currentBandwidth : " + AndroidNetworking.getCurrentBandwidth());
     }
-
 }

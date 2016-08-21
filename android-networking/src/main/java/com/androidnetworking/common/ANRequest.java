@@ -28,6 +28,7 @@ import com.androidnetworking.interfaces.DownloadListener;
 import com.androidnetworking.interfaces.DownloadProgressListener;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.androidnetworking.interfaces.OkHttpResponseListener;
 import com.androidnetworking.interfaces.ParsedRequestListener;
 import com.androidnetworking.interfaces.StringRequestListener;
 import com.androidnetworking.interfaces.UploadProgressListener;
@@ -55,6 +56,7 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
+import okhttp3.Response;
 import okio.Okio;
 
 /**
@@ -87,6 +89,7 @@ public class ANRequest<T extends ANRequest> {
     private File mFile = null;
     private static final MediaType JSON_MEDIA_TYPE = MediaType.parse("application/json; charset=utf-8");
     private static final MediaType MEDIA_TYPE_MARKDOWN = MediaType.parse("text/x-markdown; charset=utf-8");
+    private MediaType customMediaType = null;
     private static final Object sDecodeLock = new Object();
 
     private Future future;
@@ -98,6 +101,7 @@ public class ANRequest<T extends ANRequest> {
     private JSONArrayRequestListener mJSONArrayRequestListener;
     private JSONObjectRequestListener mJSONObjectRequestListener;
     private StringRequestListener mStringRequestListener;
+    private OkHttpResponseListener mOkHttpResponseListener;
     private BitmapRequestListener mBitmapRequestListener;
     private ParsedRequestListener mParsedRequestListener;
     private DownloadProgressListener mDownloadProgressListener;
@@ -154,6 +158,9 @@ public class ANRequest<T extends ANRequest> {
         this.mExecutor = builder.mExecutor;
         this.mOkHttpClient = builder.mOkHttpClient;
         this.mUserAgent = builder.mUserAgent;
+        if (builder.mCustomContentType != null) {
+            this.customMediaType = MediaType.parse(builder.mCustomContentType);
+        }
     }
 
     public ANRequest(DownloadBuilder builder) {
@@ -207,6 +214,12 @@ public class ANRequest<T extends ANRequest> {
     public void getAsString(StringRequestListener requestListener) {
         this.mResponseAs = RESPONSE.STRING;
         this.mStringRequestListener = requestListener;
+        ANRequestQueue.getInstance().addRequest(this);
+    }
+
+    public void getAsOkHttpResponse(OkHttpResponseListener requestListener) {
+        this.mResponseAs = RESPONSE.OK_HTTP_RESPONSE;
+        this.mOkHttpResponseListener = requestListener;
         ANRequestQueue.getInstance().addRequest(this);
     }
 
@@ -286,6 +299,10 @@ public class ANRequest<T extends ANRequest> {
 
     public void setResponseAs(RESPONSE responseAs) {
         this.mResponseAs = responseAs;
+    }
+
+    public RESPONSE getResponseAs() {
+        return mResponseAs;
     }
 
     public Object getTag() {
@@ -517,6 +534,8 @@ public class ANRequest<T extends ANRequest> {
                     mJSONArrayRequestListener.onError(anError);
                 } else if (mStringRequestListener != null) {
                     mStringRequestListener.onError(anError);
+                } else if (mOkHttpResponseListener != null) {
+                    mOkHttpResponseListener.onError(anError);
                 } else if (mBitmapRequestListener != null) {
                     mBitmapRequestListener.onError(anError);
                 } else if (mDownloadListener != null) {
@@ -596,16 +615,71 @@ public class ANRequest<T extends ANRequest> {
         }
     }
 
+    public void deliverOkHttpResponse(final Response response) {
+        try {
+            isDelivered = true;
+            if (!isCancelled) {
+                if (mExecutor != null) {
+                    mExecutor.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (mOkHttpResponseListener != null) {
+                                mOkHttpResponseListener.onResponse(response);
+                            }
+                            finish();
+                        }
+                    });
+                } else {
+                    Core.getInstance().getExecutorSupplier().forMainThreadTasks().execute(new Runnable() {
+                        public void run() {
+                            if (mOkHttpResponseListener != null) {
+                                mOkHttpResponseListener.onResponse(response);
+                            }
+                            finish();
+                        }
+                    });
+                }
+                ANLog.d("Delivering success : " + toString());
+            } else {
+                ANError anError = new ANError();
+                anError.setCancellationMessageInError();
+                anError.setErrorCode(0);
+                if (mOkHttpResponseListener != null) {
+                    mOkHttpResponseListener.onError(anError);
+                }
+                finish();
+                ANLog.d("Delivering cancelled : " + toString());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public RequestBody getRequestBody() {
         if (mJsonObject != null) {
+            if (customMediaType != null) {
+                return RequestBody.create(customMediaType, mJsonObject.toString());
+            }
             return RequestBody.create(JSON_MEDIA_TYPE, mJsonObject.toString());
         } else if (mJsonArray != null) {
+            if (customMediaType != null) {
+                return RequestBody.create(customMediaType, mJsonArray.toString());
+            }
             return RequestBody.create(JSON_MEDIA_TYPE, mJsonArray.toString());
         } else if (mStringBody != null) {
+            if (customMediaType != null) {
+                return RequestBody.create(customMediaType, mStringBody);
+            }
             return RequestBody.create(MEDIA_TYPE_MARKDOWN, mStringBody);
         } else if (mFile != null) {
+            if (customMediaType != null) {
+                return RequestBody.create(customMediaType, mFile);
+            }
             return RequestBody.create(MEDIA_TYPE_MARKDOWN, mFile);
         } else if (mByte != null) {
+            if (customMediaType != null) {
+                return RequestBody.create(customMediaType, mByte);
+            }
             return RequestBody.create(MEDIA_TYPE_MARKDOWN, mByte);
         } else {
             FormBody.Builder builder = new FormBody.Builder();
@@ -850,6 +924,7 @@ public class ANRequest<T extends ANRequest> {
         private Executor mExecutor;
         private OkHttpClient mOkHttpClient;
         private String mUserAgent;
+        private String mCustomContentType;
 
         public PostRequestBuilder(String url) {
             this.mUrl = url;
@@ -1009,6 +1084,11 @@ public class ANRequest<T extends ANRequest> {
 
         public T addByteBody(byte[] bytes) {
             mByte = bytes;
+            return (T) this;
+        }
+
+        public T setContentType(String contentType) {
+            mCustomContentType = contentType;
             return (T) this;
         }
 

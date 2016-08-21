@@ -24,6 +24,7 @@ public enum RESPONSE {
     STRING,
     JSON_OBJECT,
     JSON_ARRAY,
+    OK_HTTP_RESPONSE,
     BITMAP,
     PREFETCH,
     PARSED
