@@ -59,11 +59,13 @@ image from network in ImageView, etc. There are libraries but they are outdated.
 </ul>
 
 <h3>
-<a id="show-some-heart" class="anchor" href="#show-some-heart" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Show some <g-emoji alias="heart" fallback-src="https://assets-cdn.github.com/images/icons/emoji/unicode/2764.png">❤️</g-emoji>
+<a id="found-this-project-useful-heart" class="anchor" href="#found-this-project-useful-heart" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Found this project useful <g-emoji alias="heart" fallback-src="https://assets-cdn.github.com/images/icons/emoji/unicode/2764.png">❤️</g-emoji>
 </h3>
 
-<p><a href="https://github.com/amitshekhariitbhu/Fast-Android-Networking"><img src="https://img.shields.io/github/stars/amitshekhariitbhu/Fast-Android-Networking.svg?style=social&amp;label=Star" alt="GitHub stars"></a> <a href="https://github.com/amitshekhariitbhu/Fast-Android-Networking/fork"><img src="https://img.shields.io/github/forks/amitshekhariitbhu/Fast-Android-Networking.svg?style=social&amp;label=Fork" alt="GitHub forks"></a>  <a href="https://github.com/amitshekhariitbhu"><img src="https://img.shields.io/github/followers/amitshekhariitbhu.svg?style=social&amp;label=Follow" alt="GitHub followers"></a><br>
-<a href="https://twitter.com/amitiitbhu"><img src="https://img.shields.io/twitter/follow/amitiitbhu.svg?style=social" alt="Twitter Follow"></a></p>
+<ul>
+<li>Support by clicking the <g-emoji alias="star" fallback-src="https://assets-cdn.github.com/images/icons/emoji/unicode/2b50.png">⭐</g-emoji> button on the upper right of this page. <g-emoji alias="v" fallback-src="https://assets-cdn.github.com/images/icons/emoji/unicode/270c.png">✌️</g-emoji>
+</li>
+</ul>
 
 <h2>
 <a id="requirements" class="anchor" href="#requirements" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Requirements</h2>
@@ -264,6 +266,7 @@ image from network in ImageView, etc. There are libraries but they are outdated.
 
 <div class="highlight highlight-source-java"><pre><span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>upload(url)
                  .addMultipartFile(<span class="pl-s"><span class="pl-pds">"</span>image<span class="pl-pds">"</span></span>,file)    
+                 .addMultipartParameter(<span class="pl-s"><span class="pl-pds">"</span>key<span class="pl-pds">"</span></span>,<span class="pl-s"><span class="pl-pds">"</span>value<span class="pl-pds">"</span></span>)
                  .setTag(<span class="pl-s"><span class="pl-pds">"</span>uploadTest<span class="pl-pds">"</span></span>)
                  .setPriority(<span class="pl-smi">Priority</span><span class="pl-c1"><span class="pl-k">.</span>HIGH</span>)
                  .build()
@@ -290,7 +293,8 @@ image from network in ImageView, etc. There are libraries but they are outdated.
 <p>(Note : Error and Progress will always be returned in main thread of application)</p>
 
 <div class="highlight highlight-source-java"><pre><span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>upload(url)
-                 .addMultipartFile(<span class="pl-s"><span class="pl-pds">"</span>image<span class="pl-pds">"</span></span>,file)    
+                 .addMultipartFile(<span class="pl-s"><span class="pl-pds">"</span>image<span class="pl-pds">"</span></span>,file)  
+                 .addMultipartParameter(<span class="pl-s"><span class="pl-pds">"</span>key<span class="pl-pds">"</span></span>,<span class="pl-s"><span class="pl-pds">"</span>value<span class="pl-pds">"</span></span>)  
                  .setTag(<span class="pl-s"><span class="pl-pds">"</span>uploadTest<span class="pl-pds">"</span></span>)
                  .setPriority(<span class="pl-smi">Priority</span><span class="pl-c1"><span class="pl-k">.</span>HIGH</span>)
                  .build()
