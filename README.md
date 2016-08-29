@@ -26,11 +26,8 @@ Fast Android Networking Library takes care of each and everything. So you don't 
 * RxJava Support For Fast Android Networking: [Check here](https://github.com/amitshekhariitbhu/Fast-Android-Networking/wiki/Using-Fast-Android-Networking-Library-With-RxJava)
 * Have an issue or need a feature in Fast Android Networking : [Create an issue](https://github.com/amitshekhariitbhu/Fast-Android-Networking/issues/new)
 
-### Show some :heart:
-* Be sure to click the "<b>Star</b>" button in the upper right of this page. :smile:
-
-[![GitHub stars](https://img.shields.io/github/stars/amitshekhariitbhu/Fast-Android-Networking.svg?style=social&label=Star)](https://github.com/amitshekhariitbhu/Fast-Android-Networking) [![GitHub forks](https://img.shields.io/github/forks/amitshekhariitbhu/Fast-Android-Networking.svg?style=social&label=Fork)](https://github.com/amitshekhariitbhu/Fast-Android-Networking/fork)  [![GitHub followers](https://img.shields.io/github/followers/amitshekhariitbhu.svg?style=social&label=Follow)](https://github.com/amitshekhariitbhu)  
-[![Twitter Follow](https://img.shields.io/twitter/follow/amitiitbhu.svg?style=social)](https://twitter.com/amitiitbhu)
+### Found this project useful :heart:
+* Support by clicking the :star: button on the upper right of this page. :v:
 
 ## Requirements
 
