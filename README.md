@@ -92,9 +92,9 @@ AndroidNetworking.post("https://fierce-cove-29863.herokuapp.com/createAnUser")
                  .setTag("test")
                  .setPriority(Priority.MEDIUM)
                  .build()
-                 .getAsJSONArray(new JSONArrayRequestListener() {
+                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
-                    public void onResponse(JSONArray response) {
+                    public void onResponse(JSONObject response) {
                       // do anything with response
                     }
                     @Override
