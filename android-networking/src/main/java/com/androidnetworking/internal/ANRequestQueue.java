@@ -101,7 +101,12 @@ public class ANRequestQueue {
             cancel(new RequestFilter() {
                 @Override
                 public boolean apply(ANRequest request) {
-                    return request.getTag() == tag;
+                    if (request.getTag() instanceof String && tag instanceof String) {
+                        final String tempRequestTag = (String) request.getTag();
+                        final String tempTag = (String) tag;
+                        return tempRequestTag.equals(tempTag);
+                    }
+                    return request.getTag().equals(tag);
                 }
             }, forceCancel);
         } catch (Exception e) {
