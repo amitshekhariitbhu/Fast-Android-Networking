@@ -1070,6 +1070,46 @@ public class ApiTestActivity extends AppCompatActivity {
                     Utils.logError(TAG, download.getError());
                 }
 
+
+                ANResponse<Response> responseANResponse = AndroidNetworking.get(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_ARRAY)
+                        .addPathParameter("pageNumber", "0")
+                        .addQueryParameter("limit", "3")
+                        .setTag(this)
+                        .setPriority(Priority.LOW)
+                        .build()
+                        .setAnalyticsListener(new AnalyticsListener() {
+                            @Override
+                            public void onReceived(long timeTakenInMillis, long bytesSent, long bytesReceived, boolean isFromCache) {
+                                Log.d(TAG, " timeTakenInMillis : " + timeTakenInMillis);
+                                Log.d(TAG, " bytesSent : " + bytesSent);
+                                Log.d(TAG, " bytesReceived : " + bytesReceived);
+                                Log.d(TAG, " isFromCache : " + isFromCache);
+                            }
+                        })
+                        .getAsOkHttpResponse();
+
+
+                if (responseANResponse.isSuccess()) {
+                    Log.d(TAG, "checkSynchronousCall : okHttpResponse success");
+                    Response okHttpResponse = responseANResponse.getResult();
+                    if (okHttpResponse != null) {
+                        if (okHttpResponse.isSuccessful()) {
+                            Log.d(TAG, "response is successful");
+                            try {
+                                Log.d(TAG, "response : " + okHttpResponse.body().source().readUtf8());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            Log.d(TAG, "response is not successful");
+                        }
+                    } else {
+                        Log.d(TAG, "response is null");
+                    }
+                } else {
+                    Log.d(TAG, "checkSynchronousCall : okHttpResponse failed");
+                    Utils.logError(TAG, download.getError());
+                }
             }
         }).start();
     }
