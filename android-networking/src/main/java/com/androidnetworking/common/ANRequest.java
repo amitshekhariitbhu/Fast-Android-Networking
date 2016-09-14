@@ -468,39 +468,39 @@ public class ANRequest<T extends ANRequest> {
         ANRequestQueue.getInstance().finish(this);
     }
 
-    public ANResponse parseResponse(ANData data) {
+    public ANResponse parseResponse(Response response) {
         switch (mResponseAs) {
             case JSON_ARRAY:
                 try {
-                    JSONArray json = new JSONArray(Okio.buffer(data.body.source()).readUtf8());
+                    JSONArray json = new JSONArray(Okio.buffer(response.body().source()).readUtf8());
                     return ANResponse.success(json);
                 } catch (Exception e) {
                     return ANResponse.failed(new ANError(e));
                 }
             case JSON_OBJECT:
                 try {
-                    JSONObject json = new JSONObject(Okio.buffer(data.body.source()).readUtf8());
+                    JSONObject json = new JSONObject(Okio.buffer(response.body().source()).readUtf8());
                     return ANResponse.success(json);
                 } catch (Exception e) {
                     return ANResponse.failed(new ANError(e));
                 }
             case STRING:
                 try {
-                    return ANResponse.success(Okio.buffer(data.body.source()).readUtf8());
+                    return ANResponse.success(Okio.buffer(response.body().source()).readUtf8());
                 } catch (Exception e) {
                     return ANResponse.failed(new ANError(e));
                 }
             case BITMAP:
                 synchronized (sDecodeLock) {
                     try {
-                        return Utils.decodeBitmap(data, mMaxWidth, mMaxHeight, mDecodeConfig, mScaleType);
+                        return Utils.decodeBitmap(response, mMaxWidth, mMaxHeight, mDecodeConfig, mScaleType);
                     } catch (Exception e) {
                         return ANResponse.failed(new ANError(e));
                     }
                 }
             case PARSED:
                 try {
-                    return ANResponse.success(GsonParserFactory.getInstance().responseBodyParser(mType).convert(data.body));
+                    return ANResponse.success(GsonParserFactory.getInstance().responseBodyParser(mType).convert(response.body()));
                 } catch (Exception e) {
                     return ANResponse.failed(new ANError(e));
                 }
@@ -512,8 +512,8 @@ public class ANRequest<T extends ANRequest> {
 
     public ANError parseNetworkError(ANError anError) {
         try {
-            if (anError.getData() != null && anError.getData().body != null && anError.getData().body.source() != null) {
-                anError.setErrorBody(Okio.buffer(anError.getData().body.source()).readUtf8());
+            if (anError.getResponse() != null && anError.getResponse().body() != null && anError.getResponse().body().source() != null) {
+                anError.setErrorBody(Okio.buffer(anError.getResponse().body().source()).readUtf8());
             }
         } catch (Exception e) {
             e.printStackTrace();

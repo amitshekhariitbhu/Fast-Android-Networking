@@ -22,7 +22,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.widget.ImageView;
 
-import com.androidnetworking.common.ANData;
 import com.androidnetworking.common.ANResponse;
 import com.androidnetworking.core.Core;
 import com.androidnetworking.error.ANError;
@@ -62,10 +61,10 @@ public class Utils {
     }
 
 
-    public static ANResponse<Bitmap> decodeBitmap(ANData response, int maxWidth, int maxHeight, Bitmap.Config decodeConfig, ImageView.ScaleType scaleType) {
+    public static ANResponse<Bitmap> decodeBitmap(Response response, int maxWidth, int maxHeight, Bitmap.Config decodeConfig, ImageView.ScaleType scaleType) {
         byte[] data = new byte[0];
         try {
-            data = Okio.buffer(response.body.source()).readByteArray();
+            data = Okio.buffer(response.body().source()).readByteArray();
         } catch (IOException e) {
             e.printStackTrace();
         }

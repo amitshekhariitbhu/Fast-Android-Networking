@@ -17,15 +17,15 @@
 
 package com.androidnetworking.error;
 
-import com.androidnetworking.common.ANData;
 import com.androidnetworking.common.ANConstants;
+
+import okhttp3.Response;
 
 /**
  * Created by amitshekhar on 22/03/16.
  */
 public class ANError extends Exception {
 
-    private ANData data;
 
     private String errorBody;
 
@@ -33,42 +33,44 @@ public class ANError extends Exception {
 
     private String errorDetail;
 
+    private Response response;
+
     public ANError() {
     }
 
-    public ANError(ANData data) {
-        this.data = data;
+    public ANError(Response response) {
+        this.response = response;
     }
 
     public ANError(String message) {
         super(message);
     }
 
-    public ANError(String message, ANData data) {
+    public ANError(String message, Response response) {
         super(message);
-        this.data = data;
+        this.response = response;
     }
 
     public ANError(String message, Throwable throwable) {
         super(message, throwable);
     }
 
-    public ANError(String message, ANData data, Throwable throwable) {
+    public ANError(String message, Response response, Throwable throwable) {
         super(message, throwable);
-        this.data = data;
+        this.response = response;
     }
 
-    public ANError(ANData data, Throwable throwable) {
+    public ANError(Response response, Throwable throwable) {
         super(throwable);
-        this.data = data;
+        this.response = response;
     }
 
     public ANError(Throwable throwable) {
         super(throwable);
     }
 
-    public ANData getData() {
-        return data;
+    public Response getResponse() {
+        return response;
     }
 
     public void setErrorDetail(String errorDetail) {

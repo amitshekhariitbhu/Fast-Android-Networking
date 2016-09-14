@@ -498,7 +498,7 @@ public class RxApiTestActivity extends AppCompatActivity {
                 .subscribe(new Observer<JSONObject>() {
                     @Override
                     public void onCompleted() {
-                        Log.d(TAG, "onComplete Detail : createAnUserJSONObject completed");
+                        Log.d(TAG, "onComplete Detail : uploadImage completed");
                     }
 
                     @Override
