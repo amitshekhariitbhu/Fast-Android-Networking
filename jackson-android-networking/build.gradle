@@ -44,3 +44,5 @@ dependencies {
     compile 'com.fasterxml.jackson.core:jackson-databind:2.8.2'
     compile project(':android-networking')
 }
+
+//apply from: 'jackson-upload.gradle'
