@@ -17,12 +17,13 @@
  *
  */
 
-package com.androidnetworking.internal;
+package com.jacksonandroidnetworking;
 
 import com.androidnetworking.interfaces.Parser;
-import com.google.gson.Gson;
-import com.google.gson.TypeAdapter;
-import com.google.gson.reflect.TypeToken;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectReader;
+import com.fasterxml.jackson.databind.ObjectWriter;
 
 import java.lang.reflect.Type;
 
@@ -30,30 +31,32 @@ import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 
 /**
- * Created by amitshekhar on 31/07/16.
+ * Created by amitshekhar on 15/09/16.
  */
-public final class GsonParserFactory extends Parser.Factory {
+public final class JacksonParserFactory extends Parser.Factory {
 
-    private final Gson gson;
+    private final ObjectMapper mapper;
 
-    public GsonParserFactory() {
-        this.gson = new Gson();
+    public JacksonParserFactory() {
+        this.mapper = new ObjectMapper();
     }
 
-    public GsonParserFactory(Gson gson) {
-        this.gson = gson;
+    public JacksonParserFactory(ObjectMapper mapper) {
+        this.mapper = mapper;
     }
 
     @Override
     public Parser<ResponseBody, ?> responseBodyParser(Type type) {
-        TypeAdapter<?> adapter = gson.getAdapter(TypeToken.get(type));
-        return new GsonResponseBodyParser<>(gson, adapter);
+        JavaType javaType = mapper.getTypeFactory().constructType(type);
+        ObjectReader reader = mapper.reader(javaType);
+        return new JacksonResponseBodyParser<>(reader);
     }
 
     @Override
     public Parser<?, RequestBody> requestBodyParser(Type type) {
-        TypeAdapter<?> adapter = gson.getAdapter(TypeToken.get(type));
-        return new GsonRequestBodyParser<>(gson, adapter);
+        JavaType javaType = mapper.getTypeFactory().constructType(type);
+        ObjectWriter writer = mapper.writerWithType(javaType);
+        return new JacksonRequestBodyParser<>(writer);
     }
 
 }
