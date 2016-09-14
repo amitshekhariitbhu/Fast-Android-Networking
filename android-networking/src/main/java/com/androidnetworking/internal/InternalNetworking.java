@@ -48,7 +48,11 @@ import static com.androidnetworking.common.Method.PATCH;
 import static com.androidnetworking.common.Method.POST;
 import static com.androidnetworking.common.Method.PUT;
 
-public class InternalNetworking {
+public final class InternalNetworking {
+
+    private InternalNetworking() {
+
+    }
 
     public static OkHttpClient sHttpClient = getClient();
 

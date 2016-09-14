@@ -236,11 +236,6 @@ public class ANRequest<T extends ANRequest> {
         ANRequestQueue.getInstance().addRequest(this);
     }
 
-    public T setDownloadProgressListener(DownloadProgressListener downloadProgressListener) {
-        this.mDownloadProgressListener = downloadProgressListener;
-        return (T) this;
-    }
-
     public void startDownload(DownloadListener downloadListener) {
         this.mDownloadListener = downloadListener;
         ANRequestQueue.getInstance().addRequest(this);
@@ -249,6 +244,11 @@ public class ANRequest<T extends ANRequest> {
     public void prefetch() {
         this.mResponseAs = RESPONSE.PREFETCH;
         ANRequestQueue.getInstance().addRequest(this);
+    }
+
+    public T setDownloadProgressListener(DownloadProgressListener downloadProgressListener) {
+        this.mDownloadProgressListener = downloadProgressListener;
+        return (T) this;
     }
 
     public T setUploadProgressListener(UploadProgressListener uploadProgressListener) {

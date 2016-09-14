@@ -41,7 +41,7 @@ public class ANResponse<T> {
         this.mANError = null;
     }
 
-    private ANResponse(ANError anError) {
+    public ANResponse(ANError anError) {
         this.mResult = null;
         this.mANError = anError;
         this.mANError.setErrorCode(0);
