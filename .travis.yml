@@ -3,6 +3,8 @@ language: android
 env:
   global:
     - ADB_INSTALL_TIMEOUT=30
+# Turning off caching to avoid caching Issues
+    - cache: false
 
 android:
   components:
