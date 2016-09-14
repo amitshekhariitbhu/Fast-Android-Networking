@@ -282,7 +282,7 @@ public class ANRequest<T extends ANRequest> {
         return SynchronousCall.getResponse(this);
     }
 
-    public ANResponse download() {
+    public ANResponse startDownload() {
         return SynchronousCall.getResponse(this);
     }
 

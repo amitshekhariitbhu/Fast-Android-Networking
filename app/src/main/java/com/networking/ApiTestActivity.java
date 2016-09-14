@@ -974,7 +974,24 @@ public class ApiTestActivity extends AppCompatActivity {
                         .setPriority(Priority.HIGH)
                         .setTag(this)
                         .build()
-                        .download();
+                        .setAnalyticsListener(new AnalyticsListener() {
+                            @Override
+                            public void onReceived(long timeTakenInMillis, long bytesSent, long bytesReceived, boolean isFromCache) {
+                                Log.d(TAG, " timeTakenInMillis : " + timeTakenInMillis);
+                                Log.d(TAG, " bytesSent : " + bytesSent);
+                                Log.d(TAG, " bytesReceived : " + bytesReceived);
+                                Log.d(TAG, " isFromCache : " + isFromCache);
+                            }
+                        })
+                        .setDownloadProgressListener(new DownloadProgressListener() {
+                            @Override
+                            public void onProgress(long bytesDownloaded, long totalBytes) {
+                                Log.d(TAG, "bytesDownloaded : " + bytesDownloaded + " totalBytes : " + totalBytes);
+                                Log.d(TAG, "setDownloadProgressListener isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
+
+                            }
+                        })
+                        .startDownload();
 
                 if (download.isSuccess()) {
                     Log.d(TAG, "checkSynchronousCall : download success");
