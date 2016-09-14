@@ -22,6 +22,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.widget.ImageView;
 
+import com.androidnetworking.common.ANConstants;
 import com.androidnetworking.common.ANResponse;
 import com.androidnetworking.core.Core;
 import com.androidnetworking.error.ANError;
@@ -101,7 +102,10 @@ public class Utils {
         }
 
         if (bitmap == null) {
-            return ANResponse.failed(new ANError(response));
+            ANError error = new ANError(response);
+            error.setErrorCode(0);
+            error.setErrorDetail(ANConstants.PARSE_ERROR);
+            return ANResponse.failed(error);
         } else {
             return ANResponse.success(bitmap);
         }

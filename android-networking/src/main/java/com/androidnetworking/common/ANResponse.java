@@ -36,7 +36,7 @@ public class ANResponse<T> {
         return new ANResponse<>(anError);
     }
 
-    private ANResponse(T result) {
+    public ANResponse(T result) {
         this.mResult = result;
         this.mANError = null;
     }
@@ -44,8 +44,6 @@ public class ANResponse<T> {
     public ANResponse(ANError anError) {
         this.mResult = null;
         this.mANError = anError;
-        this.mANError.setErrorCode(0);
-        this.mANError.setErrorDetail(ANConstants.PARSE_ERROR);
     }
 
     public T getResult() {

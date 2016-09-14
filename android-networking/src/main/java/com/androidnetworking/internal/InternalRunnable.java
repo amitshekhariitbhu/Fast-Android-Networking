@@ -52,19 +52,19 @@ public class InternalRunnable implements Runnable {
         ANLog.d("execution started : " + request.toString());
         switch (request.getRequestType()) {
             case SIMPLE:
-                goForSimpleRequest();
+                executeSimpleRequest();
                 break;
             case DOWNLOAD:
-                goForDownloadRequest();
+                executeDownloadRequest();
                 break;
             case MULTIPART:
-                goForUploadRequest();
+                executeUploadRequest();
                 break;
         }
         ANLog.d("execution done : " + request.toString());
     }
 
-    private void goForSimpleRequest() {
+    private void executeSimpleRequest() {
         Response okHttpResponse = null;
         try {
             okHttpResponse = InternalNetworking.performSimpleRequest(request);
@@ -119,7 +119,7 @@ public class InternalRunnable implements Runnable {
         }
     }
 
-    private void goForDownloadRequest() {
+    private void executeDownloadRequest() {
         Response okHttpResponse = null;
         try {
             okHttpResponse = InternalNetworking.performDownloadRequest(request);
@@ -152,7 +152,7 @@ public class InternalRunnable implements Runnable {
         }
     }
 
-    private void goForUploadRequest() {
+    private void executeUploadRequest() {
         Response okHttpResponse = null;
         try {
             okHttpResponse = InternalNetworking.performUploadRequest(request);

@@ -34,6 +34,7 @@ import com.androidnetworking.interfaces.StringRequestListener;
 import com.androidnetworking.interfaces.UploadProgressListener;
 import com.androidnetworking.internal.ANRequestQueue;
 import com.androidnetworking.internal.GsonParserFactory;
+import com.androidnetworking.internal.SynchronousCall;
 import com.androidnetworking.utils.Utils;
 import com.google.gson.reflect.TypeToken;
 
@@ -245,6 +246,47 @@ public class ANRequest<T extends ANRequest> {
         this.mResponseAs = RESPONSE.PREFETCH;
         ANRequestQueue.getInstance().addRequest(this);
     }
+
+    /******************************
+     * Synchronous Call api's
+     *****************************/
+
+    public ANResponse getAsJSONObject() {
+        this.mResponseAs = RESPONSE.JSON_OBJECT;
+        return SynchronousCall.getResponse(this);
+    }
+
+    public ANResponse getAsJSONArray() {
+        this.mResponseAs = RESPONSE.JSON_ARRAY;
+        return SynchronousCall.getResponse(this);
+    }
+
+    public ANResponse getAsString() {
+        this.mResponseAs = RESPONSE.STRING;
+        return SynchronousCall.getResponse(this);
+    }
+
+    public ANResponse getAsOkHttpResponse() {
+        this.mResponseAs = RESPONSE.OK_HTTP_RESPONSE;
+        return SynchronousCall.getResponse(this);
+    }
+
+    public ANResponse getAsBitmap() {
+        this.mResponseAs = RESPONSE.BITMAP;
+        return SynchronousCall.getResponse(this);
+    }
+
+    public ANResponse getAsParsed(TypeToken typeToken) {
+        this.mType = typeToken.getType();
+        this.mResponseAs = RESPONSE.PARSED;
+        return SynchronousCall.getResponse(this);
+    }
+
+    public ANResponse download() {
+        return SynchronousCall.getResponse(this);
+    }
+
+    /****************************************************************************/
 
     public T setDownloadProgressListener(DownloadProgressListener downloadProgressListener) {
         this.mDownloadProgressListener = downloadProgressListener;
@@ -475,34 +517,49 @@ public class ANRequest<T extends ANRequest> {
                     JSONArray json = new JSONArray(Okio.buffer(response.body().source()).readUtf8());
                     return ANResponse.success(json);
                 } catch (Exception e) {
-                    return ANResponse.failed(new ANError(e));
+                    ANError error = new ANError(e);
+                    error.setErrorCode(0);
+                    error.setErrorDetail(ANConstants.PARSE_ERROR);
+                    return ANResponse.failed(error);
                 }
             case JSON_OBJECT:
                 try {
                     JSONObject json = new JSONObject(Okio.buffer(response.body().source()).readUtf8());
                     return ANResponse.success(json);
                 } catch (Exception e) {
-                    return ANResponse.failed(new ANError(e));
+                    ANError error = new ANError(e);
+                    error.setErrorCode(0);
+                    error.setErrorDetail(ANConstants.PARSE_ERROR);
+                    return ANResponse.failed(error);
                 }
             case STRING:
                 try {
                     return ANResponse.success(Okio.buffer(response.body().source()).readUtf8());
                 } catch (Exception e) {
-                    return ANResponse.failed(new ANError(e));
+                    ANError error = new ANError(e);
+                    error.setErrorCode(0);
+                    error.setErrorDetail(ANConstants.PARSE_ERROR);
+                    return ANResponse.failed(error);
                 }
             case BITMAP:
                 synchronized (sDecodeLock) {
                     try {
                         return Utils.decodeBitmap(response, mMaxWidth, mMaxHeight, mDecodeConfig, mScaleType);
                     } catch (Exception e) {
-                        return ANResponse.failed(new ANError(e));
+                        ANError error = new ANError(e);
+                        error.setErrorCode(0);
+                        error.setErrorDetail(ANConstants.PARSE_ERROR);
+                        return ANResponse.failed(error);
                     }
                 }
             case PARSED:
                 try {
                     return ANResponse.success(GsonParserFactory.getInstance().responseBodyParser(mType).convert(response.body()));
                 } catch (Exception e) {
-                    return ANResponse.failed(new ANError(e));
+                    ANError error = new ANError(e);
+                    error.setErrorCode(0);
+                    error.setErrorDetail(ANConstants.PARSE_ERROR);
+                    return ANResponse.failed(error);
                 }
             case PREFETCH:
                 return ANResponse.success(ANConstants.PREFETCH);
