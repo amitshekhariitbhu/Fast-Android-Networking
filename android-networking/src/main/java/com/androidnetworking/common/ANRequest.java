@@ -33,8 +33,8 @@ import com.androidnetworking.interfaces.ParsedRequestListener;
 import com.androidnetworking.interfaces.StringRequestListener;
 import com.androidnetworking.interfaces.UploadProgressListener;
 import com.androidnetworking.internal.ANRequestQueue;
-import com.androidnetworking.internal.GsonParserFactory;
 import com.androidnetworking.internal.SynchronousCall;
+import com.androidnetworking.utils.ParseUtil;
 import com.androidnetworking.utils.Utils;
 import com.google.gson.reflect.TypeToken;
 
@@ -554,7 +554,7 @@ public class ANRequest<T extends ANRequest> {
                 }
             case PARSED:
                 try {
-                    return ANResponse.success(GsonParserFactory.getInstance().responseBodyParser(mType).convert(response.body()));
+                    return ANResponse.success(ParseUtil.getParserFactory().responseBodyParser(mType).convert(response.body()));
                 } catch (Exception e) {
                     ANError error = new ANError(e);
                     error.setErrorCode(0);

@@ -26,9 +26,11 @@ import com.androidnetworking.common.ConnectionClassManager;
 import com.androidnetworking.common.ConnectionQuality;
 import com.androidnetworking.core.Core;
 import com.androidnetworking.interfaces.ConnectionQualityChangeListener;
+import com.androidnetworking.interfaces.Parser;
 import com.androidnetworking.internal.ANImageLoader;
 import com.androidnetworking.internal.ANRequestQueue;
 import com.androidnetworking.internal.InternalNetworking;
+import com.androidnetworking.utils.ParseUtil;
 import com.androidnetworking.utils.Utils;
 
 import okhttp3.OkHttpClient;
@@ -279,6 +281,10 @@ public class AndroidNetworking {
         return ConnectionClassManager.getInstance().getCurrentConnectionQuality();
     }
 
+    public static void setParserFactory(Parser.Factory parserFactory) {
+        ParseUtil.setParserFactory(parserFactory);
+    }
+
     /**
      * Shuts AndroidNetworking down
      */
@@ -287,5 +293,6 @@ public class AndroidNetworking {
         evictAllBitmap();
         ConnectionClassManager.getInstance().removeListener();
         ConnectionClassManager.shutDown();
+        ParseUtil.shutDown();
     }
 }

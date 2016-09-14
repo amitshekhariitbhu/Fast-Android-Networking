@@ -17,39 +17,32 @@
  *
  */
 
-package com.androidnetworking.internal;
+package com.androidnetworking.utils;
 
 import com.androidnetworking.interfaces.Parser;
+import com.androidnetworking.internal.GsonParserFactory;
 import com.google.gson.Gson;
-import com.google.gson.TypeAdapter;
-import com.google.gson.reflect.TypeToken;
-
-import java.lang.reflect.Type;
-
-import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 
 /**
- * Created by amitshekhar on 31/07/16.
+ * Created by amitshekhar on 15/09/16.
  */
-public final class GsonParserFactory extends Parser.Factory {
+public class ParseUtil {
 
-    private final Gson gson;
+    private static com.androidnetworking.interfaces.Parser.Factory mParserFactory;
 
-    public GsonParserFactory(Gson gson) {
-        this.gson = gson;
+    public static void setParserFactory(Parser.Factory parserFactory) {
+        mParserFactory = parserFactory;
     }
 
-    @Override
-    public Parser<ResponseBody, ?> responseBodyParser(Type type) {
-        TypeAdapter<?> adapter = gson.getAdapter(TypeToken.get(type));
-        return new GsonResponseBodyParser<>(gson, adapter);
+    public static Parser.Factory getParserFactory() {
+        if (mParserFactory == null) {
+            mParserFactory = new GsonParserFactory(new Gson());
+        }
+        return mParserFactory;
     }
 
-    @Override
-    public Parser<?, RequestBody> requestBodyParser(Type type) {
-        TypeAdapter<?> adapter = gson.getAdapter(TypeToken.get(type));
-        return new GsonRequestBodyParser<>(gson, adapter);
+    public static void shutDown() {
+        mParserFactory = null;
     }
 
 }
