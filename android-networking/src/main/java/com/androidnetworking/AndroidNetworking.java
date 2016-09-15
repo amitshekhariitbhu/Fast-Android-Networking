@@ -26,9 +26,11 @@ import com.androidnetworking.common.ConnectionClassManager;
 import com.androidnetworking.common.ConnectionQuality;
 import com.androidnetworking.core.Core;
 import com.androidnetworking.interfaces.ConnectionQualityChangeListener;
+import com.androidnetworking.interfaces.Parser;
 import com.androidnetworking.internal.ANImageLoader;
 import com.androidnetworking.internal.ANRequestQueue;
 import com.androidnetworking.internal.InternalNetworking;
+import com.androidnetworking.utils.ParseUtil;
 import com.androidnetworking.utils.Utils;
 
 import okhttp3.OkHttpClient;
@@ -42,6 +44,7 @@ import okhttp3.OkHttpClient;
  * You must initialize this class before use. The simplest way is to just do
  * {#code AndroidNetworking.initialize(context)}.
  */
+@SuppressWarnings("unused")
 public class AndroidNetworking {
 
     /**
@@ -69,7 +72,11 @@ public class AndroidNetworking {
      */
     public static void initialize(Context context, OkHttpClient okHttpClient) {
         if (okHttpClient != null && okHttpClient.cache() == null) {
-            okHttpClient = okHttpClient.newBuilder().cache(Utils.getCache(context.getApplicationContext(), ANConstants.MAX_CACHE_SIZE, ANConstants.CACHE_DIR_NAME)).build();
+            okHttpClient = okHttpClient
+                    .newBuilder()
+                    .cache(Utils.getCache(context.getApplicationContext(),
+                            ANConstants.MAX_CACHE_SIZE, ANConstants.CACHE_DIR_NAME))
+                    .build();
         }
         InternalNetworking.setClient(okHttpClient);
         ANRequestQueue.initialize();
@@ -280,6 +287,15 @@ public class AndroidNetworking {
     }
 
     /**
+     * Method to set ParserFactory
+     *
+     * @param parserFactory The ParserFactory
+     */
+    public static void setParserFactory(Parser.Factory parserFactory) {
+        ParseUtil.setParserFactory(parserFactory);
+    }
+
+    /**
      * Shuts AndroidNetworking down
      */
     public static void shutDown() {
@@ -287,5 +303,6 @@ public class AndroidNetworking {
         evictAllBitmap();
         ConnectionClassManager.getInstance().removeListener();
         ConnectionClassManager.shutDown();
+        ParseUtil.shutDown();
     }
 }

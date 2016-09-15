@@ -52,13 +52,17 @@ public class ConnectionClassManager {
     }
 
     public synchronized void updateBandwidth(long bytes, long timeInMs) {
-        if (timeInMs == 0 || bytes < 20000 || (bytes) * 1.0 / (timeInMs) * BYTES_TO_BITS < BANDWIDTH_LOWER_BOUND) {
+        if (timeInMs == 0 || bytes < 20000 || (bytes) * 1.0 / (timeInMs) *
+                BYTES_TO_BITS < BANDWIDTH_LOWER_BOUND) {
             return;
         }
         double bandwidth = (bytes) * 1.0 / (timeInMs) * BYTES_TO_BITS;
-        mCurrentBandwidthForSampling = (int) ((mCurrentBandwidthForSampling * mCurrentNumberOfSample + bandwidth) / (mCurrentNumberOfSample + 1));
+        mCurrentBandwidthForSampling = (int) ((mCurrentBandwidthForSampling *
+                mCurrentNumberOfSample + bandwidth) / (mCurrentNumberOfSample + 1));
         mCurrentNumberOfSample++;
-        if (mCurrentNumberOfSample == DEFAULT_SAMPLES_TO_QUALITY_CHANGE || (mCurrentConnectionQuality == ConnectionQuality.UNKNOWN && mCurrentNumberOfSample == MINIMUM_SAMPLES_TO_DECIDE_QUALITY)) {
+        if (mCurrentNumberOfSample == DEFAULT_SAMPLES_TO_QUALITY_CHANGE ||
+                (mCurrentConnectionQuality == ConnectionQuality.UNKNOWN &&
+                        mCurrentNumberOfSample == MINIMUM_SAMPLES_TO_DECIDE_QUALITY)) {
             final ConnectionQuality lastConnectionQuality = mCurrentConnectionQuality;
             mCurrentBandwidth = mCurrentBandwidthForSampling;
             if (mCurrentBandwidthForSampling <= 0) {
@@ -76,13 +80,16 @@ public class ConnectionClassManager {
                 mCurrentBandwidthForSampling = 0;
                 mCurrentNumberOfSample = 0;
             }
-            if (mCurrentConnectionQuality != lastConnectionQuality && mConnectionQualityChangeListener != null) {
-                Core.getInstance().getExecutorSupplier().forMainThreadTasks().execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        mConnectionQualityChangeListener.onChange(mCurrentConnectionQuality, mCurrentBandwidth);
-                    }
-                });
+            if (mCurrentConnectionQuality != lastConnectionQuality &&
+                    mConnectionQualityChangeListener != null) {
+                Core.getInstance().getExecutorSupplier().forMainThreadTasks()
+                        .execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                mConnectionQualityChangeListener
+                                        .onChange(mCurrentConnectionQuality, mCurrentBandwidth);
+                            }
+                        });
             }
         }
 

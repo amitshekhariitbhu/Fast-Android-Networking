@@ -32,4 +32,5 @@ public final class ANConstants {
     public static final String PREFETCH = "prefetch";
     public static final String ANDROID_NETWORKING = "AndroidNetworking";
     public static final String USER_AGENT = "User-Agent";
+    public static final String SUCCESS = "success";
 }

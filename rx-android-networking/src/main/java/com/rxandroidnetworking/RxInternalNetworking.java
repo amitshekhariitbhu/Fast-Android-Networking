@@ -17,11 +17,8 @@
 package com.rxandroidnetworking;
 
 import android.net.TrafficStats;
-import android.os.Build;
-import android.os.NetworkOnMainThreadException;
 
 import com.androidnetworking.common.ANConstants;
-import com.androidnetworking.common.ANData;
 import com.androidnetworking.common.ANLog;
 import com.androidnetworking.common.ANResponse;
 import com.androidnetworking.common.ConnectionClassManager;
@@ -30,6 +27,7 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.internal.InternalNetworking;
 import com.androidnetworking.internal.RequestProgressBody;
 import com.androidnetworking.internal.ResponseProgressBody;
+import com.androidnetworking.utils.SourceCloseUtil;
 import com.androidnetworking.utils.Utils;
 
 import java.io.File;
@@ -37,7 +35,6 @@ import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import okhttp3.Call;
-import okhttp3.Headers;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -59,25 +56,14 @@ import static com.androidnetworking.common.Method.PUT;
 /**
  * Created by Prashant Gupta on 25-07-2016.
  */
+@SuppressWarnings("unchecked")
 public class RxInternalNetworking {
 
     public static <T> Observable<T> generateSimpleObservable(RxANRequest request) {
-        Request okHttpRequest = null;
+        Request okHttpRequest;
         Request.Builder builder = new Request.Builder().url(request.getUrl());
-        if (request.getUserAgent() != null) {
-            builder.addHeader(ANConstants.USER_AGENT, request.getUserAgent());
-        } else if (InternalNetworking.sUserAgent != null) {
-            request.setUserAgent(InternalNetworking.sUserAgent);
-            builder.addHeader(ANConstants.USER_AGENT, InternalNetworking.sUserAgent);
-        }
-        Headers requestHeaders = request.getHeaders();
-        if (requestHeaders != null) {
-            builder.headers(requestHeaders);
-            if (request.getUserAgent() != null && !requestHeaders.names().contains(ANConstants.USER_AGENT)) {
-                builder.addHeader(ANConstants.USER_AGENT, request.getUserAgent());
-            }
-        }
-        RequestBody requestBody = null;
+        InternalNetworking.addHeadersToRequestBuilder(builder, request);
+        RequestBody requestBody;
         switch (request.getMethod()) {
             case GET: {
                 builder = builder.get();
@@ -113,31 +99,23 @@ public class RxInternalNetworking {
         }
         okHttpRequest = builder.build();
         if (request.getOkHttpClient() != null) {
-            request.setCall(request.getOkHttpClient().newBuilder().cache(InternalNetworking.sHttpClient.cache()).build().newCall(okHttpRequest));
+            request.setCall(request
+                    .getOkHttpClient()
+                    .newBuilder()
+                    .cache(InternalNetworking.sHttpClient.cache())
+                    .build()
+                    .newCall(okHttpRequest));
         } else {
             request.setCall(InternalNetworking.sHttpClient.newCall(okHttpRequest));
         }
         ANLog.d("call generated successfully for simple observable");
-        Observable<T> observable = Observable.create(new ANOnSubscribe<T>(request));
-        return observable;
+        return Observable.create(new ANOnSubscribe<T>(request));
     }
 
     public static <T> Observable<T> generateDownloadObservable(final RxANRequest request) {
-        Request okHttpRequest = null;
+        Request okHttpRequest;
         Request.Builder builder = new Request.Builder().url(request.getUrl());
-        if (request.getUserAgent() != null) {
-            builder.addHeader(ANConstants.USER_AGENT, request.getUserAgent());
-        } else if (InternalNetworking.sUserAgent != null) {
-            request.setUserAgent(InternalNetworking.sUserAgent);
-            builder.addHeader(ANConstants.USER_AGENT, InternalNetworking.sUserAgent);
-        }
-        Headers requestHeaders = request.getHeaders();
-        if (requestHeaders != null) {
-            builder.headers(requestHeaders);
-            if (request.getUserAgent() != null && !requestHeaders.names().contains(ANConstants.USER_AGENT)) {
-                builder.addHeader(ANConstants.USER_AGENT, request.getUserAgent());
-            }
-        }
+        InternalNetworking.addHeadersToRequestBuilder(builder, request);
         builder = builder.get();
         if (request.getCacheControl() != null) {
             builder.cacheControl(request.getCacheControl());
@@ -147,13 +125,17 @@ public class RxInternalNetworking {
         OkHttpClient okHttpClient;
 
         if (request.getOkHttpClient() != null) {
-            okHttpClient = request.getOkHttpClient().newBuilder().cache(InternalNetworking.sHttpClient.cache())
+            okHttpClient = request
+                    .getOkHttpClient()
+                    .newBuilder()
+                    .cache(InternalNetworking.sHttpClient.cache())
                     .addNetworkInterceptor(new Interceptor() {
                         @Override
                         public Response intercept(Chain chain) throws IOException {
                             Response originalResponse = chain.proceed(chain.request());
                             return originalResponse.newBuilder()
-                                    .body(new ResponseProgressBody(originalResponse.body(), request.getDownloadProgressListener()))
+                                    .body(new ResponseProgressBody(originalResponse.body(),
+                                            request.getDownloadProgressListener()))
                                     .build();
                         }
                     }).build();
@@ -164,19 +146,18 @@ public class RxInternalNetworking {
                         public Response intercept(Chain chain) throws IOException {
                             Response originalResponse = chain.proceed(chain.request());
                             return originalResponse.newBuilder()
-                                    .body(new ResponseProgressBody(originalResponse.body(), request.getDownloadProgressListener()))
+                                    .body(new ResponseProgressBody(originalResponse.body(),
+                                            request.getDownloadProgressListener()))
                                     .build();
                         }
                     }).build();
         }
         request.setCall(okHttpClient.newCall(okHttpRequest));
-        Observable<T> observable = Observable.create(new ANOnSubscribe<T>(request));
-        return observable;
+        return Observable.create(new ANOnSubscribe<T>(request));
     }
 
     public static <T> Observable<T> generateMultipartObservable(final RxANRequest request) {
-        Observable<T> observable = Observable.create(new ANOnSubscribe<T>(request));
-        return observable;
+        return Observable.create(new ANOnSubscribe<T>(request));
     }
 
     static final class ANOnSubscribe<T> implements Observable.OnSubscribe<T> {
@@ -196,12 +177,14 @@ public class RxInternalNetworking {
                     subscriber.setProducer(anResolver);
                     break;
                 case RequestType.DOWNLOAD:
-                    DownloadANResolver<T> downloadANResolver = new DownloadANResolver<>(request, subscriber);
+                    DownloadANResolver<T> downloadANResolver = new DownloadANResolver<>(request,
+                            subscriber);
                     subscriber.add(downloadANResolver);
                     subscriber.setProducer(downloadANResolver);
                     break;
                 case RequestType.MULTIPART:
-                    MultipartANResolver<T> multipartANResolver = new MultipartANResolver<>(request, subscriber);
+                    MultipartANResolver<T> multipartANResolver = new MultipartANResolver<>(request,
+                            subscriber);
                     subscriber.add(multipartANResolver);
                     subscriber.setProducer(multipartANResolver);
                     break;
@@ -225,48 +208,46 @@ public class RxInternalNetworking {
             if (n < 0) throw new IllegalArgumentException("n < 0: " + n);
             if (n == 0) return; // Nothing to do when requesting 0.
             if (!compareAndSet(false, true)) return; // Request was already triggered.
-            ANData data = new ANData();
+            Response okHttpResponse = null;
             try {
                 ANLog.d("initiate simple network call observable");
                 final long startTime = System.currentTimeMillis();
                 final long startBytes = TrafficStats.getTotalRxBytes();
-                Response okResponse = call.execute();
-                data.url = okResponse.request().url();
-                data.code = okResponse.code();
-                data.headers = okResponse.headers();
-                data.body = okResponse.body();
-                data.length = data.body.contentLength();
+                okHttpResponse = call.execute();
                 final long timeTaken = System.currentTimeMillis() - startTime;
-                if (okResponse.cacheResponse() == null) {
+                if (okHttpResponse.cacheResponse() == null) {
                     final long finalBytes = TrafficStats.getTotalRxBytes();
                     final long diffBytes;
                     if (startBytes == TrafficStats.UNSUPPORTED || finalBytes == TrafficStats.UNSUPPORTED) {
-                        diffBytes = data.length;
+                        diffBytes = okHttpResponse.body().contentLength();
                     } else {
                         diffBytes = finalBytes - startBytes;
                     }
                     ConnectionClassManager.getInstance().updateBandwidth(diffBytes, timeTaken);
-                    Utils.sendAnalytics(request.getAnalyticsListener(), timeTaken, (request.getRequestBody() != null && request.getRequestBody().contentLength() != 0) ? request.getRequestBody().contentLength() : -1, data.length, false);
+                    Utils.sendAnalytics(request.getAnalyticsListener(), timeTaken,
+                            (request.getRequestBody() != null &&
+                                    request.getRequestBody().contentLength() != 0) ?
+                                    request.getRequestBody().contentLength() : -1,
+                            okHttpResponse.body().contentLength(), false);
                 } else if (request.getAnalyticsListener() != null) {
-                    if (okResponse.networkResponse() == null) {
+                    if (okHttpResponse.networkResponse() == null) {
                         Utils.sendAnalytics(request.getAnalyticsListener(), timeTaken, 0, 0, true);
                     } else {
-                        Utils.sendAnalytics(request.getAnalyticsListener(), timeTaken, (request.getRequestBody() != null && request.getRequestBody().contentLength() != 0) ? request.getRequestBody().contentLength() : -1, 0, true);
+                        Utils.sendAnalytics(request.getAnalyticsListener(), timeTaken,
+                                (request.getRequestBody() != null && request.getRequestBody().contentLength() != 0) ?
+                                        request.getRequestBody().contentLength() : -1, 0, true);
                     }
                 }
-                if (data.code == 304) {
+                if (okHttpResponse.code() == 304) {
                     ANLog.d("error code 304 simple observable");
-                } else if (data.code >= 400) {
-                    ANError anError = new ANError(data);
-                    anError = request.parseNetworkError(anError);
-                    anError.setErrorCode(data.code);
-                    anError.setErrorDetail(ANConstants.RESPONSE_FROM_SERVER_ERROR);
+                } else if (okHttpResponse.code() >= 400) {
                     if (!subscriber.isUnsubscribed()) {
                         ANLog.d("delivering error to subscriber from simple observable");
-                        subscriber.onError(anError);
+                        subscriber.onError(Utils.getErrorForServerResponse(new ANError(okHttpResponse),
+                                request, okHttpResponse.code()));
                     }
                 } else {
-                    ANResponse<T> response = request.parseResponse(data);
+                    ANResponse<T> response = request.parseResponse(okHttpResponse);
                     if (!response.isSuccess()) {
                         if (!subscriber.isUnsubscribed()) {
                             ANLog.d("delivering error to subscriber from simple observable");
@@ -284,39 +265,18 @@ public class RxInternalNetworking {
                     }
                 }
             } catch (IOException ioe) {
-                Request okHttpRequest = request.getCall().request();
-                if (okHttpRequest != null) {
-                    data.url = okHttpRequest.url();
-                }
                 if (!subscriber.isUnsubscribed()) {
                     ANLog.d("delivering error to subscriber from simple observable");
-                    ANError anError = new ANError(data, ioe);
-                    anError = request.parseNetworkError(anError);
-                    anError.setErrorDetail(ANConstants.CONNECTION_ERROR);
-                    anError.setErrorCode(0);
-                    subscriber.onError(anError);
+                    subscriber.onError(Utils.getErrorForConnection(new ANError(ioe)));
                 }
             } catch (Exception e) {
                 Exceptions.throwIfFatal(e);
-                ANError se = new ANError(e);
-                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB && e instanceof NetworkOnMainThreadException) {
-                    se.setErrorDetail(ANConstants.NETWORK_ON_MAIN_THREAD_ERROR);
-                } else {
-                    se.setErrorDetail(ANConstants.CONNECTION_ERROR);
-                }
-                se.setErrorCode(0);
                 if (!subscriber.isUnsubscribed()) {
                     ANLog.d("delivering error to subscriber from simple observable");
-                    subscriber.onError(se);
+                    subscriber.onError(Utils.getErrorForNetworkOnMainThreadOrConnection(e));
                 }
             } finally {
-                if (data != null && data.body != null && data.body.source() != null) {
-                    try {
-                        data.body.source().close();
-                    } catch (Exception e) {
-                        ANLog.d("Unable to close source data");
-                    }
-                }
+                SourceCloseUtil.close(okHttpResponse, request);
             }
         }
 
@@ -348,42 +308,37 @@ public class RxInternalNetworking {
             if (n < 0) throw new IllegalArgumentException("n < 0: " + n);
             if (n == 0) return; // Nothing to do when requesting 0.
             if (!compareAndSet(false, true)) return; // Request was already triggered.
-            ANData data = new ANData();
+            Response okHttpResponse;
             try {
                 ANLog.d("initiate download network call observable");
                 final long startTime = System.currentTimeMillis();
                 final long startBytes = TrafficStats.getTotalRxBytes();
-                Response okResponse = request.getCall().execute();
-                data.url = okResponse.request().url();
-                data.code = okResponse.code();
-                data.headers = okResponse.headers();
-                Utils.saveFile(okResponse, request.getDirPath(), request.getFileName());
-                data.length = okResponse.body().contentLength();
+                okHttpResponse = request.getCall().execute();
+                Utils.saveFile(okHttpResponse, request.getDirPath(), request.getFileName());
                 final long timeTaken = System.currentTimeMillis() - startTime;
-                if (okResponse.cacheResponse() == null) {
+                if (okHttpResponse.cacheResponse() == null) {
                     final long finalBytes = TrafficStats.getTotalRxBytes();
                     final long diffBytes;
-                    if (startBytes == TrafficStats.UNSUPPORTED || finalBytes == TrafficStats.UNSUPPORTED) {
-                        diffBytes = data.length;
+                    if (startBytes == TrafficStats.UNSUPPORTED ||
+                            finalBytes == TrafficStats.UNSUPPORTED) {
+                        diffBytes = okHttpResponse.body().contentLength();
                     } else {
                         diffBytes = finalBytes - startBytes;
                     }
                     ConnectionClassManager.getInstance().updateBandwidth(diffBytes, timeTaken);
-                    Utils.sendAnalytics(request.getAnalyticsListener(), timeTaken, -1, data.length, false);
+                    Utils.sendAnalytics(request.getAnalyticsListener(),
+                            timeTaken, -1, okHttpResponse.body().contentLength(), false);
                 } else if (request.getAnalyticsListener() != null) {
                     Utils.sendAnalytics(request.getAnalyticsListener(), timeTaken, -1, 0, true);
                 }
-                if (data.code >= 400) {
-                    ANError anError = new ANError();
-                    anError = request.parseNetworkError(anError);
-                    anError.setErrorCode(data.code);
-                    anError.setErrorDetail(ANConstants.RESPONSE_FROM_SERVER_ERROR);
+                if (okHttpResponse.code() >= 400) {
                     if (!subscriber.isUnsubscribed()) {
-                        subscriber.onError(anError);
+                        subscriber.onError(Utils.getErrorForServerResponse(new ANError(okHttpResponse),
+                                request, okHttpResponse.code()));
                     }
                 } else {
                     if (!subscriber.isUnsubscribed()) {
-                        ANResponse<T> response = (ANResponse<T>) ANResponse.success("success");
+                        ANResponse<T> response = (ANResponse<T>) ANResponse.success(ANConstants.SUCCESS);
                         subscriber.onNext(response.getResult());
                     }
                     if (!subscriber.isUnsubscribed()) {
@@ -391,10 +346,6 @@ public class RxInternalNetworking {
                     }
                 }
             } catch (IOException ioe) {
-                Request okHttpRequest = request.getCall().request();
-                if (okHttpRequest != null) {
-                    data.url = okHttpRequest.url();
-                }
                 try {
                     File destinationFile = new File(request.getDirPath() + File.separator + request.getFileName());
                     if (destinationFile.exists()) {
@@ -404,23 +355,12 @@ public class RxInternalNetworking {
                     e.printStackTrace();
                 }
                 if (!subscriber.isUnsubscribed()) {
-                    ANError anError = new ANError(data, ioe);
-                    anError = request.parseNetworkError(anError);
-                    anError.setErrorDetail(ANConstants.CONNECTION_ERROR);
-                    anError.setErrorCode(0);
-                    subscriber.onError(anError);
+                    subscriber.onError(Utils.getErrorForConnection(new ANError(ioe)));
                 }
             } catch (Exception e) {
                 Exceptions.throwIfFatal(e);
-                ANError se = new ANError(e);
-                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB && e instanceof NetworkOnMainThreadException) {
-                    se.setErrorDetail(ANConstants.NETWORK_ON_MAIN_THREAD_ERROR);
-                } else {
-                    se.setErrorDetail(ANConstants.CONNECTION_ERROR);
-                }
-                se.setErrorCode(0);
                 if (!subscriber.isUnsubscribed()) {
-                    subscriber.onError(se);
+                    subscriber.onError(Utils.getErrorForNetworkOnMainThreadOrConnection(e));
                 }
             }
         }
@@ -450,23 +390,11 @@ public class RxInternalNetworking {
             if (n < 0) throw new IllegalArgumentException("n < 0: " + n);
             if (n == 0) return; // Nothing to do when requesting 0.
             if (!compareAndSet(false, true)) return; // Request was already triggered.
-            ANData data = new ANData();
-            Request okHttpRequest = null;
+            Response okHttpResponse = null;
+            Request okHttpRequest;
             try {
                 Request.Builder builder = new Request.Builder().url(request.getUrl());
-                if (request.getUserAgent() != null) {
-                    builder.addHeader(ANConstants.USER_AGENT, request.getUserAgent());
-                } else if (InternalNetworking.sUserAgent != null) {
-                    request.setUserAgent(InternalNetworking.sUserAgent);
-                    builder.addHeader(ANConstants.USER_AGENT, InternalNetworking.sUserAgent);
-                }
-                Headers requestHeaders = request.getHeaders();
-                if (requestHeaders != null) {
-                    builder.headers(requestHeaders);
-                    if (request.getUserAgent() != null && !requestHeaders.names().contains(ANConstants.USER_AGENT)) {
-                        builder.addHeader(ANConstants.USER_AGENT, request.getUserAgent());
-                    }
-                }
+                InternalNetworking.addHeadersToRequestBuilder(builder, request);
                 final RequestBody requestBody = request.getMultiPartRequestBody();
                 final long requestBodyLength = requestBody.contentLength();
                 builder = builder.post(new RequestProgressBody(requestBody, request.getUploadProgressListener()));
@@ -475,39 +403,38 @@ public class RxInternalNetworking {
                 }
                 okHttpRequest = builder.build();
                 if (request.getOkHttpClient() != null) {
-                    request.setCall(request.getOkHttpClient().newBuilder().cache(InternalNetworking.sHttpClient.cache()).build().newCall(okHttpRequest));
+                    request.setCall(request
+                            .getOkHttpClient()
+                            .newBuilder()
+                            .cache(InternalNetworking.sHttpClient.cache())
+                            .build()
+                            .newCall(okHttpRequest));
                 } else {
                     request.setCall(InternalNetworking.sHttpClient.newCall(okHttpRequest));
                 }
                 final long startTime = System.currentTimeMillis();
-                Response okResponse = request.getCall().execute();
-                data.url = okResponse.request().url();
-                data.code = okResponse.code();
-                data.headers = okResponse.headers();
-                data.body = okResponse.body();
-                data.length = data.body.contentLength();
+                okHttpResponse = request.getCall().execute();
                 final long timeTaken = System.currentTimeMillis() - startTime;
                 if (request.getAnalyticsListener() != null) {
-                    if (okResponse.cacheResponse() == null) {
-                        Utils.sendAnalytics(request.getAnalyticsListener(), timeTaken, requestBodyLength, data.length, false);
+                    if (okHttpResponse.cacheResponse() == null) {
+                        Utils.sendAnalytics(request.getAnalyticsListener(), timeTaken,
+                                requestBodyLength, okHttpResponse.body().contentLength(), false);
                     } else {
-                        if (okResponse.networkResponse() == null) {
+                        if (okHttpResponse.networkResponse() == null) {
                             Utils.sendAnalytics(request.getAnalyticsListener(), timeTaken, 0, 0, true);
                         } else {
-                            Utils.sendAnalytics(request.getAnalyticsListener(), timeTaken, requestBodyLength != 0 ? requestBodyLength : -1, 0, true);
+                            Utils.sendAnalytics(request.getAnalyticsListener(), timeTaken,
+                                    requestBodyLength != 0 ? requestBodyLength : -1, 0, true);
                         }
                     }
                 }
-                if (data.code >= 400) {
-                    ANError anError = new ANError(data);
-                    anError = request.parseNetworkError(anError);
-                    anError.setErrorCode(data.code);
-                    anError.setErrorDetail(ANConstants.RESPONSE_FROM_SERVER_ERROR);
+                if (okHttpResponse.code() >= 400) {
                     if (!subscriber.isUnsubscribed()) {
-                        subscriber.onError(anError);
+                        subscriber.onError(Utils.getErrorForServerResponse(new ANError(okHttpResponse),
+                                request, okHttpResponse.code()));
                     }
                 } else {
-                    ANResponse<T> response = request.parseResponse(data);
+                    ANResponse<T> response = request.parseResponse(okHttpResponse);
                     if (!response.isSuccess()) {
                         if (!subscriber.isUnsubscribed()) {
                             subscriber.onError(response.getError());
@@ -522,36 +449,16 @@ public class RxInternalNetworking {
                     }
                 }
             } catch (IOException ioe) {
-                if (okHttpRequest != null) {
-                    data.url = okHttpRequest.url();
-                }
                 if (!subscriber.isUnsubscribed()) {
-                    ANError anError = new ANError(data, ioe);
-                    anError = request.parseNetworkError(anError);
-                    anError.setErrorDetail(ANConstants.CONNECTION_ERROR);
-                    anError.setErrorCode(0);
-                    subscriber.onError(anError);
+                    subscriber.onError(Utils.getErrorForConnection(new ANError(ioe)));
                 }
             } catch (Exception e) {
                 Exceptions.throwIfFatal(e);
-                ANError se = new ANError(e);
-                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB && e instanceof NetworkOnMainThreadException) {
-                    se.setErrorDetail(ANConstants.NETWORK_ON_MAIN_THREAD_ERROR);
-                } else {
-                    se.setErrorDetail(ANConstants.CONNECTION_ERROR);
-                }
-                se.setErrorCode(0);
                 if (!subscriber.isUnsubscribed()) {
-                    subscriber.onError(se);
+                    subscriber.onError(Utils.getErrorForNetworkOnMainThreadOrConnection(e));
                 }
             } finally {
-                if (data != null && data.body != null && data.body.source() != null) {
-                    try {
-                        data.body.source().close();
-                    } catch (Exception e) {
-                        ANLog.d("Unable to close source data");
-                    }
-                }
+                SourceCloseUtil.close(okHttpResponse, request);
             }
         }
 

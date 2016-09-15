@@ -76,7 +76,10 @@ public class ResponseProgressBody extends ResponseBody {
                 long bytesRead = super.read(sink, byteCount);
                 totalBytesRead += ((bytesRead != -1) ? bytesRead : 0);
                 if (downloadProgressHandler != null) {
-                    downloadProgressHandler.obtainMessage(ANConstants.UPDATE, new Progress(totalBytesRead, mResponseBody.contentLength())).sendToTarget();
+                    downloadProgressHandler
+                            .obtainMessage(ANConstants.UPDATE,
+                                    new Progress(totalBytesRead, mResponseBody.contentLength()))
+                            .sendToTarget();
                 }
                 return bytesRead;
             }

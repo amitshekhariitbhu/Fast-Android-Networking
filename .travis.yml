@@ -2,7 +2,15 @@ language: android
 
 env:
   global:
-    - ADB_INSTALL_TIMEOUT=15
+    - ADB_INSTALL_TIMEOUT=30
+# Using the new Container-Based Infrastructure
+    - sudo: false
+# Turning off caching to avoid caching Issues
+    - cache: false
+# Initiating clean Gradle output
+    - TERM=dumb
+# Giving even more memory to Gradle JVM
+    - GRADLE_OPTS="-Xmx2048m -XX:MaxPermSize=1024m"
 
 android:
   components:

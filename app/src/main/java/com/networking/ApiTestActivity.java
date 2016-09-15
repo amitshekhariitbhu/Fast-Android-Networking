@@ -26,6 +26,7 @@ import android.view.View;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.ANRequest;
+import com.androidnetworking.common.ANResponse;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.AnalyticsListener;
@@ -33,6 +34,7 @@ import com.androidnetworking.interfaces.DownloadListener;
 import com.androidnetworking.interfaces.DownloadProgressListener;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.androidnetworking.interfaces.OkHttpResponseListener;
 import com.androidnetworking.interfaces.ParsedRequestListener;
 import com.androidnetworking.interfaces.UploadProgressListener;
 import com.google.gson.reflect.TypeToken;
@@ -44,11 +46,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
+import okhttp3.Response;
 
 /**
  * Created by amitshekhar on 30/03/16.
@@ -829,8 +833,293 @@ public class ApiTestActivity extends AppCompatActivity {
                 });
     }
 
+    public void checkOkHttpResponse(View view) {
+
+        AndroidNetworking.get(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_ARRAY)
+                .addPathParameter("pageNumber", "0")
+                .addQueryParameter("limit", "3")
+                .setTag(this)
+                .setPriority(Priority.LOW)
+                .build()
+                .setAnalyticsListener(new AnalyticsListener() {
+                    @Override
+                    public void onReceived(long timeTakenInMillis, long bytesSent, long bytesReceived, boolean isFromCache) {
+                        Log.d(TAG, " timeTakenInMillis : " + timeTakenInMillis);
+                        Log.d(TAG, " bytesSent : " + bytesSent);
+                        Log.d(TAG, " bytesReceived : " + bytesReceived);
+                        Log.d(TAG, " isFromCache : " + isFromCache);
+                    }
+                })
+                .getAsOkHttpResponse(new OkHttpResponseListener() {
+                    @Override
+                    public void onResponse(Response response) {
+                        if (response != null) {
+                            if (response.isSuccessful()) {
+                                Log.d(TAG, "response is successful");
+                                try {
+                                    Log.d(TAG, "response : " + response.body().source().readUtf8());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                Log.d(TAG, "response is not successful");
+                            }
+                        } else {
+                            Log.d(TAG, "response is null");
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Utils.logError(TAG, anError);
+                    }
+                });
+
+        AndroidNetworking.post(ApiEndPoint.BASE_URL + ApiEndPoint.POST_CREATE_AN_USER)
+                .addBodyParameter("firstname", "Suman")
+                .addBodyParameter("lastname", "Shekhar")
+                .setTag(this)
+                .setPriority(Priority.LOW)
+                .build()
+                .setAnalyticsListener(new AnalyticsListener() {
+                    @Override
+                    public void onReceived(long timeTakenInMillis, long bytesSent, long bytesReceived, boolean isFromCache) {
+                        Log.d(TAG, " timeTakenInMillis : " + timeTakenInMillis);
+                        Log.d(TAG, " bytesSent : " + bytesSent);
+                        Log.d(TAG, " bytesReceived : " + bytesReceived);
+                        Log.d(TAG, " isFromCache : " + isFromCache);
+                    }
+                })
+                .getAsOkHttpResponse(new OkHttpResponseListener() {
+                    @Override
+                    public void onResponse(Response response) {
+                        if (response != null) {
+                            if (response.isSuccessful()) {
+                                Log.d(TAG, "response is successful");
+                                try {
+                                    Log.d(TAG, "response : " + response.body().source().readUtf8());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                Log.d(TAG, "response is not successful");
+                            }
+                        } else {
+                            Log.d(TAG, "response is null");
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Utils.logError(TAG, anError);
+                    }
+                });
+
+        AndroidNetworking.upload(ApiEndPoint.BASE_URL + ApiEndPoint.UPLOAD_IMAGE)
+                .setPriority(Priority.MEDIUM)
+                .addMultipartFile("image", new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "test.png"))
+                .setTag(this)
+                .build()
+                .setAnalyticsListener(new AnalyticsListener() {
+                    @Override
+                    public void onReceived(long timeTakenInMillis, long bytesSent, long bytesReceived, boolean isFromCache) {
+                        Log.d(TAG, " timeTakenInMillis : " + timeTakenInMillis);
+                        Log.d(TAG, " bytesSent : " + bytesSent);
+                        Log.d(TAG, " bytesReceived : " + bytesReceived);
+                        Log.d(TAG, " isFromCache : " + isFromCache);
+                    }
+                })
+                .setUploadProgressListener(new UploadProgressListener() {
+                    @Override
+                    public void onProgress(long bytesUploaded, long totalBytes) {
+                        Log.d(TAG, "bytesUploaded : " + bytesUploaded + " totalBytes : " + totalBytes);
+                        Log.d(TAG, "setUploadProgressListener isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
+                    }
+                })
+                .getAsOkHttpResponse(new OkHttpResponseListener() {
+                    @Override
+                    public void onResponse(Response response) {
+                        if (response != null) {
+                            if (response.isSuccessful()) {
+                                Log.d(TAG, "response is successful");
+                                try {
+                                    Log.d(TAG, "response : " + response.body().source().readUtf8());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                Log.d(TAG, "response is not successful");
+                            }
+                        } else {
+                            Log.d(TAG, "response is null");
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Utils.logError(TAG, anError);
+                    }
+                });
+    }
+
+
+    public void checkSynchronousCall(View view) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                String url = "http://www.colorado.edu/conflict/peace/download/peace_problem.ZIP";
+                ANRequest requestOne = AndroidNetworking
+                        .download(url, Utils.getRootDirPath(getApplicationContext()), "file1.zip")
+                        .setPriority(Priority.HIGH)
+                        .setTag(this)
+                        .build()
+                        .setAnalyticsListener(new AnalyticsListener() {
+                            @Override
+                            public void onReceived(long timeTakenInMillis, long bytesSent, long bytesReceived, boolean isFromCache) {
+                                Log.d(TAG, " timeTakenInMillis : " + timeTakenInMillis);
+                                Log.d(TAG, " bytesSent : " + bytesSent);
+                                Log.d(TAG, " bytesReceived : " + bytesReceived);
+                                Log.d(TAG, " isFromCache : " + isFromCache);
+                            }
+                        })
+                        .setDownloadProgressListener(new DownloadProgressListener() {
+                            @Override
+                            public void onProgress(long bytesDownloaded, long totalBytes) {
+                                Log.d(TAG, "bytesDownloaded : " + bytesDownloaded + " totalBytes : " + totalBytes);
+                                Log.d(TAG, "setDownloadProgressListener isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
+
+                            }
+                        });
+                ANResponse<String> responseOne = requestOne.executeForDownload();
+
+                if (responseOne.isSuccess()) {
+                    Log.d(TAG, "checkSynchronousCall : download success");
+                    Log.d(TAG, "checkSynchronousCall : download result " + responseOne.getResult());
+                    Response response = responseOne.getOkHttpResponse();
+                    Log.d(TAG, "checkSynchronousCall : headers : " + response.headers().toString());
+                } else {
+                    Log.d(TAG, "checkSynchronousCall : download failed");
+                    Utils.logError(TAG, responseOne.getError());
+                }
+
+
+                ANRequest requestTwo = AndroidNetworking.get(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_ARRAY)
+                        .addPathParameter("pageNumber", "0")
+                        .addQueryParameter("limit", "3")
+                        .setTag(this)
+                        .setPriority(Priority.LOW)
+                        .build()
+                        .setAnalyticsListener(new AnalyticsListener() {
+                            @Override
+                            public void onReceived(long timeTakenInMillis, long bytesSent, long bytesReceived, boolean isFromCache) {
+                                Log.d(TAG, " timeTakenInMillis : " + timeTakenInMillis);
+                                Log.d(TAG, " bytesSent : " + bytesSent);
+                                Log.d(TAG, " bytesReceived : " + bytesReceived);
+                                Log.d(TAG, " isFromCache : " + isFromCache);
+                            }
+                        });
+                ANResponse<List<User>> responseTwo = requestTwo.executeForParsed(new TypeToken<List<User>>() {
+                });
+
+                if (responseTwo.isSuccess()) {
+                    Log.d(TAG, "checkSynchronousCall : response success");
+                    List<User> users = responseTwo.getResult();
+                    Log.d(TAG, "userList size : " + users.size());
+                    for (User user : users) {
+                        Log.d(TAG, "id : " + user.id);
+                        Log.d(TAG, "firstname : " + user.firstname);
+                        Log.d(TAG, "lastname : " + user.lastname);
+                    }
+                    Response response = responseTwo.getOkHttpResponse();
+                    Log.d(TAG, "checkSynchronousCall : headers : " + response.headers().toString());
+                } else {
+                    Log.d(TAG, "checkSynchronousCall : response failed");
+                    Utils.logError(TAG, responseTwo.getError());
+                }
+
+
+                JSONObject jsonObject = new JSONObject();
+                try {
+                    jsonObject.put("firstname", "Rohit");
+                    jsonObject.put("lastname", "Kumar");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+                ANRequest requestThree = AndroidNetworking.post(ApiEndPoint.BASE_URL + ApiEndPoint.POST_CREATE_AN_USER)
+                        .addJSONObjectBody(jsonObject)
+                        .setTag(this)
+                        .setPriority(Priority.LOW)
+                        .build()
+                        .setAnalyticsListener(new AnalyticsListener() {
+                            @Override
+                            public void onReceived(long timeTakenInMillis, long bytesSent, long bytesReceived, boolean isFromCache) {
+                                Log.d(TAG, " timeTakenInMillis : " + timeTakenInMillis);
+                                Log.d(TAG, " bytesSent : " + bytesSent);
+                                Log.d(TAG, " bytesReceived : " + bytesReceived);
+                                Log.d(TAG, " isFromCache : " + isFromCache);
+                            }
+                        });
+                ANResponse<JSONObject> responseThree = requestThree.executeForJSONObject();
+
+                if (responseThree.isSuccess()) {
+                    Log.d(TAG, "checkSynchronousCall : jsonObjectANResponse success");
+                    JSONObject jsonObjectFinal = responseThree.getResult();
+                    Log.d(TAG, "checkSynchronousCall : jsonObjectANResponse result " + jsonObjectFinal.toString());
+                    Response response = responseThree.getOkHttpResponse();
+                    Log.d(TAG, "checkSynchronousCall : headers : " + response.headers().toString());
+                } else {
+                    Log.d(TAG, "checkSynchronousCall : jsonObjectANResponse failed");
+                    Utils.logError(TAG, responseThree.getError());
+                }
+
+
+                ANRequest requestFour = AndroidNetworking.get(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_ARRAY)
+                        .addPathParameter("pageNumber", "0")
+                        .addQueryParameter("limit", "3")
+                        .setTag(this)
+                        .setPriority(Priority.LOW)
+                        .build()
+                        .setAnalyticsListener(new AnalyticsListener() {
+                            @Override
+                            public void onReceived(long timeTakenInMillis, long bytesSent, long bytesReceived, boolean isFromCache) {
+                                Log.d(TAG, " timeTakenInMillis : " + timeTakenInMillis);
+                                Log.d(TAG, " bytesSent : " + bytesSent);
+                                Log.d(TAG, " bytesReceived : " + bytesReceived);
+                                Log.d(TAG, " isFromCache : " + isFromCache);
+                            }
+                        });
+                ANResponse<Response> responseFour = requestFour.executeForOkHttpResponse();
+
+
+                if (responseFour.isSuccess()) {
+                    Log.d(TAG, "checkSynchronousCall : okHttpResponse success");
+                    Response okHttpResponse = responseFour.getResult();
+                    if (okHttpResponse != null) {
+                        if (okHttpResponse.isSuccessful()) {
+                            Log.d(TAG, "response is successful");
+                            try {
+                                Log.d(TAG, "response : " + okHttpResponse.body().source().readUtf8());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            Log.d(TAG, "response is not successful");
+                        }
+                    } else {
+                        Log.d(TAG, "response is null");
+                    }
+                } else {
+                    Log.d(TAG, "checkSynchronousCall : okHttpResponse failed");
+                    Utils.logError(TAG, responseFour.getError());
+                }
+            }
+        }).start();
+    }
+
     public void getCurrentConnectionQuality(View view) {
         Log.d(TAG, "getCurrentConnectionQuality : " + AndroidNetworking.getCurrentConnectionQuality() + " currentBandwidth : " + AndroidNetworking.getCurrentBandwidth());
     }
-
 }

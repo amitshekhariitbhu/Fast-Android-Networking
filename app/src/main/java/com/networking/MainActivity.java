@@ -207,4 +207,8 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(MainActivity.this, ApiTestActivity.class));
     }
 
+    public void startOkHttpResponseTestActivity(View view) {
+        startActivity(new Intent(MainActivity.this, OkHttpResponseTestActivity.class));
+    }
+
 }

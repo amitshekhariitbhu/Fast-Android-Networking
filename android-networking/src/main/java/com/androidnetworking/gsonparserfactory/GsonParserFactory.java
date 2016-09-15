@@ -17,7 +17,7 @@
  *
  */
 
-package com.androidnetworking.internal;
+package com.androidnetworking.gsonparserfactory;
 
 import com.androidnetworking.interfaces.Parser;
 import com.google.gson.Gson;
@@ -34,21 +34,13 @@ import okhttp3.ResponseBody;
  */
 public final class GsonParserFactory extends Parser.Factory {
 
-    private static GsonParserFactory sInstance = null;
     private final Gson gson;
 
-    public static GsonParserFactory getInstance() {
-        if (sInstance == null) {
-            synchronized (GsonParserFactory.class) {
-                if (sInstance == null) {
-                    sInstance = new GsonParserFactory(new Gson());
-                }
-            }
-        }
-        return sInstance;
+    public GsonParserFactory() {
+        this.gson = new Gson();
     }
 
-    private GsonParserFactory(Gson gson) {
+    public GsonParserFactory(Gson gson) {
         this.gson = gson;
     }
 
@@ -64,9 +56,4 @@ public final class GsonParserFactory extends Parser.Factory {
         return new GsonRequestBodyParser<>(gson, adapter);
     }
 
-    public static void shutDown() {
-        if (sInstance != null) {
-            sInstance = null;
-        }
-    }
 }

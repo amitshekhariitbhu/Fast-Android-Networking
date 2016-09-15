@@ -17,25 +17,21 @@
  *
  */
 
-package com.androidnetworking.common;
+package com.androidnetworking.interfaces;
 
-import okhttp3.Headers;
-import okhttp3.HttpUrl;
-import okhttp3.ResponseBody;
+import com.androidnetworking.error.ANError;
+
+import org.json.JSONArray;
+
+import okhttp3.Response;
 
 /**
- * Created by amitshekhar on 22/03/16.
+ * Created by amitshekhar on 23/05/16.
  */
-public class ANData {
+public interface OkHttpResponseAndJSONArrayRequestListener {
 
-    public int code;
+    void onResponse(Response okHttpResponse, JSONArray response);
 
-    public Headers headers;
-
-    public long length;
-
-    public ResponseBody body;
-
-    public HttpUrl url;
+    void onError(ANError anError);
 
 }

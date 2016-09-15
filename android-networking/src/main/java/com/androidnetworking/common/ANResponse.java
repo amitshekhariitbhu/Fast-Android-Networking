@@ -19,6 +19,8 @@ package com.androidnetworking.common;
 
 import com.androidnetworking.error.ANError;
 
+import okhttp3.Response;
+
 /**
  * Created by amitshekhar on 22/03/16.
  */
@@ -28,6 +30,8 @@ public class ANResponse<T> {
 
     private final ANError mANError;
 
+    private Response response;
+
     public static <T> ANResponse<T> success(T result) {
         return new ANResponse<>(result);
     }
@@ -36,16 +40,14 @@ public class ANResponse<T> {
         return new ANResponse<>(anError);
     }
 
-    private ANResponse(T result) {
+    public ANResponse(T result) {
         this.mResult = result;
         this.mANError = null;
     }
 
-    private ANResponse(ANError anError) {
+    public ANResponse(ANError anError) {
         this.mResult = null;
         this.mANError = anError;
-        this.mANError.setErrorCode(0);
-        this.mANError.setErrorDetail(ANConstants.PARSE_ERROR);
     }
 
     public T getResult() {
@@ -58,6 +60,14 @@ public class ANResponse<T> {
 
     public ANError getError() {
         return mANError;
+    }
+
+    public void setOkHttpResponse(Response response) {
+        this.response = response;
+    }
+
+    public Response getOkHttpResponse() {
+        return response;
     }
 
 }

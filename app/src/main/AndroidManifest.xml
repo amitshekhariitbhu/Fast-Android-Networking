@@ -39,6 +39,7 @@
 
         <activity android:name=".ImageGridActivity"></activity>
         <activity android:name=".ApiTestActivity"></activity>
+        <activity android:name=".OkHttpResponseTestActivity"></activity>
     </application>
 
 </manifest>
