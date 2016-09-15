@@ -250,38 +250,38 @@ public class ANRequest<T extends ANRequest> {
         ANRequestQueue.getInstance().addRequest(this);
     }
 
-    public ANResponse getAsJSONObject() {
+    public ANResponse executeForJSONObject() {
         this.mResponseType = ResponseType.JSON_OBJECT;
         return SynchronousCall.getResponse(this);
     }
 
-    public ANResponse getAsJSONArray() {
+    public ANResponse executeForJSONArray() {
         this.mResponseType = ResponseType.JSON_ARRAY;
         return SynchronousCall.getResponse(this);
     }
 
-    public ANResponse getAsString() {
+    public ANResponse executeForString() {
         this.mResponseType = ResponseType.STRING;
         return SynchronousCall.getResponse(this);
     }
 
-    public ANResponse getAsOkHttpResponse() {
+    public ANResponse executeForOkHttpResponse() {
         this.mResponseType = ResponseType.OK_HTTP_RESPONSE;
         return SynchronousCall.getResponse(this);
     }
 
-    public ANResponse getAsBitmap() {
+    public ANResponse executeForBitmap() {
         this.mResponseType = ResponseType.BITMAP;
         return SynchronousCall.getResponse(this);
     }
 
-    public ANResponse getAsParsed(TypeToken typeToken) {
+    public ANResponse executeForParsed(TypeToken typeToken) {
         this.mType = typeToken.getType();
         this.mResponseType = ResponseType.PARSED;
         return SynchronousCall.getResponse(this);
     }
 
-    public ANResponse startDownload() {
+    public ANResponse executeForDownload() {
         return SynchronousCall.getResponse(this);
     }
 
@@ -762,14 +762,16 @@ public class ANRequest<T extends ANRequest> {
         MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
         try {
             for (HashMap.Entry<String, String> entry : mMultiPartParameterMap.entrySet()) {
-                builder.addPart(Headers.of("Content-Disposition", "form-data; name=\"" + entry.getKey() + "\""),
+                builder.addPart(Headers.of("Content-Disposition",
+                        "form-data; name=\"" + entry.getKey() + "\""),
                         RequestBody.create(null, entry.getValue()));
             }
             for (HashMap.Entry<String, File> entry : mMultiPartFileMap.entrySet()) {
                 String fileName = entry.getValue().getName();
                 RequestBody fileBody = RequestBody.create(MediaType.parse(Utils.getMimeType(fileName)),
                         entry.getValue());
-                builder.addPart(Headers.of("Content-Disposition", "form-data; name=\"" + entry.getKey() + "\"; filename=\"" + fileName + "\""),
+                builder.addPart(Headers.of("Content-Disposition",
+                        "form-data; name=\"" + entry.getKey() + "\"; filename=\"" + fileName + "\""),
                         fileBody);
             }
         } catch (Exception e) {

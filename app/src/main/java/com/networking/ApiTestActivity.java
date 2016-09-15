@@ -991,7 +991,7 @@ public class ApiTestActivity extends AppCompatActivity {
 
                             }
                         });
-                ANResponse<String> responseOne = requestOne.startDownload();
+                ANResponse<String> responseOne = requestOne.executeForDownload();
 
                 if (responseOne.isSuccess()) {
                     Log.d(TAG, "checkSynchronousCall : download success");
@@ -1017,7 +1017,7 @@ public class ApiTestActivity extends AppCompatActivity {
                                 Log.d(TAG, " isFromCache : " + isFromCache);
                             }
                         });
-                ANResponse<List<User>> responseTwo = requestTwo.getAsParsed(new TypeToken<List<User>>() {
+                ANResponse<List<User>> responseTwo = requestTwo.executeForParsed(new TypeToken<List<User>>() {
                 });
 
                 if (responseTwo.isSuccess()) {
@@ -1058,7 +1058,7 @@ public class ApiTestActivity extends AppCompatActivity {
                                 Log.d(TAG, " isFromCache : " + isFromCache);
                             }
                         });
-                ANResponse<JSONObject> responseThree = requestThree.getAsJSONObject();
+                ANResponse<JSONObject> responseThree = requestThree.executeForJSONObject();
 
                 if (responseThree.isSuccess()) {
                     Log.d(TAG, "checkSynchronousCall : jsonObjectANResponse success");
@@ -1085,7 +1085,7 @@ public class ApiTestActivity extends AppCompatActivity {
                                 Log.d(TAG, " isFromCache : " + isFromCache);
                             }
                         });
-                ANResponse<Response> responseFour = requestFour.getAsOkHttpResponse();
+                ANResponse<Response> responseFour = requestFour.executeForOkHttpResponse();
 
 
                 if (responseFour.isSuccess()) {
