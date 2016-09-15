@@ -252,37 +252,37 @@ public class ANRequest<T extends ANRequest> {
 
     public ANResponse executeForJSONObject() {
         this.mResponseType = ResponseType.JSON_OBJECT;
-        return SynchronousCall.getResponse(this);
+        return SynchronousCall.execute(this);
     }
 
     public ANResponse executeForJSONArray() {
         this.mResponseType = ResponseType.JSON_ARRAY;
-        return SynchronousCall.getResponse(this);
+        return SynchronousCall.execute(this);
     }
 
     public ANResponse executeForString() {
         this.mResponseType = ResponseType.STRING;
-        return SynchronousCall.getResponse(this);
+        return SynchronousCall.execute(this);
     }
 
     public ANResponse executeForOkHttpResponse() {
         this.mResponseType = ResponseType.OK_HTTP_RESPONSE;
-        return SynchronousCall.getResponse(this);
+        return SynchronousCall.execute(this);
     }
 
     public ANResponse executeForBitmap() {
         this.mResponseType = ResponseType.BITMAP;
-        return SynchronousCall.getResponse(this);
+        return SynchronousCall.execute(this);
     }
 
     public ANResponse executeForParsed(TypeToken typeToken) {
         this.mType = typeToken.getType();
         this.mResponseType = ResponseType.PARSED;
-        return SynchronousCall.getResponse(this);
+        return SynchronousCall.execute(this);
     }
 
     public ANResponse executeForDownload() {
-        return SynchronousCall.getResponse(this);
+        return SynchronousCall.execute(this);
     }
 
     public T setDownloadProgressListener(DownloadProgressListener downloadProgressListener) {
@@ -515,10 +515,7 @@ public class ANRequest<T extends ANRequest> {
                     JSONArray json = new JSONArray(Okio.buffer(response.body().source()).readUtf8());
                     return ANResponse.success(json);
                 } catch (Exception e) {
-                    ANError error = new ANError(e);
-                    error.setErrorCode(0);
-                    error.setErrorDetail(ANConstants.PARSE_ERROR);
-                    return ANResponse.failed(error);
+                    return ANResponse.failed(Utils.getErrorForParse(new ANError(e)));
                 }
             case JSON_OBJECT:
                 try {
@@ -526,20 +523,14 @@ public class ANRequest<T extends ANRequest> {
                             .source()).readUtf8());
                     return ANResponse.success(json);
                 } catch (Exception e) {
-                    ANError error = new ANError(e);
-                    error.setErrorCode(0);
-                    error.setErrorDetail(ANConstants.PARSE_ERROR);
-                    return ANResponse.failed(error);
+                    return ANResponse.failed(Utils.getErrorForParse(new ANError(e)));
                 }
             case STRING:
                 try {
                     return ANResponse.success(Okio.buffer(response
                             .body().source()).readUtf8());
                 } catch (Exception e) {
-                    ANError error = new ANError(e);
-                    error.setErrorCode(0);
-                    error.setErrorDetail(ANConstants.PARSE_ERROR);
-                    return ANResponse.failed(error);
+                    return ANResponse.failed(Utils.getErrorForParse(new ANError(e)));
                 }
             case BITMAP:
                 synchronized (sDecodeLock) {
@@ -547,10 +538,7 @@ public class ANRequest<T extends ANRequest> {
                         return Utils.decodeBitmap(response, mMaxWidth, mMaxHeight,
                                 mDecodeConfig, mScaleType);
                     } catch (Exception e) {
-                        ANError error = new ANError(e);
-                        error.setErrorCode(0);
-                        error.setErrorDetail(ANConstants.PARSE_ERROR);
-                        return ANResponse.failed(error);
+                        return ANResponse.failed(Utils.getErrorForParse(new ANError(e)));
                     }
                 }
             case PARSED:
@@ -558,10 +546,7 @@ public class ANRequest<T extends ANRequest> {
                     return ANResponse.success(ParseUtil.getParserFactory()
                             .responseBodyParser(mType).convert(response.body()));
                 } catch (Exception e) {
-                    ANError error = new ANError(e);
-                    error.setErrorCode(0);
-                    error.setErrorDetail(ANConstants.PARSE_ERROR);
-                    return ANResponse.failed(error);
+                    return ANResponse.failed(Utils.getErrorForParse(new ANError(e)));
                 }
             case PREFETCH:
                 return ANResponse.success(ANConstants.PREFETCH);

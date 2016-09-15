@@ -20,11 +20,12 @@
 package com.androidnetworking.internal;
 
 import com.androidnetworking.common.ANConstants;
-import com.androidnetworking.common.ANLog;
 import com.androidnetworking.common.ANRequest;
 import com.androidnetworking.common.ANResponse;
 import com.androidnetworking.common.ResponseType;
 import com.androidnetworking.error.ANError;
+import com.androidnetworking.utils.SourceCloseUtil;
+import com.androidnetworking.utils.Utils;
 
 import okhttp3.Response;
 
@@ -35,13 +36,14 @@ import static com.androidnetworking.common.RequestType.SIMPLE;
 /**
  * Created by amitshekhar on 14/09/16.
  */
+@SuppressWarnings("unchecked")
 public final class SynchronousCall {
 
     private SynchronousCall() {
 
     }
 
-    public static <T> ANResponse<T> getResponse(ANRequest request) {
+    public static <T> ANResponse<T> execute(ANRequest request) {
         switch (request.getRequestType()) {
             case SIMPLE:
                 return executeSimpleRequest(request);
@@ -53,51 +55,28 @@ public final class SynchronousCall {
         return new ANResponse<>(new ANError());
     }
 
-
     private static <T> ANResponse<T> executeSimpleRequest(ANRequest request) {
         Response okHttpResponse = null;
         try {
             okHttpResponse = InternalNetworking.performSimpleRequest(request);
-
             if (okHttpResponse == null) {
-                ANError anError = new ANError();
-                anError = request.parseNetworkError(anError);
-                anError.setErrorDetail(ANConstants.CONNECTION_ERROR);
-                anError.setErrorCode(0);
-                return new ANResponse(anError);
+                return new ANResponse<>(Utils.getErrorForConnection(new ANError()));
             }
 
             if (request.getResponseAs() == ResponseType.OK_HTTP_RESPONSE) {
                 return new ANResponse(okHttpResponse);
             }
             if (okHttpResponse.code() >= 400) {
-                ANError anError = new ANError(okHttpResponse);
-                anError = request.parseNetworkError(anError);
-                anError.setErrorCode(okHttpResponse.code());
-                anError.setErrorDetail(ANConstants.RESPONSE_FROM_SERVER_ERROR);
-                return new ANResponse(anError);
+                return new ANResponse<>(Utils.getErrorForServerResponse(new ANError(okHttpResponse),
+                        request, okHttpResponse.code()));
             }
             return request.parseResponse(okHttpResponse);
         } catch (ANError se) {
-            se = request.parseNetworkError(se);
-            se.setErrorDetail(ANConstants.CONNECTION_ERROR);
-            se.setErrorCode(0);
-            return new ANResponse(se);
+            return new ANResponse<>(Utils.getErrorForConnection(new ANError(se)));
         } catch (Exception e) {
-            ANError se = new ANError(e);
-            se.setErrorDetail(ANConstants.CONNECTION_ERROR);
-            se.setErrorCode(0);
-            return new ANResponse(se);
+            return new ANResponse<>(Utils.getErrorForConnection(new ANError(e)));
         } finally {
-            if (request.getResponseAs() != ResponseType.OK_HTTP_RESPONSE &&
-                    okHttpResponse != null && okHttpResponse.body() != null &&
-                    okHttpResponse.body().source() != null) {
-                try {
-                    okHttpResponse.body().source().close();
-                } catch (Exception e) {
-                    ANLog.d("Unable to close source data");
-                }
-            }
+            SourceCloseUtil.close(okHttpResponse, request);
         }
     }
 
@@ -106,29 +85,17 @@ public final class SynchronousCall {
         try {
             okHttpResponse = InternalNetworking.performDownloadRequest(request);
             if (okHttpResponse == null) {
-                ANError anError = new ANError();
-                anError = request.parseNetworkError(anError);
-                anError.setErrorDetail(ANConstants.CONNECTION_ERROR);
-                anError.setErrorCode(0);
-                return new ANResponse(anError);
+                return new ANResponse<>(Utils.getErrorForConnection(new ANError()));
             }
             if (okHttpResponse.code() >= 400) {
-                ANError anError = new ANError();
-                anError = request.parseNetworkError(anError);
-                anError.setErrorCode(okHttpResponse.code());
-                anError.setErrorDetail(ANConstants.RESPONSE_FROM_SERVER_ERROR);
-                return new ANResponse(anError);
+                return new ANResponse<>(Utils.getErrorForServerResponse(new ANError(okHttpResponse),
+                        request, okHttpResponse.code()));
             }
-            return new ANResponse("success");
+            return new ANResponse(ANConstants.SUCCESS);
         } catch (ANError se) {
-            se.setErrorDetail(ANConstants.CONNECTION_ERROR);
-            se.setErrorCode(0);
-            return new ANResponse(se);
+            return new ANResponse<>(Utils.getErrorForConnection(new ANError(se)));
         } catch (Exception e) {
-            ANError se = new ANError(e);
-            se.setErrorDetail(ANConstants.CONNECTION_ERROR);
-            se.setErrorCode(0);
-            return new ANResponse(se);
+            return new ANResponse<>(Utils.getErrorForConnection(new ANError(e)));
         }
     }
 
@@ -138,11 +105,7 @@ public final class SynchronousCall {
             okHttpResponse = InternalNetworking.performUploadRequest(request);
 
             if (okHttpResponse == null) {
-                ANError anError = new ANError();
-                anError = request.parseNetworkError(anError);
-                anError.setErrorDetail(ANConstants.CONNECTION_ERROR);
-                anError.setErrorCode(0);
-                return new ANResponse<T>(anError);
+                return new ANResponse<>(Utils.getErrorForConnection(new ANError()));
             }
 
             if (request.getResponseAs() == ResponseType.OK_HTTP_RESPONSE) {
@@ -150,33 +113,16 @@ public final class SynchronousCall {
             }
 
             if (okHttpResponse.code() >= 400) {
-                ANError anError = new ANError(okHttpResponse);
-                anError = request.parseNetworkError(anError);
-                anError.setErrorCode(okHttpResponse.code());
-                anError.setErrorDetail(ANConstants.RESPONSE_FROM_SERVER_ERROR);
-                return new ANResponse<T>(anError);
+                return new ANResponse<>(Utils.getErrorForServerResponse(new ANError(okHttpResponse),
+                        request, okHttpResponse.code()));
             }
             return request.parseResponse(okHttpResponse);
         } catch (ANError se) {
-            se = request.parseNetworkError(se);
-            se.setErrorDetail(ANConstants.CONNECTION_ERROR);
-            se.setErrorCode(0);
-            return new ANResponse(se);
+            return new ANResponse<>(Utils.getErrorForConnection(se));
         } catch (Exception e) {
-            ANError se = new ANError(e);
-            se.setErrorDetail(ANConstants.CONNECTION_ERROR);
-            se.setErrorCode(0);
-            return new ANResponse(se);
+            return new ANResponse<>(Utils.getErrorForConnection(new ANError(e)));
         } finally {
-            if (request.getResponseAs() != ResponseType.OK_HTTP_RESPONSE &&
-                    okHttpResponse != null && okHttpResponse.body() != null &&
-                    okHttpResponse.body().source() != null) {
-                try {
-                    okHttpResponse.body().source().close();
-                } catch (Exception e) {
-                    ANLog.d("Unable to close source data");
-                }
-            }
+            SourceCloseUtil.close(okHttpResponse, request);
         }
     }
 }

@@ -286,6 +286,11 @@ public class AndroidNetworking {
         return ConnectionClassManager.getInstance().getCurrentConnectionQuality();
     }
 
+    /**
+     * Method to set ParserFactory
+     *
+     * @param parserFactory The ParserFactory
+     */
     public static void setParserFactory(Parser.Factory parserFactory) {
         ParseUtil.setParserFactory(parserFactory);
     }

@@ -17,7 +17,6 @@
 
 package com.androidnetworking.internal;
 
-import com.androidnetworking.common.ANConstants;
 import com.androidnetworking.common.ANLog;
 import com.androidnetworking.common.ANRequest;
 import com.androidnetworking.common.ANResponse;
@@ -25,6 +24,8 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.common.ResponseType;
 import com.androidnetworking.core.Core;
 import com.androidnetworking.error.ANError;
+import com.androidnetworking.utils.SourceCloseUtil;
+import com.androidnetworking.utils.Utils;
 
 import okhttp3.Response;
 
@@ -70,11 +71,7 @@ public class InternalRunnable implements Runnable {
             okHttpResponse = InternalNetworking.performSimpleRequest(request);
 
             if (okHttpResponse == null) {
-                ANError anError = new ANError();
-                anError = request.parseNetworkError(anError);
-                anError.setErrorDetail(ANConstants.CONNECTION_ERROR);
-                anError.setErrorCode(0);
-                deliverError(request, anError);
+                deliverError(request, Utils.getErrorForConnection(new ANError()));
                 return;
             }
 
@@ -83,11 +80,8 @@ public class InternalRunnable implements Runnable {
                 return;
             }
             if (okHttpResponse.code() >= 400) {
-                ANError anError = new ANError(okHttpResponse);
-                anError = request.parseNetworkError(anError);
-                anError.setErrorCode(okHttpResponse.code());
-                anError.setErrorDetail(ANConstants.RESPONSE_FROM_SERVER_ERROR);
-                deliverError(request, anError);
+                deliverError(request, Utils.getErrorForServerResponse(new ANError(okHttpResponse),
+                        request, okHttpResponse.code()));
                 return;
             }
 
@@ -97,27 +91,10 @@ public class InternalRunnable implements Runnable {
                 return;
             }
             request.deliverResponse(response);
-        } catch (ANError se) {
-            se = request.parseNetworkError(se);
-            se.setErrorDetail(ANConstants.CONNECTION_ERROR);
-            se.setErrorCode(0);
-            deliverError(request, se);
         } catch (Exception e) {
-            ANError se = new ANError(e);
-            se.setErrorDetail(ANConstants.CONNECTION_ERROR);
-            se.setErrorCode(0);
-            deliverError(request, se);
-
+            deliverError(request, Utils.getErrorForConnection(new ANError(e)));
         } finally {
-            if (request.getResponseAs() != ResponseType.OK_HTTP_RESPONSE &&
-                    okHttpResponse != null && okHttpResponse.body() != null
-                    && okHttpResponse.body().source() != null) {
-                try {
-                    okHttpResponse.body().source().close();
-                } catch (Exception e) {
-                    ANLog.d("Unable to close source data");
-                }
-            }
+            SourceCloseUtil.close(okHttpResponse, request);
         }
     }
 
@@ -126,31 +103,17 @@ public class InternalRunnable implements Runnable {
         try {
             okHttpResponse = InternalNetworking.performDownloadRequest(request);
             if (okHttpResponse == null) {
-                ANError anError = new ANError();
-                anError = request.parseNetworkError(anError);
-                anError.setErrorDetail(ANConstants.CONNECTION_ERROR);
-                anError.setErrorCode(0);
-                deliverError(request, anError);
+                deliverError(request, Utils.getErrorForConnection(new ANError()));
                 return;
             }
             if (okHttpResponse.code() >= 400) {
-                ANError anError = new ANError();
-                anError = request.parseNetworkError(anError);
-                anError.setErrorCode(okHttpResponse.code());
-                anError.setErrorDetail(ANConstants.RESPONSE_FROM_SERVER_ERROR);
-                deliverError(request, anError);
+                deliverError(request, Utils.getErrorForServerResponse(new ANError(okHttpResponse),
+                        request, okHttpResponse.code()));
                 return;
             }
             request.updateDownloadCompletion();
-        } catch (ANError se) {
-            se.setErrorDetail(ANConstants.CONNECTION_ERROR);
-            se.setErrorCode(0);
-            deliverError(request, se);
         } catch (Exception e) {
-            ANError se = new ANError(e);
-            se.setErrorDetail(ANConstants.CONNECTION_ERROR);
-            se.setErrorCode(0);
-            deliverError(request, se);
+            deliverError(request, Utils.getErrorForConnection(new ANError(e)));
         }
     }
 
@@ -160,11 +123,7 @@ public class InternalRunnable implements Runnable {
             okHttpResponse = InternalNetworking.performUploadRequest(request);
 
             if (okHttpResponse == null) {
-                ANError anError = new ANError();
-                anError = request.parseNetworkError(anError);
-                anError.setErrorDetail(ANConstants.CONNECTION_ERROR);
-                anError.setErrorCode(0);
-                deliverError(request, anError);
+                deliverError(request, Utils.getErrorForConnection(new ANError()));
                 return;
             }
 
@@ -174,11 +133,8 @@ public class InternalRunnable implements Runnable {
             }
 
             if (okHttpResponse.code() >= 400) {
-                ANError anError = new ANError(okHttpResponse);
-                anError = request.parseNetworkError(anError);
-                anError.setErrorCode(okHttpResponse.code());
-                anError.setErrorDetail(ANConstants.RESPONSE_FROM_SERVER_ERROR);
-                deliverError(request, anError);
+                deliverError(request, Utils.getErrorForServerResponse(new ANError(okHttpResponse),
+                        request, okHttpResponse.code()));
                 return;
             }
             ANResponse response = request.parseResponse(okHttpResponse);
@@ -187,26 +143,10 @@ public class InternalRunnable implements Runnable {
                 return;
             }
             request.deliverResponse(response);
-        } catch (ANError se) {
-            se = request.parseNetworkError(se);
-            se.setErrorDetail(ANConstants.CONNECTION_ERROR);
-            se.setErrorCode(0);
-            deliverError(request, se);
         } catch (Exception e) {
-            ANError se = new ANError(e);
-            se.setErrorDetail(ANConstants.CONNECTION_ERROR);
-            se.setErrorCode(0);
-            deliverError(request, se);
+            deliverError(request, Utils.getErrorForConnection(new ANError(e)));
         } finally {
-            if (request.getResponseAs() != ResponseType.OK_HTTP_RESPONSE &&
-                    okHttpResponse != null && okHttpResponse.body() != null &&
-                    okHttpResponse.body().source() != null) {
-                try {
-                    okHttpResponse.body().source().close();
-                } catch (Exception e) {
-                    ANLog.d("Unable to close source data");
-                }
-            }
+            SourceCloseUtil.close(okHttpResponse, request);
         }
     }
 

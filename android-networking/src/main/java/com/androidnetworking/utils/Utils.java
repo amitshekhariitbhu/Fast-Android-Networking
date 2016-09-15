@@ -23,6 +23,7 @@ import android.graphics.BitmapFactory;
 import android.widget.ImageView;
 
 import com.androidnetworking.common.ANConstants;
+import com.androidnetworking.common.ANRequest;
 import com.androidnetworking.common.ANResponse;
 import com.androidnetworking.core.Core;
 import com.androidnetworking.error.ANError;
@@ -104,10 +105,7 @@ public class Utils {
         }
 
         if (bitmap == null) {
-            ANError error = new ANError(response);
-            error.setErrorCode(0);
-            error.setErrorDetail(ANConstants.PARSE_ERROR);
-            return ANResponse.failed(error);
+            return ANResponse.failed(Utils.getErrorForParse(new ANError(response)));
         } else {
             return ANResponse.success(bitmap);
         }
@@ -209,5 +207,24 @@ public class Utils {
                 }
             }
         });
+    }
+
+    public static ANError getErrorForConnection(ANError error) {
+        error.setErrorDetail(ANConstants.CONNECTION_ERROR);
+        error.setErrorCode(0);
+        return error;
+    }
+
+    public static ANError getErrorForServerResponse(ANError error, ANRequest request, int code) {
+        error = request.parseNetworkError(error);
+        error.setErrorCode(code);
+        error.setErrorDetail(ANConstants.RESPONSE_FROM_SERVER_ERROR);
+        return error;
+    }
+
+    public static ANError getErrorForParse(ANError error) {
+        error.setErrorCode(0);
+        error.setErrorDetail(ANConstants.PARSE_ERROR);
+        return error;
     }
 }
