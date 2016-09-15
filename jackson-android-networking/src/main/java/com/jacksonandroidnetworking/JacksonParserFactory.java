@@ -48,14 +48,14 @@ public final class JacksonParserFactory extends Parser.Factory {
     @Override
     public Parser<ResponseBody, ?> responseBodyParser(Type type) {
         JavaType javaType = mapper.getTypeFactory().constructType(type);
-        ObjectReader reader = mapper.reader(javaType);
+        ObjectReader reader = mapper.readerFor(javaType);
         return new JacksonResponseBodyParser<>(reader);
     }
 
     @Override
     public Parser<?, RequestBody> requestBodyParser(Type type) {
         JavaType javaType = mapper.getTypeFactory().constructType(type);
-        ObjectWriter writer = mapper.writerWithType(javaType);
+        ObjectWriter writer = mapper.writerFor(javaType);
         return new JacksonRequestBodyParser<>(writer);
     }
 
