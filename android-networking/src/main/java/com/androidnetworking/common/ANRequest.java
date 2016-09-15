@@ -28,6 +28,11 @@ import com.androidnetworking.interfaces.DownloadListener;
 import com.androidnetworking.interfaces.DownloadProgressListener;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.androidnetworking.interfaces.OkHttpResponseAndBitmapRequestListener;
+import com.androidnetworking.interfaces.OkHttpResponseAndJSONArrayRequestListener;
+import com.androidnetworking.interfaces.OkHttpResponseAndJSONObjectRequestListener;
+import com.androidnetworking.interfaces.OkHttpResponseAndParsedRequestListener;
+import com.androidnetworking.interfaces.OkHttpResponseAndStringRequestListener;
 import com.androidnetworking.interfaces.OkHttpResponseListener;
 import com.androidnetworking.interfaces.ParsedRequestListener;
 import com.androidnetworking.interfaces.StringRequestListener;
@@ -108,6 +113,11 @@ public class ANRequest<T extends ANRequest> {
     private OkHttpResponseListener mOkHttpResponseListener;
     private BitmapRequestListener mBitmapRequestListener;
     private ParsedRequestListener mParsedRequestListener;
+    private OkHttpResponseAndJSONObjectRequestListener mOkHttpResponseAndJSONObjectRequestListener;
+    private OkHttpResponseAndJSONArrayRequestListener mOkHttpResponseAndJSONArrayRequestListener;
+    private OkHttpResponseAndStringRequestListener mOkHttpResponseAndStringRequestListener;
+    private OkHttpResponseAndBitmapRequestListener mOkHttpResponseAndBitmapRequestListener;
+    private OkHttpResponseAndParsedRequestListener mOkHttpResponseAndParsedRequestListener;
     private DownloadProgressListener mDownloadProgressListener;
     private UploadProgressListener mUploadProgressListener;
     private DownloadListener mDownloadListener;
@@ -242,6 +252,39 @@ public class ANRequest<T extends ANRequest> {
         this.mParsedRequestListener = parsedRequestListener;
         ANRequestQueue.getInstance().addRequest(this);
     }
+
+    public void getAsOkHttpResponseAndJSONObject(OkHttpResponseAndJSONObjectRequestListener requestListener) {
+        this.mResponseType = ResponseType.JSON_OBJECT;
+        this.mOkHttpResponseAndJSONObjectRequestListener = requestListener;
+        ANRequestQueue.getInstance().addRequest(this);
+    }
+
+    public void getAsOkHttpResponseAndJSONArray(OkHttpResponseAndJSONArrayRequestListener requestListener) {
+        this.mResponseType = ResponseType.JSON_ARRAY;
+        this.mOkHttpResponseAndJSONArrayRequestListener = requestListener;
+        ANRequestQueue.getInstance().addRequest(this);
+    }
+
+    public void getAsOkHttpResponseAndString(OkHttpResponseAndStringRequestListener requestListener) {
+        this.mResponseType = ResponseType.STRING;
+        this.mOkHttpResponseAndStringRequestListener = requestListener;
+        ANRequestQueue.getInstance().addRequest(this);
+    }
+
+
+    public void getAsOkHttpResponseAndBitmap(OkHttpResponseAndBitmapRequestListener requestListener) {
+        this.mResponseType = ResponseType.BITMAP;
+        this.mOkHttpResponseAndBitmapRequestListener = requestListener;
+        ANRequestQueue.getInstance().addRequest(this);
+    }
+
+    public void getAsOkHttpResponseAndParsed(TypeToken typeToken, OkHttpResponseAndParsedRequestListener parsedRequestListener) {
+        this.mType = typeToken.getType();
+        this.mResponseType = ResponseType.PARSED;
+        this.mOkHttpResponseAndParsedRequestListener = parsedRequestListener;
+        ANRequestQueue.getInstance().addRequest(this);
+    }
+
 
     public void startDownload(DownloadListener downloadListener) {
         this.mDownloadListener = downloadListener;
@@ -577,21 +620,7 @@ public class ANRequest<T extends ANRequest> {
                     anError.setCancellationMessageInError();
                     anError.setErrorCode(0);
                 }
-                if (mJSONObjectRequestListener != null) {
-                    mJSONObjectRequestListener.onError(anError);
-                } else if (mJSONArrayRequestListener != null) {
-                    mJSONArrayRequestListener.onError(anError);
-                } else if (mStringRequestListener != null) {
-                    mStringRequestListener.onError(anError);
-                } else if (mOkHttpResponseListener != null) {
-                    mOkHttpResponseListener.onError(anError);
-                } else if (mBitmapRequestListener != null) {
-                    mBitmapRequestListener.onError(anError);
-                } else if (mDownloadListener != null) {
-                    mDownloadListener.onError(anError);
-                } else if (mParsedRequestListener != null) {
-                    mParsedRequestListener.onError(anError);
-                }
+                deliverErrorResponse(anError);
                 ANLog.d("Delivering anError : " + toString());
             }
             isDelivered = true;
@@ -599,6 +628,7 @@ public class ANRequest<T extends ANRequest> {
             e.printStackTrace();
         }
     }
+
 
     public void deliverResponse(final ANResponse response) {
         try {
@@ -608,35 +638,13 @@ public class ANRequest<T extends ANRequest> {
                     mExecutor.execute(new Runnable() {
                         @Override
                         public void run() {
-                            if (mJSONObjectRequestListener != null) {
-                                mJSONObjectRequestListener.onResponse((JSONObject) response.getResult());
-                            } else if (mJSONArrayRequestListener != null) {
-                                mJSONArrayRequestListener.onResponse((JSONArray) response.getResult());
-                            } else if (mStringRequestListener != null) {
-                                mStringRequestListener.onResponse((String) response.getResult());
-                            } else if (mBitmapRequestListener != null) {
-                                mBitmapRequestListener.onResponse((Bitmap) response.getResult());
-                            } else if (mParsedRequestListener != null) {
-                                mParsedRequestListener.onResponse(response.getResult());
-                            }
-                            finish();
+                            deliverSuccessResponse(response);
                         }
                     });
                 } else {
                     Core.getInstance().getExecutorSupplier().forMainThreadTasks().execute(new Runnable() {
                         public void run() {
-                            if (mJSONObjectRequestListener != null) {
-                                mJSONObjectRequestListener.onResponse((JSONObject) response.getResult());
-                            } else if (mJSONArrayRequestListener != null) {
-                                mJSONArrayRequestListener.onResponse((JSONArray) response.getResult());
-                            } else if (mStringRequestListener != null) {
-                                mStringRequestListener.onResponse((String) response.getResult());
-                            } else if (mBitmapRequestListener != null) {
-                                mBitmapRequestListener.onResponse((Bitmap) response.getResult());
-                            } else if (mParsedRequestListener != null) {
-                                mParsedRequestListener.onResponse(response.getResult());
-                            }
-                            finish();
+                            deliverSuccessResponse(response);
                         }
                     });
                 }
@@ -645,22 +653,61 @@ public class ANRequest<T extends ANRequest> {
                 ANError anError = new ANError();
                 anError.setCancellationMessageInError();
                 anError.setErrorCode(0);
-                if (mJSONObjectRequestListener != null) {
-                    mJSONObjectRequestListener.onError(anError);
-                } else if (mJSONArrayRequestListener != null) {
-                    mJSONArrayRequestListener.onError(anError);
-                } else if (mStringRequestListener != null) {
-                    mStringRequestListener.onError(anError);
-                } else if (mBitmapRequestListener != null) {
-                    mBitmapRequestListener.onError(anError);
-                } else if (mParsedRequestListener != null) {
-                    mParsedRequestListener.onError(anError);
-                }
+                deliverErrorResponse(anError);
                 finish();
                 ANLog.d("Delivering cancelled : " + toString());
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private void deliverSuccessResponse(ANResponse response) {
+        if (mJSONObjectRequestListener != null) {
+            mJSONObjectRequestListener.onResponse((JSONObject) response.getResult());
+        } else if (mJSONArrayRequestListener != null) {
+            mJSONArrayRequestListener.onResponse((JSONArray) response.getResult());
+        } else if (mStringRequestListener != null) {
+            mStringRequestListener.onResponse((String) response.getResult());
+        } else if (mBitmapRequestListener != null) {
+            mBitmapRequestListener.onResponse((Bitmap) response.getResult());
+        } else if (mParsedRequestListener != null) {
+            mParsedRequestListener.onResponse(response.getResult());
+        } else if (mOkHttpResponseAndJSONObjectRequestListener != null) {
+            mOkHttpResponseAndJSONObjectRequestListener.onResponse(response.getOkHttpResponse(), (JSONObject) response.getResult());
+        } else if (mOkHttpResponseAndJSONArrayRequestListener != null) {
+            mOkHttpResponseAndJSONArrayRequestListener.onResponse(response.getOkHttpResponse(), (JSONArray) response.getResult());
+        } else if (mOkHttpResponseAndStringRequestListener != null) {
+            mOkHttpResponseAndStringRequestListener.onResponse(response.getOkHttpResponse(), (String) response.getResult());
+        } else if (mOkHttpResponseAndBitmapRequestListener != null) {
+            mOkHttpResponseAndBitmapRequestListener.onResponse(response.getOkHttpResponse(), (Bitmap) response.getResult());
+        } else if (mOkHttpResponseAndParsedRequestListener != null) {
+            mOkHttpResponseAndParsedRequestListener.onResponse(response.getOkHttpResponse(), response.getResult());
+        }
+        finish();
+    }
+
+    private void deliverErrorResponse(ANError anError) {
+        if (mJSONObjectRequestListener != null) {
+            mJSONObjectRequestListener.onError(anError);
+        } else if (mJSONArrayRequestListener != null) {
+            mJSONArrayRequestListener.onError(anError);
+        } else if (mStringRequestListener != null) {
+            mStringRequestListener.onError(anError);
+        } else if (mBitmapRequestListener != null) {
+            mBitmapRequestListener.onError(anError);
+        } else if (mParsedRequestListener != null) {
+            mParsedRequestListener.onError(anError);
+        } else if (mOkHttpResponseAndJSONObjectRequestListener != null) {
+            mOkHttpResponseAndJSONObjectRequestListener.onError(anError);
+        } else if (mOkHttpResponseAndJSONArrayRequestListener != null) {
+            mOkHttpResponseAndJSONArrayRequestListener.onError(anError);
+        } else if (mOkHttpResponseAndStringRequestListener != null) {
+            mOkHttpResponseAndStringRequestListener.onError(anError);
+        } else if (mOkHttpResponseAndBitmapRequestListener != null) {
+            mOkHttpResponseAndBitmapRequestListener.onError(anError);
+        } else if (mOkHttpResponseAndParsedRequestListener != null) {
+            mOkHttpResponseAndParsedRequestListener.onError(anError);
         }
     }
 

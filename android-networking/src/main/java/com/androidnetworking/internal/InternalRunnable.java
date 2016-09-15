@@ -90,6 +90,7 @@ public class InternalRunnable implements Runnable {
                 deliverError(request, response.getError());
                 return;
             }
+            response.setOkHttpResponse(okHttpResponse);
             request.deliverResponse(response);
         } catch (Exception e) {
             deliverError(request, Utils.getErrorForConnection(new ANError(e)));
@@ -142,6 +143,7 @@ public class InternalRunnable implements Runnable {
                 deliverError(request, response.getError());
                 return;
             }
+            response.setOkHttpResponse(okHttpResponse);
             request.deliverResponse(response);
         } catch (Exception e) {
             deliverError(request, Utils.getErrorForConnection(new ANError(e)));
