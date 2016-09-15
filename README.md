@@ -39,7 +39,7 @@ Fast Android Networking Library supports Android 2.3 (Gingerbread) and later.
 
 Add this in your build.gradle
 ```groovy
-compile 'com.amitshekhar.android:android-networking:0.1.0'
+compile 'com.amitshekhar.android:android-networking:0.2.0'
 ```
 Do not forget to add internet permission in manifest if already not present
 ```xml
@@ -57,6 +57,15 @@ OkHttpClient okHttpClient = new OkHttpClient() .newBuilder()
                         .build();
 AndroidNetworking.initialize(getApplicationContext(),okHttpClient);                        
 ```
+Using the Fast Android Networking with Jackson Parser
+```groovy
+compile 'com.amitshekhar.android:jackson-android-networking:0.2.0'
+```
+```java
+// Then set the JacksonParserFactory like below
+AndroidNetworking.setParserFactory(new JacksonParserFactory());
+```
+
 If you are using proguard, then add this rule in proguard-project.txt
 ```
 -dontwarn okio.**
@@ -476,6 +485,39 @@ AndroidNetworking.download(url,dirPath,fileName)
                     }
                 });  
 Note : If bytesSent or bytesReceived is -1 , it means it is unknown                
+```
+### Getting OkHttpResponse in Response
+```java
+AndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAnUserDetail/{userId}")
+                .addPathParameter("userId", "1")
+                .setTag(this)
+                .setPriority(Priority.LOW)
+                .setUserAgent("getAnUser")
+                .build()
+                .getAsOkHttpResponseAndParsed(new TypeToken<User>() {
+                }, new OkHttpResponseAndParsedRequestListener<User>() {
+                    @Override
+                    public void onResponse(Response okHttpResponse, User user) {
+                      // do anything with okHttpResponse and user
+                    }
+                    @Override
+                    public void onError(ANError anError) {
+                      // handle error
+                    }
+                });
+```
+### Making Synchronous Request
+```java                
+ANRequest request = AndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAllUsers/{pageNumber}")
+                        .addPathParameter("pageNumber", "0")
+                        .addQueryParameter("limit", "3")
+                        .build();
+ANResponse<List<User>> response = request.executeForParsed(new TypeToken<List<User>>() {});
+if (response.isSuccess()) {
+   List<User> users = responseTwo.getResult();
+} else {
+   //handle error
+}                                        
 ```
 ### How caching works ?
 * First of all the server must send cache-control in header so that is starts working.
