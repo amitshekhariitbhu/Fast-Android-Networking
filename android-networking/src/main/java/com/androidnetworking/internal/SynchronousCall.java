@@ -74,7 +74,7 @@ public final class SynchronousCall {
         } catch (ANError se) {
             return new ANResponse<>(Utils.getErrorForConnection(new ANError(se)));
         } catch (Exception e) {
-            return new ANResponse<>(Utils.getErrorForConnection(new ANError(e)));
+            return new ANResponse<>(Utils.getErrorForNetworkOnMainThreadOrConnection(e));
         } finally {
             SourceCloseUtil.close(okHttpResponse, request);
         }
@@ -95,7 +95,7 @@ public final class SynchronousCall {
         } catch (ANError se) {
             return new ANResponse<>(Utils.getErrorForConnection(new ANError(se)));
         } catch (Exception e) {
-            return new ANResponse<>(Utils.getErrorForConnection(new ANError(e)));
+            return new ANResponse<>(Utils.getErrorForNetworkOnMainThreadOrConnection(e));
         }
     }
 
@@ -120,7 +120,7 @@ public final class SynchronousCall {
         } catch (ANError se) {
             return new ANResponse<>(Utils.getErrorForConnection(se));
         } catch (Exception e) {
-            return new ANResponse<>(Utils.getErrorForConnection(new ANError(e)));
+            return new ANResponse<>(Utils.getErrorForNetworkOnMainThreadOrConnection(e));
         } finally {
             SourceCloseUtil.close(okHttpResponse, request);
         }

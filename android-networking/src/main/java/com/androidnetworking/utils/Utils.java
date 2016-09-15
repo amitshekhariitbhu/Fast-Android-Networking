@@ -20,6 +20,8 @@ package com.androidnetworking.utils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
+import android.os.NetworkOnMainThreadException;
 import android.widget.ImageView;
 
 import com.androidnetworking.common.ANConstants;
@@ -215,6 +217,7 @@ public class Utils {
         return error;
     }
 
+
     public static ANError getErrorForServerResponse(ANError error, ANRequest request, int code) {
         error = request.parseNetworkError(error);
         error.setErrorCode(code);
@@ -225,6 +228,18 @@ public class Utils {
     public static ANError getErrorForParse(ANError error) {
         error.setErrorCode(0);
         error.setErrorDetail(ANConstants.PARSE_ERROR);
+        return error;
+    }
+
+    public static ANError getErrorForNetworkOnMainThreadOrConnection(Exception e) {
+        ANError error = new ANError(e);
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB
+                && e instanceof NetworkOnMainThreadException) {
+            error.setErrorDetail(ANConstants.NETWORK_ON_MAIN_THREAD_ERROR);
+        } else {
+            error.setErrorDetail(ANConstants.CONNECTION_ERROR);
+        }
+        error.setErrorCode(0);
         return error;
     }
 }

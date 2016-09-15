@@ -17,8 +17,6 @@
 package com.rxandroidnetworking;
 
 import android.net.TrafficStats;
-import android.os.Build;
-import android.os.NetworkOnMainThreadException;
 
 import com.androidnetworking.common.ANConstants;
 import com.androidnetworking.common.ANLog;
@@ -273,17 +271,9 @@ public class RxInternalNetworking {
                 }
             } catch (Exception e) {
                 Exceptions.throwIfFatal(e);
-                ANError se = new ANError(e);
-                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB
-                        && e instanceof NetworkOnMainThreadException) {
-                    se.setErrorDetail(ANConstants.NETWORK_ON_MAIN_THREAD_ERROR);
-                } else {
-                    se.setErrorDetail(ANConstants.CONNECTION_ERROR);
-                }
-                se.setErrorCode(0);
                 if (!subscriber.isUnsubscribed()) {
                     ANLog.d("delivering error to subscriber from simple observable");
-                    subscriber.onError(se);
+                    subscriber.onError(Utils.getErrorForNetworkOnMainThreadOrConnection(e));
                 }
             } finally {
                 SourceCloseUtil.close(okHttpResponse, request);
@@ -369,16 +359,8 @@ public class RxInternalNetworking {
                 }
             } catch (Exception e) {
                 Exceptions.throwIfFatal(e);
-                ANError se = new ANError(e);
-                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB
-                        && e instanceof NetworkOnMainThreadException) {
-                    se.setErrorDetail(ANConstants.NETWORK_ON_MAIN_THREAD_ERROR);
-                } else {
-                    se.setErrorDetail(ANConstants.CONNECTION_ERROR);
-                }
-                se.setErrorCode(0);
                 if (!subscriber.isUnsubscribed()) {
-                    subscriber.onError(se);
+                    subscriber.onError(Utils.getErrorForNetworkOnMainThreadOrConnection(e));
                 }
             }
         }
@@ -472,16 +454,8 @@ public class RxInternalNetworking {
                 }
             } catch (Exception e) {
                 Exceptions.throwIfFatal(e);
-                ANError se = new ANError(e);
-                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB
-                        && e instanceof NetworkOnMainThreadException) {
-                    se.setErrorDetail(ANConstants.NETWORK_ON_MAIN_THREAD_ERROR);
-                } else {
-                    se.setErrorDetail(ANConstants.CONNECTION_ERROR);
-                }
-                se.setErrorCode(0);
                 if (!subscriber.isUnsubscribed()) {
-                    subscriber.onError(se);
+                    subscriber.onError(Utils.getErrorForNetworkOnMainThreadOrConnection(e));
                 }
             } finally {
                 SourceCloseUtil.close(okHttpResponse, request);
