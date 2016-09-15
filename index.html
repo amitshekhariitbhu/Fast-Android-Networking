@@ -79,7 +79,7 @@ image from network in ImageView, etc. There are libraries but they are outdated.
 
 <p>Add this in your build.gradle</p>
 
-<div class="highlight highlight-source-groovy"><pre>compile <span class="pl-s"><span class="pl-pds">'</span>com.amitshekhar.android:android-networking:0.1.0<span class="pl-pds">'</span></span></pre></div>
+<div class="highlight highlight-source-groovy"><pre>compile <span class="pl-s"><span class="pl-pds">'</span>com.amitshekhar.android:android-networking:0.2.0<span class="pl-pds">'</span></span></pre></div>
 
 <p>Do not forget to add internet permission in manifest if already not present</p>
 
@@ -96,6 +96,13 @@ image from network in ImageView, etc. There are libraries but they are outdated.
                         .addNetworkInterceptor(<span class="pl-k">new</span> <span class="pl-smi">StethoInterceptor</span>())
                         .build();
 <span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>initialize(getApplicationContext(),okHttpClient);                        </pre></div>
+
+<p>Using the Fast Android Networking with Jackson Parser</p>
+
+<div class="highlight highlight-source-groovy"><pre>compile <span class="pl-s"><span class="pl-pds">'</span>com.amitshekhar.android:jackson-android-networking:0.2.0<span class="pl-pds">'</span></span></pre></div>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-c">// Then set the JacksonParserFactory like below</span>
+<span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>setParserFactory(<span class="pl-k">new</span> <span class="pl-smi">JacksonParserFactory</span>());</pre></div>
 
 <p>If you are using proguard, then add this rule in proguard-project.txt</p>
 
@@ -136,9 +143,9 @@ image from network in ImageView, etc. There are libraries but they are outdated.
                  .setTag(<span class="pl-s"><span class="pl-pds">"</span>test<span class="pl-pds">"</span></span>)
                  .setPriority(<span class="pl-smi">Priority</span><span class="pl-c1"><span class="pl-k">.</span>MEDIUM</span>)
                  .build()
-                 .getAsJSONArray(<span class="pl-k">new</span> <span class="pl-smi">JSONArrayRequestListener</span>() {
+                 .getAsJSONObject(<span class="pl-k">new</span> <span class="pl-smi">JSONObjectRequestListener</span>() {
                     <span class="pl-k">@Override</span>
-                    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onResponse</span>(<span class="pl-smi">JSONArray</span> <span class="pl-v">response</span>) {
+                    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onResponse</span>(<span class="pl-smi">JSONObject</span> <span class="pl-v">response</span>) {
                       <span class="pl-c">// do anything with response</span>
                     }
                     <span class="pl-k">@Override</span>
@@ -534,6 +541,41 @@ anRequest<span class="pl-k">.</span>getAsJSONObject(<span class="pl-k">new</span
                     }
                 });  
 <span class="pl-smi">Note</span> <span class="pl-k">:</span> <span class="pl-smi">If</span> bytesSent or bytesReceived is <span class="pl-k">-</span><span class="pl-c1">1</span> , it means it is unknown                </pre></div>
+
+<h3>
+<a id="getting-okhttpresponse-in-response" class="anchor" href="#getting-okhttpresponse-in-response" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Getting OkHttpResponse in Response</h3>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>get(<span class="pl-s"><span class="pl-pds">"</span>https://fierce-cove-29863.herokuapp.com/getAnUserDetail/{userId}<span class="pl-pds">"</span></span>)
+                .addPathParameter(<span class="pl-s"><span class="pl-pds">"</span>userId<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>1<span class="pl-pds">"</span></span>)
+                .setTag(<span class="pl-v">this</span>)
+                .setPriority(<span class="pl-smi">Priority</span><span class="pl-c1"><span class="pl-k">.</span>LOW</span>)
+                .setUserAgent(<span class="pl-s"><span class="pl-pds">"</span>getAnUser<span class="pl-pds">"</span></span>)
+                .build()
+                .getAsOkHttpResponseAndParsed(<span class="pl-k">new</span> <span class="pl-k">TypeToken&lt;<span class="pl-smi">User</span>&gt;</span>() {
+                }, <span class="pl-k">new</span> <span class="pl-k">OkHttpResponseAndParsedRequestListener&lt;<span class="pl-smi">User</span>&gt;</span>() {
+                    <span class="pl-k">@Override</span>
+                    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onResponse</span>(<span class="pl-smi">Response</span> <span class="pl-v">okHttpResponse</span>, <span class="pl-smi">User</span> <span class="pl-v">user</span>) {
+                      <span class="pl-c">// do anything with okHttpResponse and user</span>
+                    }
+                    <span class="pl-k">@Override</span>
+                    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onError</span>(<span class="pl-smi">ANError</span> <span class="pl-v">anError</span>) {
+                      <span class="pl-c">// handle error</span>
+                    }
+                });</pre></div>
+
+<h3>
+<a id="making-synchronous-request" class="anchor" href="#making-synchronous-request" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Making Synchronous Request</h3>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-smi">ANRequest</span> request <span class="pl-k">=</span> <span class="pl-smi">AndroidNetworking</span><span class="pl-k">.</span>get(<span class="pl-s"><span class="pl-pds">"</span>https://fierce-cove-29863.herokuapp.com/getAllUsers/{pageNumber}<span class="pl-pds">"</span></span>)
+                        .addPathParameter(<span class="pl-s"><span class="pl-pds">"</span>pageNumber<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span>)
+                        .addQueryParameter(<span class="pl-s"><span class="pl-pds">"</span>limit<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>3<span class="pl-pds">"</span></span>)
+                        .build();
+<span class="pl-k">ANResponse&lt;<span class="pl-k">List&lt;<span class="pl-smi">User</span>&gt;</span>&gt;</span> response <span class="pl-k">=</span> request<span class="pl-k">.</span>executeForParsed(<span class="pl-k">new</span> <span class="pl-k">TypeToken&lt;<span class="pl-k">List&lt;<span class="pl-smi">User</span>&gt;</span>&gt;</span>() {});
+<span class="pl-k">if</span> (response<span class="pl-k">.</span>isSuccess()) {
+   <span class="pl-k">List&lt;<span class="pl-smi">User</span>&gt;</span> users <span class="pl-k">=</span> responseTwo<span class="pl-k">.</span>getResult();
+} <span class="pl-k">else</span> {
+   <span class="pl-c">//handle error</span>
+}                                        </pre></div>
 
 <h3>
 <a id="how-caching-works-" class="anchor" href="#how-caching-works-" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How caching works ?</h3>
