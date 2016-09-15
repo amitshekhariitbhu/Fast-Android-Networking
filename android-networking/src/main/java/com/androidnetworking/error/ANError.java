@@ -26,7 +26,6 @@ import okhttp3.Response;
  */
 public class ANError extends Exception {
 
-
     private String errorBody;
 
     private int errorCode = 0;

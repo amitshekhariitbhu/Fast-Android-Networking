@@ -20,7 +20,7 @@
 package com.androidnetworking.utils;
 
 import com.androidnetworking.interfaces.Parser;
-import com.androidnetworking.internal.GsonParserFactory;
+import com.androidnetworking.gsonparserfactory.GsonParserFactory;
 import com.google.gson.Gson;
 
 /**

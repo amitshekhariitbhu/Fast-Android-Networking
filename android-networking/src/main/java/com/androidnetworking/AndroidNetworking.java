@@ -44,6 +44,7 @@ import okhttp3.OkHttpClient;
  * You must initialize this class before use. The simplest way is to just do
  * {#code AndroidNetworking.initialize(context)}.
  */
+@SuppressWarnings("unused")
 public class AndroidNetworking {
 
     /**
@@ -71,7 +72,11 @@ public class AndroidNetworking {
      */
     public static void initialize(Context context, OkHttpClient okHttpClient) {
         if (okHttpClient != null && okHttpClient.cache() == null) {
-            okHttpClient = okHttpClient.newBuilder().cache(Utils.getCache(context.getApplicationContext(), ANConstants.MAX_CACHE_SIZE, ANConstants.CACHE_DIR_NAME)).build();
+            okHttpClient = okHttpClient
+                    .newBuilder()
+                    .cache(Utils.getCache(context.getApplicationContext(),
+                            ANConstants.MAX_CACHE_SIZE, ANConstants.CACHE_DIR_NAME))
+                    .build();
         }
         InternalNetworking.setClient(okHttpClient);
         ANRequestQueue.initialize();

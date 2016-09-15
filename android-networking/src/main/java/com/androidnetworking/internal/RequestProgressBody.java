@@ -77,7 +77,8 @@ public class RequestProgressBody extends RequestBody {
                 }
                 bytesWritten += byteCount;
                 if (uploadProgressHandler != null) {
-                    uploadProgressHandler.obtainMessage(ANConstants.UPDATE, new Progress(bytesWritten, contentLength)).sendToTarget();
+                    uploadProgressHandler.obtainMessage(ANConstants.UPDATE,
+                            new Progress(bytesWritten, contentLength)).sendToTarget();
                 }
             }
         };

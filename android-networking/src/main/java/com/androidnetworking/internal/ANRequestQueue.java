@@ -33,7 +33,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class ANRequestQueue {
 
     private final static String TAG = ANRequestQueue.class.getSimpleName();
-    private final Set<ANRequest> mCurrentRequests = new HashSet<ANRequest>();
+    private final Set<ANRequest> mCurrentRequests = new HashSet<>();
     private AtomicInteger mSequenceGenerator = new AtomicInteger();
     private static ANRequestQueue sInstance = null;
 
@@ -129,9 +129,15 @@ public class ANRequestQueue {
         try {
             request.setSequenceNumber(getSequenceNumber());
             if (request.getPriority() == Priority.IMMEDIATE) {
-                request.setFuture(Core.getInstance().getExecutorSupplier().forImmediateNetworkTasks().submit(new InternalRunnable(request)));
+                request.setFuture(Core.getInstance()
+                        .getExecutorSupplier()
+                        .forImmediateNetworkTasks()
+                        .submit(new InternalRunnable(request)));
             } else {
-                request.setFuture(Core.getInstance().getExecutorSupplier().forNetworkTasks().submit(new InternalRunnable(request)));
+                request.setFuture(Core.getInstance()
+                        .getExecutorSupplier()
+                        .forNetworkTasks()
+                        .submit(new InternalRunnable(request)));
             }
             ANLog.d("addRequest: after addition - mCurrentRequests size: " + mCurrentRequests.size());
         } catch (Exception e) {

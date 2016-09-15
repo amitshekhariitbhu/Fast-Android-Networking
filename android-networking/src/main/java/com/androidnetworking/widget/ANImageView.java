@@ -104,7 +104,8 @@ public class ANImageView extends ImageView {
         ANImageLoader.ImageContainer newContainer = ANImageLoader.getInstance().get(mUrl,
                 new ANImageLoader.ImageListener() {
                     @Override
-                    public void onResponse(final ANImageLoader.ImageContainer response, boolean isImmediate) {
+                    public void onResponse(final ANImageLoader.ImageContainer response,
+                                           boolean isImmediate) {
                         if (isImmediate && isInLayoutPass) {
                             post(new Runnable() {
                                 @Override

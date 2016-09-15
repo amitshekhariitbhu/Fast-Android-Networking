@@ -94,7 +94,8 @@ public class ANImageLoader {
     }
 
     public static ImageListener getImageListener(final ImageView view,
-                                                 final int defaultImageResId, final int errorImageResId) {
+                                                 final int defaultImageResId,
+                                                 final int errorImageResId) {
         return new ImageListener() {
             @Override
             public void onResponse(ImageContainer response, boolean isImmediate) {
@@ -125,7 +126,8 @@ public class ANImageLoader {
         return isCached(requestUrl, maxWidth, maxHeight, ImageView.ScaleType.CENTER_INSIDE);
     }
 
-    public boolean isCached(String requestUrl, int maxWidth, int maxHeight, ImageView.ScaleType scaleType) {
+    public boolean isCached(String requestUrl, int maxWidth, int maxHeight,
+                            ImageView.ScaleType scaleType) {
         throwIfNotOnMainThread();
 
         String cacheKey = getCacheKey(requestUrl, maxWidth, maxHeight, scaleType);
@@ -139,7 +141,8 @@ public class ANImageLoader {
 
     public ImageContainer get(String requestUrl, ImageListener imageListener,
                               int maxWidth, int maxHeight) {
-        return get(requestUrl, imageListener, maxWidth, maxHeight, ImageView.ScaleType.CENTER_INSIDE);
+        return get(requestUrl, imageListener, maxWidth, maxHeight,
+                ImageView.ScaleType.CENTER_INSIDE);
     }
 
     public ImageContainer get(String requestUrl, ImageListener imageListener,
@@ -352,7 +355,8 @@ public class ANImageLoader {
         }
     }
 
-    private static String getCacheKey(String url, int maxWidth, int maxHeight, ImageView.ScaleType scaleType) {
+    private static String getCacheKey(String url, int maxWidth, int maxHeight,
+                                      ImageView.ScaleType scaleType) {
         return new StringBuilder(url.length() + 12).append("#W").append(maxWidth)
                 .append("#H").append(maxHeight).append("#S").append(scaleType.ordinal()).append(url)
                 .toString();

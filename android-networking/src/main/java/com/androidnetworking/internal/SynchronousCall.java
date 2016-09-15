@@ -23,7 +23,7 @@ import com.androidnetworking.common.ANConstants;
 import com.androidnetworking.common.ANLog;
 import com.androidnetworking.common.ANRequest;
 import com.androidnetworking.common.ANResponse;
-import com.androidnetworking.common.RESPONSE;
+import com.androidnetworking.common.ResponseType;
 import com.androidnetworking.error.ANError;
 
 import okhttp3.Response;
@@ -67,7 +67,7 @@ public final class SynchronousCall {
                 return new ANResponse(anError);
             }
 
-            if (request.getResponseAs() == RESPONSE.OK_HTTP_RESPONSE) {
+            if (request.getResponseAs() == ResponseType.OK_HTTP_RESPONSE) {
                 return new ANResponse(okHttpResponse);
             }
             if (okHttpResponse.code() >= 400) {
@@ -89,7 +89,9 @@ public final class SynchronousCall {
             se.setErrorCode(0);
             return new ANResponse(se);
         } finally {
-            if (request.getResponseAs() != RESPONSE.OK_HTTP_RESPONSE && okHttpResponse != null && okHttpResponse.body() != null && okHttpResponse.body().source() != null) {
+            if (request.getResponseAs() != ResponseType.OK_HTTP_RESPONSE &&
+                    okHttpResponse != null && okHttpResponse.body() != null &&
+                    okHttpResponse.body().source() != null) {
                 try {
                     okHttpResponse.body().source().close();
                 } catch (Exception e) {
@@ -143,7 +145,7 @@ public final class SynchronousCall {
                 return new ANResponse<T>(anError);
             }
 
-            if (request.getResponseAs() == RESPONSE.OK_HTTP_RESPONSE) {
+            if (request.getResponseAs() == ResponseType.OK_HTTP_RESPONSE) {
                 return new ANResponse(okHttpResponse);
             }
 
@@ -166,7 +168,9 @@ public final class SynchronousCall {
             se.setErrorCode(0);
             return new ANResponse(se);
         } finally {
-            if (request.getResponseAs() != RESPONSE.OK_HTTP_RESPONSE && okHttpResponse != null && okHttpResponse.body() != null && okHttpResponse.body().source() != null) {
+            if (request.getResponseAs() != ResponseType.OK_HTTP_RESPONSE &&
+                    okHttpResponse != null && okHttpResponse.body() != null &&
+                    okHttpResponse.body().source() != null) {
                 try {
                     okHttpResponse.body().source().close();
                 } catch (Exception e) {

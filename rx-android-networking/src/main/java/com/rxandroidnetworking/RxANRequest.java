@@ -21,7 +21,7 @@ import android.graphics.Bitmap;
 
 import com.androidnetworking.common.ANRequest;
 import com.androidnetworking.common.Method;
-import com.androidnetworking.common.RESPONSE;
+import com.androidnetworking.common.ResponseType;
 import com.androidnetworking.common.RequestType;
 import com.google.gson.reflect.TypeToken;
 
@@ -52,7 +52,7 @@ public class RxANRequest extends ANRequest<RxANRequest> {
     }
 
     public Observable<JSONObject> getJSONObjectObservable() {
-        this.setResponseAs(RESPONSE.JSON_OBJECT);
+        this.setResponseAs(ResponseType.JSON_OBJECT);
         if (this.getRequestType() == RequestType.SIMPLE) {
             return RxInternalNetworking.generateSimpleObservable(this);
         } else if (this.getRequestType() == RequestType.MULTIPART) {
@@ -63,7 +63,7 @@ public class RxANRequest extends ANRequest<RxANRequest> {
     }
 
     public Observable<JSONArray> getJSONArrayObservable() {
-        this.setResponseAs(RESPONSE.JSON_ARRAY);
+        this.setResponseAs(ResponseType.JSON_ARRAY);
         if (this.getRequestType() == RequestType.SIMPLE) {
             return RxInternalNetworking.generateSimpleObservable(this);
         } else if (this.getRequestType() == RequestType.MULTIPART) {
@@ -74,7 +74,7 @@ public class RxANRequest extends ANRequest<RxANRequest> {
     }
 
     public Observable<Bitmap> getBitmapObservable() {
-        this.setResponseAs(RESPONSE.BITMAP);
+        this.setResponseAs(ResponseType.BITMAP);
         if (this.getRequestType() == RequestType.SIMPLE) {
             return RxInternalNetworking.generateSimpleObservable(this);
         } else if (this.getRequestType() == RequestType.MULTIPART) {
@@ -85,7 +85,7 @@ public class RxANRequest extends ANRequest<RxANRequest> {
     }
 
     public Observable<String> getStringObservable() {
-        this.setResponseAs(RESPONSE.STRING);
+        this.setResponseAs(ResponseType.STRING);
         if (this.getRequestType() == RequestType.SIMPLE) {
             return RxInternalNetworking.generateSimpleObservable(this);
         } else if (this.getRequestType() == RequestType.MULTIPART) {
@@ -101,7 +101,7 @@ public class RxANRequest extends ANRequest<RxANRequest> {
 
     public <T> Observable<T> getParseObservable(TypeToken<T> typeToken) {
         this.setType(typeToken.getType());
-        this.setResponseAs(RESPONSE.PARSED);
+        this.setResponseAs(ResponseType.PARSED);
         if (this.getRequestType() == RequestType.SIMPLE) {
             return RxInternalNetworking.generateSimpleObservable(this);
         } else if (this.getRequestType() == RequestType.MULTIPART) {

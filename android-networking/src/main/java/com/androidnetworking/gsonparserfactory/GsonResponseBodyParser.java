@@ -17,43 +17,36 @@
  *
  */
 
-package com.androidnetworking.internal;
+package com.androidnetworking.gsonparserfactory;
 
 import com.androidnetworking.interfaces.Parser;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
-import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
 
-import java.lang.reflect.Type;
+import java.io.IOException;
 
-import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 
 /**
  * Created by amitshekhar on 31/07/16.
  */
-public final class GsonParserFactory extends Parser.Factory {
-
+final class GsonResponseBodyParser<T> implements Parser<ResponseBody, T> {
     private final Gson gson;
+    private final TypeAdapter<T> adapter;
 
-    public GsonParserFactory() {
-        this.gson = new Gson();
-    }
-
-    public GsonParserFactory(Gson gson) {
+    GsonResponseBodyParser(Gson gson, TypeAdapter<T> adapter) {
         this.gson = gson;
+        this.adapter = adapter;
     }
 
     @Override
-    public Parser<ResponseBody, ?> responseBodyParser(Type type) {
-        TypeAdapter<?> adapter = gson.getAdapter(TypeToken.get(type));
-        return new GsonResponseBodyParser<>(gson, adapter);
+    public T convert(ResponseBody value) throws IOException {
+        JsonReader jsonReader = gson.newJsonReader(value.charStream());
+        try {
+            return adapter.read(jsonReader);
+        } finally {
+            value.close();
+        }
     }
-
-    @Override
-    public Parser<?, RequestBody> requestBodyParser(Type type) {
-        TypeAdapter<?> adapter = gson.getAdapter(TypeToken.get(type));
-        return new GsonRequestBodyParser<>(gson, adapter);
-    }
-
 }

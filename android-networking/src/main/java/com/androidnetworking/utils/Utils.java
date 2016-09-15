@@ -62,7 +62,9 @@ public class Utils {
     }
 
 
-    public static ANResponse<Bitmap> decodeBitmap(Response response, int maxWidth, int maxHeight, Bitmap.Config decodeConfig, ImageView.ScaleType scaleType) {
+    public static ANResponse<Bitmap> decodeBitmap(Response response, int maxWidth,
+                                                  int maxHeight, Bitmap.Config decodeConfig,
+                                                  ImageView.ScaleType scaleType) {
         byte[] data = new byte[0];
         try {
             data = Okio.buffer(response.body().source()).readByteArray();
@@ -111,7 +113,9 @@ public class Utils {
         }
     }
 
-    private static int getResizedDimension(int maxPrimary, int maxSecondary, int actualPrimary, int actualSecondary, ImageView.ScaleType scaleType) {
+    private static int getResizedDimension(int maxPrimary, int maxSecondary,
+                                           int actualPrimary, int actualSecondary,
+                                           ImageView.ScaleType scaleType) {
 
         if ((maxPrimary == 0) && (maxSecondary == 0)) {
             return actualPrimary;
@@ -149,7 +153,8 @@ public class Utils {
         return resized;
     }
 
-    public static int findBestSampleSize(int actualWidth, int actualHeight, int desiredWidth, int desiredHeight) {
+    public static int findBestSampleSize(int actualWidth, int actualHeight,
+                                         int desiredWidth, int desiredHeight) {
         double wr = (double) actualWidth / desiredWidth;
         double hr = (double) actualHeight / desiredHeight;
         double ratio = Math.min(wr, hr);
@@ -160,7 +165,8 @@ public class Utils {
         return (int) n;
     }
 
-    public static void saveFile(Response response, String dirPath, String fileName) throws IOException {
+    public static void saveFile(Response response, String dirPath,
+                                String fileName) throws IOException {
         InputStream is = null;
         byte[] buf = new byte[2048];
         int len;
@@ -191,12 +197,15 @@ public class Utils {
         }
     }
 
-    public static void sendAnalytics(final AnalyticsListener analyticsListener, final long timeTakenInMillis, final long bytesSent, final long bytesReceived, final boolean isFromCache) {
+    public static void sendAnalytics(final AnalyticsListener analyticsListener,
+                                     final long timeTakenInMillis, final long bytesSent,
+                                     final long bytesReceived, final boolean isFromCache) {
         Core.getInstance().getExecutorSupplier().forMainThreadTasks().execute(new Runnable() {
             @Override
             public void run() {
                 if (analyticsListener != null) {
-                    analyticsListener.onReceived(timeTakenInMillis, bytesSent, bytesReceived, isFromCache);
+                    analyticsListener.onReceived(timeTakenInMillis, bytesSent, bytesReceived,
+                            isFromCache);
                 }
             }
         });

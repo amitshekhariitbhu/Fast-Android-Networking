@@ -118,12 +118,17 @@ public final class InternalNetworking {
                     diffBytes = finalBytes - startBytes;
                 }
                 ConnectionClassManager.getInstance().updateBandwidth(diffBytes, timeTaken);
-                Utils.sendAnalytics(request.getAnalyticsListener(), timeTaken, (requestBody != null && requestBody.contentLength() != 0) ? requestBody.contentLength() : -1, okHttpResponse.body().contentLength(), false);
+                Utils.sendAnalytics(request.getAnalyticsListener(), timeTaken,
+                        (requestBody != null &&
+                                requestBody.contentLength() != 0) ? requestBody.contentLength() : -1,
+                        okHttpResponse.body().contentLength(), false);
             } else if (request.getAnalyticsListener() != null) {
                 if (okHttpResponse.networkResponse() == null) {
                     Utils.sendAnalytics(request.getAnalyticsListener(), timeTaken, 0, 0, true);
                 } else {
-                    Utils.sendAnalytics(request.getAnalyticsListener(), timeTaken, (requestBody != null && requestBody.contentLength() != 0) ? requestBody.contentLength() : -1, 0, true);
+                    Utils.sendAnalytics(request.getAnalyticsListener(), timeTaken,
+                            (requestBody != null && requestBody.contentLength() != 0) ? requestBody.contentLength() : -1,
+                            0, true);
                 }
             }
         } catch (IOException ioe) {
@@ -153,7 +158,8 @@ public final class InternalNetworking {
                             public Response intercept(Chain chain) throws IOException {
                                 Response originalResponse = chain.proceed(chain.request());
                                 return originalResponse.newBuilder()
-                                        .body(new ResponseProgressBody(originalResponse.body(), request.getDownloadProgressListener()))
+                                        .body(new ResponseProgressBody(originalResponse.body(),
+                                                request.getDownloadProgressListener()))
                                         .build();
                             }
                         }).build();
@@ -164,7 +170,8 @@ public final class InternalNetworking {
                             public Response intercept(Chain chain) throws IOException {
                                 Response originalResponse = chain.proceed(chain.request());
                                 return originalResponse.newBuilder()
-                                        .body(new ResponseProgressBody(originalResponse.body(), request.getDownloadProgressListener()))
+                                        .body(new ResponseProgressBody(originalResponse.body(),
+                                                request.getDownloadProgressListener()))
                                         .build();
                             }
                         }).build();
@@ -184,7 +191,8 @@ public final class InternalNetworking {
                     diffBytes = finalBytes - startBytes;
                 }
                 ConnectionClassManager.getInstance().updateBandwidth(diffBytes, timeTaken);
-                Utils.sendAnalytics(request.getAnalyticsListener(), timeTaken, -1, okHttpResponse.body().contentLength(), false);
+                Utils.sendAnalytics(request.getAnalyticsListener(), timeTaken, -1,
+                        okHttpResponse.body().contentLength(), false);
             } else if (request.getAnalyticsListener() != null) {
                 Utils.sendAnalytics(request.getAnalyticsListener(), timeTaken, -1, 0, true);
             }
@@ -217,7 +225,11 @@ public final class InternalNetworking {
             }
             okHttpRequest = builder.build();
             if (request.getOkHttpClient() != null) {
-                request.setCall(request.getOkHttpClient().newBuilder().cache(sHttpClient.cache()).build().newCall(okHttpRequest));
+                request.setCall(request.getOkHttpClient()
+                        .newBuilder()
+                        .cache(sHttpClient.cache())
+                        .build()
+                        .newCall(okHttpRequest));
             } else {
                 request.setCall(sHttpClient.newCall(okHttpRequest));
             }
@@ -226,12 +238,14 @@ public final class InternalNetworking {
             final long timeTaken = System.currentTimeMillis() - startTime;
             if (request.getAnalyticsListener() != null) {
                 if (okHttpResponse.cacheResponse() == null) {
-                    Utils.sendAnalytics(request.getAnalyticsListener(), timeTaken, requestBodyLength, okHttpResponse.body().contentLength(), false);
+                    Utils.sendAnalytics(request.getAnalyticsListener(), timeTaken,
+                            requestBodyLength, okHttpResponse.body().contentLength(), false);
                 } else {
                     if (okHttpResponse.networkResponse() == null) {
                         Utils.sendAnalytics(request.getAnalyticsListener(), timeTaken, 0, 0, true);
                     } else {
-                        Utils.sendAnalytics(request.getAnalyticsListener(), timeTaken, requestBodyLength != 0 ? requestBodyLength : -1, 0, true);
+                        Utils.sendAnalytics(request.getAnalyticsListener(), timeTaken,
+                                requestBodyLength != 0 ? requestBodyLength : -1, 0, true);
                     }
                 }
             }

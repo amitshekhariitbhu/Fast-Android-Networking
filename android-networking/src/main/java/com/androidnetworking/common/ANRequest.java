@@ -74,7 +74,7 @@ public class ANRequest<T extends ANRequest> {
     private String mUrl;
     private int sequenceNumber;
     private Object mTag;
-    private RESPONSE mResponseAs;
+    private ResponseType mResponseType;
     private HashMap<String, String> mHeadersMap = new HashMap<>();
     private HashMap<String, String> mBodyParameterMap = new HashMap<>();
     private HashMap<String, String> mUrlEncodedFormBodyParameterMap = new HashMap<>();
@@ -89,8 +89,10 @@ public class ANRequest<T extends ANRequest> {
     private String mStringBody = null;
     private byte[] mByte = null;
     private File mFile = null;
-    private static final MediaType JSON_MEDIA_TYPE = MediaType.parse("application/json; charset=utf-8");
-    private static final MediaType MEDIA_TYPE_MARKDOWN = MediaType.parse("text/x-markdown; charset=utf-8");
+    private static final MediaType JSON_MEDIA_TYPE =
+            MediaType.parse("application/json; charset=utf-8");
+    private static final MediaType MEDIA_TYPE_MARKDOWN =
+            MediaType.parse("text/x-markdown; charset=utf-8");
     private MediaType customMediaType = null;
     private static final Object sDecodeLock = new Object();
 
@@ -202,38 +204,38 @@ public class ANRequest<T extends ANRequest> {
     }
 
     public void getAsJSONObject(JSONObjectRequestListener requestListener) {
-        this.mResponseAs = RESPONSE.JSON_OBJECT;
+        this.mResponseType = ResponseType.JSON_OBJECT;
         this.mJSONObjectRequestListener = requestListener;
         ANRequestQueue.getInstance().addRequest(this);
     }
 
     public void getAsJSONArray(JSONArrayRequestListener requestListener) {
-        this.mResponseAs = RESPONSE.JSON_ARRAY;
+        this.mResponseType = ResponseType.JSON_ARRAY;
         this.mJSONArrayRequestListener = requestListener;
         ANRequestQueue.getInstance().addRequest(this);
     }
 
     public void getAsString(StringRequestListener requestListener) {
-        this.mResponseAs = RESPONSE.STRING;
+        this.mResponseType = ResponseType.STRING;
         this.mStringRequestListener = requestListener;
         ANRequestQueue.getInstance().addRequest(this);
     }
 
     public void getAsOkHttpResponse(OkHttpResponseListener requestListener) {
-        this.mResponseAs = RESPONSE.OK_HTTP_RESPONSE;
+        this.mResponseType = ResponseType.OK_HTTP_RESPONSE;
         this.mOkHttpResponseListener = requestListener;
         ANRequestQueue.getInstance().addRequest(this);
     }
 
     public void getAsBitmap(BitmapRequestListener requestListener) {
-        this.mResponseAs = RESPONSE.BITMAP;
+        this.mResponseType = ResponseType.BITMAP;
         this.mBitmapRequestListener = requestListener;
         ANRequestQueue.getInstance().addRequest(this);
     }
 
     public void getAsParsed(TypeToken typeToken, ParsedRequestListener parsedRequestListener) {
         this.mType = typeToken.getType();
-        this.mResponseAs = RESPONSE.PARSED;
+        this.mResponseType = ResponseType.PARSED;
         this.mParsedRequestListener = parsedRequestListener;
         ANRequestQueue.getInstance().addRequest(this);
     }
@@ -244,50 +246,44 @@ public class ANRequest<T extends ANRequest> {
     }
 
     public void prefetch() {
-        this.mResponseAs = RESPONSE.PREFETCH;
+        this.mResponseType = ResponseType.PREFETCH;
         ANRequestQueue.getInstance().addRequest(this);
     }
 
-    /******************************
-     * Synchronous Call api's
-     *****************************/
-
     public ANResponse getAsJSONObject() {
-        this.mResponseAs = RESPONSE.JSON_OBJECT;
+        this.mResponseType = ResponseType.JSON_OBJECT;
         return SynchronousCall.getResponse(this);
     }
 
     public ANResponse getAsJSONArray() {
-        this.mResponseAs = RESPONSE.JSON_ARRAY;
+        this.mResponseType = ResponseType.JSON_ARRAY;
         return SynchronousCall.getResponse(this);
     }
 
     public ANResponse getAsString() {
-        this.mResponseAs = RESPONSE.STRING;
+        this.mResponseType = ResponseType.STRING;
         return SynchronousCall.getResponse(this);
     }
 
     public ANResponse getAsOkHttpResponse() {
-        this.mResponseAs = RESPONSE.OK_HTTP_RESPONSE;
+        this.mResponseType = ResponseType.OK_HTTP_RESPONSE;
         return SynchronousCall.getResponse(this);
     }
 
     public ANResponse getAsBitmap() {
-        this.mResponseAs = RESPONSE.BITMAP;
+        this.mResponseType = ResponseType.BITMAP;
         return SynchronousCall.getResponse(this);
     }
 
     public ANResponse getAsParsed(TypeToken typeToken) {
         this.mType = typeToken.getType();
-        this.mResponseAs = RESPONSE.PARSED;
+        this.mResponseType = ResponseType.PARSED;
         return SynchronousCall.getResponse(this);
     }
 
     public ANResponse startDownload() {
         return SynchronousCall.getResponse(this);
     }
-
-    /****************************************************************************/
 
     public T setDownloadProgressListener(DownloadProgressListener downloadProgressListener) {
         this.mDownloadProgressListener = downloadProgressListener;
@@ -340,12 +336,12 @@ public class ANRequest<T extends ANRequest> {
         this.mProgress = progress;
     }
 
-    public void setResponseAs(RESPONSE responseAs) {
-        this.mResponseAs = responseAs;
+    public void setResponseAs(ResponseType responseType) {
+        this.mResponseType = responseType;
     }
 
-    public RESPONSE getResponseAs() {
-        return mResponseAs;
+    public ResponseType getResponseAs() {
+        return mResponseType;
     }
 
     public Object getTag() {
@@ -454,7 +450,8 @@ public class ANRequest<T extends ANRequest> {
 
     public void cancel(boolean forceCancel) {
         try {
-            if (forceCancel || mPercentageThresholdForCancelling == 0 || mProgress < mPercentageThresholdForCancelling) {
+            if (forceCancel || mPercentageThresholdForCancelling == 0
+                    || mProgress < mPercentageThresholdForCancelling) {
                 ANLog.d("cancelling request : " + toString());
                 isCancelled = true;
                 if (call != null) {
@@ -512,7 +509,7 @@ public class ANRequest<T extends ANRequest> {
     }
 
     public ANResponse parseResponse(Response response) {
-        switch (mResponseAs) {
+        switch (mResponseType) {
             case JSON_ARRAY:
                 try {
                     JSONArray json = new JSONArray(Okio.buffer(response.body().source()).readUtf8());
@@ -525,7 +522,8 @@ public class ANRequest<T extends ANRequest> {
                 }
             case JSON_OBJECT:
                 try {
-                    JSONObject json = new JSONObject(Okio.buffer(response.body().source()).readUtf8());
+                    JSONObject json = new JSONObject(Okio.buffer(response.body()
+                            .source()).readUtf8());
                     return ANResponse.success(json);
                 } catch (Exception e) {
                     ANError error = new ANError(e);
@@ -535,7 +533,8 @@ public class ANRequest<T extends ANRequest> {
                 }
             case STRING:
                 try {
-                    return ANResponse.success(Okio.buffer(response.body().source()).readUtf8());
+                    return ANResponse.success(Okio.buffer(response
+                            .body().source()).readUtf8());
                 } catch (Exception e) {
                     ANError error = new ANError(e);
                     error.setErrorCode(0);
@@ -545,7 +544,8 @@ public class ANRequest<T extends ANRequest> {
             case BITMAP:
                 synchronized (sDecodeLock) {
                     try {
-                        return Utils.decodeBitmap(response, mMaxWidth, mMaxHeight, mDecodeConfig, mScaleType);
+                        return Utils.decodeBitmap(response, mMaxWidth, mMaxHeight,
+                                mDecodeConfig, mScaleType);
                     } catch (Exception e) {
                         ANError error = new ANError(e);
                         error.setErrorCode(0);
@@ -555,7 +555,8 @@ public class ANRequest<T extends ANRequest> {
                 }
             case PARSED:
                 try {
-                    return ANResponse.success(ParseUtil.getParserFactory().responseBodyParser(mType).convert(response.body()));
+                    return ANResponse.success(ParseUtil.getParserFactory()
+                            .responseBodyParser(mType).convert(response.body()));
                 } catch (Exception e) {
                     ANError error = new ANError(e);
                     error.setErrorCode(0);
@@ -570,8 +571,10 @@ public class ANRequest<T extends ANRequest> {
 
     public ANError parseNetworkError(ANError anError) {
         try {
-            if (anError.getResponse() != null && anError.getResponse().body() != null && anError.getResponse().body().source() != null) {
-                anError.setErrorBody(Okio.buffer(anError.getResponse().body().source()).readUtf8());
+            if (anError.getResponse() != null && anError.getResponse().body() != null
+                    && anError.getResponse().body().source() != null) {
+                anError.setErrorBody(Okio.buffer(anError
+                        .getResponse().body().source()).readUtf8());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -759,12 +762,15 @@ public class ANRequest<T extends ANRequest> {
         MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
         try {
             for (HashMap.Entry<String, String> entry : mMultiPartParameterMap.entrySet()) {
-                builder.addPart(Headers.of("Content-Disposition", "form-data; name=\"" + entry.getKey() + "\""), RequestBody.create(null, entry.getValue()));
+                builder.addPart(Headers.of("Content-Disposition", "form-data; name=\"" + entry.getKey() + "\""),
+                        RequestBody.create(null, entry.getValue()));
             }
             for (HashMap.Entry<String, File> entry : mMultiPartFileMap.entrySet()) {
                 String fileName = entry.getValue().getName();
-                RequestBody fileBody = RequestBody.create(MediaType.parse(Utils.getMimeType(fileName)), entry.getValue());
-                builder.addPart(Headers.of("Content-Disposition", "form-data; name=\"" + entry.getKey() + "\"; filename=\"" + fileName + "\""), fileBody);
+                RequestBody fileBody = RequestBody.create(MediaType.parse(Utils.getMimeType(fileName)),
+                        entry.getValue());
+                builder.addPart(Headers.of("Content-Disposition", "form-data; name=\"" + entry.getKey() + "\"; filename=\"" + fileName + "\""),
+                        fileBody);
             }
         } catch (Exception e) {
             e.printStackTrace();

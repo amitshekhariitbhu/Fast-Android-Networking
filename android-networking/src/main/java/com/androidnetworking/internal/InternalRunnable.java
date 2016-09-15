@@ -22,7 +22,7 @@ import com.androidnetworking.common.ANLog;
 import com.androidnetworking.common.ANRequest;
 import com.androidnetworking.common.ANResponse;
 import com.androidnetworking.common.Priority;
-import com.androidnetworking.common.RESPONSE;
+import com.androidnetworking.common.ResponseType;
 import com.androidnetworking.core.Core;
 import com.androidnetworking.error.ANError;
 
@@ -78,7 +78,7 @@ public class InternalRunnable implements Runnable {
                 return;
             }
 
-            if (request.getResponseAs() == RESPONSE.OK_HTTP_RESPONSE) {
+            if (request.getResponseAs() == ResponseType.OK_HTTP_RESPONSE) {
                 request.deliverOkHttpResponse(okHttpResponse);
                 return;
             }
@@ -109,7 +109,9 @@ public class InternalRunnable implements Runnable {
             deliverError(request, se);
 
         } finally {
-            if (request.getResponseAs() != RESPONSE.OK_HTTP_RESPONSE && okHttpResponse != null && okHttpResponse.body() != null && okHttpResponse.body().source() != null) {
+            if (request.getResponseAs() != ResponseType.OK_HTTP_RESPONSE &&
+                    okHttpResponse != null && okHttpResponse.body() != null
+                    && okHttpResponse.body().source() != null) {
                 try {
                     okHttpResponse.body().source().close();
                 } catch (Exception e) {
@@ -120,7 +122,7 @@ public class InternalRunnable implements Runnable {
     }
 
     private void executeDownloadRequest() {
-        Response okHttpResponse = null;
+        Response okHttpResponse;
         try {
             okHttpResponse = InternalNetworking.performDownloadRequest(request);
             if (okHttpResponse == null) {
@@ -166,7 +168,7 @@ public class InternalRunnable implements Runnable {
                 return;
             }
 
-            if (request.getResponseAs() == RESPONSE.OK_HTTP_RESPONSE) {
+            if (request.getResponseAs() == ResponseType.OK_HTTP_RESPONSE) {
                 request.deliverOkHttpResponse(okHttpResponse);
                 return;
             }
@@ -196,7 +198,9 @@ public class InternalRunnable implements Runnable {
             se.setErrorCode(0);
             deliverError(request, se);
         } finally {
-            if (request.getResponseAs() != RESPONSE.OK_HTTP_RESPONSE && okHttpResponse != null && okHttpResponse.body() != null && okHttpResponse.body().source() != null) {
+            if (request.getResponseAs() != ResponseType.OK_HTTP_RESPONSE &&
+                    okHttpResponse != null && okHttpResponse.body() != null &&
+                    okHttpResponse.body().source() != null) {
                 try {
                     okHttpResponse.body().source().close();
                 } catch (Exception e) {
