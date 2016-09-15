@@ -969,7 +969,7 @@ public class ApiTestActivity extends AppCompatActivity {
             public void run() {
 
                 String url = "http://www.colorado.edu/conflict/peace/download/peace_problem.ZIP";
-                ANResponse<String> download = AndroidNetworking
+                ANRequest requestOne = AndroidNetworking
                         .download(url, Utils.getRootDirPath(getApplicationContext()), "file1.zip")
                         .setPriority(Priority.HIGH)
                         .setTag(this)
@@ -990,19 +990,19 @@ public class ApiTestActivity extends AppCompatActivity {
                                 Log.d(TAG, "setDownloadProgressListener isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
 
                             }
-                        })
-                        .startDownload();
+                        });
+                ANResponse<String> responseOne = requestOne.startDownload();
 
-                if (download.isSuccess()) {
+                if (responseOne.isSuccess()) {
                     Log.d(TAG, "checkSynchronousCall : download success");
-                    Log.d(TAG, "checkSynchronousCall : download result " + download.getResult());
+                    Log.d(TAG, "checkSynchronousCall : download result " + responseOne.getResult());
                 } else {
                     Log.d(TAG, "checkSynchronousCall : download failed");
-                    Utils.logError(TAG, download.getError());
+                    Utils.logError(TAG, responseOne.getError());
                 }
 
 
-                ANResponse<List<User>> response = AndroidNetworking.get(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_ARRAY)
+                ANRequest requestTwo = AndroidNetworking.get(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_ARRAY)
                         .addPathParameter("pageNumber", "0")
                         .addQueryParameter("limit", "3")
                         .setTag(this)
@@ -1016,13 +1016,13 @@ public class ApiTestActivity extends AppCompatActivity {
                                 Log.d(TAG, " bytesReceived : " + bytesReceived);
                                 Log.d(TAG, " isFromCache : " + isFromCache);
                             }
-                        })
-                        .getAsParsed(new TypeToken<List<User>>() {
                         });
+                ANResponse<List<User>> responseTwo = requestTwo.getAsParsed(new TypeToken<List<User>>() {
+                });
 
-                if (response.isSuccess()) {
+                if (responseTwo.isSuccess()) {
                     Log.d(TAG, "checkSynchronousCall : response success");
-                    List<User> users = response.getResult();
+                    List<User> users = responseTwo.getResult();
                     Log.d(TAG, "userList size : " + users.size());
                     for (User user : users) {
                         Log.d(TAG, "id : " + user.id);
@@ -1031,7 +1031,7 @@ public class ApiTestActivity extends AppCompatActivity {
                     }
                 } else {
                     Log.d(TAG, "checkSynchronousCall : response failed");
-                    Utils.logError(TAG, download.getError());
+                    Utils.logError(TAG, responseTwo.getError());
                 }
 
 
@@ -1044,8 +1044,7 @@ public class ApiTestActivity extends AppCompatActivity {
                 }
 
 
-                ANResponse<JSONObject> jsonObjectANResponse
-                        = AndroidNetworking.post(ApiEndPoint.BASE_URL + ApiEndPoint.POST_CREATE_AN_USER)
+                ANRequest requestThree = AndroidNetworking.post(ApiEndPoint.BASE_URL + ApiEndPoint.POST_CREATE_AN_USER)
                         .addJSONObjectBody(jsonObject)
                         .setTag(this)
                         .setPriority(Priority.LOW)
@@ -1058,20 +1057,20 @@ public class ApiTestActivity extends AppCompatActivity {
                                 Log.d(TAG, " bytesReceived : " + bytesReceived);
                                 Log.d(TAG, " isFromCache : " + isFromCache);
                             }
-                        })
-                        .getAsJSONObject();
+                        });
+                ANResponse<JSONObject> responseThree = requestThree.getAsJSONObject();
 
-                if (jsonObjectANResponse.isSuccess()) {
+                if (responseThree.isSuccess()) {
                     Log.d(TAG, "checkSynchronousCall : jsonObjectANResponse success");
-                    JSONObject jsonObjectFinal = jsonObjectANResponse.getResult();
+                    JSONObject jsonObjectFinal = responseThree.getResult();
                     Log.d(TAG, "checkSynchronousCall : jsonObjectANResponse result " + jsonObjectFinal.toString());
                 } else {
                     Log.d(TAG, "checkSynchronousCall : jsonObjectANResponse failed");
-                    Utils.logError(TAG, download.getError());
+                    Utils.logError(TAG, responseThree.getError());
                 }
 
 
-                ANResponse<Response> responseANResponse = AndroidNetworking.get(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_ARRAY)
+                ANRequest requestFour = AndroidNetworking.get(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_ARRAY)
                         .addPathParameter("pageNumber", "0")
                         .addQueryParameter("limit", "3")
                         .setTag(this)
@@ -1085,13 +1084,13 @@ public class ApiTestActivity extends AppCompatActivity {
                                 Log.d(TAG, " bytesReceived : " + bytesReceived);
                                 Log.d(TAG, " isFromCache : " + isFromCache);
                             }
-                        })
-                        .getAsOkHttpResponse();
+                        });
+                ANResponse<Response> responseFour = requestFour.getAsOkHttpResponse();
 
 
-                if (responseANResponse.isSuccess()) {
+                if (responseFour.isSuccess()) {
                     Log.d(TAG, "checkSynchronousCall : okHttpResponse success");
-                    Response okHttpResponse = responseANResponse.getResult();
+                    Response okHttpResponse = responseFour.getResult();
                     if (okHttpResponse != null) {
                         if (okHttpResponse.isSuccessful()) {
                             Log.d(TAG, "response is successful");
@@ -1108,7 +1107,7 @@ public class ApiTestActivity extends AppCompatActivity {
                     }
                 } else {
                     Log.d(TAG, "checkSynchronousCall : okHttpResponse failed");
-                    Utils.logError(TAG, download.getError());
+                    Utils.logError(TAG, responseFour.getError());
                 }
             }
         }).start();

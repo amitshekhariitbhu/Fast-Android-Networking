@@ -63,6 +63,7 @@ import okio.Okio;
 /**
  * Created by amitshekhar on 26/03/16.
  */
+@SuppressWarnings({"unchecked", "unused"})
 public class ANRequest<T extends ANRequest> {
 
     private final static String TAG = ANRequest.class.getSimpleName();
@@ -74,13 +75,13 @@ public class ANRequest<T extends ANRequest> {
     private int sequenceNumber;
     private Object mTag;
     private RESPONSE mResponseAs;
-    private HashMap<String, String> mHeadersMap = new HashMap<String, String>();
-    private HashMap<String, String> mBodyParameterMap = new HashMap<String, String>();
-    private HashMap<String, String> mUrlEncodedFormBodyParameterMap = new HashMap<String, String>();
-    private HashMap<String, String> mMultiPartParameterMap = new HashMap<String, String>();
-    private HashMap<String, String> mQueryParameterMap = new HashMap<String, String>();
-    private HashMap<String, String> mPathParameterMap = new HashMap<String, String>();
-    private HashMap<String, File> mMultiPartFileMap = new HashMap<String, File>();
+    private HashMap<String, String> mHeadersMap = new HashMap<>();
+    private HashMap<String, String> mBodyParameterMap = new HashMap<>();
+    private HashMap<String, String> mUrlEncodedFormBodyParameterMap = new HashMap<>();
+    private HashMap<String, String> mMultiPartParameterMap = new HashMap<>();
+    private HashMap<String, String> mQueryParameterMap = new HashMap<>();
+    private HashMap<String, String> mPathParameterMap = new HashMap<>();
+    private HashMap<String, File> mMultiPartFileMap = new HashMap<>();
     private String mDirPath;
     private String mFileName;
     private JSONObject mJsonObject = null;
@@ -799,9 +800,9 @@ public class ANRequest<T extends ANRequest> {
         private int mMaxWidth;
         private int mMaxHeight;
         private ImageView.ScaleType mScaleType;
-        private HashMap<String, String> mHeadersMap = new HashMap<String, String>();
-        private HashMap<String, String> mQueryParameterMap = new HashMap<String, String>();
-        private HashMap<String, String> mPathParameterMap = new HashMap<String, String>();
+        private HashMap<String, String> mHeadersMap = new HashMap<>();
+        private HashMap<String, String> mQueryParameterMap = new HashMap<>();
+        private HashMap<String, String> mPathParameterMap = new HashMap<>();
         private CacheControl mCacheControl;
         private Executor mExecutor;
         private OkHttpClient mOkHttpClient;
@@ -972,11 +973,11 @@ public class ANRequest<T extends ANRequest> {
         private String mStringBody = null;
         private byte[] mByte = null;
         private File mFile = null;
-        private HashMap<String, String> mHeadersMap = new HashMap<String, String>();
-        private HashMap<String, String> mBodyParameterMap = new HashMap<String, String>();
-        private HashMap<String, String> mUrlEncodedFormBodyParameterMap = new HashMap<String, String>();
-        private HashMap<String, String> mQueryParameterMap = new HashMap<String, String>();
-        private HashMap<String, String> mPathParameterMap = new HashMap<String, String>();
+        private HashMap<String, String> mHeadersMap = new HashMap<>();
+        private HashMap<String, String> mBodyParameterMap = new HashMap<>();
+        private HashMap<String, String> mUrlEncodedFormBodyParameterMap = new HashMap<>();
+        private HashMap<String, String> mQueryParameterMap = new HashMap<>();
+        private HashMap<String, String> mPathParameterMap = new HashMap<>();
         private CacheControl mCacheControl;
         private Executor mExecutor;
         private OkHttpClient mOkHttpClient;
@@ -1159,9 +1160,9 @@ public class ANRequest<T extends ANRequest> {
         private Priority mPriority = Priority.MEDIUM;
         private String mUrl;
         private Object mTag;
-        private HashMap<String, String> mHeadersMap = new HashMap<String, String>();
-        private HashMap<String, String> mQueryParameterMap = new HashMap<String, String>();
-        private HashMap<String, String> mPathParameterMap = new HashMap<String, String>();
+        private HashMap<String, String> mHeadersMap = new HashMap<>();
+        private HashMap<String, String> mQueryParameterMap = new HashMap<>();
+        private HashMap<String, String> mPathParameterMap = new HashMap<>();
         private String mDirPath;
         private String mFileName;
         private CacheControl mCacheControl;
@@ -1289,11 +1290,11 @@ public class ANRequest<T extends ANRequest> {
         private Priority mPriority = Priority.MEDIUM;
         private String mUrl;
         private Object mTag;
-        private HashMap<String, String> mHeadersMap = new HashMap<String, String>();
-        private HashMap<String, String> mMultiPartParameterMap = new HashMap<String, String>();
-        private HashMap<String, String> mQueryParameterMap = new HashMap<String, String>();
-        private HashMap<String, String> mPathParameterMap = new HashMap<String, String>();
-        private HashMap<String, File> mMultiPartFileMap = new HashMap<String, File>();
+        private HashMap<String, String> mHeadersMap = new HashMap<>();
+        private HashMap<String, String> mMultiPartParameterMap = new HashMap<>();
+        private HashMap<String, String> mQueryParameterMap = new HashMap<>();
+        private HashMap<String, String> mPathParameterMap = new HashMap<>();
+        private HashMap<String, File> mMultiPartFileMap = new HashMap<>();
         private CacheControl mCacheControl;
         private int mPercentageThresholdForCancelling = 0;
         private Executor mExecutor;
