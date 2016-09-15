@@ -201,6 +201,9 @@ public class ANRequest<T extends ANRequest> {
         this.mExecutor = builder.mExecutor;
         this.mOkHttpClient = builder.mOkHttpClient;
         this.mUserAgent = builder.mUserAgent;
+        if (builder.mCustomContentType != null) {
+            this.customMediaType = MediaType.parse(builder.mCustomContentType);
+        }
     }
 
     public void getAsJSONObject(JSONObjectRequestListener requestListener) {
@@ -758,6 +761,9 @@ public class ANRequest<T extends ANRequest> {
                 builder.addPart(Headers.of("Content-Disposition",
                         "form-data; name=\"" + entry.getKey() + "\"; filename=\"" + fileName + "\""),
                         fileBody);
+                if (customMediaType != null) {
+                    builder.setType(customMediaType);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -1293,6 +1299,7 @@ public class ANRequest<T extends ANRequest> {
         private Executor mExecutor;
         private OkHttpClient mOkHttpClient;
         private String mUserAgent;
+        private String mCustomContentType;
 
         public MultiPartBuilder(String url) {
             this.mUrl = url;
@@ -1426,6 +1433,11 @@ public class ANRequest<T extends ANRequest> {
 
         public T setPercentageThresholdForCancelling(int percentageThresholdForCancelling) {
             this.mPercentageThresholdForCancelling = percentageThresholdForCancelling;
+            return (T) this;
+        }
+
+        public T setContentType(String contentType) {
+            mCustomContentType = contentType;
             return (T) this;
         }
 

@@ -996,6 +996,8 @@ public class ApiTestActivity extends AppCompatActivity {
                 if (responseOne.isSuccess()) {
                     Log.d(TAG, "checkSynchronousCall : download success");
                     Log.d(TAG, "checkSynchronousCall : download result " + responseOne.getResult());
+                    Response response = responseOne.getOkHttpResponse();
+                    Log.d(TAG, "checkSynchronousCall : headers : " + response.headers().toString());
                 } else {
                     Log.d(TAG, "checkSynchronousCall : download failed");
                     Utils.logError(TAG, responseOne.getError());
@@ -1029,6 +1031,8 @@ public class ApiTestActivity extends AppCompatActivity {
                         Log.d(TAG, "firstname : " + user.firstname);
                         Log.d(TAG, "lastname : " + user.lastname);
                     }
+                    Response response = responseTwo.getOkHttpResponse();
+                    Log.d(TAG, "checkSynchronousCall : headers : " + response.headers().toString());
                 } else {
                     Log.d(TAG, "checkSynchronousCall : response failed");
                     Utils.logError(TAG, responseTwo.getError());
@@ -1064,6 +1068,8 @@ public class ApiTestActivity extends AppCompatActivity {
                     Log.d(TAG, "checkSynchronousCall : jsonObjectANResponse success");
                     JSONObject jsonObjectFinal = responseThree.getResult();
                     Log.d(TAG, "checkSynchronousCall : jsonObjectANResponse result " + jsonObjectFinal.toString());
+                    Response response = responseThree.getOkHttpResponse();
+                    Log.d(TAG, "checkSynchronousCall : headers : " + response.headers().toString());
                 } else {
                     Log.d(TAG, "checkSynchronousCall : jsonObjectANResponse failed");
                     Utils.logError(TAG, responseThree.getError());

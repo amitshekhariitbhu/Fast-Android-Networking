@@ -64,13 +64,19 @@ public final class SynchronousCall {
             }
 
             if (request.getResponseAs() == ResponseType.OK_HTTP_RESPONSE) {
-                return new ANResponse(okHttpResponse);
+                ANResponse response = new ANResponse(okHttpResponse);
+                response.setOkHttpResponse(okHttpResponse);
+                return response;
             }
             if (okHttpResponse.code() >= 400) {
-                return new ANResponse<>(Utils.getErrorForServerResponse(new ANError(okHttpResponse),
+                ANResponse response = new ANResponse<>(Utils.getErrorForServerResponse(new ANError(okHttpResponse),
                         request, okHttpResponse.code()));
+                response.setOkHttpResponse(okHttpResponse);
+                return response;
             }
-            return request.parseResponse(okHttpResponse);
+            ANResponse response = request.parseResponse(okHttpResponse);
+            response.setOkHttpResponse(okHttpResponse);
+            return response;
         } catch (ANError se) {
             return new ANResponse<>(Utils.getErrorForConnection(new ANError(se)));
         } catch (Exception e) {
@@ -88,10 +94,14 @@ public final class SynchronousCall {
                 return new ANResponse<>(Utils.getErrorForConnection(new ANError()));
             }
             if (okHttpResponse.code() >= 400) {
-                return new ANResponse<>(Utils.getErrorForServerResponse(new ANError(okHttpResponse),
+                ANResponse response = new ANResponse<>(Utils.getErrorForServerResponse(new ANError(okHttpResponse),
                         request, okHttpResponse.code()));
+                response.setOkHttpResponse(okHttpResponse);
+                return response;
             }
-            return new ANResponse(ANConstants.SUCCESS);
+            ANResponse response = new ANResponse(ANConstants.SUCCESS);
+            response.setOkHttpResponse(okHttpResponse);
+            return response;
         } catch (ANError se) {
             return new ANResponse<>(Utils.getErrorForConnection(new ANError(se)));
         } catch (Exception e) {
@@ -109,14 +119,19 @@ public final class SynchronousCall {
             }
 
             if (request.getResponseAs() == ResponseType.OK_HTTP_RESPONSE) {
-                return new ANResponse(okHttpResponse);
+                ANResponse response = new ANResponse(okHttpResponse);
+                response.setOkHttpResponse(okHttpResponse);
+                return response;
             }
-
             if (okHttpResponse.code() >= 400) {
-                return new ANResponse<>(Utils.getErrorForServerResponse(new ANError(okHttpResponse),
+                ANResponse response = new ANResponse<>(Utils.getErrorForServerResponse(new ANError(okHttpResponse),
                         request, okHttpResponse.code()));
+                response.setOkHttpResponse(okHttpResponse);
+                return response;
             }
-            return request.parseResponse(okHttpResponse);
+            ANResponse response = request.parseResponse(okHttpResponse);
+            response.setOkHttpResponse(okHttpResponse);
+            return response;
         } catch (ANError se) {
             return new ANResponse<>(Utils.getErrorForConnection(se));
         } catch (Exception e) {
