@@ -6,3 +6,7 @@ allowed-tags:
   - download
   - upload
   - multipart
+  - head
+  - bitmap
+  - error
+  - cancel
