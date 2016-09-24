@@ -38,7 +38,7 @@ entries:
       url: /upload_request.html
       output: web
 
-    - title: Making Head Request
+    - title: Head Request
       url: /head_request.html
       output: web
 
