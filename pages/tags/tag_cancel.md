@@ -1,8 +1,8 @@
 ---
-title: "Download Pages"
-tagName: download
+title: "Cancel Pages"
+tagName: cancel
 search: exclude
-permalink: tag_download.html
+permalink: tag_cancel_.html
 sidebar: doc_sidebar
 folder: tags
 ---

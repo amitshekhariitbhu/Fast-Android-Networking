@@ -1,8 +1,8 @@
 {% if page.sidebar == "home_sidebar" %}
 {% assign sidebar = site.data.sidebars.home_sidebar.entries %}
 
-{% elsif page.sidebar == "mydoc_sidebar" %}
-{% assign sidebar = site.data.sidebars.mydoc_sidebar.entries %}
+{% elsif page.sidebar == "doc_sidebar" %}
+{% assign sidebar = site.data.sidebars.doc_sidebar.entries %}
 
 {% else %}
 {% assign sidebar = site.data.sidebars.home_sidebar.entries %}
@@ -14,6 +14,6 @@
 sidebar configuration for print files
 {% endcomment %}
 
-{% if site.product == "mydoc" %}
-{% assign sidebar_pdf = site.data.sidebars.mydoc_sidebar.entries %}
+{% if site.product == "doc" %}
+{% assign sidebar_pdf = site.data.sidebars.doc_sidebar.entries %}
 {% endif %}

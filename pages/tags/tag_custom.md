@@ -1,8 +1,8 @@
 ---
-title: "Download Pages"
-tagName: download
+title: "Custom Pages"
+tagName: custom
 search: exclude
-permalink: tag_download.html
+permalink: tag_custom.html
 sidebar: doc_sidebar
 folder: tags
 ---

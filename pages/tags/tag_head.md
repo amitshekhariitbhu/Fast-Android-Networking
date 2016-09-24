@@ -1,8 +1,8 @@
 ---
-title: "Download Pages"
-tagName: download
+title: "Head Pages"
+tagName: head
 search: exclude
-permalink: tag_download.html
+permalink: tag_head.html
 sidebar: doc_sidebar
 folder: tags
 ---

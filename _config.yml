@@ -62,7 +62,7 @@ defaults:
       layout: "page"
       comments: true
       search: true
-      sidebar: mydoc_sidebar
+      sidebar: doc_sidebar
 
   -
     scope:
@@ -78,7 +78,7 @@ defaults:
 
 sidebars:
 - home_sidebar
-- mydoc_sidebar
+- doc_sidebar
 
 description: "Fast Android Netorking description and documentation"
 # the description is used in the feed.xml file

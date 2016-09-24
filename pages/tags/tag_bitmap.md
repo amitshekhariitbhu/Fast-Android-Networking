@@ -1,8 +1,8 @@
 ---
-title: "Download Pages"
-tagName: download
+title: "Bitmap Pages"
+tagName: bitmap
 search: exclude
-permalink: tag_download.html
+permalink: tag_bitmap.html
 sidebar: doc_sidebar
 folder: tags
 ---

@@ -1,17 +1,17 @@
 ---
 title: Download Request
 tags: [download]
-keywords: "download, http, https, android"
-last_updated: "Aug 21, 2016"
-summary: "Making a download request"
+keywords: "download, http, https, android , download request"
+last_updated: "Sept 24, 2016"
+summary: "Making download request"
 published: true
-sidebar: mydoc_sidebar
-permalink: mydoc_download_example_one.html
-folder: mydoc
+sidebar: doc_sidebar
+permalink: download_request.html
+folder: doc
 ---
 
 
-### Downloading a file from server
+## Downloading a file from server
 ```java
 AndroidNetworking.download(url,dirPath,fileName)
                  .setTag("downloadTest")
@@ -34,6 +34,5 @@ AndroidNetworking.download(url,dirPath,fileName)
                     }
                 });                                
 ```
-
 
 {% include links.html %}

@@ -1,0 +1,127 @@
+# This is your sidebar. The sidebar code loops through sections here and provides the appropriate formatting.
+
+entries:
+- title: sidebar
+  product: Fast Android Networking
+  folders:
+
+  - title: Getting started
+    output: web
+    folderitems:
+
+    - title: FAN(Fast Android Networking)
+      url: /index.html
+      output: web
+      type: homepage
+
+    - title: Adding FAN to your Project
+      url: /adding_fan_to_your_project.html
+      output: web
+
+  - title: Making Requests
+    output: web
+    folderitems:
+
+    - title: Get Request
+      url: /get_request.html
+      output: web
+
+    - title: Post Request
+      url: /post_request.html
+      output: web
+
+    - title: Download Request
+      url: /downlaod_request.html
+      output: web
+
+    - title: Upload Request
+      url: /upload_request.html
+      output: web
+
+    - title: Making Head Request
+      url: /head_request.html
+      output: web
+
+  - title: Customization
+    output: web
+    folderitems:
+
+    - title: Custom OkHttpClient
+      url: /custom_okHttpClient.html
+      output: web
+
+    - title: Configure Timeout
+      url: /configure_timeout.html
+      output: web
+
+    - title: Setting ContentType
+      url: /setting_content_type.html
+      output: web              
+
+    - title: Logging
+      url: /logging.html
+      output: web
+
+  - title: Download Image
+    output: web
+    folderitems:
+
+    - title: Getting bitmap
+      url: /getting_bitmap.html
+      output: web
+
+    - title: Loading image into Imageview
+      url: /loading_image_into_imageview.html
+      output: web
+
+    - title: Clear Bitmap Cache
+      url: /clear_bitmap_cache.html
+      output: web
+
+  - title: Others
+    output: web
+    folderitems:
+
+    - title: Error Code Handling
+      url: /error_code_handling.html
+      output: web
+
+    - title: Cancelling a request
+      url: /cancelling_a_request.html
+      output: web
+
+    - title: Accessing Headers
+      url: /accessing_headers.html
+      output: web
+
+    - title: Getting OkHttpResponse
+      url: /getting_okhttpresponse.html
+      output: web
+
+    - title: Synchronous Request
+      url: /synchronous_request.html
+      output: web
+
+    - title: Prefetch a request
+      url: /prefetch_a_request.html
+      output: web
+
+    - title: Connection Quality
+      url: /connection_quality.html
+      output: web
+
+    - title: Getting Analytics
+      url: /getting_analytics.html
+      output: web
+
+  - title: Integration with other libraries
+    output: web
+    folderitems:
+
+    - title: Jackson Parser Support
+      url: /jackson_parser_support.html
+      output: web
+
+    - title: RxJava Support
+      url: /rxjava_support.html
+      output: web

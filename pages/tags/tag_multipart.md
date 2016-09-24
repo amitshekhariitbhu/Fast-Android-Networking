@@ -3,7 +3,7 @@ title: "Multipart Pages"
 tagName: multipart
 search: exclude
 permalink: tag_multipart.html
-sidebar: mydoc_sidebar
+sidebar: doc_sidebar
 folder: tags
 ---
 {% include taglogic.html %}

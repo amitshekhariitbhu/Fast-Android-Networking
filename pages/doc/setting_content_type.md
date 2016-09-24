@@ -1,22 +1,22 @@
 ---
-title: Post Request
-tags: [post]
-keywords: "POST, http, https, android , networking , post request"
-last_updated: "Aug 21, 2016"
-summary: "Making a post request : Example One"
+title: Setting Custom ContentType
+tags: [custom]
+keywords: "contentType, http, https, android , custom request"
+last_updated: "Sept 24, 2016"
+summary: "Setting Custom ContentType"
 published: true
-sidebar: mydoc_sidebar
-permalink: mydoc_post_example_one.html
-folder: mydoc
+sidebar: doc_sidebar
+permalink: setting_content_type.html
+folder: doc
 ---
 
 
-### Making a POST Request
+## Setting Custom ContentType in a request
 ```java
 AndroidNetworking.post("https://fierce-cove-29863.herokuapp.com/createAnUser")
                  .addBodyParameter("firstname", "Amit")
                  .addBodyParameter("lastname", "Shekhar")
-                 .setTag("test")
+                 .setContentType("application/json; charset=utf-8") // custom ContentType
                  .setPriority(Priority.MEDIUM)
                  .build()
                  .getAsJSONArray(new JSONArrayRequestListener() {
@@ -28,9 +28,7 @@ AndroidNetworking.post("https://fierce-cove-29863.herokuapp.com/createAnUser")
                     public void onError(ANError error) {
                       // handle error
                     }
-                });
+                });                             
 ```
-
-
 
 {% include links.html %}
