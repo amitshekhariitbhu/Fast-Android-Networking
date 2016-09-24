@@ -23,7 +23,7 @@ search: exclude
 "title": "{{ post.title | escape }}",
 "tags": "{{ post.tags }}",
 "keywords": "{{post.keywords}}",
-"url": "{{ post.url }}",
+"url": "{{ post.url | remove: "/"}}",
 "summary": "{{post.summary | strip }}"
 }
 {% unless forloop.last %},{% endunless %}

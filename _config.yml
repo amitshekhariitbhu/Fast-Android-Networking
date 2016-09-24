@@ -11,7 +11,7 @@ site_title: Fast Android Networking
 company_name: Fast Android Netwoking | Amit Shekhar
 # this appears in the footer
 
-github_editme_path: amitshekhariitbhu/fast-android-networking/blob/gh-pages/pages/
+#github_editme_path: amitshekhariitbhu/fast-android-networking/blob/gh-pages/pages/
 # if you're using Github, provide the basepath to the branch you've created for reviews, following the sample here. if not, leave this value blank.
 
 disqus_shortname: amitshekhar

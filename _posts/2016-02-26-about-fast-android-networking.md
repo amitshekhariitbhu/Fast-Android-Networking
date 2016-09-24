@@ -2,7 +2,7 @@
 title:  "About Fast Android Networking"
 published: true
 permalink: about-fast-android-networking.html
-summary: "About Fast Android Networking is developed by the developers for the developers."
+summary: "Fast Android Networking is developed by the developers for the developers."
 tags: [about, getting_started]
 ---
 
