@@ -1,0 +1,8 @@
+allowed-tags:
+  - getting_started
+  - troubleshooting
+  - post
+  - get
+  - download
+  - upload
+  - multipart

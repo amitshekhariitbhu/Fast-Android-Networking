@@ -1,0 +1,24 @@
+## Topnav single links
+## if you want to list an external url, use external_url instead of url. the theme will apply a different link base.
+topnav:
+- title: Topnav
+  items:
+    - title: Github
+      external_url: https://github.com/amitshekhariitbhu/Fast-Android-Networking
+
+#Topnav dropdowns
+topnav_dropdowns:
+- title: Topnav dropdowns
+  folders:
+    - title: Blogs
+      folderitems:
+        - title: The Best Networking Library
+          external_url: https://medium.freecodecamp.com/simple-and-fast-android-networking-19ed860d1455
+        - title: RxJava + Fast Android Networking
+          external_url: https://medium.freecodecamp.com/rxjava-fast-android-networking-6e3d90ee4387
+    - title: Others
+      folderitems:
+        - title: Wikis
+          external_url: https://github.com/amitshekhariitbhu/Fast-Android-Networking/wiki
+        - title: Create an Issue
+          external_url: https://github.com/amitshekhariitbhu/Fast-Android-Networking/issues/new
