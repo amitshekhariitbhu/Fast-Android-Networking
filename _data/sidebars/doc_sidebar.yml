@@ -31,7 +31,7 @@ entries:
       output: web
 
     - title: Download Request
-      url: /downlaod_request.html
+      url: /download_request.html
       output: web
 
     - title: Upload Request
