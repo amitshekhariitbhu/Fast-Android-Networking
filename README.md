@@ -29,7 +29,7 @@ Fast Android Networking Library takes care of each and everything. So you don't 
 ### Found this project useful :heart:
 * Support by clicking the :star: button on the upper right of this page. :v:
 
-For full details, visit the documentation on our web site, available in English, Chinese, and Korean:
+For full details, visit the documentation on our web site :
 
 <a href="https://amitshekhariitbhu.github.io/Fast-Android-Networking/"><img src="https://raw.githubusercontent.com/amitshekhariitbhu/Fast-Android-Networking/master/assets/get_started.png" width="150" height="42"/></a>
 
