@@ -29,6 +29,10 @@ Fast Android Networking Library takes care of each and everything. So you don't 
 ### Found this project useful :heart:
 * Support by clicking the :star: button on the upper right of this page. :v:
 
+For full details, visit the documentation on our web site, available in English, Chinese, and Korean:
+
+<a href="https://amitshekhariitbhu.github.io/Fast-Android-Networking/"><img src="https://raw.githubusercontent.com/amitshekhariitbhu/Fast-Android-Networking/master/assets/get_started.png" width="150" height="42"/></a>
+
 ## Requirements
 
 Fast Android Networking Library can be included in any Android application. 
@@ -49,7 +53,7 @@ Then initialize it in onCreate() Method of application class :
 ```java
 AndroidNetworking.initialize(getApplicationContext());
 ```
-Initializing it with some customization , as it uses [OkHttp](http://square.github.io/okhttp/) as newtorking layer, you can pass custom okHttpClient while initializing it.
+Initializing it with some customization , as it uses [OkHttp](http://square.github.io/okhttp/) as networking layer, you can pass custom okHttpClient while initializing it.
 ```java
 # Adding an Network Interceptor for Debugging purpose :
 OkHttpClient okHttpClient = new OkHttpClient() .newBuilder()

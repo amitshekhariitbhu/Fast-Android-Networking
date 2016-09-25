@@ -971,8 +971,6 @@ public class ApiTestActivity extends AppCompatActivity {
                 String url = "http://www.colorado.edu/conflict/peace/download/peace_problem.ZIP";
                 ANRequest requestOne = AndroidNetworking
                         .download(url, Utils.getRootDirPath(getApplicationContext()), "file1.zip")
-                        .setPriority(Priority.HIGH)
-                        .setTag(this)
                         .build()
                         .setAnalyticsListener(new AnalyticsListener() {
                             @Override
@@ -1007,8 +1005,6 @@ public class ApiTestActivity extends AppCompatActivity {
                 ANRequest requestTwo = AndroidNetworking.get(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_ARRAY)
                         .addPathParameter("pageNumber", "0")
                         .addQueryParameter("limit", "3")
-                        .setTag(this)
-                        .setPriority(Priority.LOW)
                         .build()
                         .setAnalyticsListener(new AnalyticsListener() {
                             @Override
@@ -1050,8 +1046,6 @@ public class ApiTestActivity extends AppCompatActivity {
 
                 ANRequest requestThree = AndroidNetworking.post(ApiEndPoint.BASE_URL + ApiEndPoint.POST_CREATE_AN_USER)
                         .addJSONObjectBody(jsonObject)
-                        .setTag(this)
-                        .setPriority(Priority.LOW)
                         .build()
                         .setAnalyticsListener(new AnalyticsListener() {
                             @Override
@@ -1079,8 +1073,6 @@ public class ApiTestActivity extends AppCompatActivity {
                 ANRequest requestFour = AndroidNetworking.get(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_ARRAY)
                         .addPathParameter("pageNumber", "0")
                         .addQueryParameter("limit", "3")
-                        .setTag(this)
-                        .setPriority(Priority.LOW)
                         .build()
                         .setAnalyticsListener(new AnalyticsListener() {
                             @Override
