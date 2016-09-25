@@ -1,5 +1,6 @@
 language: android
-
+jdk: oraclejdk8
+Use JDK8 for Android builds on TravisUse JDK8 for Android builds on TraviUse JDK8 for Android builds on Travis
 env:
   global:
     - ADB_INSTALL_TIMEOUT=30
