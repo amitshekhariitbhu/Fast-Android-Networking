@@ -1,9 +1,7 @@
 ---
 title: Using Fast Android Networking with RxJava
 tags: [getting_started]
-keywords: "GET, http, https, android , get request, parser, jackson"
-last_updated: "Sept 24, 2016"
-summary: "Using Fast Android Networking with RxJava"
+keywords: "GET, http, https, android , get request, parser, rxjava, gradle"
 published: true
 sidebar: doc_sidebar
 permalink: rxjava_support.html

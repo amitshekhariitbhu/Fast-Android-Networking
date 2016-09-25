@@ -1,9 +1,7 @@
 ---
 title: Adding Fast Android Networking to your Project
 tags: [getting_started]
-keywords: "GET, http, https, android , get request"
-last_updated: "Sept 24, 2016"
-summary: "These brief instructions will help you get started quickly with the Fast Android Networking"
+keywords: "GET, http, https, android , get request, adding, include, gradle"
 published: true
 sidebar: doc_sidebar
 permalink: adding_fan_to_your_project.html

@@ -2,8 +2,6 @@
 title: Get Request
 tags: [get]
 keywords: "GET, http, https, android , get request"
-last_updated: "Sept 24, 2016"
-summary: "Making get request"
 published: true
 sidebar: doc_sidebar
 permalink: get_request.html

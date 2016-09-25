@@ -1,9 +1,7 @@
 ---
-title: Custom OkHttpClient
+title: Initializing FAN with Custom OkHttpClient
 tags: [custom]
-keywords: "download, http, https, android , download request"
-last_updated: "Sept 24, 2016"
-summary: "Initializing FAN with Custom OkHttpClient"
+keywords: "download, http, https, android , download request, initialize, custom, network, interceptor"
 published: true
 sidebar: doc_sidebar
 permalink: custom_okHttpClient.html

@@ -2,8 +2,6 @@
 title: Getting bitmap
 tags: [download,bitmap]
 keywords: "bitmap, http, https, android ,bitmap, image, download request"
-last_updated: "Sept 24, 2016"
-summary: "Making Image download request"
 published: true
 sidebar: doc_sidebar
 permalink: getting_bitmap.html

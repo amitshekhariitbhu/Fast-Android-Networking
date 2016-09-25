@@ -2,8 +2,6 @@
 title: Getting Analytics
 tags: [custom]
 keywords: "download, http, https, android , analytics"
-last_updated: "Sept 24, 2016"
-summary: "Getting Analytics of a request"
 published: true
 sidebar: doc_sidebar
 permalink: getting_analytics.html

@@ -2,8 +2,6 @@
 title: Download Request
 tags: [download]
 keywords: "download, http, https, android , download request"
-last_updated: "Sept 24, 2016"
-summary: "Making download request"
 published: true
 sidebar: doc_sidebar
 permalink: download_request.html

@@ -1,9 +1,7 @@
 ---
-title: Getting OkHttpResponse
+title: Getting OkHttpResponse in Response
 tags: [custom]
-keywords: "okHttp Response, http, https, android , request"
-last_updated: "Sept 24, 2016"
-summary: "Getting OkHttpResponse in response"
+keywords: "okHttp Response, http, https, android , request, header"
 published: true
 sidebar: doc_sidebar
 permalink: getting_okhttpresponse.html

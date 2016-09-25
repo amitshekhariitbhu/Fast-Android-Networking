@@ -2,8 +2,6 @@
 title: Error Code Handling
 tags: [error]
 keywords: "error, http, https, android , errorCode, error request"
-last_updated: "Sept 24, 2016"
-summary: "Error Code Handling"
 published: true
 sidebar: doc_sidebar
 permalink: error_code_handling.html

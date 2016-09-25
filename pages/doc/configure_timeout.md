@@ -1,9 +1,7 @@
 ---
-title: Configure Timeout
+title: Configure Timeout for Request
 tags: [custom]
 keywords: "custom, http, https, android , timeout, custom request"
-last_updated: "Sept 24, 2016"
-summary: "Configure Timeout For Request"
 published: true
 sidebar: doc_sidebar
 permalink: configure_timeout.html

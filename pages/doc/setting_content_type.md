@@ -2,8 +2,6 @@
 title: Setting Custom ContentType
 tags: [custom]
 keywords: "contentType, http, https, android , custom request"
-last_updated: "Sept 24, 2016"
-summary: "Setting Custom ContentType"
 published: true
 sidebar: doc_sidebar
 permalink: setting_content_type.html

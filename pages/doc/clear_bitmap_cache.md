@@ -1,9 +1,7 @@
 ---
 title: Clear Bitmap Cache
 tags: [bitmap]
-keywords: "bitmap, http, https, android ,bitmap, image, imageview, cache"
-last_updated: "Sept 24, 2016"
-summary: "Clear Bitmap Cache"
+keywords: "bitmap, http, https, android ,bitmap, image, imageView, cache"
 published: true
 sidebar: doc_sidebar
 permalink: clear_bitmap_cache.html

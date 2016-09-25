@@ -2,8 +2,6 @@
 title: Post Request
 tags: [post]
 keywords: "POST, http, https, android , post request"
-last_updated: "Sept 24, 2016"
-summary: "Making post request"
 published: true
 sidebar: doc_sidebar
 permalink: post_request.html

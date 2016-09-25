@@ -2,8 +2,6 @@
 title: Logging
 tags: [custom]
 keywords: "logging, http, https, android , logging request"
-last_updated: "Sept 24, 2016"
-summary: "Logging Network Request"
 published: true
 sidebar: doc_sidebar
 permalink: logging.html

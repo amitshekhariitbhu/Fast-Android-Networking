@@ -2,8 +2,6 @@
 title: Head Request
 tags: [head]
 keywords: "HEAD, http, https, android , head request"
-last_updated: "Sept 24, 2016"
-summary: "Head request"
 published: true
 sidebar: doc_sidebar
 permalink: head_request.html

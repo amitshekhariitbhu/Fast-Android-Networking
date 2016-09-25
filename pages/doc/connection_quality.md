@@ -1,9 +1,7 @@
 ---
 title: Connection Quality
 tags: [custom]
-keywords: "download, http, https, android ,prefetch, connection quality"
-last_updated: "Sept 24, 2016"
-summary: "Connection Quality"
+keywords: "download, http, https, android ,prefetch, connection quality, internet, speed, bandwidth"
 published: true
 sidebar: doc_sidebar
 permalink: connection_quality.html

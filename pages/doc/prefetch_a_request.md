@@ -2,8 +2,6 @@
 title: Download Request
 tags: [custom,download]
 keywords: "download, http, https, android ,prefetch, download request"
-last_updated: "Sept 24, 2016"
-summary: "Prefetch a request"
 published: true
 sidebar: doc_sidebar
 permalink: prefetch_a_request.html

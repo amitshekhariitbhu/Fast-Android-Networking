@@ -1,9 +1,7 @@
 ---
 title: Upload Request
-tags: [upload]
-keywords: "upload, http, https, android , upload request"
-last_updated: "Sept 24, 2016"
-summary: "Making upload request"
+tags: [upload,multipart]
+keywords: "upload, http, https, android , upload request, multipart"
 published: true
 sidebar: doc_sidebar
 permalink: upload_request.html

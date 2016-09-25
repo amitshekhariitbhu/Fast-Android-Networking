@@ -2,8 +2,6 @@
 title: Synchronous Request
 tags: [get,post,download,upload]
 keywords: "GET,POST,download,upload, http, https, android , request"
-last_updated: "Sept 24, 2016"
-summary: "Making Synchronous Request"
 published: true
 sidebar: doc_sidebar
 permalink: synchronous_request.html

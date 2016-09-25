@@ -9,7 +9,7 @@ entries:
     output: web
     folderitems:
 
-    - title: FAN(Fast Android Networking)
+    - title: Fast Android Networking - FAN
       url: /index.html
       output: web
       type: homepage

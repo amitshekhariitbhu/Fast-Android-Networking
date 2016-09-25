@@ -1,9 +1,7 @@
 ---
-title: Accessing Headers
+title: Accessing Headers in Response
 tags: [head]
 keywords: "HEAD, http, https, android , head request"
-last_updated: "Sept 24, 2016"
-summary: "Accessing Headers in Response"
 published: true
 sidebar: doc_sidebar
 permalink: accessing_headers.html

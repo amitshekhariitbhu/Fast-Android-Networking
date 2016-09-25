@@ -2,8 +2,6 @@
 title: Cancelling a request
 tags: [cancel]
 keywords: "cancel, http, https, android , cancel request"
-last_updated: "Sept 24, 2016"
-summary: "Cancelling a request"
 published: true
 sidebar: doc_sidebar
 permalink: cancelling_a_request.html

@@ -1,9 +1,7 @@
 ---
-title: Loading image into imageview
+title: Loading image into ImageView
 tags: [download,bitmap]
-keywords: "bitmap, http, https, android ,bitmap, image, imageview, download request"
-last_updated: "Sept 24, 2016"
-summary: "Loading Image into ImageView from network"
+keywords: "bitmap, http, https, android ,bitmap, image, imageView, download request"
 published: true
 sidebar: doc_sidebar
 permalink: loading_image_into_imageview.html
