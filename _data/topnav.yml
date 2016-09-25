@@ -14,18 +14,10 @@ topnav_dropdowns:
       folderitems:
         - title: If you found this project useful, support by putting the star on the project
           external_url: https://github.com/amitshekhariitbhu/Fast-Android-Networking
-    - title: Others
-      folderitems:
-        - title: Wikis
-          external_url: https://github.com/amitshekhariitbhu/Fast-Android-Networking/wiki
-        - title: Create an Issue
-          external_url: https://github.com/amitshekhariitbhu/Fast-Android-Networking/issues/new
-        - title: The Best Networking Library
-          external_url: https://medium.freecodecamp.com/simple-and-fast-android-networking-19ed860d1455
-        - title: RxJava + Fast Android Networking
-          external_url: https://medium.freecodecamp.com/rxjava-fast-android-networking-6e3d90ee4387
     - title: Contact
       folderitems:
+        - title: Create an Issue
+          external_url: https://github.com/amitshekhariitbhu/Fast-Android-Networking/issues/new
         - title: Twitter
           external_url: https://twitter.com/amitiitbhu
         - title: Github
@@ -34,4 +26,6 @@ topnav_dropdowns:
           external_url: https://medium.com/@amitshekhar
         - title: Facebook
           external_url: https://www.facebook.com/amit.shekhar.iitbhu
+        - title: Email us
+          external_url: mailto:amit.shekhar.iitbhu@gmail.com?subject=Fast Android Networking
 
