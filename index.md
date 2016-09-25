@@ -6,6 +6,8 @@ sidebar: doc_sidebar
 permalink: index.html
 ---
 
+<img src= "images/androidnetworking.png" alt="Fast Android Networking"/>
+
 Fast Android Networking Library is a powerful library for doing any type of networking in Android applications which is made on top of [OkHttp Networking Layer](http://square.github.io/okhttp/).
 
 ##  Advantages of using Fast Android Networking library over other libraries:
