@@ -54,6 +54,10 @@ entries:
       url: /configure_timeout.html
       output: web
 
+    - title: Custom Executor
+      url: /custom_executor.html
+      output: web
+
     - title: Setting ContentType
       url: /setting_content_type.html
       output: web              
