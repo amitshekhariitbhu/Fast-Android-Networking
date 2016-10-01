@@ -21,17 +21,13 @@ Fast Android Networking Library takes care of each and everything. So you don't 
   [Okio](https://github.com/square/okio) is made to handle GC overhead while allocating memory.
   [Okio](https://github.com/square/okio) do some clever things to save CPU and memory.
 * As it uses [OkHttp](http://square.github.io/okhttp/) , most important it supports HTTP/2.  
-* What Fast Android Networking Library supports? [Check here](#fast-android-networking-library-supports)
-* Difference over other Networking Library [Check here](#difference-over-other-networking-library)
-* RxJava Support For Fast Android Networking: [Check here](https://github.com/amitshekhariitbhu/Fast-Android-Networking/wiki/Using-Fast-Android-Networking-Library-With-RxJava)
-* Have an issue or need a feature in Fast Android Networking : [Create an issue](https://github.com/amitshekhariitbhu/Fast-Android-Networking/issues/new)
 
 ### Found this project useful :heart:
 * Support by clicking the :star: button on the upper right of this page. :v:
 
 For full details, visit the documentation on our web site :
 
-<a href="https://amitshekhariitbhu.github.io/Fast-Android-Networking/"><img src="https://raw.githubusercontent.com/amitshekhariitbhu/Fast-Android-Networking/master/assets/get_started.png" width="150" height="42"/></a>
+<a href="https://amitshekhariitbhu.github.io/Fast-Android-Networking" target="_blank"><img src="https://raw.githubusercontent.com/amitshekhariitbhu/Fast-Android-Networking/master/assets/get_started.png" width="150" height="42"/></a>
 
 ## Requirements
 
@@ -69,13 +65,6 @@ compile 'com.amitshekhar.android:jackson-android-networking:0.2.0'
 // Then set the JacksonParserFactory like below
 AndroidNetworking.setParserFactory(new JacksonParserFactory());
 ```
-
-If you are using proguard, then add this rule in proguard-project.txt
-```
--dontwarn okio.**
-```
-
-### [How to use Fast Android Networking with RxJava? - Click Here](https://github.com/amitshekhariitbhu/Fast-Android-Networking/wiki/Using-Fast-Android-Networking-Library-With-RxJava)
 
 ### Making a GET Request
 ```java
@@ -555,6 +544,12 @@ AndroidNetworking.initialize(getApplicationContext(),okHttpClient);
   1 or 2 (at max 2)IMMEDIATE request is required at instant.Otherwise use HIGH Priority.
 * Known Bug : As present if you are using GZIP Interceptor from client to server, Upload progress
   is not working perfectly in Multipart.
+  
+  If you are using proguard, then add this rule in proguard-project.txt
+  ```
+  -dontwarn okio.**
+  ```
+
   
 ### Fast Android Networking Library supports
 
