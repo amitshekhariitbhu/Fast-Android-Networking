@@ -1,7 +1,7 @@
 ---
 title: Fast Android Networking
 keywords: "fast android networking, http, https, GET, POST, download, upload, http/2, about, why, use, advantages"
-tags: [getting_started]
+tags: []
 sidebar: doc_sidebar
 permalink: index.html
 ---
