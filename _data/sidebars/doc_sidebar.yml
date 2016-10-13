@@ -58,6 +58,10 @@ entries:
       url: /custom_executor.html
       output: web
 
+    - title: Caching
+      url: /caching.html
+      output: web
+
     - title: Setting ContentType
       url: /setting_content_type.html
       output: web              
