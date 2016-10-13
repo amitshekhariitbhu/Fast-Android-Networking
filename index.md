@@ -32,4 +32,6 @@ Fast Android Networking Library is a powerful library for doing any type of netw
 * As it uses [OkHttp](http://square.github.io/okhttp/) , most important it supports HTTP/2. 
 * No other library provides simple interface for doing all types of things in networking like setting priority, cancelling, etc.
 
+<a href="https://amitshekhariitbhu.github.io/Fast-Android-Networking/adding_fan_to_your_project.html"><img src="images/get_started.png"/></a>
+
 {% include links.html %}
