@@ -37,7 +37,7 @@ AndroidNetworking.initialize(getApplicationContext(),okHttpClient);
 ```
 
 
-### Inbuilt basic Logging
+## Inbuilt basic Logging
 ```java
 AndroidNetworking.enableLogging(); // simply enable logging
 AndroidNetworking.enableLogging("tag"); // enabling logging with some tag
