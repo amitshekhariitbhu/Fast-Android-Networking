@@ -25,7 +25,7 @@ AndroidNetworking.initialize(getApplicationContext(),okHttpClient);
 
 ## Logging it with Stetho Network Interceptor
 ```groovy
-compile 'com.faceboogroovyk.stetho:stetho:1.1.1'
+compile 'com.facebook.stetho:stetho:1.1.1'
 ```
 
 ```java
