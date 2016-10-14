@@ -18,7 +18,7 @@ compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
 HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
 logging.setLevel(Level.BASIC);
 OkHttpClient okHttpClient = new OkHttpClient() .newBuilder()
-                        . addInterceptor(logging)
+                        .addInterceptor(logging)
                         .build();
 AndroidNetworking.initialize(getApplicationContext(),okHttpClient);                       
 ```
