@@ -122,6 +122,10 @@ entries:
       url: /getting_analytics.html
       output: web
 
+    - title: Cookie
+      url: /cookie.html
+      output: web
+
   - title: Integration with other libraries
     output: web
     folderitems:
