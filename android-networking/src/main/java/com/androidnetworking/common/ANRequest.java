@@ -708,6 +708,8 @@ public class ANRequest<T extends ANRequest> {
             mOkHttpResponseAndBitmapRequestListener.onError(anError);
         } else if (mOkHttpResponseAndParsedRequestListener != null) {
             mOkHttpResponseAndParsedRequestListener.onError(anError);
+        }else if (mDownloadListener != null) {
+            mDownloadListener.onError(anError);
         }
     }
 
