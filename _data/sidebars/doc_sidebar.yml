@@ -114,6 +114,10 @@ entries:
       url: /prefetch_a_request.html
       output: web
 
+    - title: Building a request
+      url: /building_a_request.html
+      output: web
+
     - title: Connection Quality
       url: /connection_quality.html
       output: web
