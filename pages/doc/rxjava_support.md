@@ -13,7 +13,7 @@ folder: doc
 Add this in your build.gradle
 
 ```groovy
-compile 'com.amitshekhar.android:rx-android-networking:0.1.0'
+compile 'com.amitshekhar.android:rx-android-networking:0.2.0'
 ```
 
 Do not forget to add internet permission in manifest if already not present

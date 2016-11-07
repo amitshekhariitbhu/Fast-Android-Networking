@@ -19,7 +19,7 @@ Fast Android Networking Library supports Android 2.3 (Gingerbread) and later.
 Add this in your build.gradle
 
 ```groovy
-compile 'com.amitshekhar.android:android-networking:0.2.0'
+compile 'com.amitshekhar.android:android-networking:0.3.0'
 ```
 
 Do not forget to add internet permission in manifest if already not present
