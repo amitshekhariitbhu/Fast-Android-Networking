@@ -105,7 +105,7 @@ AndroidNetworking.post("https://fierce-cove-29863.herokuapp.com/createAnUser")
                     }
                 });
 ```
-You can also post json, file ,etc in POST request like this.
+You can also post json, file, etc in POST request like this.
 ```java
 
 JSONObject jsonObject = new JSONObject();
@@ -532,8 +532,8 @@ AndroidNetworking.disableLogging(); // disable logging
 ### Enabling GZIP From Client to Server
 ```java
 // Enabling GZIP for Request (Not needed if your server doesn't support GZIP Compression), anyway responses 
-from server are automatically unGzipped if required. So enable it only if you need your request to be 
-Gzipped before sending to server(Make sure your server support GZIP Compression).
+// from server are automatically unGzipped if required. So enable it only if you need your request to be 
+// Gzipped before sending to server(Make sure your server support GZIP Compression).
 OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
                 .addInterceptor(new GzipRequestInterceptor())
                 .build();
