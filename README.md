@@ -23,7 +23,7 @@ Fast Android Networking Library takes care of each and everything. So you don't 
 * As it uses [OkHttp](http://square.github.io/okhttp/) , most important it supports HTTP/2.  
 
 ### Find this project useful ? :heart:
-* Support it clicking the :star: button on the upper right of this page. :v:
+* Support it by clicking the :star: button on the upper right of this page. :v:
 
 For full details, visit the documentation on our web site :
 
