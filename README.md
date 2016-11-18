@@ -22,8 +22,8 @@ Fast Android Networking Library takes care of each and everything. So you don't 
   [Okio](https://github.com/square/okio) do some clever things to save CPU and memory.
 * As it uses [OkHttp](http://square.github.io/okhttp/) , most important it supports HTTP/2.  
 
-### Found this project useful :heart:
-* Support by clicking the :star: button on the upper right of this page. :v:
+### Find this project useful ? :heart:
+* Support it clicking the :star: button on the upper right of this page. :v:
 
 For full details, visit the documentation on our web site :
 
