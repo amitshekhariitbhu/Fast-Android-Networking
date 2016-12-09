@@ -698,7 +698,9 @@ public class ANRequest<T extends ANRequest> {
             mBitmapRequestListener.onError(anError);
         } else if (mParsedRequestListener != null) {
             mParsedRequestListener.onError(anError);
-        } else if (mOkHttpResponseAndJSONObjectRequestListener != null) {
+        } else if (mOkHttpResponseListener != null) {
+            mOkHttpResponseListener.onError(anError);
+        }else if (mOkHttpResponseAndJSONObjectRequestListener != null) {
             mOkHttpResponseAndJSONObjectRequestListener.onError(anError);
         } else if (mOkHttpResponseAndJSONArrayRequestListener != null) {
             mOkHttpResponseAndJSONArrayRequestListener.onError(anError);
