@@ -40,6 +40,7 @@
         <activity android:name=".ImageGridActivity"></activity>
         <activity android:name=".ApiTestActivity"></activity>
         <activity android:name=".OkHttpResponseTestActivity"></activity>
+        <activity android:name=".WebSocketActivity"></activity>
     </application>
 
 </manifest>
