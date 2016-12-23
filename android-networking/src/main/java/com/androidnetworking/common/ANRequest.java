@@ -595,7 +595,12 @@ public class ANRequest<T extends ANRequest> {
                     return ANResponse.failed(Utils.getErrorForParse(new ANError(e)));
                 }
             case PREFETCH:
-                return ANResponse.success(ANConstants.PREFETCH);
+                try {
+                    Okio.buffer(response.body().source()).skip(Long.MAX_VALUE);
+                    return ANResponse.success(ANConstants.PREFETCH);
+                } catch (Exception e) {
+                    return ANResponse.failed(Utils.getErrorForParse(new ANError(e)));
+                }
         }
         return null;
     }
