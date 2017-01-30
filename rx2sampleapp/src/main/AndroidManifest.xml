@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ /*
   ~  *    Copyright (C) 2016 Amit Shekhar
   ~  *    Copyright (C) 2011 Android Open Source Project
@@ -18,7 +17,8 @@
   ~  */
   -->
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.rx2sampleapp">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.rx2sampleapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -30,13 +30,15 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Rx2ApiTestActivity">
+        <activity android:name=".Rx2OperatorExampleActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Rx2ApiTestActivity"></activity>
+        <activity android:name=".SubscriptionActivity"></activity>
     </application>
 
 </manifest>
