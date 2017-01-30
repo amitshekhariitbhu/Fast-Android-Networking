@@ -17,16 +17,15 @@
  *
  */
 
-package com.rx2sampleapp;
+package com.rx2sampleapp.model;
 
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+/**
+ * Created by amitshekhar on 02/08/16.
+ */
+public class UserDetail {
 
-public class MainActivity extends AppCompatActivity {
+    public long id;
+    public String firstname;
+    public String lastname;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-    }
 }
