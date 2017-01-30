@@ -19,8 +19,8 @@
 
 package com.androidnetworking.utils;
 
-import com.androidnetworking.interfaces.Parser;
 import com.androidnetworking.gsonparserfactory.GsonParserFactory;
+import com.androidnetworking.interfaces.Parser;
 import com.google.gson.Gson;
 
 /**
@@ -28,7 +28,7 @@ import com.google.gson.Gson;
  */
 public class ParseUtil {
 
-    private static com.androidnetworking.interfaces.Parser.Factory mParserFactory;
+    private static Parser.Factory mParserFactory;
 
     public static void setParserFactory(Parser.Factory parserFactory) {
         mParserFactory = parserFactory;
