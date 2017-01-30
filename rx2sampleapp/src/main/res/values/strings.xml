@@ -17,6 +17,6 @@
   ~  */
   -->
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.rx2androidnetworking">
-</manifest>
+<resources>
+    <string name="app_name">Rx2SampleApp</string>
+</resources>
