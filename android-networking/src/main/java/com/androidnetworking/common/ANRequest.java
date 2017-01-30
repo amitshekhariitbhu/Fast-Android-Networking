@@ -820,9 +820,6 @@ public class ANRequest<T extends ANRequest> {
                 builder.addPart(Headers.of("Content-Disposition",
                         "form-data; name=\"" + entry.getKey() + "\"; filename=\"" + fileName + "\""),
                         fileBody);
-                if (customMediaType != null) {
-                    builder.setType(customMediaType);
-                }
             }
         } catch (Exception e) {
             e.printStackTrace();
