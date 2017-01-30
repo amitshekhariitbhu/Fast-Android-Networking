@@ -1,3 +1,22 @@
+/*
+ *
+ *  *    Copyright (C) 2016 Amit Shekhar
+ *  *    Copyright (C) 2011 Android Open Source Project
+ *  *
+ *  *    Licensed under the Apache License, Version 2.0 (the "License");
+ *  *    you may not use this file except in compliance with the License.
+ *  *    You may obtain a copy of the License at
+ *  *
+ *  *        http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  *    Unless required by applicable law or agreed to in writing, software
+ *  *    distributed under the License is distributed on an "AS IS" BASIS,
+ *  *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  *    See the License for the specific language governing permissions and
+ *  *    limitations under the License.
+ *
+ */
+
 package com.rx2androidnetworking;
 
 import android.net.TrafficStats;
@@ -92,7 +111,7 @@ public class Rx2InternalNetworking {
             request.setCall(InternalNetworking.sHttpClient.newCall(okHttpRequest));
         }
         ANLog.d("call generated successfully for simple observable");
-        return new SimpleANObservable<T>(request);
+        return new SimpleANObservable<>(request);
     }
 
     public static <T> Observable<T> generateDownloadObservable(final Rx2ANRequest request) {
@@ -158,7 +177,7 @@ public class Rx2InternalNetworking {
             observer.onSubscribe(new ANDisposable(this.call));
             boolean dontSwallowError = false;
             Response okHttpResponse = null;
-            try{
+            try {
                 ANLog.d("initiate simple network call observable");
                 final long startTime = System.currentTimeMillis();
                 final long startBytes = TrafficStats.getTotalRxBytes();
@@ -329,7 +348,7 @@ public class Rx2InternalNetworking {
 
         @Override
         protected void subscribeActual(Observer<? super T> observer) {
-            boolean dontSwallowError = false;
+            boolean doNotSwallowError = false;
             Response okHttpResponse = null;
             Request okHttpRequest;
             try {
@@ -385,7 +404,7 @@ public class Rx2InternalNetworking {
                             observer.onNext(response.getResult());
                         }
                         if (!request.getCall().isCanceled()) {
-                            dontSwallowError = true;
+                            doNotSwallowError = true;
                             observer.onComplete();
                         }
                     }
@@ -396,7 +415,7 @@ public class Rx2InternalNetworking {
                 }
             } catch (Exception e) {
                 Exceptions.throwIfFatal(e);
-                if (dontSwallowError) {
+                if (doNotSwallowError) {
                     RxJavaPlugins.onError(e);
                 } else if (!request.getCall().isCanceled()) {
                     try {
