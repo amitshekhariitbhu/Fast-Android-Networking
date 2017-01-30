@@ -49,6 +49,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.lang.reflect.Type;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -887,11 +888,9 @@ public class ANRequest<T extends ANRequest> {
         }
 
         @Override
-        public T addQueryParameter(HashMap<String, String> queryParameterMap) {
+        public T addQueryParameter(Map<String, String> queryParameterMap) {
             if (queryParameterMap != null) {
-                for (HashMap.Entry<String, String> entry : queryParameterMap.entrySet()) {
-                    mQueryParameterMap.put(entry.getKey(), entry.getValue());
-                }
+                mQueryParameterMap.putAll(queryParameterMap);
             }
             return (T) this;
         }
@@ -909,11 +908,9 @@ public class ANRequest<T extends ANRequest> {
         }
 
         @Override
-        public T addHeaders(HashMap<String, String> headerMap) {
+        public T addHeaders(Map<String, String> headerMap) {
             if (headerMap != null) {
-                for (HashMap.Entry<String, String> entry : headerMap.entrySet()) {
-                    mHeadersMap.put(entry.getKey(), entry.getValue());
-                }
+                mHeadersMap.putAll(headerMap);
             }
             return (T) this;
         }
@@ -1063,11 +1060,9 @@ public class ANRequest<T extends ANRequest> {
         }
 
         @Override
-        public T addQueryParameter(HashMap<String, String> queryParameterMap) {
+        public T addQueryParameter(Map<String, String> queryParameterMap) {
             if (queryParameterMap != null) {
-                for (HashMap.Entry<String, String> entry : queryParameterMap.entrySet()) {
-                    mQueryParameterMap.put(entry.getKey(), entry.getValue());
-                }
+                mQueryParameterMap.putAll(queryParameterMap);
             }
             return (T) this;
         }
@@ -1085,11 +1080,9 @@ public class ANRequest<T extends ANRequest> {
         }
 
         @Override
-        public T addHeaders(HashMap<String, String> headerMap) {
+        public T addHeaders(Map<String, String> headerMap) {
             if (headerMap != null) {
-                for (HashMap.Entry<String, String> entry : headerMap.entrySet()) {
-                    mHeadersMap.put(entry.getKey(), entry.getValue());
-                }
+                mHeadersMap.putAll(headerMap);
             }
             return (T) this;
         }
@@ -1152,20 +1145,16 @@ public class ANRequest<T extends ANRequest> {
             return (T) this;
         }
 
-        public T addBodyParameter(HashMap<String, String> bodyParameterMap) {
+        public T addBodyParameter(Map<String, String> bodyParameterMap) {
             if (bodyParameterMap != null) {
-                for (HashMap.Entry<String, String> entry : bodyParameterMap.entrySet()) {
-                    mBodyParameterMap.put(entry.getKey(), entry.getValue());
-                }
+                mBodyParameterMap.putAll(bodyParameterMap);
             }
             return (T) this;
         }
 
-        public T addUrlEncodeFormBodyParameter(HashMap<String, String> bodyParameterMap) {
+        public T addUrlEncodeFormBodyParameter(Map<String, String> bodyParameterMap) {
             if (bodyParameterMap != null) {
-                for (HashMap.Entry<String, String> entry : bodyParameterMap.entrySet()) {
-                    mUrlEncodedFormBodyParameterMap.put(entry.getKey(), entry.getValue());
-                }
+                mUrlEncodedFormBodyParameterMap.putAll(bodyParameterMap);
             }
             return (T) this;
         }
@@ -1246,11 +1235,9 @@ public class ANRequest<T extends ANRequest> {
         }
 
         @Override
-        public T addHeaders(HashMap<String, String> headerMap) {
+        public T addHeaders(Map<String, String> headerMap) {
             if (headerMap != null) {
-                for (HashMap.Entry<String, String> entry : headerMap.entrySet()) {
-                    mHeadersMap.put(entry.getKey(), entry.getValue());
-                }
+                mHeadersMap.putAll(headerMap);
             }
             return (T) this;
         }
@@ -1262,11 +1249,9 @@ public class ANRequest<T extends ANRequest> {
         }
 
         @Override
-        public T addQueryParameter(HashMap<String, String> queryParameterMap) {
+        public T addQueryParameter(Map<String, String> queryParameterMap) {
             if (queryParameterMap != null) {
-                for (HashMap.Entry<String, String> entry : queryParameterMap.entrySet()) {
-                    mQueryParameterMap.put(entry.getKey(), entry.getValue());
-                }
+                mQueryParameterMap.putAll(queryParameterMap);
             }
             return (T) this;
         }
@@ -1375,11 +1360,9 @@ public class ANRequest<T extends ANRequest> {
         }
 
         @Override
-        public T addQueryParameter(HashMap<String, String> queryParameterMap) {
+        public T addQueryParameter(Map<String, String> queryParameterMap) {
             if (queryParameterMap != null) {
-                for (HashMap.Entry<String, String> entry : queryParameterMap.entrySet()) {
-                    mQueryParameterMap.put(entry.getKey(), entry.getValue());
-                }
+                mQueryParameterMap.putAll(queryParameterMap);
             }
             return (T) this;
         }
@@ -1397,11 +1380,9 @@ public class ANRequest<T extends ANRequest> {
         }
 
         @Override
-        public T addHeaders(HashMap<String, String> headerMap) {
+        public T addHeaders(Map<String, String> headerMap) {
             if (headerMap != null) {
-                for (HashMap.Entry<String, String> entry : headerMap.entrySet()) {
-                    mHeadersMap.put(entry.getKey(), entry.getValue());
-                }
+                mHeadersMap.putAll(headerMap);
             }
             return (T) this;
         }
@@ -1459,11 +1440,9 @@ public class ANRequest<T extends ANRequest> {
             return (T) this;
         }
 
-        public T addMultipartParameter(HashMap<String, String> multiPartParameterMap) {
+        public T addMultipartParameter(Map<String, String> multiPartParameterMap) {
             if (multiPartParameterMap != null) {
-                for (HashMap.Entry<String, String> entry : multiPartParameterMap.entrySet()) {
-                    mMultiPartParameterMap.put(entry.getKey(), entry.getValue());
-                }
+                mMultiPartParameterMap.putAll(multiPartParameterMap);
             }
             return (T) this;
         }
@@ -1473,11 +1452,9 @@ public class ANRequest<T extends ANRequest> {
             return (T) this;
         }
 
-        public T addMultipartFile(HashMap<String, File> multiPartFileMap) {
+        public T addMultipartFile(Map<String, File> multiPartFileMap) {
             if (multiPartFileMap != null) {
-                for (HashMap.Entry<String, File> entry : multiPartFileMap.entrySet()) {
-                    mMultiPartFileMap.put(entry.getKey(), entry.getValue());
-                }
+                mMultiPartFileMap.putAll(multiPartFileMap);
             }
             return (T) this;
         }
