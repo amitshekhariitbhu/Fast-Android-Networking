@@ -706,7 +706,7 @@ public class ANRequest<T extends ANRequest> {
             mParsedRequestListener.onError(anError);
         } else if (mOkHttpResponseListener != null) {
             mOkHttpResponseListener.onError(anError);
-        }else if (mOkHttpResponseAndJSONObjectRequestListener != null) {
+        } else if (mOkHttpResponseAndJSONObjectRequestListener != null) {
             mOkHttpResponseAndJSONObjectRequestListener.onError(anError);
         } else if (mOkHttpResponseAndJSONArrayRequestListener != null) {
             mOkHttpResponseAndJSONArrayRequestListener.onError(anError);
@@ -716,7 +716,7 @@ public class ANRequest<T extends ANRequest> {
             mOkHttpResponseAndBitmapRequestListener.onError(anError);
         } else if (mOkHttpResponseAndParsedRequestListener != null) {
             mOkHttpResponseAndParsedRequestListener.onError(anError);
-        }else if (mDownloadListener != null) {
+        } else if (mDownloadListener != null) {
             mDownloadListener.onError(anError);
         }
     }
@@ -804,7 +804,9 @@ public class ANRequest<T extends ANRequest> {
     }
 
     public RequestBody getMultiPartRequestBody() {
-        MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
+        MultipartBody.Builder builder = new MultipartBody
+                .Builder()
+                .setType((customMediaType == null) ? MultipartBody.FORM : customMediaType);
         try {
             for (HashMap.Entry<String, String> entry : mMultiPartParameterMap.entrySet()) {
                 builder.addPart(Headers.of("Content-Disposition",
