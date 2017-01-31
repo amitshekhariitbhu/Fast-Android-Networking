@@ -62,6 +62,18 @@ public final class JacksonParserFactory extends Parser.Factory {
     }
 
     @Override
+    public Object getObject(String string, Type type) {
+        try {
+            JavaType javaType = mapper.getTypeFactory().constructType(type);
+            ObjectReader objectReader = mapper.readerFor(javaType);
+            return objectReader.readValue(string);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
     public String getString(Object object) {
         try {
             ObjectWriter objectWriter = mapper.writerFor(object.getClass());

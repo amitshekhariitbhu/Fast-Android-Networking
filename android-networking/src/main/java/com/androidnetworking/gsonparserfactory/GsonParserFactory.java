@@ -58,6 +58,16 @@ public final class GsonParserFactory extends Parser.Factory {
     }
 
     @Override
+    public Object getObject(String string, Type type) {
+        try {
+            return gson.fromJson(string, type);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
     public String getString(Object object) {
         try {
             return gson.toJson(object);

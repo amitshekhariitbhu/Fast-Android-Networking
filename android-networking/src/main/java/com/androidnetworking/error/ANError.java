@@ -34,6 +34,8 @@ public class ANError extends Exception {
 
     private Response response;
 
+    private Object errorBodyObject;
+
     public ANError() {
     }
 
@@ -98,6 +100,14 @@ public class ANError extends Exception {
 
     public void setErrorBody(String errorBody) {
         this.errorBody = errorBody;
+    }
+
+    public Object getErrorAsObject() {
+        return errorBodyObject;
+    }
+
+    public void setErrorAsObject(Object errorBodyObject) {
+        this.errorBodyObject = errorBodyObject;
     }
 
 }

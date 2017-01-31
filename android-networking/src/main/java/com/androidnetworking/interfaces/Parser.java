@@ -43,6 +43,10 @@ public interface Parser<F, T> {
             return null;
         }
 
+        public Object getObject(String string, Type type) {
+            return null;
+        }
+
         public String getString(Object object) {
             return null;
         }

@@ -134,6 +134,7 @@ public class ANRequest<T extends ANRequest> {
     private OkHttpClient mOkHttpClient = null;
     private String mUserAgent = null;
     private Type mType = null;
+    private Type mErrorType = null;
 
     public ANRequest(GetRequestBuilder builder) {
         this.mRequestType = RequestType.SIMPLE;
@@ -152,6 +153,7 @@ public class ANRequest<T extends ANRequest> {
         this.mExecutor = builder.mExecutor;
         this.mOkHttpClient = builder.mOkHttpClient;
         this.mUserAgent = builder.mUserAgent;
+        this.mErrorType = builder.mErrorType;
     }
 
     public ANRequest(PostRequestBuilder builder) {
@@ -173,6 +175,7 @@ public class ANRequest<T extends ANRequest> {
         this.mExecutor = builder.mExecutor;
         this.mOkHttpClient = builder.mOkHttpClient;
         this.mUserAgent = builder.mUserAgent;
+        this.mErrorType = builder.mErrorType;
         if (builder.mCustomContentType != null) {
             this.customMediaType = MediaType.parse(builder.mCustomContentType);
         }
@@ -194,6 +197,7 @@ public class ANRequest<T extends ANRequest> {
         this.mExecutor = builder.mExecutor;
         this.mOkHttpClient = builder.mOkHttpClient;
         this.mUserAgent = builder.mUserAgent;
+        this.mErrorType = builder.mErrorType;
     }
 
     public ANRequest(MultiPartBuilder builder) {
@@ -212,6 +216,7 @@ public class ANRequest<T extends ANRequest> {
         this.mExecutor = builder.mExecutor;
         this.mOkHttpClient = builder.mOkHttpClient;
         this.mUserAgent = builder.mUserAgent;
+        this.mErrorType = builder.mErrorType;
         if (builder.mCustomContentType != null) {
             this.customMediaType = MediaType.parse(builder.mCustomContentType);
         }
@@ -625,7 +630,15 @@ public class ANRequest<T extends ANRequest> {
             if (anError.getResponse() != null && anError.getResponse().body() != null
                     && anError.getResponse().body().source() != null) {
                 anError.setErrorBody(Okio.buffer(anError
-                        .getResponse().body().source()).readUtf8());
+                        .getResponse()
+                        .body()
+                        .source())
+                        .readUtf8());
+                if (mErrorType != null) {
+                    anError.setErrorAsObject(ParseUtil
+                            .getParserFactory()
+                            .getObject(anError.getErrorBody(), mErrorType));
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -871,6 +884,7 @@ public class ANRequest<T extends ANRequest> {
         private Executor mExecutor;
         private OkHttpClient mOkHttpClient;
         private String mUserAgent;
+        private Type mErrorType;
 
         public GetRequestBuilder(String url) {
             this.mUrl = url;
@@ -1014,6 +1028,12 @@ public class ANRequest<T extends ANRequest> {
             return (T) this;
         }
 
+        @Override
+        public T setErrorBodyObjectClass(Class errorBodyObjectClass) {
+            mErrorType = errorBodyObjectClass;
+            return (T) this;
+        }
+
         public T setBitmapConfig(Bitmap.Config bitmapConfig) {
             mDecodeConfig = bitmapConfig;
             return (T) this;
@@ -1080,6 +1100,7 @@ public class ANRequest<T extends ANRequest> {
         private OkHttpClient mOkHttpClient;
         private String mUserAgent;
         private String mCustomContentType;
+        private Type mErrorType;
 
         public PostRequestBuilder(String url) {
             this.mUrl = url;
@@ -1223,6 +1244,12 @@ public class ANRequest<T extends ANRequest> {
             return (T) this;
         }
 
+        @Override
+        public T setErrorBodyObjectClass(Class errorBodyObjectClass) {
+            mErrorType = errorBodyObjectClass;
+            return (T) this;
+        }
+
         public T addBodyParameter(String key, String value) {
             mBodyParameterMap.put(key, value);
             return (T) this;
@@ -1328,6 +1355,7 @@ public class ANRequest<T extends ANRequest> {
         private Executor mExecutor;
         private OkHttpClient mOkHttpClient;
         private String mUserAgent;
+        private Type mErrorType;
 
         public DownloadBuilder(String url, String dirPath, String fileName) {
             this.mUrl = url;
@@ -1467,6 +1495,12 @@ public class ANRequest<T extends ANRequest> {
             return (T) this;
         }
 
+        @Override
+        public T setErrorBodyObjectClass(Class errorBodyObjectClass) {
+            mErrorType = errorBodyObjectClass;
+            return (T) this;
+        }
+
         public T setPercentageThresholdForCancelling(int percentageThresholdForCancelling) {
             mPercentageThresholdForCancelling = percentageThresholdForCancelling;
             return (T) this;
@@ -1493,6 +1527,7 @@ public class ANRequest<T extends ANRequest> {
         private OkHttpClient mOkHttpClient;
         private String mUserAgent;
         private String mCustomContentType;
+        private Type mErrorType;
 
         public MultiPartBuilder(String url) {
             this.mUrl = url;
@@ -1627,6 +1662,12 @@ public class ANRequest<T extends ANRequest> {
         @Override
         public T setUserAgent(String userAgent) {
             mUserAgent = userAgent;
+            return (T) this;
+        }
+
+        @Override
+        public T setErrorBodyObjectClass(Class errorBodyObjectClass) {
+            mErrorType = errorBodyObjectClass;
             return (T) this;
         }
 
