@@ -18,12 +18,14 @@
 package com.androidnetworking.error;
 
 import com.androidnetworking.common.ANConstants;
+import com.androidnetworking.utils.ParseUtil;
 
 import okhttp3.Response;
 
 /**
  * Created by amitshekhar on 22/03/16.
  */
+@SuppressWarnings({"unchecked", "unused"})
 public class ANError extends Exception {
 
     private String errorBody;
@@ -33,8 +35,6 @@ public class ANError extends Exception {
     private String errorDetail;
 
     private Response response;
-
-    private Object errorBodyObject;
 
     public ANError() {
     }
@@ -102,12 +102,14 @@ public class ANError extends Exception {
         this.errorBody = errorBody;
     }
 
-    public Object getErrorAsObject() {
-        return errorBodyObject;
+    public <T> T getErrorAsObject(Class<T> objectClass) {
+        try {
+            return (T) (ParseUtil
+                    .getParserFactory()
+                    .getObject(errorBody, objectClass));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
-
-    public void setErrorAsObject(Object errorBodyObject) {
-        this.errorBodyObject = errorBodyObject;
-    }
-
 }
