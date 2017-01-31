@@ -24,7 +24,7 @@ def siteUrl = 'https://github.com/amitshekhariitbhu/Fast-Android-Networking'
 def gitUrl = 'https://github.com/amitshekhariitbhu/Fast-Android-Networking.git'
 
 group = "com.amitshekhar.android"
-version = '0.4.0-alpha'
+version = '0.4.0-SNAPSHOT'
 
 install {
     repositories.mavenInstaller {
