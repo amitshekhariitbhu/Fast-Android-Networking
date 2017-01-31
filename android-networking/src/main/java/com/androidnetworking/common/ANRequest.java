@@ -90,8 +90,7 @@ public class ANRequest<T extends ANRequest> {
     private HashMap<String, File> mMultiPartFileMap = new HashMap<>();
     private String mDirPath;
     private String mFileName;
-    private JSONObject mJsonObject = null;
-    private JSONArray mJsonArray = null;
+    private String mApplicationJsonString = null;
     private String mStringBody = null;
     private byte[] mByte = null;
     private File mFile = null;
@@ -164,8 +163,7 @@ public class ANRequest<T extends ANRequest> {
         this.mUrlEncodedFormBodyParameterMap = builder.mUrlEncodedFormBodyParameterMap;
         this.mQueryParameterMap = builder.mQueryParameterMap;
         this.mPathParameterMap = builder.mPathParameterMap;
-        this.mJsonObject = builder.mJsonObject;
-        this.mJsonArray = builder.mJsonArray;
+        this.mApplicationJsonString = builder.mApplicationJsonString;
         this.mStringBody = builder.mStringBody;
         this.mFile = builder.mFile;
         this.mByte = builder.mByte;
@@ -762,16 +760,11 @@ public class ANRequest<T extends ANRequest> {
     }
 
     public RequestBody getRequestBody() {
-        if (mJsonObject != null) {
+        if (mApplicationJsonString != null) {
             if (customMediaType != null) {
-                return RequestBody.create(customMediaType, mJsonObject.toString());
+                return RequestBody.create(customMediaType, mApplicationJsonString);
             }
-            return RequestBody.create(JSON_MEDIA_TYPE, mJsonObject.toString());
-        } else if (mJsonArray != null) {
-            if (customMediaType != null) {
-                return RequestBody.create(customMediaType, mJsonArray.toString());
-            }
-            return RequestBody.create(JSON_MEDIA_TYPE, mJsonArray.toString());
+            return RequestBody.create(JSON_MEDIA_TYPE, mApplicationJsonString);
         } else if (mStringBody != null) {
             if (customMediaType != null) {
                 return RequestBody.create(customMediaType, mStringBody);
@@ -900,8 +893,36 @@ public class ANRequest<T extends ANRequest> {
         }
 
         @Override
+        public T addQueryParameter(Object object) {
+            if (object != null) {
+                mQueryParameterMap.putAll(ParseUtil
+                        .getParserFactory()
+                        .getStringMap(object));
+            }
+            return (T) this;
+        }
+
+        @Override
         public T addPathParameter(String key, String value) {
             mPathParameterMap.put(key, value);
+            return (T) this;
+        }
+
+        @Override
+        public T addPathParameter(Map<String, String> pathParameterMap) {
+            if (mPathParameterMap != null) {
+                mPathParameterMap.putAll(pathParameterMap);
+            }
+            return (T) this;
+        }
+
+        @Override
+        public T addPathParameter(Object object) {
+            if (object != null) {
+                mPathParameterMap.putAll(ParseUtil
+                        .getParserFactory()
+                        .getStringMap(object));
+            }
             return (T) this;
         }
 
@@ -915,6 +936,16 @@ public class ANRequest<T extends ANRequest> {
         public T addHeaders(Map<String, String> headerMap) {
             if (headerMap != null) {
                 mHeadersMap.putAll(headerMap);
+            }
+            return (T) this;
+        }
+
+        @Override
+        public T addHeaders(Object object) {
+            if (object != null) {
+                mHeadersMap.putAll(ParseUtil
+                        .getParserFactory()
+                        .getStringMap(object));
             }
             return (T) this;
         }
@@ -1019,8 +1050,7 @@ public class ANRequest<T extends ANRequest> {
         private int mMethod = Method.POST;
         private String mUrl;
         private Object mTag;
-        private JSONObject mJsonObject = null;
-        private JSONArray mJsonArray = null;
+        private String mApplicationJsonString = null;
         private String mStringBody = null;
         private byte[] mByte = null;
         private File mFile = null;
@@ -1072,8 +1102,36 @@ public class ANRequest<T extends ANRequest> {
         }
 
         @Override
+        public T addQueryParameter(Object object) {
+            if (object != null) {
+                mQueryParameterMap.putAll(ParseUtil
+                        .getParserFactory()
+                        .getStringMap(object));
+            }
+            return (T) this;
+        }
+
+        @Override
         public T addPathParameter(String key, String value) {
             mPathParameterMap.put(key, value);
+            return (T) this;
+        }
+
+        @Override
+        public T addPathParameter(Map<String, String> pathParameterMap) {
+            if (mPathParameterMap != null) {
+                mPathParameterMap.putAll(pathParameterMap);
+            }
+            return (T) this;
+        }
+
+        @Override
+        public T addPathParameter(Object object) {
+            if (object != null) {
+                mPathParameterMap.putAll(ParseUtil
+                        .getParserFactory()
+                        .getStringMap(object));
+            }
             return (T) this;
         }
 
@@ -1087,6 +1145,16 @@ public class ANRequest<T extends ANRequest> {
         public T addHeaders(Map<String, String> headerMap) {
             if (headerMap != null) {
                 mHeadersMap.putAll(headerMap);
+            }
+            return (T) this;
+        }
+
+        @Override
+        public T addHeaders(Object object) {
+            if (object != null) {
+                mHeadersMap.putAll(ParseUtil
+                        .getParserFactory()
+                        .getStringMap(object));
             }
             return (T) this;
         }
@@ -1144,15 +1212,24 @@ public class ANRequest<T extends ANRequest> {
             return (T) this;
         }
 
-        public T addUrlEncodeFormBodyParameter(String key, String value) {
-            mUrlEncodedFormBodyParameterMap.put(key, value);
-            return (T) this;
-        }
-
         public T addBodyParameter(Map<String, String> bodyParameterMap) {
             if (bodyParameterMap != null) {
                 mBodyParameterMap.putAll(bodyParameterMap);
             }
+            return (T) this;
+        }
+
+        public T addBodyParameter(Object object) {
+            if (object != null) {
+                mBodyParameterMap.putAll(ParseUtil
+                        .getParserFactory()
+                        .getStringMap(object));
+            }
+            return (T) this;
+        }
+
+        public T addUrlEncodeFormBodyParameter(String key, String value) {
+            mUrlEncodedFormBodyParameterMap.put(key, value);
             return (T) this;
         }
 
@@ -1163,13 +1240,35 @@ public class ANRequest<T extends ANRequest> {
             return (T) this;
         }
 
+        public T addUrlEncodeFormBodyParameter(Object object) {
+            if (object != null) {
+                mUrlEncodedFormBodyParameterMap.putAll(ParseUtil
+                        .getParserFactory()
+                        .getStringMap(object));
+            }
+            return (T) this;
+        }
+
+        public T addApplicationJsonBody(Object object) {
+            if (object != null) {
+                mApplicationJsonString = ParseUtil
+                        .getParserFactory()
+                        .getString(object);
+            }
+            return (T) this;
+        }
+
         public T addJSONObjectBody(JSONObject jsonObject) {
-            mJsonObject = jsonObject;
+            if (jsonObject != null) {
+                mApplicationJsonString = jsonObject.toString();
+            }
             return (T) this;
         }
 
         public T addJSONArrayBody(JSONArray jsonArray) {
-            mJsonArray = jsonArray;
+            if (jsonArray != null) {
+                mApplicationJsonString = jsonArray.toString();
+            }
             return (T) this;
         }
 
@@ -1247,6 +1346,16 @@ public class ANRequest<T extends ANRequest> {
         }
 
         @Override
+        public T addHeaders(Object object) {
+            if (object != null) {
+                mHeadersMap.putAll(ParseUtil
+                        .getParserFactory()
+                        .getStringMap(object));
+            }
+            return (T) this;
+        }
+
+        @Override
         public T addQueryParameter(String key, String value) {
             mQueryParameterMap.put(key, value);
             return (T) this;
@@ -1261,8 +1370,36 @@ public class ANRequest<T extends ANRequest> {
         }
 
         @Override
+        public T addQueryParameter(Object object) {
+            if (object != null) {
+                mQueryParameterMap.putAll(ParseUtil
+                        .getParserFactory()
+                        .getStringMap(object));
+            }
+            return (T) this;
+        }
+
+        @Override
         public T addPathParameter(String key, String value) {
             mPathParameterMap.put(key, value);
+            return (T) this;
+        }
+
+        @Override
+        public T addPathParameter(Map<String, String> pathParameterMap) {
+            if (mPathParameterMap != null) {
+                mPathParameterMap.putAll(pathParameterMap);
+            }
+            return (T) this;
+        }
+
+        @Override
+        public T addPathParameter(Object object) {
+            if (object != null) {
+                mPathParameterMap.putAll(ParseUtil
+                        .getParserFactory()
+                        .getStringMap(object));
+            }
             return (T) this;
         }
 
@@ -1372,8 +1509,36 @@ public class ANRequest<T extends ANRequest> {
         }
 
         @Override
+        public T addQueryParameter(Object object) {
+            if (object != null) {
+                mQueryParameterMap.putAll(ParseUtil
+                        .getParserFactory()
+                        .getStringMap(object));
+            }
+            return (T) this;
+        }
+
+        @Override
         public T addPathParameter(String key, String value) {
             mPathParameterMap.put(key, value);
+            return (T) this;
+        }
+
+        @Override
+        public T addPathParameter(Map<String, String> pathParameterMap) {
+            if (mPathParameterMap != null) {
+                mPathParameterMap.putAll(pathParameterMap);
+            }
+            return (T) this;
+        }
+
+        @Override
+        public T addPathParameter(Object object) {
+            if (object != null) {
+                mPathParameterMap.putAll(ParseUtil
+                        .getParserFactory()
+                        .getStringMap(object));
+            }
             return (T) this;
         }
 
@@ -1387,6 +1552,16 @@ public class ANRequest<T extends ANRequest> {
         public T addHeaders(Map<String, String> headerMap) {
             if (headerMap != null) {
                 mHeadersMap.putAll(headerMap);
+            }
+            return (T) this;
+        }
+
+        @Override
+        public T addHeaders(Object object) {
+            if (object != null) {
+                mHeadersMap.putAll(ParseUtil
+                        .getParserFactory()
+                        .getStringMap(object));
             }
             return (T) this;
         }
@@ -1447,6 +1622,15 @@ public class ANRequest<T extends ANRequest> {
         public T addMultipartParameter(Map<String, String> multiPartParameterMap) {
             if (multiPartParameterMap != null) {
                 mMultiPartParameterMap.putAll(multiPartParameterMap);
+            }
+            return (T) this;
+        }
+
+        public T addMultipartParameter(Object object) {
+            if (object != null) {
+                mMultiPartParameterMap.putAll(ParseUtil
+                        .getParserFactory()
+                        .getStringMap(object));
             }
             return (T) this;
         }
