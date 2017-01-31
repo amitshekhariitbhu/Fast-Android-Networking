@@ -85,8 +85,7 @@ public class Rx2OperatorExampleActivity extends AppCompatActivity {
                         Log.d(TAG, " isFromCache : " + isFromCache);
                     }
                 })
-                .getParseObservable(new TypeToken<List<User>>() {
-                })
+                .getObjectListObservable(User.class)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<List<User>>() {
@@ -126,8 +125,7 @@ public class Rx2OperatorExampleActivity extends AppCompatActivity {
         Rx2AndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAnUser/{userId}")
                 .addPathParameter("userId", "1")
                 .build()
-                .getParseObservable(new TypeToken<ApiUser>() {
-                })
+                .getObjectObservable(ApiUser.class)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(new Function<ApiUser, User>() {
@@ -175,8 +173,7 @@ public class Rx2OperatorExampleActivity extends AppCompatActivity {
     private Observable<List<User>> getCricketFansObservable() {
         return Rx2AndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAllCricketFans")
                 .build()
-                .getParseObservable(new TypeToken<List<User>>() {
-                });
+                .getObjectListObservable(User.class);
     }
 
     /*
@@ -185,8 +182,7 @@ public class Rx2OperatorExampleActivity extends AppCompatActivity {
     private Observable<List<User>> getFootballFansObservable() {
         return Rx2AndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAllFootballFans")
                 .build()
-                .getParseObservable(new TypeToken<List<User>>() {
-                });
+                .getObjectListObservable(User.class);
     }
 
     /*
@@ -261,8 +257,7 @@ public class Rx2OperatorExampleActivity extends AppCompatActivity {
         return Rx2AndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAllFriends/{userId}")
                 .addPathParameter("userId", "1")
                 .build()
-                .getParseObservable(new TypeToken<List<User>>() {
-                });
+                .getObjectListObservable(User.class);
     }
 
     public void flatMapAndFilter(View view) {
@@ -410,16 +405,14 @@ public class Rx2OperatorExampleActivity extends AppCompatActivity {
                 .addPathParameter("pageNumber", "0")
                 .addQueryParameter("limit", "10")
                 .build()
-                .getParseObservable(new TypeToken<List<User>>() {
-                });
+                .getObjectListObservable(User.class);
     }
 
     private Observable<UserDetail> getUserDetailObservable(long id) {
         return Rx2AndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAnUserDetail/{userId}")
                 .addPathParameter("userId", String.valueOf(id))
                 .build()
-                .getParseObservable(new TypeToken<UserDetail>() {
-                });
+                .getObjectObservable(UserDetail.class);
     }
 
     public void flatMapWithZip(View view) {
