@@ -17,7 +17,7 @@
  *
  */
 
-package com.androidnetworking.common;
+package com.androidnetworking.interceptors;
 
 import java.io.EOFException;
 import java.io.IOException;

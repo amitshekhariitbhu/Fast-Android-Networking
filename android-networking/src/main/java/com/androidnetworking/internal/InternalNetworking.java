@@ -27,8 +27,8 @@ import android.net.TrafficStats;
 import com.androidnetworking.common.ANConstants;
 import com.androidnetworking.common.ANRequest;
 import com.androidnetworking.common.ConnectionClassManager;
-import com.androidnetworking.common.HttpLoggingInterceptor;
-import com.androidnetworking.common.HttpLoggingInterceptor.Level;
+import com.androidnetworking.interceptors.HttpLoggingInterceptor;
+import com.androidnetworking.interceptors.HttpLoggingInterceptor.Level;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.utils.Utils;
 
