@@ -455,7 +455,6 @@ public class ANRequest<T extends ANRequest> {
                             if (mDownloadListener != null) {
                                 mDownloadListener.onDownloadComplete();
                             }
-                            ANLog.d("Delivering success : " + toString());
                             finish();
                         }
                     });
@@ -466,7 +465,6 @@ public class ANRequest<T extends ANRequest> {
                             if (mDownloadListener != null) {
                                 mDownloadListener.onDownloadComplete();
                             }
-                            ANLog.d("Delivering success : " + toString());
                             finish();
                         }
                     });
@@ -476,7 +474,6 @@ public class ANRequest<T extends ANRequest> {
                 finish();
             }
         } else {
-            ANLog.d("Prefetch done : " + toString());
             finish();
         }
     }
@@ -513,7 +510,6 @@ public class ANRequest<T extends ANRequest> {
         try {
             if (forceCancel || mPercentageThresholdForCancelling == 0
                     || mProgress < mPercentageThresholdForCancelling) {
-                ANLog.d("cancelling request : " + toString());
                 isCancelled = true;
                 if (call != null) {
                     call.cancel();
@@ -524,8 +520,6 @@ public class ANRequest<T extends ANRequest> {
                 if (!isDelivered) {
                     deliverError(new ANError());
                 }
-            } else {
-                ANLog.d("not cancelling request : " + toString());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -641,7 +635,6 @@ public class ANRequest<T extends ANRequest> {
                     anError.setErrorCode(0);
                 }
                 deliverErrorResponse(anError);
-                ANLog.d("Delivering anError : " + toString());
             }
             isDelivered = true;
         } catch (Exception e) {
@@ -668,14 +661,12 @@ public class ANRequest<T extends ANRequest> {
                         }
                     });
                 }
-                ANLog.d("Delivering success : " + toString());
             } else {
                 ANError anError = new ANError();
                 anError.setCancellationMessageInError();
                 anError.setErrorCode(0);
                 deliverErrorResponse(anError);
                 finish();
-                ANLog.d("Delivering cancelled : " + toString());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -759,7 +750,6 @@ public class ANRequest<T extends ANRequest> {
                         }
                     });
                 }
-                ANLog.d("Delivering success : " + toString());
             } else {
                 ANError anError = new ANError();
                 anError.setCancellationMessageInError();
@@ -768,7 +758,6 @@ public class ANRequest<T extends ANRequest> {
                     mOkHttpResponseListener.onError(anError);
                 }
                 finish();
-                ANLog.d("Delivering cancelled : " + toString());
             }
         } catch (Exception e) {
             e.printStackTrace();

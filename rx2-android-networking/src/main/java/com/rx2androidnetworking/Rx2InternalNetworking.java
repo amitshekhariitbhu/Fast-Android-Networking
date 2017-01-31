@@ -22,7 +22,6 @@ package com.rx2androidnetworking;
 import android.net.TrafficStats;
 
 import com.androidnetworking.common.ANConstants;
-import com.androidnetworking.common.ANLog;
 import com.androidnetworking.common.ANResponse;
 import com.androidnetworking.common.ConnectionClassManager;
 import com.androidnetworking.error.ANError;
@@ -110,7 +109,6 @@ public class Rx2InternalNetworking {
         } else {
             request.setCall(InternalNetworking.sHttpClient.newCall(okHttpRequest));
         }
-        ANLog.d("call generated successfully for simple observable");
         return new SimpleANObservable<>(request);
     }
 
@@ -178,7 +176,6 @@ public class Rx2InternalNetworking {
             boolean dontSwallowError = false;
             Response okHttpResponse = null;
             try {
-                ANLog.d("initiate simple network call observable");
                 final long startTime = System.currentTimeMillis();
                 final long startBytes = TrafficStats.getTotalRxBytes();
                 okHttpResponse = call.execute();
@@ -206,11 +203,8 @@ public class Rx2InternalNetworking {
                                         request.getRequestBody().contentLength() : -1, 0, true);
                     }
                 }
-                if (okHttpResponse.code() == 304) {
-                    ANLog.d("error code 304 simple observable");
-                } else if (okHttpResponse.code() >= 400) {
+                if (okHttpResponse.code() >= 400) {
                     if (!call.isCanceled()) {
-                        ANLog.d("delivering error to observer from simple observable");
                         observer.onError(Utils.getErrorForServerResponse(new ANError(okHttpResponse),
                                 request, okHttpResponse.code()));
                     }
@@ -218,16 +212,13 @@ public class Rx2InternalNetworking {
                     ANResponse<T> response = request.parseResponse(okHttpResponse);
                     if (!response.isSuccess()) {
                         if (!call.isCanceled()) {
-                            ANLog.d("delivering error to observer from simple observable");
                             observer.onError(response.getError());
                         }
                     } else {
                         if (!call.isCanceled()) {
-                            ANLog.d("delivering response to observer from simple observable");
                             observer.onNext(response.getResult());
                         }
                         if (!call.isCanceled()) {
-                            ANLog.d("delivering completion to observer from simple observable");
                             dontSwallowError = true;
                             observer.onComplete();
                         }
@@ -235,7 +226,6 @@ public class Rx2InternalNetworking {
                 }
             } catch (IOException ioe) {
                 if (!call.isCanceled()) {
-                    ANLog.d("delivering error to subscriber from simple observable");
                     observer.onError(Utils.getErrorForConnection(new ANError(ioe)));
                 }
             } catch (Exception e) {
@@ -244,7 +234,6 @@ public class Rx2InternalNetworking {
                     RxJavaPlugins.onError(e);
                 } else if (!call.isCanceled()) {
                     try {
-                        ANLog.d("delivering error to subscriber from simple observable");
                         observer.onError(Utils.getErrorForNetworkOnMainThreadOrConnection(e));
                     } catch (Exception e1) {
                         Exceptions.throwIfFatal(e1);
@@ -273,7 +262,6 @@ public class Rx2InternalNetworking {
             boolean dontSwallowError = false;
             Response okHttpResponse;
             try {
-                ANLog.d("initiate download network call observable");
                 final long startTime = System.currentTimeMillis();
                 final long startBytes = TrafficStats.getTotalRxBytes();
                 okHttpResponse = request.getCall().execute();
@@ -327,7 +315,6 @@ public class Rx2InternalNetworking {
                     RxJavaPlugins.onError(e);
                 } else if (!call.isCanceled()) {
                     try {
-                        ANLog.d("delivering error to subscriber from download observable");
                         observer.onError(Utils.getErrorForNetworkOnMainThreadOrConnection(e));
                     } catch (Exception e1) {
                         Exceptions.throwIfFatal(e1);
@@ -419,7 +406,6 @@ public class Rx2InternalNetworking {
                     RxJavaPlugins.onError(e);
                 } else if (!request.getCall().isCanceled()) {
                     try {
-                        ANLog.d("delivering error to subscriber from multipart observable");
                         observer.onError(Utils.getErrorForNetworkOnMainThreadOrConnection(e));
                     } catch (Exception e1) {
                         Exceptions.throwIfFatal(e1);
