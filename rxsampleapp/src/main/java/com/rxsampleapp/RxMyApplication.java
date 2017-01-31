@@ -36,13 +36,6 @@ public class RxMyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         appInstance = this;
-        //For testing purpose only: network interceptor : enable it only for non-images request checking
-//        Stetho.initializeWithDefaults(getApplicationContext());
-//        OkHttpClient okHttpClient = new OkHttpClient().newBuilder().addNetworkInterceptor(new StethoInterceptor()).addInterceptor(new GzipRequestInterceptor()).build();
-//        OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
-//                .addInterceptor(new GzipRequestInterceptor())
-//                .build();
-//        AndroidNetworking.initialize(getApplicationContext(), okHttpClient);
         AndroidNetworking.initialize(getApplicationContext());
         AndroidNetworking.enableLogging();
         AndroidNetworking.setConnectionQualityChangeListener(new ConnectionQualityChangeListener() {
