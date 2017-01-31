@@ -25,17 +25,20 @@ import com.androidnetworking.common.ANRequest;
 import com.androidnetworking.common.Method;
 import com.androidnetworking.common.RequestType;
 import com.androidnetworking.common.ResponseType;
+import com.google.gson.internal.$Gson$Types;
 import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.List;
 
 import io.reactivex.Observable;
 
 /**
  * Created by Prashant Gupta on 30-01-2017.
  */
-
+@SuppressWarnings({"unchecked", "unused"})
 public class Rx2ANRequest extends ANRequest<Rx2ANRequest> {
 
     public Rx2ANRequest(GetRequestBuilder builder) {
@@ -104,6 +107,30 @@ public class Rx2ANRequest extends ANRequest<Rx2ANRequest> {
 
     public <T> Observable<T> getParseObservable(TypeToken<T> typeToken) {
         this.setType(typeToken.getType());
+        this.setResponseAs(ResponseType.PARSED);
+        if (this.getRequestType() == RequestType.SIMPLE) {
+            return Rx2InternalNetworking.generateSimpleObservable(this);
+        } else if (this.getRequestType() == RequestType.MULTIPART) {
+            return Rx2InternalNetworking.generateMultipartObservable(this);
+        } else {
+            return null;
+        }
+    }
+
+    public <T> Observable<T> getObjectObservable(Class<T> objectClass) {
+        this.setType(objectClass);
+        this.setResponseAs(ResponseType.PARSED);
+        if (this.getRequestType() == RequestType.SIMPLE) {
+            return Rx2InternalNetworking.generateSimpleObservable(this);
+        } else if (this.getRequestType() == RequestType.MULTIPART) {
+            return Rx2InternalNetworking.generateMultipartObservable(this);
+        } else {
+            return null;
+        }
+    }
+
+    public <T> Observable<List<T>> getObjectListObservable(Class<T> objectClass) {
+        this.setType($Gson$Types.newParameterizedTypeWithOwner(null, List.class, objectClass));
         this.setResponseAs(ResponseType.PARSED);
         if (this.getRequestType() == RequestType.SIMPLE) {
             return Rx2InternalNetworking.generateSimpleObservable(this);

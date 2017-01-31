@@ -31,7 +31,6 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.AnalyticsListener;
 import com.androidnetworking.interfaces.DownloadProgressListener;
 import com.androidnetworking.interfaces.UploadProgressListener;
-import com.google.gson.reflect.TypeToken;
 import com.rx2androidnetworking.Rx2ANRequest;
 import com.rx2androidnetworking.Rx2AndroidNetworking;
 import com.rx2sampleapp.model.User;
@@ -75,8 +74,7 @@ public class Rx2ApiTestActivity extends AppCompatActivity {
                         Log.d(TAG, " isFromCache : " + isFromCache);
                     }
                 })
-                .getParseObservable(new TypeToken<List<User>>() {
-                })
+                .getObjectListObservable(User.class)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<List<User>>() {
@@ -122,8 +120,7 @@ public class Rx2ApiTestActivity extends AppCompatActivity {
                         Log.d(TAG, " isFromCache : " + isFromCache);
                     }
                 })
-                .getParseObservable(new TypeToken<User>() {
-                })
+                .getObjectObservable(User.class)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<User>() {

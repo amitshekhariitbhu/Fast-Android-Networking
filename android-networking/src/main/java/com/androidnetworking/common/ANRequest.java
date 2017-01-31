@@ -41,6 +41,7 @@ import com.androidnetworking.internal.ANRequestQueue;
 import com.androidnetworking.internal.SynchronousCall;
 import com.androidnetworking.utils.ParseUtil;
 import com.androidnetworking.utils.Utils;
+import com.google.gson.internal.$Gson$Types;
 import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
@@ -49,6 +50,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.lang.reflect.Type;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Future;
@@ -247,6 +249,20 @@ public class ANRequest<T extends ANRequest> {
 
     public void getAsParsed(TypeToken typeToken, ParsedRequestListener parsedRequestListener) {
         this.mType = typeToken.getType();
+        this.mResponseType = ResponseType.PARSED;
+        this.mParsedRequestListener = parsedRequestListener;
+        ANRequestQueue.getInstance().addRequest(this);
+    }
+
+    public void getAsObject(Class objectClass, ParsedRequestListener parsedRequestListener) {
+        this.mType = objectClass;
+        this.mResponseType = ResponseType.PARSED;
+        this.mParsedRequestListener = parsedRequestListener;
+        ANRequestQueue.getInstance().addRequest(this);
+    }
+
+    public void getAsObjectList(Class objectClass, ParsedRequestListener parsedRequestListener) {
+        this.mType = $Gson$Types.newParameterizedTypeWithOwner(null, List.class, objectClass);
         this.mResponseType = ResponseType.PARSED;
         this.mParsedRequestListener = parsedRequestListener;
         ANRequestQueue.getInstance().addRequest(this);
