@@ -189,6 +189,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         final CountDownLatch latch = new CountDownLatch(1);
 
         AndroidNetworking.upload(server.url("/").toString())
+                .addMultipartParameter("key", "value")
                 .build()
                 .getAsString(new StringRequestListener() {
                     @Override
@@ -219,6 +220,7 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         final CountDownLatch latch = new CountDownLatch(1);
 
         AndroidNetworking.upload(server.url("/").toString())
+                .addMultipartParameter("key", "value")
                 .build()
                 .getAsString(new StringRequestListener() {
                     @Override
