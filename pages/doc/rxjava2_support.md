@@ -8,7 +8,7 @@ permalink: rxjava2_support.html
 folder: doc
 --- 
 
-## Using Fast Android Networking Library in your application with RxJava
+## Using Fast Android Networking Library in your application with RxJava2
 
 Add this in your build.gradle
 
