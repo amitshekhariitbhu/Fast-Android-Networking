@@ -173,7 +173,7 @@ public class Rx2InternalNetworking {
         @Override
         protected void subscribeActual(Observer<? super T> observer) {
             observer.onSubscribe(new ANDisposable(this.call));
-            boolean dontSwallowError = false;
+            boolean doNotSwallowError = false;
             Response okHttpResponse = null;
             try {
                 final long startTime = System.currentTimeMillis();
@@ -219,7 +219,7 @@ public class Rx2InternalNetworking {
                             observer.onNext(response.getResult());
                         }
                         if (!call.isCanceled()) {
-                            dontSwallowError = true;
+                            doNotSwallowError = true;
                             observer.onComplete();
                         }
                     }
@@ -230,7 +230,7 @@ public class Rx2InternalNetworking {
                 }
             } catch (Exception e) {
                 Exceptions.throwIfFatal(e);
-                if (dontSwallowError) {
+                if (doNotSwallowError) {
                     RxJavaPlugins.onError(e);
                 } else if (!call.isCanceled()) {
                     try {
@@ -259,7 +259,7 @@ public class Rx2InternalNetworking {
         @Override
         protected void subscribeActual(Observer<? super T> observer) {
             observer.onSubscribe(new ANDisposable(this.call));
-            boolean dontSwallowError = false;
+            boolean doNotSwallowError = false;
             Response okHttpResponse;
             try {
                 final long startTime = System.currentTimeMillis();
@@ -293,7 +293,7 @@ public class Rx2InternalNetworking {
                         observer.onNext(response.getResult());
                     }
                     if (!call.isCanceled()) {
-                        dontSwallowError = true;
+                        doNotSwallowError = true;
                         observer.onComplete();
                     }
                 }
@@ -311,7 +311,7 @@ public class Rx2InternalNetworking {
                 }
             } catch (Exception e) {
                 Exceptions.throwIfFatal(e);
-                if (dontSwallowError) {
+                if (doNotSwallowError) {
                     RxJavaPlugins.onError(e);
                 } else if (!call.isCanceled()) {
                     try {
