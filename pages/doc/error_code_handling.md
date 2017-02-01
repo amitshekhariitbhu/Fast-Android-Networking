@@ -11,20 +11,22 @@ folder: doc
 
 ## Error Code Handling
 ```java
- public void onError(ANError error) {
-               if (error.getErrorCode() != 0) {
-                    // received error from server
-                    // error.getErrorCode() - the error code from server
-                    // error.getErrorBody() - the error body from server
-                    // error.getErrorDetail() - just an error detail
-                    Log.d(TAG, "onError errorCode : " + error.getErrorCode());
-                    Log.d(TAG, "onError errorBody : " + error.getErrorBody());
-                    Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
-               } else {
-                    // error.getErrorDetail() : connectionError, parseError, requestCancelledError
-                    Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
-               }
-            }                              
+public void onError(ANError error) {
+   if (error.getErrorCode() != 0) {
+        // received error from server
+        // error.getErrorCode() - the error code from server
+        // error.getErrorBody() - the error body from server
+        // error.getErrorDetail() - just an error detail
+        Log.d(TAG, "onError errorCode : " + error.getErrorCode());
+        Log.d(TAG, "onError errorBody : " + error.getErrorBody());
+        Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+        // get parsed error object (If ApiError is your class)
+        ApiError apiError = error.getErrorAsObject(ApiError.class);
+   } else {
+        // error.getErrorDetail() : connectionError, parseError, requestCancelledError
+        Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+   }
+}                            
 ```
 
 {% include links.html %}
