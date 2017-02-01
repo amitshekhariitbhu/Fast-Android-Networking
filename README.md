@@ -582,7 +582,7 @@ AndroidNetworking.initialize(getApplicationContext(),okHttpClient);
 * Fast Android Networking Library supports uploading any type of file (supports multipart upload)
 * Fast Android Networking Library supports cancelling a request
 * Fast Android Networking Library supports setting priority to any request (LOW, MEDIUM, HIGH, IMMEDIATE)
-* Fast Android Networking Library supports [RxJava](https://github.com/amitshekhariitbhu/Fast-Android-Networking/wiki/Using-Fast-Android-Networking-Library-With-RxJava)
+* Fast Android Networking Library supports [RxJava](https://amitshekhariitbhu.github.io/Fast-Android-Networking/rxjava2_support.html)
 
 As it uses [OkHttp](http://square.github.io/okhttp/) as a networking layer, it supports:
 
@@ -595,7 +595,7 @@ As it uses [OkHttp](http://square.github.io/okhttp/) as a networking layer, it s
 * In Fast Android Networking Library, OkHttpClient can be customized for every request easily.
 * As Fast Android Networking Library uses [OkHttp](http://square.github.io/okhttp/) and [Okio](https://github.com/square/okio), it is faster.
 * Single library for all type of networking.
-* Supports RxJava, RxJava2 -> [Check here](https://github.com/amitshekhariitbhu/Fast-Android-Networking/wiki/Using-Fast-Android-Networking-Library-With-RxJava)
+* Supports RxJava, RxJava2 -> [Check here](https://amitshekhariitbhu.github.io/Fast-Android-Networking/rxjava2_support.html)
 * Current bandwidth and connection quality can be obtained to decide logic of code.
 * Executor can be passed to any request to get response in another thread.
 * Complete analytics of any request can be obtained.
