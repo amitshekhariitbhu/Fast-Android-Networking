@@ -547,8 +547,7 @@ if (response.isSuccess()) {
 ### Enabling Logging
 ```java
 AndroidNetworking.enableLogging(); // simply enable logging
-AndroidNetworking.enableLogging("tag"); // enabling logging with some tag
-AndroidNetworking.disableLogging(); // disable logging
+AndroidNetworking.enableLogging(LEVEL.HEADERS); // enabling logging with level
 ```
 ### Enabling GZIP From Client to Server
 ```java
