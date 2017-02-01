@@ -8,19 +8,10 @@ permalink: logging.html
 folder: doc
 ---
 
-## Logging it with OkHttp Logging Interceptor
-```groovy
-compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
-```
-
+## Inbuilt Logging
 ```java
-// Adding an Interceptor for Debugging purpose :
-HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-logging.setLevel(Level.BASIC);
-OkHttpClient okHttpClient = new OkHttpClient() .newBuilder()
-                        .addInterceptor(logging)
-                        .build();
-AndroidNetworking.initialize(getApplicationContext(),okHttpClient);                       
+AndroidNetworking.enableLogging(); // simply enable logging
+AndroidNetworking.enableLogging(LEVEL.HEADERS); // enabling logging with level
 ```
 
 ## Logging it with Stetho Network Interceptor
@@ -35,15 +26,5 @@ OkHttpClient okHttpClient = new OkHttpClient() .newBuilder()
                         .build();
 AndroidNetworking.initialize(getApplicationContext(),okHttpClient);                        
 ```
-
-
-## Inbuilt basic Logging
-```java
-AndroidNetworking.enableLogging(); // simply enable logging
-AndroidNetworking.enableLogging("tag"); // enabling logging with some tag
-AndroidNetworking.disableLogging(); // disable logging
-```
-
-
 
 {% include links.html %}
