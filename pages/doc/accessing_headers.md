@@ -37,8 +37,8 @@ AndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAllUsers/{page
 AndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAnUserDetail/{userId}")
                  .addPathParameter("userId", "1")
                  .build()
-                .getAsOkHttpResponseAndParsed(new TypeToken<User>() {},
-                 new OkHttpResponseAndParsedRequestListener<User>() {
+                 .getAsOkHttpResponseAndParsed(new TypeToken<User>() {},
+                  new OkHttpResponseAndParsedRequestListener<User>() {
                     @Override
                     public void onResponse(Response okHttpResponse, User user) {
                       // do anything with okHttpResponse and user
