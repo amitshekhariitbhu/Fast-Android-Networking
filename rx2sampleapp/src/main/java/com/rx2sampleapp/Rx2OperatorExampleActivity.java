@@ -27,7 +27,6 @@ import android.util.Pair;
 import android.view.View;
 
 import com.androidnetworking.interfaces.AnalyticsListener;
-import com.google.gson.reflect.TypeToken;
 import com.rx2androidnetworking.Rx2AndroidNetworking;
 import com.rx2sampleapp.model.ApiUser;
 import com.rx2sampleapp.model.User;
@@ -72,7 +71,8 @@ public class Rx2OperatorExampleActivity extends AppCompatActivity {
      ************************************/
 
     private void testApi() {
-        Rx2AndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAllUsers/{pageNumber}")
+
+        Observable<List<User>> observable = Rx2AndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAllUsers/{pageNumber}")
                 .addPathParameter("pageNumber", "0")
                 .addQueryParameter("limit", "3")
                 .build()
@@ -85,29 +85,62 @@ public class Rx2OperatorExampleActivity extends AppCompatActivity {
                         Log.d(TAG, " isFromCache : " + isFromCache);
                     }
                 })
-                .getObjectListObservable(User.class)
-                .subscribeOn(Schedulers.io())
+                .getObjectListObservable(User.class);
+
+        // first observer
+        observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<List<User>>() {
 
                     @Override
                     public void onError(Throwable e) {
-                        Utils.logError(TAG, e);
+                        Utils.logError(TAG + "_1", e);
                     }
 
                     @Override
                     public void onComplete() {
-                        Log.d(TAG, "onComplete Detail : getAllUsers completed");
+                        Log.d(TAG + "_1", "onComplete Detail : getAllUsers completed");
                     }
 
                     @Override
                     public void onSubscribe(Disposable d) {
-
+                        Log.d(TAG + "_1", "onSubscribe");
                     }
 
                     @Override
                     public void onNext(List<User> users) {
-                        Log.d(TAG, "userList size : " + users.size());
+                        Log.d(TAG + "_1", "userList size : " + users.size());
+                        for (User user : users) {
+                            Log.d(TAG, "id : " + user.id);
+                            Log.d(TAG, "firstname : " + user.firstname);
+                            Log.d(TAG, "lastname : " + user.lastname);
+                        }
+                    }
+                });
+
+        // second observer
+        observable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<List<User>>() {
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Utils.logError(TAG + "_2", e);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.d(TAG + "_2", "onComplete Detail : getAllUsers completed");
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        Log.d(TAG + "_2", "onSubscribe");
+                    }
+
+                    @Override
+                    public void onNext(List<User> users) {
+                        Log.d(TAG + "_2", "userList size : " + users.size());
                         for (User user : users) {
                             Log.d(TAG, "id : " + user.id);
                             Log.d(TAG, "firstname : " + user.firstname);

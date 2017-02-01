@@ -163,16 +163,17 @@ public class Rx2InternalNetworking {
     static final class SimpleANObservable<T> extends Observable<T> {
 
         private Rx2ANRequest request;
-        private final Call call;
+        private final Call originalCall;
 
         SimpleANObservable(Rx2ANRequest request) {
             this.request = request;
-            this.call = request.getCall();
+            this.originalCall = request.getCall();
         }
 
         @Override
         protected void subscribeActual(Observer<? super T> observer) {
-            observer.onSubscribe(new ANDisposable(this.call));
+            Call call = originalCall.clone();
+            observer.onSubscribe(new ANDisposable(call));
             boolean doNotSwallowError = false;
             Response okHttpResponse = null;
             try {
@@ -249,16 +250,17 @@ public class Rx2InternalNetworking {
     static final class DownloadANObservable<T> extends Observable<T> {
 
         private final Rx2ANRequest request;
-        private final Call call;
+        private final Call originalCall;
 
         DownloadANObservable(Rx2ANRequest request) {
             this.request = request;
-            this.call = request.getCall();
+            this.originalCall = request.getCall();
         }
 
         @Override
         protected void subscribeActual(Observer<? super T> observer) {
-            observer.onSubscribe(new ANDisposable(this.call));
+            Call call = originalCall.clone();
+            observer.onSubscribe(new ANDisposable(call));
             boolean doNotSwallowError = false;
             Response okHttpResponse;
             try {
