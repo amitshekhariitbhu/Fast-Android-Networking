@@ -592,7 +592,7 @@ As it uses [OkHttp](http://square.github.io/okhttp/) as a networking layer, it s
 * In Fast Android Networking Library, OkHttpClient can be customized for every request easily.
 * As Fast Android Networking Library uses [OkHttp](http://square.github.io/okhttp/) and [Okio](https://github.com/square/okio), it is faster.
 * Single library for all type of networking.
-* Supports RxJava -> [Check here](https://github.com/amitshekhariitbhu/Fast-Android-Networking/wiki/Using-Fast-Android-Networking-Library-With-RxJava)
+* Supports RxJava, RxJava2 -> [Check here](https://github.com/amitshekhariitbhu/Fast-Android-Networking/wiki/Using-Fast-Android-Networking-Library-With-RxJava)
 * Current bandwidth and connection quality can be obtained to decide logic of code.
 * Executor can be passed to any request to get response in another thread.
 * Complete analytics of any request can be obtained.
@@ -612,7 +612,7 @@ As it uses [OkHttp](http://square.github.io/okhttp/) as a networking layer, it s
 * [Square](https://square.github.io/) - As both [OkHttp](http://square.github.io/okhttp/) and [Okio](https://github.com/square/okio)
   used by Fast Android Networking is developed by [Square](https://square.github.io/).
 * [Volley](https://android.googlesource.com/platform/frameworks/volley/) - As Fast Android Networking uses ImageLoader that is developed by [Volley](https://android.googlesource.com/platform/frameworks/volley/).  
-* [Prashant Gupta](https://github.com/PrashantGupta17) - For RxJava Support - [RxJava Support](https://github.com/amitshekhariitbhu/Fast-Android-Networking/wiki/Using-Fast-Android-Networking-Library-With-RxJava)
+* [Prashant Gupta](https://github.com/PrashantGupta17) - For RxJava, RxJava2 Support - [RxJava Support](https://github.com/amitshekhariitbhu/Fast-Android-Networking/wiki/Using-Fast-Android-Networking-Library-With-RxJava)
 
 ### Contact - Let's become friend
 - [Twitter](https://twitter.com/amitiitbhu)
