@@ -370,6 +370,7 @@ public void onError(ANError error) {
         Log.d(TAG, "onError errorCode : " + error.getErrorCode());
         Log.d(TAG, "onError errorBody : " + error.getErrorBody());
         Log.d(TAG, "onError errorDetail : " + error.getErrorDetail());
+        // get parsed error object (If ApiError is your class)
         ApiError apiError = error.getErrorAsObject(ApiError.class);
    } else {
         // error.getErrorDetail() : connectionError, parseError, requestCancelledError
