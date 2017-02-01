@@ -13,7 +13,7 @@ folder: doc
 Add this in your build.gradle
 
 ```groovy
-compile 'com.amitshekhar.android:rx-android-networking:0.2.0'
+compile 'com.amitshekhar.android:rx-android-networking:0.3.0'
 ```
 
 Do not forget to add internet permission in manifest if already not present
@@ -39,8 +39,7 @@ AndroidNetworking.initialize(getApplicationContext());
 RxAndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAnUser/{userId}")
                 .addPathParameter("userId", "1")
                 .build()
-                .getParseObservable(new TypeToken<ApiUser>() {
-                })
+                .getObjectObservable(ApiUser.class)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(new Func1<ApiUser, User>() { // takes ApiUser and returns User
@@ -84,8 +83,7 @@ RxAndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAnUser/{user
 private Observable<List<User>> getCricketFansObservable() {
     return RxAndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAllCricketFans")
             .build()
-            .getParseObservable(new TypeToken<List<User>>() {
-            });
+            .getObjectListObservable(User.class);
 }
 
 /*
@@ -94,8 +92,7 @@ private Observable<List<User>> getCricketFansObservable() {
 private Observable<List<User>> getFootballFansObservable() {
     return RxAndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAllFootballFans")
             .build()
-            .getParseObservable(new TypeToken<List<User>>() {
-            });
+            .getObjectListObservable(User.class);
 }
 
 /*
