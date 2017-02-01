@@ -35,7 +35,7 @@ AndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAnUserDetail/{
                 .setTag(this)
                 .setPriority(Priority.LOW)
                 .build()
-                .getAsParsed(new TypeToken<User>() {}, new ParsedRequestListener<User>() {
+                .getAsObject(User.class, new ParsedRequestListener<User>() {
                      @Override
                      public void onResponse(User user) {
                         // do anything with response
@@ -58,7 +58,7 @@ AndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAllUsers/{page
                 .setTag(this)
                 .setPriority(Priority.LOW)
                 .build()
-                .getAsParsed(new TypeToken<List<User>>() {}, new ParsedRequestListener<List<User>>() {
+                .getAsObjectList(User.class, new ParsedRequestListener<List<User>>() {
                     @Override
                     public void onResponse(List<User> users) {
                       // do anything with response
@@ -75,6 +75,6 @@ AndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAllUsers/{page
                     }
                 });           
 ```
-Note : TypeToken and getAsParsed is important here. 
+Note : YourObject.class, getAsObject and getAsObjectList are important here. 
 
 {% include links.html %}
