@@ -19,7 +19,7 @@
     package="com.rxsampleapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name=".RxMyApplication"
@@ -35,7 +35,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        RxApiTestActivity
         <activity android:name=".RxApiTestActivity"></activity>
         <activity android:name=".SubscriptionActivity"></activity>
     </application>

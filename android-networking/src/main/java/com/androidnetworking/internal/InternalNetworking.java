@@ -27,6 +27,8 @@ import android.net.TrafficStats;
 import com.androidnetworking.common.ANConstants;
 import com.androidnetworking.common.ANRequest;
 import com.androidnetworking.common.ConnectionClassManager;
+import com.androidnetworking.interceptors.HttpLoggingInterceptor;
+import com.androidnetworking.interceptors.HttpLoggingInterceptor.Level;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.utils.Utils;
 
@@ -301,6 +303,15 @@ public final class InternalNetworking {
 
     public static void setClient(OkHttpClient okHttpClient) {
         sHttpClient = okHttpClient;
+    }
+
+    public static void enableLogging(Level level) {
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(level);
+        sHttpClient = getClient()
+                .newBuilder()
+                .addInterceptor(logging)
+                .build();
     }
 
 }

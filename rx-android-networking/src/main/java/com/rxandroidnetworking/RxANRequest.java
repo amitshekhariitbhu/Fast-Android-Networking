@@ -21,18 +21,22 @@ import android.graphics.Bitmap;
 
 import com.androidnetworking.common.ANRequest;
 import com.androidnetworking.common.Method;
-import com.androidnetworking.common.ResponseType;
 import com.androidnetworking.common.RequestType;
+import com.androidnetworking.common.ResponseType;
+import com.google.gson.internal.$Gson$Types;
 import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.List;
 
 import rx.Observable;
 
 /**
  * Created by amitshekhar on 10/06/16.
  */
+@SuppressWarnings({"unchecked", "unused"})
 public class RxANRequest extends ANRequest<RxANRequest> {
 
     public RxANRequest(GetRequestBuilder builder) {
@@ -101,6 +105,30 @@ public class RxANRequest extends ANRequest<RxANRequest> {
 
     public <T> Observable<T> getParseObservable(TypeToken<T> typeToken) {
         this.setType(typeToken.getType());
+        this.setResponseAs(ResponseType.PARSED);
+        if (this.getRequestType() == RequestType.SIMPLE) {
+            return RxInternalNetworking.generateSimpleObservable(this);
+        } else if (this.getRequestType() == RequestType.MULTIPART) {
+            return RxInternalNetworking.generateMultipartObservable(this);
+        } else {
+            return null;
+        }
+    }
+
+    public <T> Observable<T> getObjectObservable(Class<T> objectClass) {
+        this.setType(objectClass);
+        this.setResponseAs(ResponseType.PARSED);
+        if (this.getRequestType() == RequestType.SIMPLE) {
+            return RxInternalNetworking.generateSimpleObservable(this);
+        } else if (this.getRequestType() == RequestType.MULTIPART) {
+            return RxInternalNetworking.generateMultipartObservable(this);
+        } else {
+            return null;
+        }
+    }
+
+    public <T> Observable<List<T>> getObjectListObservable(Class<T> objectClass) {
+        this.setType($Gson$Types.newParameterizedTypeWithOwner(null, List.class, objectClass));
         this.setResponseAs(ResponseType.PARSED);
         if (this.getRequestType() == RequestType.SIMPLE) {
             return RxInternalNetworking.generateSimpleObservable(this);

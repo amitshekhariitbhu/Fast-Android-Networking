@@ -24,7 +24,7 @@ package com.rxandroidnetworking;
 /**
  * RxAndroidNetworking entry point.
  * You must initialize this class before use. The simplest way is to just do
- * {#code RxAndroidNetworking.initialize(context)}.
+ * {#code AndroidNetworking.initialize(context)}.
  */
 public class RxAndroidNetworking {
 

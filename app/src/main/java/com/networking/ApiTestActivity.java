@@ -120,8 +120,7 @@ public class ApiTestActivity extends AppCompatActivity {
                         Log.d(TAG, " isFromCache : " + isFromCache);
                     }
                 })
-                .getAsParsed(new TypeToken<List<User>>() {
-                }, new ParsedRequestListener<List<User>>() {
+                .getAsObjectList(User.class, new ParsedRequestListener<List<User>>() {
                     @Override
                     public void onResponse(List<User> users) {
                         Log.d(TAG, "userList size : " + users.size());
@@ -155,8 +154,7 @@ public class ApiTestActivity extends AppCompatActivity {
                         Log.d(TAG, " isFromCache : " + isFromCache);
                     }
                 })
-                .getAsParsed(new TypeToken<User>() {
-                }, new ParsedRequestListener<User>() {
+                .getAsObject(User.class, new ParsedRequestListener<User>() {
                     @Override
                     public void onResponse(User user) {
                         Log.d(TAG, "id : " + user.id);

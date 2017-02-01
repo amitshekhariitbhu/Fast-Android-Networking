@@ -25,6 +25,7 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
 
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -56,4 +57,35 @@ public final class GsonParserFactory extends Parser.Factory {
         return new GsonRequestBodyParser<>(gson, adapter);
     }
 
+    @Override
+    public Object getObject(String string, Type type) {
+        try {
+            return gson.fromJson(string, type);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public String getString(Object object) {
+        try {
+            return gson.toJson(object);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    @Override
+    public HashMap<String, String> getStringMap(Object object) {
+        try {
+            Type type = new TypeToken<HashMap<String, String>>() {
+            }.getType();
+            return gson.fromJson(gson.toJson(object), type);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new HashMap<>();
+    }
 }

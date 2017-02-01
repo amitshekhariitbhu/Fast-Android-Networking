@@ -19,7 +19,6 @@
 
 package com.androidnetworking.utils;
 
-import com.androidnetworking.common.ANLog;
 import com.androidnetworking.common.ANRequest;
 import com.androidnetworking.common.ResponseType;
 
@@ -39,8 +38,8 @@ public final class SourceCloseUtil {
                 response.body().source() != null) {
             try {
                 response.body().source().close();
-            } catch (Exception e) {
-                ANLog.d("Unable to close source data");
+            } catch (Exception ignore) {
+
             }
         }
     }

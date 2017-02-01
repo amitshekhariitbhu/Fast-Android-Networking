@@ -20,10 +20,10 @@ package com.androidnetworking;
 import android.content.Context;
 
 import com.androidnetworking.common.ANConstants;
-import com.androidnetworking.common.ANLog;
 import com.androidnetworking.common.ANRequest;
 import com.androidnetworking.common.ConnectionClassManager;
 import com.androidnetworking.common.ConnectionQuality;
+import com.androidnetworking.interceptors.HttpLoggingInterceptor.Level;
 import com.androidnetworking.core.Core;
 import com.androidnetworking.interfaces.ConnectionQualityChangeListener;
 import com.androidnetworking.interfaces.Parser;
@@ -217,24 +217,16 @@ public class AndroidNetworking {
      * Method to enable logging
      */
     public static void enableLogging() {
-        ANLog.enableLogging();
+        enableLogging(Level.BASIC);
     }
 
     /**
      * Method to enable logging with tag
      *
-     * @param tag The tag for logging
+     * @param level The level for logging
      */
-    public static void enableLogging(String tag) {
-        ANLog.enableLogging();
-        ANLog.setTag(tag);
-    }
-
-    /**
-     * Method to disable logging
-     */
-    public static void disableLogging() {
-        ANLog.disableLogging();
+    public static void enableLogging(Level level) {
+        InternalNetworking.enableLogging(level);
     }
 
     /**

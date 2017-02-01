@@ -125,7 +125,7 @@ public class RxOperatorExampleActivity extends AppCompatActivity {
                     public User call(ApiUser apiUser) {
                         // here we get ApiUser from server
                         User user = new User(apiUser);
-                        // then by converting, we are returing user
+                        // then by converting, we are returning user
                         return user;
                     }
                 })

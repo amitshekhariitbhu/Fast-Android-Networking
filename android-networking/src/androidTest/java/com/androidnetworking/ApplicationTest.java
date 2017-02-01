@@ -181,5 +181,70 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         assertEquals(404, errorCodeRef.get().intValue());
     }
 
+    public void testUploadRequest() throws InterruptedException {
+
+        server.enqueue(new MockResponse().setBody("uploadTestResponse"));
+
+        final AtomicReference<String> responseRef = new AtomicReference<>();
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        AndroidNetworking.upload(server.url("/").toString())
+                .addMultipartParameter("key", "value")
+                .build()
+                .getAsString(new StringRequestListener() {
+                    @Override
+                    public void onResponse(String response) {
+                        responseRef.set(response);
+                        latch.countDown();
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        assertTrue(false);
+                    }
+                });
+
+        assertTrue(latch.await(2, SECONDS));
+
+        assertEquals("uploadTestResponse", responseRef.get());
+    }
+
+
+    public void testUploadRequest404() throws InterruptedException {
+
+        server.enqueue(new MockResponse().setResponseCode(404).setBody("uploadTestResponse"));
+
+        final AtomicReference<String> errorDetailRef = new AtomicReference<>();
+        final AtomicReference<String> errorBodyRef = new AtomicReference<>();
+        final AtomicReference<Integer> errorCodeRef = new AtomicReference<>();
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        AndroidNetworking.upload(server.url("/").toString())
+                .addMultipartParameter("key", "value")
+                .build()
+                .getAsString(new StringRequestListener() {
+                    @Override
+                    public void onResponse(String response) {
+                        assertTrue(false);
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        errorBodyRef.set(anError.getErrorBody());
+                        errorDetailRef.set(anError.getErrorDetail());
+                        errorCodeRef.set(anError.getErrorCode());
+                        latch.countDown();
+                    }
+                });
+
+        assertTrue(latch.await(2, SECONDS));
+
+        assertEquals(ANConstants.RESPONSE_FROM_SERVER_ERROR, errorDetailRef.get());
+
+        assertEquals("uploadTestResponse", errorBodyRef.get());
+
+        assertEquals(404, errorCodeRef.get().intValue());
+    }
+
 
 }

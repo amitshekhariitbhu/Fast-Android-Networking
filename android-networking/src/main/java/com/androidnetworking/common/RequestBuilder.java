@@ -17,7 +17,7 @@
 
 package com.androidnetworking.common;
 
-import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 
@@ -34,13 +34,21 @@ public interface RequestBuilder {
 
     RequestBuilder addHeaders(String key, String value);
 
-    RequestBuilder addHeaders(HashMap<String, String> headerMap);
+    RequestBuilder addHeaders(Map<String, String> headerMap);
+
+    RequestBuilder addHeaders(Object object);
 
     RequestBuilder addQueryParameter(String key, String value);
 
-    RequestBuilder addQueryParameter(HashMap<String, String> queryParameterMap);
+    RequestBuilder addQueryParameter(Map<String, String> queryParameterMap);
+
+    RequestBuilder addQueryParameter(Object object);
 
     RequestBuilder addPathParameter(String key, String value);
+
+    RequestBuilder addPathParameter(Map<String, String> pathParameterMap);
+
+    RequestBuilder addPathParameter(Object object);
 
     RequestBuilder doNotCacheResponse();
 

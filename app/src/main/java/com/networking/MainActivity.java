@@ -211,4 +211,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(MainActivity.this, OkHttpResponseTestActivity.class));
     }
 
+    public void startWebSocketActivity(View view) {
+        startActivity(new Intent(MainActivity.this, WebSocketActivity.class));
+    }
 }
