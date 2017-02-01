@@ -50,8 +50,27 @@ AndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAnUserDetail/{
                  });               
 ```
 
-## Posting json, file ,etc in POST Request
+## Posting java object, json, file ,etc in POST Request
 ```java
+User user = new User();
+user.firstname = "Amit";
+user.lastname = "Shekhar";
+
+AndroidNetworking.post("https://fierce-cove-29863.herokuapp.com/createUser")
+                 .addBodyParameter(user) // posting java object
+                 .setTag("test")
+                 .setPriority(Priority.MEDIUM)
+                 .build()
+                 .getAsJSONArray(new JSONArrayRequestListener() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                      // do anything with response
+                    }
+                    @Override
+                    public void onError(ANError error) {
+                      // handle error
+                    }
+                });
 
 JSONObject jsonObject = new JSONObject();
 try {
