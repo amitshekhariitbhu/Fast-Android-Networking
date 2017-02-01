@@ -134,10 +134,14 @@ entries:
     output: web
     folderitems:
 
-    - title: Jackson Parser Support
-      url: /jackson_parser_support.html
+    - title: RxJava2 Support
+      url: /rxjava2_support.html
       output: web
 
     - title: RxJava Support
       url: /rxjava_support.html
+      output: web
+
+    - title: Jackson Parser Support
+      url: /jackson_parser_support.html
       output: web
