@@ -42,6 +42,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.util.List;
 
+import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -510,7 +511,7 @@ public class Rx2ApiTestActivity extends AppCompatActivity {
     }
 
     public void uploadImage(final View view) {
-        Rx2AndroidNetworking.upload(ApiEndPoint.BASE_URL + ApiEndPoint.UPLOAD_IMAGE)
+        Observable<JSONObject> observable = Rx2AndroidNetworking.upload(ApiEndPoint.BASE_URL + ApiEndPoint.UPLOAD_IMAGE)
                 .addMultipartFile("image", new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "test.png"))
                 .build()
                 .setAnalyticsListener(new AnalyticsListener() {
@@ -529,13 +530,14 @@ public class Rx2ApiTestActivity extends AppCompatActivity {
                         Log.d(TAG, "setUploadProgressListener isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }
                 })
-                .getJSONObjectObservable()
-                .subscribeOn(Schedulers.io())
+                .getJSONObjectObservable();
+
+        observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<JSONObject>() {
                     @Override
                     public void onComplete() {
-                        Log.d(TAG, "onComplete Detail : uploadImage completed");
+                        Log.d(TAG + "_1", "onComplete Detail : uploadImage completed");
                     }
 
                     @Override
@@ -547,15 +549,15 @@ public class Rx2ApiTestActivity extends AppCompatActivity {
                                 // error.getErrorCode() - the ANError code from server
                                 // error.getErrorBody() - the ANError body from server
                                 // error.getErrorDetail() - just a ANError detail
-                                Log.d(TAG, "onError errorCode : " + anError.getErrorCode());
-                                Log.d(TAG, "onError errorBody : " + anError.getErrorBody());
-                                Log.d(TAG, "onError errorDetail : " + anError.getErrorDetail());
+                                Log.d(TAG + "_1", "onError errorCode : " + anError.getErrorCode());
+                                Log.d(TAG + "_1", "onError errorBody : " + anError.getErrorBody());
+                                Log.d(TAG + "_1", "onError errorDetail : " + anError.getErrorDetail());
                             } else {
                                 // error.getErrorDetail() : connectionError, parseError, requestCancelledError
-                                Log.d(TAG, "onError errorDetail : " + anError.getErrorDetail());
+                                Log.d(TAG + "_1", "onError errorDetail : " + anError.getErrorDetail());
                             }
                         } else {
-                            Log.d(TAG, "onError errorMessage : " + e.getMessage());
+                            Log.d(TAG + "_1", "onError errorMessage : " + e.getMessage());
                         }
                     }
 
@@ -566,10 +568,52 @@ public class Rx2ApiTestActivity extends AppCompatActivity {
 
                     @Override
                     public void onNext(JSONObject response) {
-                        Log.d(TAG, "Image upload Completed");
-                        Log.d(TAG, "onResponse object : " + response.toString());
+                        Log.d(TAG + "_1", "Image upload Completed");
+                        Log.d(TAG + "_1", "onResponse object : " + response.toString());
                     }
                 });
+
+        observable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<JSONObject>() {
+                    @Override
+                    public void onComplete() {
+                        Log.d(TAG + "_2", "onComplete Detail : uploadImage completed");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        if (e instanceof ANError) {
+                            ANError anError = (ANError) e;
+                            if (anError.getErrorCode() != 0) {
+                                // received ANError from server
+                                // error.getErrorCode() - the ANError code from server
+                                // error.getErrorBody() - the ANError body from server
+                                // error.getErrorDetail() - just a ANError detail
+                                Log.d(TAG + "_2", "onError errorCode : " + anError.getErrorCode());
+                                Log.d(TAG + "_2", "onError errorBody : " + anError.getErrorBody());
+                                Log.d(TAG + "_2", "onError errorDetail : " + anError.getErrorDetail());
+                            } else {
+                                // error.getErrorDetail() : connectionError, parseError, requestCancelledError
+                                Log.d(TAG + "_2", "onError errorDetail : " + anError.getErrorDetail());
+                            }
+                        } else {
+                            Log.d(TAG + "_2", "onError errorMessage : " + e.getMessage());
+                        }
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(JSONObject response) {
+                        Log.d(TAG + "_2", "Image upload Completed");
+                        Log.d(TAG + "_2", "onResponse object : " + response.toString());
+                    }
+                });
+
     }
 
     public void getCurrentConnectionQuality(View view) {
