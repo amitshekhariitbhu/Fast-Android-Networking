@@ -25,6 +25,8 @@ Fast Android Networking Library takes care of each and everything. So you don't 
 
 ### RxJava2 Support, [check here](https://amitshekhariitbhu.github.io/Fast-Android-Networking/rxjava2_support.html).
 
+### RxJava2 + Fast Android Networking + Dagger2 with MVP Architecture Project, [Check here](https://github.com/MindorksOpenSource/android-mvp-architecture)
+
 ### Find this project useful ? :heart:
 * Support it by clicking the :star: button on the upper right of this page. :v:
 
