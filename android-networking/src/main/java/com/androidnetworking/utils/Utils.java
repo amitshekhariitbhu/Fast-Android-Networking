@@ -64,9 +64,16 @@ public class Utils {
         return contentTypeFor;
     }
 
+    public static ANResponse<Bitmap> decodeBitmap(Response response, int maxWidth,
+                                                  int maxHeight, Bitmap.Config decodeConfig,
+                                                  ImageView.ScaleType scaleType) {
+        return decodeBitmap(response, maxWidth, maxHeight, decodeConfig,
+                new BitmapFactory.Options(), scaleType);
+    }
 
     public static ANResponse<Bitmap> decodeBitmap(Response response, int maxWidth,
                                                   int maxHeight, Bitmap.Config decodeConfig,
+                                                  BitmapFactory.Options decodeOptions,
                                                   ImageView.ScaleType scaleType) {
         byte[] data = new byte[0];
         try {
@@ -74,7 +81,6 @@ public class Utils {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        BitmapFactory.Options decodeOptions = new BitmapFactory.Options();
         Bitmap bitmap = null;
         if (maxWidth == 0 && maxHeight == 0) {
             decodeOptions.inPreferredConfig = decodeConfig;
