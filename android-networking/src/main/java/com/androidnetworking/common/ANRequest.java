@@ -18,6 +18,7 @@
 package com.androidnetworking.common;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.widget.ImageView;
 
 import com.androidnetworking.core.Core;
@@ -850,6 +851,7 @@ public class ANRequest<T extends ANRequest> {
         private String mUrl;
         private Object mTag;
         private Bitmap.Config mDecodeConfig;
+        private BitmapFactory.Options mBitmapOptions;
         private int mMaxWidth;
         private int mMaxHeight;
         private ImageView.ScaleType mScaleType;
@@ -1005,6 +1007,11 @@ public class ANRequest<T extends ANRequest> {
 
         public T setBitmapConfig(Bitmap.Config bitmapConfig) {
             mDecodeConfig = bitmapConfig;
+            return (T) this;
+        }
+
+        public T setBitmapOptions(BitmapFactory.Options bitmapOptions) {
+            mBitmapOptions = bitmapOptions;
             return (T) this;
         }
 

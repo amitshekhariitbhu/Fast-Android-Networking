@@ -18,6 +18,7 @@
 package com.androidnetworking;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
 
 import com.androidnetworking.common.ANConstants;
 import com.androidnetworking.common.ANRequest;
@@ -81,6 +82,17 @@ public class AndroidNetworking {
         InternalNetworking.setClient(okHttpClient);
         ANRequestQueue.initialize();
         ANImageLoader.initialize();
+    }
+
+    /**
+     * Method to set decodeOptions
+     *
+     * @param decodeOptions The decode config for Bitmaps
+     */
+    public static void setBitmapDecodeOptions(BitmapFactory.Options decodeOptions) {
+        if (decodeOptions != null) {
+            ANImageLoader.getInstance().setBitmapDecodeOptions(decodeOptions);
+        }
     }
 
     /**
