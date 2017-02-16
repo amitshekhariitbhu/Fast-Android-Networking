@@ -65,6 +65,7 @@ public class Utils {
     }
 
 
+    @SuppressWarnings("deprecation")
     public static ANResponse<Bitmap> decodeBitmap(Response response, int maxWidth,
                                                   int maxHeight, Bitmap.Config decodeConfig,
                                                   ImageView.ScaleType scaleType) {
@@ -75,6 +76,7 @@ public class Utils {
             e.printStackTrace();
         }
         BitmapFactory.Options decodeOptions = new BitmapFactory.Options();
+        decodeOptions.inPurgeable = android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP;
         Bitmap bitmap = null;
         if (maxWidth == 0 && maxHeight == 0) {
             decodeOptions.inPreferredConfig = decodeConfig;
