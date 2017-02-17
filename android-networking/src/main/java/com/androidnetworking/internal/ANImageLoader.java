@@ -18,6 +18,7 @@
 package com.androidnetworking.internal;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Looper;
 import android.widget.ImageView;
@@ -57,6 +58,8 @@ public class ANImageLoader {
     private final Handler mHandler = new Handler(Looper.getMainLooper());
 
     private Runnable mRunnable;
+
+    private BitmapFactory.Options mBitmapOptions = new BitmapFactory.Options();
 
     private static ANImageLoader sInstance;
 
@@ -186,6 +189,7 @@ public class ANImageLoader {
                 .setBitmapMaxWidth(maxWidth)
                 .setImageScaleType(scaleType)
                 .setBitmapConfig(Bitmap.Config.RGB_565)
+                .setBitmapOptions(mBitmapOptions)
                 .build();
 
         ANRequest.getAsBitmap(new BitmapRequestListener() {
@@ -203,6 +207,9 @@ public class ANImageLoader {
         return ANRequest;
     }
 
+    public void setBitmapDecodeOptions(BitmapFactory.Options bitmapOptions) {
+        mBitmapOptions = bitmapOptions;
+    }
 
     public void setBatchedResponseDelay(int newBatchedResponseDelayMs) {
         mBatchResponseDelayMs = newBatchedResponseDelayMs;

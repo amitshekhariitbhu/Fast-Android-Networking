@@ -18,6 +18,7 @@
 package com.networking;
 
 import android.app.Application;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.androidnetworking.AndroidNetworking;
@@ -41,6 +42,9 @@ public class MyApplication extends Application {
         super.onCreate();
         appInstance = this;
         AndroidNetworking.initialize(getApplicationContext());
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPurgeable = true;
+        AndroidNetworking.setBitmapDecodeOptions(options);
         AndroidNetworking.enableLogging();
         AndroidNetworking.setConnectionQualityChangeListener(new ConnectionQualityChangeListener() {
             @Override
