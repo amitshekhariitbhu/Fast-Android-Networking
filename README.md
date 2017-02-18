@@ -571,7 +571,7 @@ AndroidNetworking.initialize(getApplicationContext(),okHttpClient);
 * Known Bug : As present if you are using GZIP Interceptor from client to server, Upload progress
   is not working perfectly in Multipart.
   
-  If you are using proguard, then add this rule in proguard-project.txt
+  If you are using Proguard with Gradle build system (which is usually the case), you don't have to do anything. The appropriate Proguard rules will be automatically applied. If you still need the rules applied in `proguard-rules.pro`, it is as follows:
   ```
   -dontwarn okio.**
   ```
