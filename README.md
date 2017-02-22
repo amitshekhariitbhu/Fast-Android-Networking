@@ -1,3 +1,5 @@
+<img src=https://raw.githubusercontent.com/amitshekhariitbhu/Fast-Android-Networking/master/assets/androidnetworking.png >
+
 # Fast Android Networking Library
 
 [![Build Status](https://travis-ci.org/amitshekhariitbhu/Fast-Android-Networking.svg?branch=master)](https://travis-ci.org/amitshekhariitbhu/Fast-Android-Networking)
@@ -7,8 +9,6 @@
 [![Download](https://api.bintray.com/packages/amitshekhariitbhu/maven/android-networking/images/download.svg) ](https://bintray.com/amitshekhariitbhu/maven/android-networking/_latestVersion)
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=102)](https://opensource.org/licenses/Apache-2.0)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/amitshekhariitbhu/Fast-Android-Networking/blob/master/LICENSE)
-
-<img src=https://raw.githubusercontent.com/amitshekhariitbhu/Fast-Android-Networking/master/assets/androidnetworking.png >
 
 ### About Fast Android Networking Library
 
