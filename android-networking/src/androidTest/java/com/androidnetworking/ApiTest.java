@@ -39,11 +39,11 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 /**
  * <a href="http://d.android.com/tools/testing/testing_android.html">Testing Fundamentals</a>
  */
-public class ApplicationTest extends ApplicationTestCase<Application> {
+public class ApiTest extends ApplicationTestCase<Application> {
     @Rule
     public final MockWebServer server = new MockWebServer();
 
-    public ApplicationTest() {
+    public ApiTest() {
         super(Application.class);
     }
 
