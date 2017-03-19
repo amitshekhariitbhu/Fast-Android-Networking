@@ -25,28 +25,25 @@ import com.androidnetworking.common.ANConstants;
 import com.androidnetworking.interfaces.UploadProgressListener;
 import com.androidnetworking.model.Progress;
 
-import java.lang.ref.WeakReference;
-
 /**
  * Created by amitshekhar on 24/05/16.
  */
 public class UploadProgressHandler extends Handler {
 
-    private final WeakReference<UploadProgressListener> mUploadProgressListenerWeakRef;
+    private final UploadProgressListener mUploadProgressListenerWeakRef;
 
     public UploadProgressHandler(UploadProgressListener uploadProgressListener) {
         super(Looper.getMainLooper());
-        mUploadProgressListenerWeakRef = new WeakReference<>(uploadProgressListener);
+        mUploadProgressListenerWeakRef = uploadProgressListener;
     }
 
     @Override
     public void handleMessage(Message msg) {
-        final UploadProgressListener uploadProgressListener = mUploadProgressListenerWeakRef.get();
         switch (msg.what) {
             case ANConstants.UPDATE:
-                if (uploadProgressListener != null) {
+                if (mUploadProgressListenerWeakRef != null) {
                     final Progress progress = (Progress) msg.obj;
-                    uploadProgressListener.onProgress(progress.currentBytes, progress.totalBytes);
+                    mUploadProgressListenerWeakRef.onProgress(progress.currentBytes, progress.totalBytes);
                 }
                 break;
             default:

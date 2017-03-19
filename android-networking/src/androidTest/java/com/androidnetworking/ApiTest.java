@@ -21,6 +21,8 @@ import android.app.Application;
 import android.test.ApplicationTestCase;
 
 import com.androidnetworking.common.ANConstants;
+import com.androidnetworking.common.ANRequest;
+import com.androidnetworking.common.ANResponse;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.StringRequestListener;
 
@@ -37,11 +39,11 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 /**
  * <a href="http://d.android.com/tools/testing/testing_android.html">Testing Fundamentals</a>
  */
-public class ApplicationTest extends ApplicationTestCase<Application> {
+public class ApiTest extends ApplicationTestCase<Application> {
     @Rule
     public final MockWebServer server = new MockWebServer();
 
-    public ApplicationTest() {
+    public ApiTest() {
         super(Application.class);
     }
 
@@ -246,5 +248,31 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         assertEquals(404, errorCodeRef.get().intValue());
     }
 
+    @SuppressWarnings("unchecked")
+    public void testSynchronousGetRequest() throws InterruptedException {
+
+        server.enqueue(new MockResponse().setBody("getResponse"));
+
+        ANRequest request = AndroidNetworking.get(server.url("/").toString()).build();
+
+        ANResponse<String> response = request.executeForString();
+
+        assertEquals("getResponse", response.getResult());
+    }
+
+    @SuppressWarnings("unchecked")
+    public void testSynchronousPostRequest() throws InterruptedException {
+
+        server.enqueue(new MockResponse().setBody("postResponse"));
+
+        ANRequest request = AndroidNetworking.post(server.url("/").toString())
+                .addBodyParameter("fistName", "Amit")
+                .addBodyParameter("lastName", "Shekhar")
+                .build();
+
+        ANResponse<String> response = request.executeForString();
+
+        assertEquals("postResponse", response.getResult());
+    }
 
 }

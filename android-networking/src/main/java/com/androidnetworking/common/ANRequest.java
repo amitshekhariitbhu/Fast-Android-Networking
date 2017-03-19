@@ -301,6 +301,19 @@ public class ANRequest<T extends ANRequest> {
         ANRequestQueue.getInstance().addRequest(this);
     }
 
+    public void getAsOkHttpResponseAndObject(Class objectClass, OkHttpResponseAndParsedRequestListener parsedRequestListener) {
+        this.mType = objectClass;
+        this.mResponseType = ResponseType.PARSED;
+        this.mOkHttpResponseAndParsedRequestListener = parsedRequestListener;
+        ANRequestQueue.getInstance().addRequest(this);
+    }
+
+    public void getAsOkHttpResponseAndObjectList(Class objectClass, OkHttpResponseAndParsedRequestListener parsedRequestListener) {
+        this.mType = $Gson$Types.newParameterizedTypeWithOwner(null, List.class, objectClass);
+        this.mResponseType = ResponseType.PARSED;
+        this.mOkHttpResponseAndParsedRequestListener = parsedRequestListener;
+        ANRequestQueue.getInstance().addRequest(this);
+    }
 
     public void startDownload(DownloadListener downloadListener) {
         this.mDownloadListener = downloadListener;
@@ -339,6 +352,18 @@ public class ANRequest<T extends ANRequest> {
 
     public ANResponse executeForParsed(TypeToken typeToken) {
         this.mType = typeToken.getType();
+        this.mResponseType = ResponseType.PARSED;
+        return SynchronousCall.execute(this);
+    }
+
+    public ANResponse executeForObject(Class objectClass) {
+        this.mType = objectClass;
+        this.mResponseType = ResponseType.PARSED;
+        return SynchronousCall.execute(this);
+    }
+
+    public ANResponse executeForObjectList(Class objectClass) {
+        this.mType = $Gson$Types.newParameterizedTypeWithOwner(null, List.class, objectClass);
         this.mResponseType = ResponseType.PARSED;
         return SynchronousCall.execute(this);
     }
@@ -917,7 +942,7 @@ public class ANRequest<T extends ANRequest> {
 
         @Override
         public T addPathParameter(Map<String, String> pathParameterMap) {
-            if (mPathParameterMap != null) {
+            if (pathParameterMap != null) {
                 mPathParameterMap.putAll(pathParameterMap);
             }
             return (T) this;
@@ -1131,7 +1156,7 @@ public class ANRequest<T extends ANRequest> {
 
         @Override
         public T addPathParameter(Map<String, String> pathParameterMap) {
-            if (mPathParameterMap != null) {
+            if (pathParameterMap != null) {
                 mPathParameterMap.putAll(pathParameterMap);
             }
             return (T) this;
@@ -1399,7 +1424,7 @@ public class ANRequest<T extends ANRequest> {
 
         @Override
         public T addPathParameter(Map<String, String> pathParameterMap) {
-            if (mPathParameterMap != null) {
+            if (pathParameterMap != null) {
                 mPathParameterMap.putAll(pathParameterMap);
             }
             return (T) this;
@@ -1538,7 +1563,7 @@ public class ANRequest<T extends ANRequest> {
 
         @Override
         public T addPathParameter(Map<String, String> pathParameterMap) {
-            if (mPathParameterMap != null) {
+            if (pathParameterMap != null) {
                 mPathParameterMap.putAll(pathParameterMap);
             }
             return (T) this;

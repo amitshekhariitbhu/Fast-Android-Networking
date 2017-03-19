@@ -37,7 +37,6 @@ import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.androidnetworking.interfaces.OkHttpResponseListener;
 import com.androidnetworking.interfaces.ParsedRequestListener;
 import com.androidnetworking.interfaces.UploadProgressListener;
-import com.google.gson.reflect.TypeToken;
 import com.networking.model.User;
 import com.networking.utils.Utils;
 
@@ -1013,8 +1012,7 @@ public class ApiTestActivity extends AppCompatActivity {
                                 Log.d(TAG, " isFromCache : " + isFromCache);
                             }
                         });
-                ANResponse<List<User>> responseTwo = requestTwo.executeForParsed(new TypeToken<List<User>>() {
-                });
+                ANResponse<List<User>> responseTwo = requestTwo.executeForObjectList(User.class);
 
                 if (responseTwo.isSuccess()) {
                     Log.d(TAG, "checkSynchronousCall : response success");
