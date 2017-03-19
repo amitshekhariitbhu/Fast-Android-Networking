@@ -942,7 +942,7 @@ public class ANRequest<T extends ANRequest> {
 
         @Override
         public T addPathParameter(Map<String, String> pathParameterMap) {
-            if (mPathParameterMap != null) {
+            if (pathParameterMap != null) {
                 mPathParameterMap.putAll(pathParameterMap);
             }
             return (T) this;
@@ -1156,7 +1156,7 @@ public class ANRequest<T extends ANRequest> {
 
         @Override
         public T addPathParameter(Map<String, String> pathParameterMap) {
-            if (mPathParameterMap != null) {
+            if (pathParameterMap != null) {
                 mPathParameterMap.putAll(pathParameterMap);
             }
             return (T) this;
@@ -1424,7 +1424,7 @@ public class ANRequest<T extends ANRequest> {
 
         @Override
         public T addPathParameter(Map<String, String> pathParameterMap) {
-            if (mPathParameterMap != null) {
+            if (pathParameterMap != null) {
                 mPathParameterMap.putAll(pathParameterMap);
             }
             return (T) this;
@@ -1563,7 +1563,7 @@ public class ANRequest<T extends ANRequest> {
 
         @Override
         public T addPathParameter(Map<String, String> pathParameterMap) {
-            if (mPathParameterMap != null) {
+            if (pathParameterMap != null) {
                 mPathParameterMap.putAll(pathParameterMap);
             }
             return (T) this;
