@@ -16,7 +16,7 @@ ANRequest request = AndroidNetworking.get(url)
         .addQueryParameter("limit", "3")
         .build();
         
-ANResponse<List<User>> response = request.executeForParsed(new TypeToken<List<User>>() {});
+ANResponse<List<User>> response = request.executeForObjectList(User.class);
 
 if (response.isSuccess()) {
     List<User> users = response.getResult();
