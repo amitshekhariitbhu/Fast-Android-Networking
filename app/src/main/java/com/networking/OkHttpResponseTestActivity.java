@@ -34,13 +34,11 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.AnalyticsListener;
 import com.androidnetworking.interfaces.DownloadListener;
 import com.androidnetworking.interfaces.DownloadProgressListener;
-import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.androidnetworking.interfaces.OkHttpResponseAndJSONArrayRequestListener;
 import com.androidnetworking.interfaces.OkHttpResponseAndJSONObjectRequestListener;
 import com.androidnetworking.interfaces.OkHttpResponseAndParsedRequestListener;
 import com.androidnetworking.interfaces.OkHttpResponseListener;
 import com.androidnetworking.interfaces.UploadProgressListener;
-import com.google.gson.reflect.TypeToken;
 import com.networking.model.User;
 import com.networking.utils.Utils;
 
@@ -123,8 +121,7 @@ public class OkHttpResponseTestActivity extends AppCompatActivity {
                         Log.d(TAG, " isFromCache : " + isFromCache);
                     }
                 })
-                .getAsOkHttpResponseAndParsed(new TypeToken<List<User>>() {
-                }, new OkHttpResponseAndParsedRequestListener<List<User>>() {
+                .getAsOkHttpResponseAndObjectList(User.class, new OkHttpResponseAndParsedRequestListener<List<User>>() {
                     @Override
                     public void onResponse(Response okHttpResponse, List<User> users) {
                         Log.d(TAG, "userList size : " + users.size());
@@ -163,8 +160,7 @@ public class OkHttpResponseTestActivity extends AppCompatActivity {
                         Log.d(TAG, " isFromCache : " + isFromCache);
                     }
                 })
-                .getAsOkHttpResponseAndParsed(new TypeToken<User>() {
-                }, new OkHttpResponseAndParsedRequestListener<User>() {
+                .getAsOkHttpResponseAndObject(User.class, new OkHttpResponseAndParsedRequestListener<User>() {
                     @Override
                     public void onResponse(Response okHttpResponse, User user) {
                         Log.d(TAG, "id : " + user.id);
@@ -964,8 +960,7 @@ public class OkHttpResponseTestActivity extends AppCompatActivity {
                                 Log.d(TAG, " isFromCache : " + isFromCache);
                             }
                         });
-                ANResponse<List<User>> responseTwo = requestTwo.executeForParsed(new TypeToken<List<User>>() {
-                });
+                ANResponse<List<User>> responseTwo = requestTwo.executeForObjectList(User.class);
 
                 if (responseTwo.isSuccess()) {
                     Log.d(TAG, "checkSynchronousCall : response success");

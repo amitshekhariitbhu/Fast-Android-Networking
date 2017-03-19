@@ -538,7 +538,7 @@ ANRequest request = AndroidNetworking.get("https://fierce-cove-29863.herokuapp.c
                         .addPathParameter("pageNumber", "0")
                         .addQueryParameter("limit", "3")
                         .build();
-ANResponse<List<User>> response = request.executeForParsed(new TypeToken<List<User>>() {});
+ANResponse<List<User>> response = request.executeForObjectList(User.class);
 if (response.isSuccess()) {
    List<User> users = responseTwo.getResult();
 } else {
