@@ -1,7 +1,7 @@
 Change Log
 ==========
 
-Version 0.3.0 *(2017-03-19)*
+Version 1.0.0 *(2017-03-19)*
 ----------------------------
 
  * Fix: Progress bug for large files download
