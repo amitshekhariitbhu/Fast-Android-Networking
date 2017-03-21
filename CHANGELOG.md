@@ -6,10 +6,10 @@ Version 1.0.0 *(2017-03-19)*
 
  * Fix: Progress bug for large files download
  * Merge pull requests
- * Add new API
+ * New: Add new API
  * Bump OkHttp Version to 3.6.0
- * Add config options for BitmapDecode
- * Add Consumer Proguard
+ * New: Add config options for BitmapDecode
+ * New: Add Consumer Proguard
 
 
 Version 0.4.0 *(2017-02-01)*
