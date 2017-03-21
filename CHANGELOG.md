@@ -36,12 +36,6 @@ Version 0.2.0 *(2016-09-16)*
 ----------------------------
 
 * New: Jackson Parser Support 
-  
-      ```
-      compile 'com.amitshekhar.android:jackson-android-networking:0.2.0'
-      // Then set the JacksonParserFactory like below
-      AndroidNetworking.setParserFactory(new JacksonParserFactory());
-      ```
 * New: Making Synchronous Request - [Check Here](https://amitshekhariitbhu.github.io/Fast-Android-Networking/synchronous_request.html)
 * New: setContentType("application/json; charset=utf-8") in POST and Multipart request.
 * New: Getting OkHttpResponse in Response to access headers - [Check Here](https://amitshekhariitbhu.github.io/Fast-Android-Networking/getting_okhttpresponse.html)
