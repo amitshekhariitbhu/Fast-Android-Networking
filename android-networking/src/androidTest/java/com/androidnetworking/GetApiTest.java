@@ -36,14 +36,12 @@ import okhttp3.mockwebserver.MockWebServer;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
-/**
- * <a href="http://d.android.com/tools/testing/testing_android.html">Testing Fundamentals</a>
- */
-public class ApiTest extends ApplicationTestCase<Application> {
+public class GetApiTest extends ApplicationTestCase<Application> {
+
     @Rule
     public final MockWebServer server = new MockWebServer();
 
-    public ApiTest() {
+    public GetApiTest() {
         super(Application.class);
     }
 
@@ -116,73 +114,6 @@ public class ApiTest extends ApplicationTestCase<Application> {
 
     }
 
-    public void testPostRequest() throws InterruptedException {
-
-        server.enqueue(new MockResponse().setBody("postResponse"));
-
-        final AtomicReference<String> responseRef = new AtomicReference<>();
-        final CountDownLatch latch = new CountDownLatch(1);
-
-        AndroidNetworking.post(server.url("/").toString())
-                .addBodyParameter("fistName", "Amit")
-                .addBodyParameter("lastName", "Shekhar")
-                .build()
-                .getAsString(new StringRequestListener() {
-                    @Override
-                    public void onResponse(String response) {
-                        responseRef.set(response);
-                        latch.countDown();
-                    }
-
-                    @Override
-                    public void onError(ANError anError) {
-                        assertTrue(false);
-                    }
-                });
-
-        assertTrue(latch.await(2, SECONDS));
-
-        assertEquals("postResponse", responseRef.get());
-    }
-
-
-    public void testPostRequest404() throws InterruptedException {
-
-        server.enqueue(new MockResponse().setResponseCode(404).setBody("postResponse"));
-
-        final AtomicReference<String> errorDetailRef = new AtomicReference<>();
-        final AtomicReference<String> errorBodyRef = new AtomicReference<>();
-        final AtomicReference<Integer> errorCodeRef = new AtomicReference<>();
-        final CountDownLatch latch = new CountDownLatch(1);
-
-        AndroidNetworking.post(server.url("/").toString())
-                .addBodyParameter("fistName", "Amit")
-                .addBodyParameter("lastName", "Shekhar")
-                .build()
-                .getAsString(new StringRequestListener() {
-                    @Override
-                    public void onResponse(String response) {
-                        assertTrue(false);
-                    }
-
-                    @Override
-                    public void onError(ANError anError) {
-                        errorBodyRef.set(anError.getErrorBody());
-                        errorDetailRef.set(anError.getErrorDetail());
-                        errorCodeRef.set(anError.getErrorCode());
-                        latch.countDown();
-                    }
-                });
-
-        assertTrue(latch.await(2, SECONDS));
-
-        assertEquals(ANConstants.RESPONSE_FROM_SERVER_ERROR, errorDetailRef.get());
-
-        assertEquals("postResponse", errorBodyRef.get());
-
-        assertEquals(404, errorCodeRef.get().intValue());
-    }
-
     public void testUploadRequest() throws InterruptedException {
 
         server.enqueue(new MockResponse().setBody("uploadTestResponse"));
@@ -210,7 +141,6 @@ public class ApiTest extends ApplicationTestCase<Application> {
 
         assertEquals("uploadTestResponse", responseRef.get());
     }
-
 
     public void testUploadRequest404() throws InterruptedException {
 
@@ -258,21 +188,6 @@ public class ApiTest extends ApplicationTestCase<Application> {
         ANResponse<String> response = request.executeForString();
 
         assertEquals("getResponse", response.getResult());
-    }
-
-    @SuppressWarnings("unchecked")
-    public void testSynchronousPostRequest() throws InterruptedException {
-
-        server.enqueue(new MockResponse().setBody("postResponse"));
-
-        ANRequest request = AndroidNetworking.post(server.url("/").toString())
-                .addBodyParameter("fistName", "Amit")
-                .addBodyParameter("lastName", "Shekhar")
-                .build();
-
-        ANResponse<String> response = request.executeForString();
-
-        assertEquals("postResponse", response.getResult());
     }
 
 }
