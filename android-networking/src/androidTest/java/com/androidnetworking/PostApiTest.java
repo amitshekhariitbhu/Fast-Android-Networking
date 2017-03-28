@@ -139,5 +139,26 @@ public class PostApiTest extends ApplicationTestCase<Application> {
         assertEquals("postResponse", response.getResult());
     }
 
+    @SuppressWarnings("unchecked")
+    public void testSynchronousPostRequest404() throws InterruptedException {
+
+        server.enqueue(new MockResponse().setResponseCode(404).setBody("getResponse"));
+
+        ANRequest request = AndroidNetworking.post(server.url("/").toString())
+                .addBodyParameter("fistName", "Amit")
+                .addBodyParameter("lastName", "Shekhar")
+                .build();
+
+        ANResponse<String> response = request.executeForString();
+
+        ANError error = response.getError();
+
+        assertEquals("getResponse", error.getErrorBody());
+
+        assertEquals(ANConstants.RESPONSE_FROM_SERVER_ERROR, error.getErrorDetail());
+
+        assertEquals(404, error.getErrorCode());
+    }
+
 
 }

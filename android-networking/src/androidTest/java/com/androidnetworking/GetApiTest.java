@@ -126,4 +126,22 @@ public class GetApiTest extends ApplicationTestCase<Application> {
         assertEquals("getResponse", response.getResult());
     }
 
+    @SuppressWarnings("unchecked")
+    public void testSynchronousGetRequest404() throws InterruptedException {
+
+        server.enqueue(new MockResponse().setResponseCode(404).setBody("getResponse"));
+
+        ANRequest request = AndroidNetworking.get(server.url("/").toString()).build();
+
+        ANResponse<String> response = request.executeForString();
+
+        ANError error = response.getError();
+
+        assertEquals("getResponse", error.getErrorBody());
+
+        assertEquals(ANConstants.RESPONSE_FROM_SERVER_ERROR, error.getErrorDetail());
+
+        assertEquals(404, error.getErrorCode());
+    }
+
 }
