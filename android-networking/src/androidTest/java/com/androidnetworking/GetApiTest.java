@@ -24,13 +24,16 @@ import com.androidnetworking.common.ANConstants;
 import com.androidnetworking.common.ANRequest;
 import com.androidnetworking.common.ANResponse;
 import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.OkHttpResponseListener;
 import com.androidnetworking.interfaces.StringRequestListener;
 
 import org.junit.Rule;
 
+import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
 
+import okhttp3.Response;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 
@@ -142,6 +145,49 @@ public class GetApiTest extends ApplicationTestCase<Application> {
         assertEquals(ANConstants.RESPONSE_FROM_SERVER_ERROR, error.getErrorDetail());
 
         assertEquals(404, error.getErrorCode());
+    }
+
+    public void testResponseBody() throws InterruptedException {
+
+        server.enqueue(new MockResponse().setBody("getResponse"));
+
+        final AtomicReference<String> responseRef = new AtomicReference<>();
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        AndroidNetworking.get(server.url("/").toString())
+                .build()
+                .getAsOkHttpResponse(new OkHttpResponseListener() {
+                    @Override
+                    public void onResponse(Response response) {
+                        try {
+                            responseRef.set(response.body().string());
+                            latch.countDown();
+                        } catch (IOException e) {
+                            assertTrue(false);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        assertTrue(false);
+                    }
+                });
+
+        assertTrue(latch.await(2, SECONDS));
+
+        assertEquals("getResponse", responseRef.get());
+    }
+
+    @SuppressWarnings("unchecked")
+    public void testSyncResponseBody() throws InterruptedException, IOException {
+
+        server.enqueue(new MockResponse().setBody("getResponse"));
+
+        ANRequest request = AndroidNetworking.get(server.url("/").toString()).build();
+
+        ANResponse<Response> response = request.executeForOkHttpResponse();
+
+        assertEquals("getResponse", response.getResult().body().string());
     }
 
 }
