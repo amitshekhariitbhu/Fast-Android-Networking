@@ -31,6 +31,7 @@ import org.junit.Rule;
 
 import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
 
 import okhttp3.Response;
@@ -187,6 +188,7 @@ public class GetApiTest extends ApplicationTestCase<Application> {
         final CountDownLatch latch = new CountDownLatch(1);
 
         AndroidNetworking.get(server.url("/").toString())
+                .setExecutor(Executors.newSingleThreadExecutor())
                 .build()
                 .getAsOkHttpResponse(new OkHttpResponseListener() {
                     @Override
