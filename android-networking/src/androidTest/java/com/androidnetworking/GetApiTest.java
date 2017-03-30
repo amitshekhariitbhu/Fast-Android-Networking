@@ -56,7 +56,7 @@ public class GetApiTest extends ApplicationTestCase<Application> {
 
     public void testGetRequest() throws InterruptedException {
 
-        server.enqueue(new MockResponse().setBody("getResponse"));
+        server.enqueue(new MockResponse().setBody("data"));
 
         final AtomicReference<String> responseRef = new AtomicReference<>();
         final CountDownLatch latch = new CountDownLatch(1);
@@ -78,12 +78,12 @@ public class GetApiTest extends ApplicationTestCase<Application> {
 
         assertTrue(latch.await(2, SECONDS));
 
-        assertEquals("getResponse", responseRef.get());
+        assertEquals("data", responseRef.get());
     }
 
     public void testGetRequest404() throws InterruptedException {
 
-        server.enqueue(new MockResponse().setResponseCode(404).setBody("getResponse"));
+        server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
 
         final AtomicReference<String> errorDetailRef = new AtomicReference<>();
         final AtomicReference<String> errorBodyRef = new AtomicReference<>();
@@ -111,7 +111,7 @@ public class GetApiTest extends ApplicationTestCase<Application> {
 
         assertEquals(ANConstants.RESPONSE_FROM_SERVER_ERROR, errorDetailRef.get());
 
-        assertEquals("getResponse", errorBodyRef.get());
+        assertEquals("data", errorBodyRef.get());
 
         assertEquals(404, errorCodeRef.get().intValue());
 
@@ -120,19 +120,19 @@ public class GetApiTest extends ApplicationTestCase<Application> {
     @SuppressWarnings("unchecked")
     public void testSynchronousGetRequest() throws InterruptedException {
 
-        server.enqueue(new MockResponse().setBody("getResponse"));
+        server.enqueue(new MockResponse().setBody("data"));
 
         ANRequest request = AndroidNetworking.get(server.url("/").toString()).build();
 
         ANResponse<String> response = request.executeForString();
 
-        assertEquals("getResponse", response.getResult());
+        assertEquals("data", response.getResult());
     }
 
     @SuppressWarnings("unchecked")
     public void testSynchronousGetRequest404() throws InterruptedException {
 
-        server.enqueue(new MockResponse().setResponseCode(404).setBody("getResponse"));
+        server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
 
         ANRequest request = AndroidNetworking.get(server.url("/").toString()).build();
 
@@ -140,7 +140,7 @@ public class GetApiTest extends ApplicationTestCase<Application> {
 
         ANError error = response.getError();
 
-        assertEquals("getResponse", error.getErrorBody());
+        assertEquals("data", error.getErrorBody());
 
         assertEquals(ANConstants.RESPONSE_FROM_SERVER_ERROR, error.getErrorDetail());
 
@@ -149,7 +149,7 @@ public class GetApiTest extends ApplicationTestCase<Application> {
 
     public void testResponseBody() throws InterruptedException {
 
-        server.enqueue(new MockResponse().setBody("getResponse"));
+        server.enqueue(new MockResponse().setBody("data"));
 
         final AtomicReference<String> responseRef = new AtomicReference<>();
         final CountDownLatch latch = new CountDownLatch(1);
@@ -175,19 +175,69 @@ public class GetApiTest extends ApplicationTestCase<Application> {
 
         assertTrue(latch.await(2, SECONDS));
 
-        assertEquals("getResponse", responseRef.get());
+        assertEquals("data", responseRef.get());
+    }
+
+    public void testResponseBody404() throws InterruptedException {
+
+        server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
+
+        final AtomicReference<String> errorBodyRef = new AtomicReference<>();
+        final AtomicReference<Integer> errorCodeRef = new AtomicReference<>();
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        AndroidNetworking.get(server.url("/").toString())
+                .build()
+                .getAsOkHttpResponse(new OkHttpResponseListener() {
+                    @Override
+                    public void onResponse(Response response) {
+                        try {
+                            errorBodyRef.set(response.body().string());
+                            errorCodeRef.set(response.code());
+                            latch.countDown();
+                        } catch (IOException e) {
+                            assertTrue(false);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        assertTrue(false);
+                    }
+                });
+
+        assertTrue(latch.await(2, SECONDS));
+
+        assertEquals("data", errorBodyRef.get());
+
+        assertEquals(404, errorCodeRef.get().intValue());
     }
 
     @SuppressWarnings("unchecked")
     public void testSyncResponseBody() throws InterruptedException, IOException {
 
-        server.enqueue(new MockResponse().setBody("getResponse"));
+        server.enqueue(new MockResponse().setBody("data"));
 
         ANRequest request = AndroidNetworking.get(server.url("/").toString()).build();
 
         ANResponse<Response> response = request.executeForOkHttpResponse();
 
-        assertEquals("getResponse", response.getResult().body().string());
+        assertEquals("data", response.getResult().body().string());
+
+    }
+
+    @SuppressWarnings("unchecked")
+    public void testSyncResponseBody404() throws InterruptedException, IOException {
+
+        server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
+
+        ANRequest request = AndroidNetworking.get(server.url("/").toString()).build();
+
+        ANResponse<Response> response = request.executeForOkHttpResponse();
+
+        assertEquals("data", response.getResult().body().string());
+
+        assertEquals(404, response.getResult().code());
     }
 
 }
