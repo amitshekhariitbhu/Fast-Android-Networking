@@ -156,6 +156,7 @@ public class GetApiTest extends ApplicationTestCase<Application> {
         final CountDownLatch latch = new CountDownLatch(1);
 
         AndroidNetworking.get(server.url("/").toString())
+                .setExecutor(Executors.newSingleThreadExecutor())
                 .build()
                 .getAsOkHttpResponse(new OkHttpResponseListener() {
                     @Override

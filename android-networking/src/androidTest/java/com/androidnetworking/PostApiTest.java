@@ -174,6 +174,7 @@ public class PostApiTest extends ApplicationTestCase<Application> {
         AndroidNetworking.post(server.url("/").toString())
                 .addBodyParameter("fistName", "Amit")
                 .addBodyParameter("lastName", "Shekhar")
+                .setExecutor(Executors.newSingleThreadExecutor())
                 .build()
                 .getAsOkHttpResponse(new OkHttpResponseListener() {
                     @Override
