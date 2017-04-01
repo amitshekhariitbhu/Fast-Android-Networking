@@ -23,14 +23,20 @@ import android.app.Application;
 import android.test.ApplicationTestCase;
 
 import com.androidnetworking.common.ANConstants;
+import com.androidnetworking.common.ANRequest;
+import com.androidnetworking.common.ANResponse;
 import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.OkHttpResponseListener;
 import com.androidnetworking.interfaces.StringRequestListener;
 
 import org.junit.Rule;
 
+import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
 
+import okhttp3.Response;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 
@@ -118,5 +124,141 @@ public class MultipartApiTest extends ApplicationTestCase<Application> {
 
         assertEquals(404, errorCodeRef.get().intValue());
     }
+
+    @SuppressWarnings("unchecked")
+    public void testSynchronousUploadRequest() throws InterruptedException {
+
+        server.enqueue(new MockResponse().setBody("data"));
+
+        ANRequest request = AndroidNetworking.upload(server.url("/").toString())
+                .addMultipartParameter("key", "value")
+                .build();
+
+        ANResponse<String> response = request.executeForString();
+
+        assertEquals("data", response.getResult());
+    }
+
+    @SuppressWarnings("unchecked")
+    public void testSynchronousUploadRequest404() throws InterruptedException {
+
+        server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
+
+        ANRequest request = AndroidNetworking.upload(server.url("/").toString())
+                .addMultipartParameter("key", "value")
+                .build();
+
+        ANResponse<String> response = request.executeForString();
+
+        ANError error = response.getError();
+
+        assertEquals("data", error.getErrorBody());
+
+        assertEquals(ANConstants.RESPONSE_FROM_SERVER_ERROR, error.getErrorDetail());
+
+        assertEquals(404, error.getErrorCode());
+    }
+
+    public void testResponseBodyUpload() throws InterruptedException {
+
+        server.enqueue(new MockResponse().setBody("data"));
+
+        final AtomicReference<String> responseRef = new AtomicReference<>();
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        AndroidNetworking.upload(server.url("/").toString())
+                .addMultipartParameter("key", "value")
+                .setExecutor(Executors.newSingleThreadExecutor())
+                .build()
+                .getAsOkHttpResponse(new OkHttpResponseListener() {
+                    @Override
+                    public void onResponse(Response response) {
+                        try {
+                            responseRef.set(response.body().string());
+                            latch.countDown();
+                        } catch (IOException e) {
+                            assertTrue(false);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        assertTrue(false);
+                    }
+                });
+
+        assertTrue(latch.await(2, SECONDS));
+
+        assertEquals("data", responseRef.get());
+    }
+
+    public void testResponseBodyUpload404() throws InterruptedException {
+
+        server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
+
+        final AtomicReference<String> errorBodyRef = new AtomicReference<>();
+        final AtomicReference<Integer> errorCodeRef = new AtomicReference<>();
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        AndroidNetworking.upload(server.url("/").toString())
+                .addMultipartParameter("key", "value")
+                .setExecutor(Executors.newSingleThreadExecutor())
+                .build()
+                .getAsOkHttpResponse(new OkHttpResponseListener() {
+                    @Override
+                    public void onResponse(Response response) {
+                        try {
+                            errorBodyRef.set(response.body().string());
+                            errorCodeRef.set(response.code());
+                            latch.countDown();
+                        } catch (IOException e) {
+                            assertTrue(false);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        assertTrue(false);
+                    }
+                });
+
+        assertTrue(latch.await(2, SECONDS));
+
+        assertEquals("data", errorBodyRef.get());
+
+        assertEquals(404, errorCodeRef.get().intValue());
+    }
+
+    @SuppressWarnings("unchecked")
+    public void testSyncResponseBodyUpload() throws InterruptedException, IOException {
+
+        server.enqueue(new MockResponse().setBody("data"));
+
+        ANRequest request = AndroidNetworking.upload(server.url("/").toString())
+                .addMultipartParameter("key", "value")
+                .build();
+
+        ANResponse<Response> response = request.executeForOkHttpResponse();
+
+        assertEquals("data", response.getResult().body().string());
+
+    }
+
+    @SuppressWarnings("unchecked")
+    public void testSyncResponseBodyUpload404() throws InterruptedException, IOException {
+
+        server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
+
+        ANRequest request = AndroidNetworking.upload(server.url("/").toString())
+                .addMultipartParameter("key", "value")
+                .build();
+
+        ANResponse<Response> response = request.executeForOkHttpResponse();
+
+        assertEquals("data", response.getResult().body().string());
+
+        assertEquals(404, response.getResult().code());
+    }
+
 
 }
