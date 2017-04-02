@@ -26,6 +26,7 @@ import com.androidnetworking.common.ANConstants;
 import com.androidnetworking.common.ANRequest;
 import com.androidnetworking.common.ANResponse;
 import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.OkHttpResponseAndStringRequestListener;
 import com.androidnetworking.interfaces.OkHttpResponseListener;
 import com.androidnetworking.interfaces.StringRequestListener;
 
@@ -267,6 +268,77 @@ public class PostApiTest extends ApplicationTestCase<Application> {
         assertEquals("data", response.getResult().body().string());
 
         assertEquals(404, response.getResult().code());
+    }
+
+    public void testResponseBodyAndStringPost() throws InterruptedException {
+
+        server.enqueue(new MockResponse().setBody("data"));
+
+        final AtomicReference<Boolean> responseBodySuccess = new AtomicReference<>();
+        final AtomicReference<String> responseStringRef = new AtomicReference<>();
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        AndroidNetworking.post(server.url("/").toString())
+                .addBodyParameter("fistName", "Amit")
+                .addBodyParameter("lastName", "Shekhar")
+                .setExecutor(Executors.newSingleThreadExecutor())
+                .build()
+                .getAsOkHttpResponseAndString(new OkHttpResponseAndStringRequestListener() {
+                    @Override
+                    public void onResponse(Response okHttpResponse, String response) {
+                        responseBodySuccess.set(okHttpResponse.isSuccessful());
+                        responseStringRef.set(response);
+                        latch.countDown();
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        assertTrue(false);
+                    }
+                });
+
+        assertTrue(latch.await(2, SECONDS));
+
+        assertTrue(responseBodySuccess.get());
+        assertEquals("data", responseStringRef.get());
+    }
+
+    public void testResponseBodyAndStringPost404() throws InterruptedException {
+
+        server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
+
+        final AtomicReference<String> errorBodyRef = new AtomicReference<>();
+        final AtomicReference<Integer> errorCodeRef = new AtomicReference<>();
+        final AtomicReference<String> errorDetailRef = new AtomicReference<>();
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        AndroidNetworking.post(server.url("/").toString())
+                .addBodyParameter("fistName", "Amit")
+                .addBodyParameter("lastName", "Shekhar")
+                .setExecutor(Executors.newSingleThreadExecutor())
+                .build()
+                .getAsOkHttpResponseAndString(new OkHttpResponseAndStringRequestListener() {
+                    @Override
+                    public void onResponse(Response okHttpResponse, String response) {
+                        assertTrue(false);
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        errorBodyRef.set(anError.getErrorBody());
+                        errorDetailRef.set(anError.getErrorDetail());
+                        errorCodeRef.set(anError.getErrorCode());
+                        latch.countDown();
+                    }
+                });
+
+        assertTrue(latch.await(2, SECONDS));
+
+        assertEquals(ANConstants.RESPONSE_FROM_SERVER_ERROR, errorDetailRef.get());
+
+        assertEquals("data", errorBodyRef.get());
+
+        assertEquals(404, errorCodeRef.get().intValue());
     }
 
 }
