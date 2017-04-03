@@ -47,12 +47,12 @@ import static java.util.concurrent.TimeUnit.SECONDS;
  * Created by amitshekhar on 25/03/17.
  */
 
-public class PostApiTest extends ApplicationTestCase<Application> {
+public class PostStringApiTest extends ApplicationTestCase<Application> {
 
     @Rule
     public final MockWebServer server = new MockWebServer();
 
-    public PostApiTest() {
+    public PostStringApiTest() {
         super(Application.class);
     }
 
