@@ -62,7 +62,7 @@ public class PostApiTest extends ApplicationTestCase<Application> {
         createApplication();
     }
 
-    public void testPostRequest() throws InterruptedException {
+    public void testStringPostRequest() throws InterruptedException {
 
         server.enqueue(new MockResponse().setBody("data"));
 
@@ -92,7 +92,7 @@ public class PostApiTest extends ApplicationTestCase<Application> {
     }
 
 
-    public void testPostRequest404() throws InterruptedException {
+    public void testStringPostRequest404() throws InterruptedException {
 
         server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
 
@@ -130,7 +130,7 @@ public class PostApiTest extends ApplicationTestCase<Application> {
     }
 
     @SuppressWarnings("unchecked")
-    public void testSynchronousPostRequest() throws InterruptedException {
+    public void testSynchronousStringPostRequest() throws InterruptedException {
 
         server.enqueue(new MockResponse().setBody("data"));
 
@@ -145,7 +145,7 @@ public class PostApiTest extends ApplicationTestCase<Application> {
     }
 
     @SuppressWarnings("unchecked")
-    public void testSynchronousPostRequest404() throws InterruptedException {
+    public void testSynchronousStringPostRequest404() throws InterruptedException {
 
         server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
 

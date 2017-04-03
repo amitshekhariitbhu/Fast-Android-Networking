@@ -56,7 +56,7 @@ public class GetApiTest extends ApplicationTestCase<Application> {
         createApplication();
     }
 
-    public void testGetRequest() throws InterruptedException {
+    public void testStringGetRequest() throws InterruptedException {
 
         server.enqueue(new MockResponse().setBody("data"));
 
@@ -83,7 +83,7 @@ public class GetApiTest extends ApplicationTestCase<Application> {
         assertEquals("data", responseRef.get());
     }
 
-    public void testGetRequest404() throws InterruptedException {
+    public void testStringGetRequest404() throws InterruptedException {
 
         server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
 
@@ -120,7 +120,7 @@ public class GetApiTest extends ApplicationTestCase<Application> {
     }
 
     @SuppressWarnings("unchecked")
-    public void testSynchronousGetRequest() throws InterruptedException {
+    public void testSynchronousStringGetRequest() throws InterruptedException {
 
         server.enqueue(new MockResponse().setBody("data"));
 
@@ -132,7 +132,7 @@ public class GetApiTest extends ApplicationTestCase<Application> {
     }
 
     @SuppressWarnings("unchecked")
-    public void testSynchronousGetRequest404() throws InterruptedException {
+    public void testSynchronousStringGetRequest404() throws InterruptedException {
 
         server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
 

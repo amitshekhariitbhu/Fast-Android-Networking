@@ -62,7 +62,7 @@ public class MultipartApiTest extends ApplicationTestCase<Application> {
         createApplication();
     }
 
-    public void testUploadRequest() throws InterruptedException {
+    public void testStringUploadRequest() throws InterruptedException {
 
         server.enqueue(new MockResponse().setBody("data"));
 
@@ -90,7 +90,7 @@ public class MultipartApiTest extends ApplicationTestCase<Application> {
         assertEquals("data", responseRef.get());
     }
 
-    public void testUploadRequest404() throws InterruptedException {
+    public void testStringUploadRequest404() throws InterruptedException {
 
         server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
 
@@ -127,7 +127,7 @@ public class MultipartApiTest extends ApplicationTestCase<Application> {
     }
 
     @SuppressWarnings("unchecked")
-    public void testSynchronousUploadRequest() throws InterruptedException {
+    public void testSynchronousStringUploadRequest() throws InterruptedException {
 
         server.enqueue(new MockResponse().setBody("data"));
 
