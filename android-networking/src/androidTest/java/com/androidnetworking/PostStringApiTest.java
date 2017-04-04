@@ -44,15 +44,15 @@ import okhttp3.mockwebserver.MockWebServer;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
- * Created by amitshekhar on 27/03/17.
+ * Created by amitshekhar on 25/03/17.
  */
 
-public class MultipartStringAndResponseBodyApiTest extends ApplicationTestCase<Application> {
+public class PostStringApiTest extends ApplicationTestCase<Application> {
 
     @Rule
     public final MockWebServer server = new MockWebServer();
 
-    public MultipartStringAndResponseBodyApiTest() {
+    public PostStringApiTest() {
         super(Application.class);
     }
 
@@ -62,15 +62,16 @@ public class MultipartStringAndResponseBodyApiTest extends ApplicationTestCase<A
         createApplication();
     }
 
-    public void testStringUploadRequest() throws InterruptedException {
+    public void testStringPostRequest() throws InterruptedException {
 
         server.enqueue(new MockResponse().setBody("data"));
 
         final AtomicReference<String> responseRef = new AtomicReference<>();
         final CountDownLatch latch = new CountDownLatch(1);
 
-        AndroidNetworking.upload(server.url("/").toString())
-                .addMultipartParameter("key", "value")
+        AndroidNetworking.post(server.url("/").toString())
+                .addBodyParameter("fistName", "Amit")
+                .addBodyParameter("lastName", "Shekhar")
                 .build()
                 .getAsString(new StringRequestListener() {
                     @Override
@@ -90,7 +91,8 @@ public class MultipartStringAndResponseBodyApiTest extends ApplicationTestCase<A
         assertEquals("data", responseRef.get());
     }
 
-    public void testStringUploadRequest404() throws InterruptedException {
+
+    public void testStringPostRequest404() throws InterruptedException {
 
         server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
 
@@ -99,8 +101,9 @@ public class MultipartStringAndResponseBodyApiTest extends ApplicationTestCase<A
         final AtomicReference<Integer> errorCodeRef = new AtomicReference<>();
         final CountDownLatch latch = new CountDownLatch(1);
 
-        AndroidNetworking.upload(server.url("/").toString())
-                .addMultipartParameter("key", "value")
+        AndroidNetworking.post(server.url("/").toString())
+                .addBodyParameter("fistName", "Amit")
+                .addBodyParameter("lastName", "Shekhar")
                 .build()
                 .getAsString(new StringRequestListener() {
                     @Override
@@ -127,12 +130,13 @@ public class MultipartStringAndResponseBodyApiTest extends ApplicationTestCase<A
     }
 
     @SuppressWarnings("unchecked")
-    public void testSynchronousStringUploadRequest() throws InterruptedException {
+    public void testSynchronousStringPostRequest() throws InterruptedException {
 
         server.enqueue(new MockResponse().setBody("data"));
 
-        ANRequest request = AndroidNetworking.upload(server.url("/").toString())
-                .addMultipartParameter("key", "value")
+        ANRequest request = AndroidNetworking.post(server.url("/").toString())
+                .addBodyParameter("fistName", "Amit")
+                .addBodyParameter("lastName", "Shekhar")
                 .build();
 
         ANResponse<String> response = request.executeForString();
@@ -141,12 +145,13 @@ public class MultipartStringAndResponseBodyApiTest extends ApplicationTestCase<A
     }
 
     @SuppressWarnings("unchecked")
-    public void testSynchronousUploadRequest404() throws InterruptedException {
+    public void testSynchronousStringPostRequest404() throws InterruptedException {
 
         server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
 
-        ANRequest request = AndroidNetworking.upload(server.url("/").toString())
-                .addMultipartParameter("key", "value")
+        ANRequest request = AndroidNetworking.post(server.url("/").toString())
+                .addBodyParameter("fistName", "Amit")
+                .addBodyParameter("lastName", "Shekhar")
                 .build();
 
         ANResponse<String> response = request.executeForString();
@@ -160,15 +165,16 @@ public class MultipartStringAndResponseBodyApiTest extends ApplicationTestCase<A
         assertEquals(404, error.getErrorCode());
     }
 
-    public void testResponseBodyUpload() throws InterruptedException {
+    public void testResponseBodyPost() throws InterruptedException {
 
         server.enqueue(new MockResponse().setBody("data"));
 
         final AtomicReference<String> responseRef = new AtomicReference<>();
         final CountDownLatch latch = new CountDownLatch(1);
 
-        AndroidNetworking.upload(server.url("/").toString())
-                .addMultipartParameter("key", "value")
+        AndroidNetworking.post(server.url("/").toString())
+                .addBodyParameter("fistName", "Amit")
+                .addBodyParameter("lastName", "Shekhar")
                 .setExecutor(Executors.newSingleThreadExecutor())
                 .build()
                 .getAsOkHttpResponse(new OkHttpResponseListener() {
@@ -193,7 +199,7 @@ public class MultipartStringAndResponseBodyApiTest extends ApplicationTestCase<A
         assertEquals("data", responseRef.get());
     }
 
-    public void testResponseBodyUpload404() throws InterruptedException {
+    public void testResponseBodyPost404() throws InterruptedException {
 
         server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
 
@@ -201,8 +207,9 @@ public class MultipartStringAndResponseBodyApiTest extends ApplicationTestCase<A
         final AtomicReference<Integer> errorCodeRef = new AtomicReference<>();
         final CountDownLatch latch = new CountDownLatch(1);
 
-        AndroidNetworking.upload(server.url("/").toString())
-                .addMultipartParameter("key", "value")
+        AndroidNetworking.post(server.url("/").toString())
+                .addBodyParameter("fistName", "Amit")
+                .addBodyParameter("lastName", "Shekhar")
                 .setExecutor(Executors.newSingleThreadExecutor())
                 .build()
                 .getAsOkHttpResponse(new OkHttpResponseListener() {
@@ -231,12 +238,13 @@ public class MultipartStringAndResponseBodyApiTest extends ApplicationTestCase<A
     }
 
     @SuppressWarnings("unchecked")
-    public void testSyncResponseBodyUpload() throws InterruptedException, IOException {
+    public void testSyncResponseBodyPost() throws InterruptedException, IOException {
 
         server.enqueue(new MockResponse().setBody("data"));
 
-        ANRequest request = AndroidNetworking.upload(server.url("/").toString())
-                .addMultipartParameter("key", "value")
+        ANRequest request = AndroidNetworking.post(server.url("/").toString())
+                .addBodyParameter("fistName", "Amit")
+                .addBodyParameter("lastName", "Shekhar")
                 .build();
 
         ANResponse<Response> response = request.executeForOkHttpResponse();
@@ -246,12 +254,13 @@ public class MultipartStringAndResponseBodyApiTest extends ApplicationTestCase<A
     }
 
     @SuppressWarnings("unchecked")
-    public void testSyncResponseBodyUpload404() throws InterruptedException, IOException {
+    public void testSyncResponseBodyPost404() throws InterruptedException, IOException {
 
         server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
 
-        ANRequest request = AndroidNetworking.upload(server.url("/").toString())
-                .addMultipartParameter("key", "value")
+        ANRequest request = AndroidNetworking.post(server.url("/").toString())
+                .addBodyParameter("fistName", "Amit")
+                .addBodyParameter("lastName", "Shekhar")
                 .build();
 
         ANResponse<Response> response = request.executeForOkHttpResponse();
@@ -261,7 +270,7 @@ public class MultipartStringAndResponseBodyApiTest extends ApplicationTestCase<A
         assertEquals(404, response.getResult().code());
     }
 
-    public void testResponseBodyAndStringUpload() throws InterruptedException {
+    public void testResponseBodyAndStringPost() throws InterruptedException {
 
         server.enqueue(new MockResponse().setBody("data"));
 
@@ -269,8 +278,9 @@ public class MultipartStringAndResponseBodyApiTest extends ApplicationTestCase<A
         final AtomicReference<String> responseStringRef = new AtomicReference<>();
         final CountDownLatch latch = new CountDownLatch(1);
 
-        AndroidNetworking.upload(server.url("/").toString())
-                .addMultipartParameter("key", "value")
+        AndroidNetworking.post(server.url("/").toString())
+                .addBodyParameter("fistName", "Amit")
+                .addBodyParameter("lastName", "Shekhar")
                 .setExecutor(Executors.newSingleThreadExecutor())
                 .build()
                 .getAsOkHttpResponseAndString(new OkHttpResponseAndStringRequestListener() {
@@ -293,7 +303,7 @@ public class MultipartStringAndResponseBodyApiTest extends ApplicationTestCase<A
         assertEquals("data", responseStringRef.get());
     }
 
-    public void testResponseBodyAndStringUpload404() throws InterruptedException {
+    public void testResponseBodyAndStringPost404() throws InterruptedException {
 
         server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
 
@@ -302,8 +312,9 @@ public class MultipartStringAndResponseBodyApiTest extends ApplicationTestCase<A
         final AtomicReference<String> errorDetailRef = new AtomicReference<>();
         final CountDownLatch latch = new CountDownLatch(1);
 
-        AndroidNetworking.upload(server.url("/").toString())
-                .addMultipartParameter("key", "value")
+        AndroidNetworking.post(server.url("/").toString())
+                .addBodyParameter("fistName", "Amit")
+                .addBodyParameter("lastName", "Shekhar")
                 .setExecutor(Executors.newSingleThreadExecutor())
                 .build()
                 .getAsOkHttpResponseAndString(new OkHttpResponseAndStringRequestListener() {
