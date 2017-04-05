@@ -23,6 +23,8 @@ import android.app.Application;
 import android.test.ApplicationTestCase;
 
 import com.androidnetworking.common.ANConstants;
+import com.androidnetworking.common.ANRequest;
+import com.androidnetworking.common.ANResponse;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
@@ -197,6 +199,75 @@ public class GetJSONApiTest extends ApplicationTestCase<Application> {
         assertEquals("data", errorBodyRef.get());
 
         assertEquals(404, errorCodeRef.get().intValue());
+
+    }
+
+    @SuppressWarnings("unchecked")
+    public void testSynchronousJSONObjectGetRequest() throws InterruptedException, JSONException {
+
+        server.enqueue(new MockResponse().setBody("{\"firstName\":\"Amit\", \"lastName\":\"Shekhar\"}"));
+
+        ANRequest request = AndroidNetworking.get(server.url("/").toString()).build();
+
+        ANResponse<JSONObject> response = request.executeForJSONObject();
+
+        assertEquals("Amit", response.getResult().getString("firstName"));
+
+        assertEquals("Shekhar", response.getResult().getString("lastName"));
+    }
+
+    @SuppressWarnings("unchecked")
+    public void testSynchronousJSONObjectGetRequest404() throws InterruptedException {
+
+        server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
+
+        ANRequest request = AndroidNetworking.get(server.url("/").toString()).build();
+
+        ANResponse<JSONObject> response = request.executeForJSONObject();
+
+        ANError error = response.getError();
+
+        assertEquals("data", error.getErrorBody());
+
+        assertEquals(ANConstants.RESPONSE_FROM_SERVER_ERROR, error.getErrorDetail());
+
+        assertEquals(404, error.getErrorCode());
+
+    }
+
+    @SuppressWarnings("unchecked")
+    public void testSynchronousJSONArrayGetRequest() throws InterruptedException, JSONException {
+
+        server.enqueue(new MockResponse().setBody("[{\"firstName\":\"Amit\", \"lastName\":\"Shekhar\"}]"));
+
+        ANRequest request = AndroidNetworking.get(server.url("/").toString()).build();
+
+        ANResponse<JSONArray> response = request.executeForJSONArray();
+
+        JSONObject jsonObject = response.getResult().getJSONObject(0);
+
+        assertEquals("Amit", jsonObject.getString("firstName"));
+
+        assertEquals("Shekhar", jsonObject.getString("lastName"));
+
+    }
+
+    @SuppressWarnings("unchecked")
+    public void testSynchronousJSONArrayGetRequest404() throws InterruptedException {
+
+        server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
+
+        ANRequest request = AndroidNetworking.get(server.url("/").toString()).build();
+
+        ANResponse<JSONObject> response = request.executeForJSONArray();
+
+        ANError error = response.getError();
+
+        assertEquals("data", error.getErrorBody());
+
+        assertEquals(ANConstants.RESPONSE_FROM_SERVER_ERROR, error.getErrorDetail());
+
+        assertEquals(404, error.getErrorCode());
 
     }
 
