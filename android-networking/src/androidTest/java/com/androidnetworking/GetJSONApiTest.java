@@ -28,6 +28,8 @@ import com.androidnetworking.common.ANResponse;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.androidnetworking.interfaces.OkHttpResponseAndJSONArrayRequestListener;
+import com.androidnetworking.interfaces.OkHttpResponseAndJSONObjectRequestListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,8 +37,10 @@ import org.json.JSONObject;
 import org.junit.Rule;
 
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
 
+import okhttp3.Response;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 
@@ -269,6 +273,155 @@ public class GetJSONApiTest extends ApplicationTestCase<Application> {
 
         assertEquals(404, error.getErrorCode());
 
+    }
+
+    public void testResponseBodyAndJSONObjectGet() throws InterruptedException {
+
+        server.enqueue(new MockResponse().setBody("{\"firstName\":\"Amit\", \"lastName\":\"Shekhar\"}"));
+
+        final AtomicReference<String> firstNameRef = new AtomicReference<>();
+        final AtomicReference<String> lastNameRef = new AtomicReference<>();
+        final AtomicReference<Boolean> responseBodySuccess = new AtomicReference<>();
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        AndroidNetworking.get(server.url("/").toString())
+                .setExecutor(Executors.newSingleThreadExecutor())
+                .build()
+                .getAsOkHttpResponseAndJSONObject(new OkHttpResponseAndJSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(Response okHttpResponse, JSONObject response) {
+                        try {
+                            firstNameRef.set(response.getString("firstName"));
+                            lastNameRef.set(response.getString("lastName"));
+                            responseBodySuccess.set(okHttpResponse.isSuccessful());
+                            latch.countDown();
+                        } catch (JSONException e) {
+                            assertTrue(false);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        assertTrue(false);
+                    }
+                });
+
+        assertTrue(latch.await(2, SECONDS));
+
+        assertTrue(responseBodySuccess.get());
+        assertEquals("Amit", firstNameRef.get());
+        assertEquals("Shekhar", lastNameRef.get());
+    }
+
+    public void testResponseBodyAndJSONObjectGet404() throws InterruptedException {
+
+        server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
+
+        final AtomicReference<String> errorBodyRef = new AtomicReference<>();
+        final AtomicReference<Integer> errorCodeRef = new AtomicReference<>();
+        final AtomicReference<String> errorDetailRef = new AtomicReference<>();
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        AndroidNetworking.get(server.url("/").toString())
+                .setExecutor(Executors.newSingleThreadExecutor())
+                .build()
+                .getAsOkHttpResponseAndJSONObject(new OkHttpResponseAndJSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(Response okHttpResponse, JSONObject response) {
+                        assertTrue(false);
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        errorBodyRef.set(anError.getErrorBody());
+                        errorDetailRef.set(anError.getErrorDetail());
+                        errorCodeRef.set(anError.getErrorCode());
+                        latch.countDown();
+                    }
+                });
+
+        assertTrue(latch.await(2, SECONDS));
+
+        assertEquals(ANConstants.RESPONSE_FROM_SERVER_ERROR, errorDetailRef.get());
+
+        assertEquals("data", errorBodyRef.get());
+
+        assertEquals(404, errorCodeRef.get().intValue());
+    }
+
+    public void testResponseBodyAndJSONArrayGet() throws InterruptedException {
+
+        server.enqueue(new MockResponse().setBody("[{\"firstName\":\"Amit\", \"lastName\":\"Shekhar\"}]"));
+
+        final AtomicReference<String> firstNameRef = new AtomicReference<>();
+        final AtomicReference<String> lastNameRef = new AtomicReference<>();
+        final AtomicReference<Boolean> responseBodySuccess = new AtomicReference<>();
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        AndroidNetworking.get(server.url("/").toString())
+                .setExecutor(Executors.newSingleThreadExecutor())
+                .build()
+                .getAsOkHttpResponseAndJSONArray(new OkHttpResponseAndJSONArrayRequestListener() {
+                    @Override
+                    public void onResponse(Response okHttpResponse, JSONArray response) {
+                        try {
+                            JSONObject jsonObject = response.getJSONObject(0);
+                            firstNameRef.set(jsonObject.getString("firstName"));
+                            lastNameRef.set(jsonObject.getString("lastName"));
+                            responseBodySuccess.set(okHttpResponse.isSuccessful());
+                            latch.countDown();
+                        } catch (JSONException e) {
+                            assertTrue(false);
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        assertTrue(false);
+                    }
+                });
+
+        assertTrue(latch.await(2, SECONDS));
+
+        assertTrue(responseBodySuccess.get());
+        assertEquals("Amit", firstNameRef.get());
+        assertEquals("Shekhar", lastNameRef.get());
+    }
+
+    public void testResponseBodyAndJSONArrayGet404() throws InterruptedException {
+
+        server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
+
+        final AtomicReference<String> errorBodyRef = new AtomicReference<>();
+        final AtomicReference<Integer> errorCodeRef = new AtomicReference<>();
+        final AtomicReference<String> errorDetailRef = new AtomicReference<>();
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        AndroidNetworking.get(server.url("/").toString())
+                .setExecutor(Executors.newSingleThreadExecutor())
+                .build()
+                .getAsOkHttpResponseAndJSONArray(new OkHttpResponseAndJSONArrayRequestListener() {
+                    @Override
+                    public void onResponse(Response okHttpResponse, JSONArray response) {
+                        assertTrue(false);
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        errorBodyRef.set(anError.getErrorBody());
+                        errorDetailRef.set(anError.getErrorDetail());
+                        errorCodeRef.set(anError.getErrorCode());
+                        latch.countDown();
+                    }
+                });
+
+        assertTrue(latch.await(2, SECONDS));
+
+        assertEquals(ANConstants.RESPONSE_FROM_SERVER_ERROR, errorDetailRef.get());
+
+        assertEquals("data", errorBodyRef.get());
+
+        assertEquals(404, errorCodeRef.get().intValue());
     }
 
 }
