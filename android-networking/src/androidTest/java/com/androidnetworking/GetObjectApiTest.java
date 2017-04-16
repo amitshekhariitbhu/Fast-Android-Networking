@@ -408,4 +408,42 @@ public class GetObjectApiTest extends ApplicationTestCase<Application> {
         assertEquals(404, errorCodeRef.get().intValue());
     }
 
+    public void testHeaderGet() throws InterruptedException {
+
+        server.enqueue(new MockResponse().setBody("{\"firstName\":\"Amit\", \"lastName\":\"Shekhar\"}"));
+
+        final AtomicReference<String> firstNameRef = new AtomicReference<>();
+        final AtomicReference<String> lastNameRef = new AtomicReference<>();
+        final AtomicReference<String> headerRef = new AtomicReference<>();
+        final AtomicReference<Boolean> responseBodySuccess = new AtomicReference<>();
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        AndroidNetworking.get(server.url("/").toString())
+                .setExecutor(Executors.newSingleThreadExecutor())
+                .build()
+                .getAsOkHttpResponseAndObjectList(User.class,
+                        new OkHttpResponseAndParsedRequestListener<List<User>>() {
+                            @Override
+                            public void onResponse(Response okHttpResponse, List<User> userList) {
+                                firstNameRef.set(userList.get(0).firstName);
+                                lastNameRef.set(userList.get(0).lastName);
+                                responseBodySuccess.set(okHttpResponse.isSuccessful());
+                                headerRef.set(okHttpResponse.request().header("headerKey"));
+                                latch.countDown();
+                            }
+
+                            @Override
+                            public void onError(ANError anError) {
+                                assertTrue(false);
+                            }
+                        });
+
+        assertTrue(latch.await(2, SECONDS));
+
+        assertTrue(responseBodySuccess.get());
+        assertEquals("Amit", firstNameRef.get());
+        assertEquals("Shekhar", lastNameRef.get());
+        assertEquals("headerValue", headerRef.get());
+    }
+
 }
