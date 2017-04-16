@@ -419,6 +419,7 @@ public class GetObjectApiTest extends ApplicationTestCase<Application> {
         final CountDownLatch latch = new CountDownLatch(1);
 
         AndroidNetworking.get(server.url("/").toString())
+                .addHeaders("headerKey", "headerValue")
                 .setExecutor(Executors.newSingleThreadExecutor())
                 .build()
                 .getAsOkHttpResponseAndObjectList(User.class,
