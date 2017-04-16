@@ -422,7 +422,7 @@ public class GetObjectApiTest extends ApplicationTestCase<Application> {
                 .addHeaders("headerKey", "headerValue")
                 .setExecutor(Executors.newSingleThreadExecutor())
                 .build()
-                .getAsOkHttpResponseAndObjectList(User.class,
+                .getAsOkHttpResponseAndObject(User.class,
                         new OkHttpResponseAndParsedRequestListener<User>() {
                             @Override
                             public void onResponse(Response okHttpResponse, User user) {
