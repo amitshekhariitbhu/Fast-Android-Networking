@@ -423,11 +423,11 @@ public class GetObjectApiTest extends ApplicationTestCase<Application> {
                 .setExecutor(Executors.newSingleThreadExecutor())
                 .build()
                 .getAsOkHttpResponseAndObjectList(User.class,
-                        new OkHttpResponseAndParsedRequestListener<List<User>>() {
+                        new OkHttpResponseAndParsedRequestListener<User>() {
                             @Override
-                            public void onResponse(Response okHttpResponse, List<User> userList) {
-                                firstNameRef.set(userList.get(0).firstName);
-                                lastNameRef.set(userList.get(0).lastName);
+                            public void onResponse(Response okHttpResponse, User user) {
+                                firstNameRef.set(user.firstName);
+                                lastNameRef.set(user.lastName);
                                 responseBodySuccess.set(okHttpResponse.isSuccessful());
                                 headerRef.set(okHttpResponse.request().header("headerKey"));
                                 latch.countDown();
