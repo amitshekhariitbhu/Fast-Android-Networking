@@ -310,4 +310,39 @@ public class GetStringApiTest extends ApplicationTestCase<Application> {
 
         assertEquals(404, errorCodeRef.get().intValue());
     }
+
+    public void testHeaderGet() throws InterruptedException {
+
+        server.enqueue(new MockResponse().setBody("data"));
+
+        final AtomicReference<String> responseRef = new AtomicReference<>();
+        final AtomicReference<String> headerRef = new AtomicReference<>();
+        final AtomicReference<Boolean> responseBodySuccess = new AtomicReference<>();
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        AndroidNetworking.get(server.url("/").toString())
+                .addHeaders("headerKey", "headerValue")
+                .setExecutor(Executors.newSingleThreadExecutor())
+                .build()
+                .getAsOkHttpResponseAndString(new OkHttpResponseAndStringRequestListener() {
+                    @Override
+                    public void onResponse(Response okHttpResponse, String response) {
+                        responseRef.set(response);
+                        responseBodySuccess.set(okHttpResponse.isSuccessful());
+                        headerRef.set(okHttpResponse.request().header("headerKey"));
+                        latch.countDown();
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        assertTrue(false);
+                    }
+                });
+
+        assertTrue(latch.await(2, SECONDS));
+
+        assertTrue(responseBodySuccess.get());
+        assertEquals("data", responseRef.get());
+        assertEquals("headerValue", headerRef.get());
+    }
 }
