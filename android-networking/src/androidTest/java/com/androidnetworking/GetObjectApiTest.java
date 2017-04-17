@@ -26,16 +26,14 @@ import com.androidnetworking.common.ANConstants;
 import com.androidnetworking.common.ANRequest;
 import com.androidnetworking.common.ANResponse;
 import com.androidnetworking.error.ANError;
-import com.androidnetworking.interfaces.JSONArrayRequestListener;
-import com.androidnetworking.interfaces.JSONObjectRequestListener;
-import com.androidnetworking.interfaces.OkHttpResponseAndJSONArrayRequestListener;
-import com.androidnetworking.interfaces.OkHttpResponseAndJSONObjectRequestListener;
+import com.androidnetworking.interfaces.OkHttpResponseAndParsedRequestListener;
+import com.androidnetworking.interfaces.ParsedRequestListener;
+import com.androidnetworking.model.User;
 
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.junit.Rule;
 
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
@@ -47,15 +45,15 @@ import okhttp3.mockwebserver.MockWebServer;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
- * Created by amitshekhar on 03/04/17.
+ * Created by amitshekhar on 10/04/17.
  */
 
-public class GetJSONApiTest extends ApplicationTestCase<Application> {
+public class GetObjectApiTest extends ApplicationTestCase<Application> {
 
     @Rule
     public final MockWebServer server = new MockWebServer();
 
-    public GetJSONApiTest() {
+    public GetObjectApiTest() {
         super(Application.class);
     }
 
@@ -65,7 +63,7 @@ public class GetJSONApiTest extends ApplicationTestCase<Application> {
         createApplication();
     }
 
-    public void testJSONObjectGetRequest() throws InterruptedException {
+    public void testObjectGetRequest() throws InterruptedException {
 
         server.enqueue(new MockResponse().setBody("{\"firstName\":\"Amit\", \"lastName\":\"Shekhar\"}"));
 
@@ -75,16 +73,12 @@ public class GetJSONApiTest extends ApplicationTestCase<Application> {
 
         AndroidNetworking.get(server.url("/").toString())
                 .build()
-                .getAsJSONObject(new JSONObjectRequestListener() {
+                .getAsObject(User.class, new ParsedRequestListener<User>() {
                     @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            firstNameRef.set(response.getString("firstName"));
-                            lastNameRef.set(response.getString("lastName"));
-                            latch.countDown();
-                        } catch (JSONException e) {
-                            assertTrue(false);
-                        }
+                    public void onResponse(User user) {
+                        firstNameRef.set(user.firstName);
+                        lastNameRef.set(user.lastName);
+                        latch.countDown();
                     }
 
                     @Override
@@ -99,7 +93,7 @@ public class GetJSONApiTest extends ApplicationTestCase<Application> {
         assertEquals("Shekhar", lastNameRef.get());
     }
 
-    public void testJSONObjectGetRequest404() throws InterruptedException {
+    public void testObjectGetRequest404() throws InterruptedException {
 
         server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
 
@@ -110,9 +104,9 @@ public class GetJSONApiTest extends ApplicationTestCase<Application> {
 
         AndroidNetworking.get(server.url("/").toString())
                 .build()
-                .getAsJSONObject(new JSONObjectRequestListener() {
+                .getAsObject(User.class, new ParsedRequestListener<User>() {
                     @Override
-                    public void onResponse(JSONObject response) {
+                    public void onResponse(User user) {
                         assertTrue(false);
                     }
 
@@ -135,7 +129,7 @@ public class GetJSONApiTest extends ApplicationTestCase<Application> {
 
     }
 
-    public void testJSONArrayGetRequest() throws InterruptedException {
+    public void testObjectListGetRequest() throws InterruptedException {
 
         server.enqueue(new MockResponse().setBody("[{\"firstName\":\"Amit\", \"lastName\":\"Shekhar\"}]"));
 
@@ -145,17 +139,12 @@ public class GetJSONApiTest extends ApplicationTestCase<Application> {
 
         AndroidNetworking.get(server.url("/").toString())
                 .build()
-                .getAsJSONArray(new JSONArrayRequestListener() {
+                .getAsObjectList(User.class, new ParsedRequestListener<List<User>>() {
                     @Override
-                    public void onResponse(JSONArray response) {
-                        try {
-                            JSONObject jsonObject = response.getJSONObject(0);
-                            firstNameRef.set(jsonObject.getString("firstName"));
-                            lastNameRef.set(jsonObject.getString("lastName"));
-                            latch.countDown();
-                        } catch (JSONException e) {
-                            assertTrue(false);
-                        }
+                    public void onResponse(List<User> userList) {
+                        firstNameRef.set(userList.get(0).firstName);
+                        lastNameRef.set(userList.get(0).lastName);
+                        latch.countDown();
                     }
 
                     @Override
@@ -170,7 +159,7 @@ public class GetJSONApiTest extends ApplicationTestCase<Application> {
         assertEquals("Shekhar", lastNameRef.get());
     }
 
-    public void testJSONArrayGetRequest404() throws InterruptedException {
+    public void testObjectListGetRequest404() throws InterruptedException {
 
         server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
 
@@ -181,9 +170,9 @@ public class GetJSONApiTest extends ApplicationTestCase<Application> {
 
         AndroidNetworking.get(server.url("/").toString())
                 .build()
-                .getAsJSONArray(new JSONArrayRequestListener() {
+                .getAsObjectList(User.class, new ParsedRequestListener<List<User>>() {
                     @Override
-                    public void onResponse(JSONArray response) {
+                    public void onResponse(List<User> userList) {
                         assertTrue(false);
                     }
 
@@ -207,27 +196,27 @@ public class GetJSONApiTest extends ApplicationTestCase<Application> {
     }
 
     @SuppressWarnings("unchecked")
-    public void testSynchronousJSONObjectGetRequest() throws InterruptedException, JSONException {
+    public void testSynchronousObjectGetRequest() throws InterruptedException, JSONException {
 
         server.enqueue(new MockResponse().setBody("{\"firstName\":\"Amit\", \"lastName\":\"Shekhar\"}"));
 
         ANRequest request = AndroidNetworking.get(server.url("/").toString()).build();
 
-        ANResponse<JSONObject> response = request.executeForJSONObject();
+        ANResponse<User> response = request.executeForObject(User.class);
 
-        assertEquals("Amit", response.getResult().getString("firstName"));
+        assertEquals("Amit", response.getResult().firstName);
 
-        assertEquals("Shekhar", response.getResult().getString("lastName"));
+        assertEquals("Shekhar", response.getResult().lastName);
     }
 
     @SuppressWarnings("unchecked")
-    public void testSynchronousJSONObjectGetRequest404() throws InterruptedException {
+    public void testSynchronousObjectGetRequest404() throws InterruptedException {
 
         server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
 
         ANRequest request = AndroidNetworking.get(server.url("/").toString()).build();
 
-        ANResponse<JSONObject> response = request.executeForJSONObject();
+        ANResponse<User> response = request.executeForObject(User.class);
 
         ANError error = response.getError();
 
@@ -240,30 +229,30 @@ public class GetJSONApiTest extends ApplicationTestCase<Application> {
     }
 
     @SuppressWarnings("unchecked")
-    public void testSynchronousJSONArrayGetRequest() throws InterruptedException, JSONException {
+    public void testSynchronousObjectListGetRequest() throws InterruptedException, JSONException {
 
         server.enqueue(new MockResponse().setBody("[{\"firstName\":\"Amit\", \"lastName\":\"Shekhar\"}]"));
 
         ANRequest request = AndroidNetworking.get(server.url("/").toString()).build();
 
-        ANResponse<JSONArray> response = request.executeForJSONArray();
+        ANResponse<List<User>> response = request.executeForObjectList(User.class);
 
-        JSONObject jsonObject = response.getResult().getJSONObject(0);
+        User user = response.getResult().get(0);
 
-        assertEquals("Amit", jsonObject.getString("firstName"));
+        assertEquals("Amit", user.firstName);
 
-        assertEquals("Shekhar", jsonObject.getString("lastName"));
+        assertEquals("Shekhar", user.lastName);
 
     }
 
     @SuppressWarnings("unchecked")
-    public void testSynchronousJSONArrayGetRequest404() throws InterruptedException {
+    public void testSynchronousObjectListGetRequest404() throws InterruptedException {
 
         server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
 
         ANRequest request = AndroidNetworking.get(server.url("/").toString()).build();
 
-        ANResponse<JSONObject> response = request.executeForJSONArray();
+        ANResponse<List<User>> response = request.executeForObjectList(User.class);
 
         ANError error = response.getError();
 
@@ -275,7 +264,7 @@ public class GetJSONApiTest extends ApplicationTestCase<Application> {
 
     }
 
-    public void testResponseBodyAndJSONObjectGet() throws InterruptedException {
+    public void testResponseBodyAndObjectGet() throws InterruptedException {
 
         server.enqueue(new MockResponse().setBody("{\"firstName\":\"Amit\", \"lastName\":\"Shekhar\"}"));
 
@@ -287,24 +276,21 @@ public class GetJSONApiTest extends ApplicationTestCase<Application> {
         AndroidNetworking.get(server.url("/").toString())
                 .setExecutor(Executors.newSingleThreadExecutor())
                 .build()
-                .getAsOkHttpResponseAndJSONObject(new OkHttpResponseAndJSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(Response okHttpResponse, JSONObject response) {
-                        try {
-                            firstNameRef.set(response.getString("firstName"));
-                            lastNameRef.set(response.getString("lastName"));
-                            responseBodySuccess.set(okHttpResponse.isSuccessful());
-                            latch.countDown();
-                        } catch (JSONException e) {
-                            assertTrue(false);
-                        }
-                    }
+                .getAsOkHttpResponseAndObject(User.class,
+                        new OkHttpResponseAndParsedRequestListener<User>() {
+                            @Override
+                            public void onResponse(Response okHttpResponse, User user) {
+                                firstNameRef.set(user.firstName);
+                                lastNameRef.set(user.lastName);
+                                responseBodySuccess.set(okHttpResponse.isSuccessful());
+                                latch.countDown();
+                            }
 
-                    @Override
-                    public void onError(ANError anError) {
-                        assertTrue(false);
-                    }
-                });
+                            @Override
+                            public void onError(ANError anError) {
+                                assertTrue(false);
+                            }
+                        });
 
         assertTrue(latch.await(2, SECONDS));
 
@@ -313,7 +299,7 @@ public class GetJSONApiTest extends ApplicationTestCase<Application> {
         assertEquals("Shekhar", lastNameRef.get());
     }
 
-    public void testResponseBodyAndJSONObjectGet404() throws InterruptedException {
+    public void testResponseBodyAndObjectGet404() throws InterruptedException {
 
         server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
 
@@ -325,20 +311,21 @@ public class GetJSONApiTest extends ApplicationTestCase<Application> {
         AndroidNetworking.get(server.url("/").toString())
                 .setExecutor(Executors.newSingleThreadExecutor())
                 .build()
-                .getAsOkHttpResponseAndJSONObject(new OkHttpResponseAndJSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(Response okHttpResponse, JSONObject response) {
-                        assertTrue(false);
-                    }
+                .getAsOkHttpResponseAndObject(User.class,
+                        new OkHttpResponseAndParsedRequestListener<User>() {
+                            @Override
+                            public void onResponse(Response okHttpResponse, User user) {
+                                assertTrue(false);
+                            }
 
-                    @Override
-                    public void onError(ANError anError) {
-                        errorBodyRef.set(anError.getErrorBody());
-                        errorDetailRef.set(anError.getErrorDetail());
-                        errorCodeRef.set(anError.getErrorCode());
-                        latch.countDown();
-                    }
-                });
+                            @Override
+                            public void onError(ANError anError) {
+                                errorBodyRef.set(anError.getErrorBody());
+                                errorDetailRef.set(anError.getErrorDetail());
+                                errorCodeRef.set(anError.getErrorCode());
+                                latch.countDown();
+                            }
+                        });
 
         assertTrue(latch.await(2, SECONDS));
 
@@ -349,7 +336,7 @@ public class GetJSONApiTest extends ApplicationTestCase<Application> {
         assertEquals(404, errorCodeRef.get().intValue());
     }
 
-    public void testResponseBodyAndJSONArrayGet() throws InterruptedException {
+    public void testResponseBodyAndObjectListGet() throws InterruptedException {
 
         server.enqueue(new MockResponse().setBody("[{\"firstName\":\"Amit\", \"lastName\":\"Shekhar\"}]"));
 
@@ -361,25 +348,21 @@ public class GetJSONApiTest extends ApplicationTestCase<Application> {
         AndroidNetworking.get(server.url("/").toString())
                 .setExecutor(Executors.newSingleThreadExecutor())
                 .build()
-                .getAsOkHttpResponseAndJSONArray(new OkHttpResponseAndJSONArrayRequestListener() {
-                    @Override
-                    public void onResponse(Response okHttpResponse, JSONArray response) {
-                        try {
-                            JSONObject jsonObject = response.getJSONObject(0);
-                            firstNameRef.set(jsonObject.getString("firstName"));
-                            lastNameRef.set(jsonObject.getString("lastName"));
-                            responseBodySuccess.set(okHttpResponse.isSuccessful());
-                            latch.countDown();
-                        } catch (JSONException e) {
-                            assertTrue(false);
-                        }
-                    }
+                .getAsOkHttpResponseAndObjectList(User.class,
+                        new OkHttpResponseAndParsedRequestListener<List<User>>() {
+                            @Override
+                            public void onResponse(Response okHttpResponse, List<User> userList) {
+                                firstNameRef.set(userList.get(0).firstName);
+                                lastNameRef.set(userList.get(0).lastName);
+                                responseBodySuccess.set(okHttpResponse.isSuccessful());
+                                latch.countDown();
+                            }
 
-                    @Override
-                    public void onError(ANError anError) {
-                        assertTrue(false);
-                    }
-                });
+                            @Override
+                            public void onError(ANError anError) {
+                                assertTrue(false);
+                            }
+                        });
 
         assertTrue(latch.await(2, SECONDS));
 
@@ -388,7 +371,7 @@ public class GetJSONApiTest extends ApplicationTestCase<Application> {
         assertEquals("Shekhar", lastNameRef.get());
     }
 
-    public void testResponseBodyAndJSONArrayGet404() throws InterruptedException {
+    public void testResponseBodyAndObjectListGet404() throws InterruptedException {
 
         server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
 
@@ -400,20 +383,21 @@ public class GetJSONApiTest extends ApplicationTestCase<Application> {
         AndroidNetworking.get(server.url("/").toString())
                 .setExecutor(Executors.newSingleThreadExecutor())
                 .build()
-                .getAsOkHttpResponseAndJSONArray(new OkHttpResponseAndJSONArrayRequestListener() {
-                    @Override
-                    public void onResponse(Response okHttpResponse, JSONArray response) {
-                        assertTrue(false);
-                    }
+                .getAsOkHttpResponseAndObjectList(User.class,
+                        new OkHttpResponseAndParsedRequestListener<List<User>>() {
+                            @Override
+                            public void onResponse(Response okHttpResponse, List<User> userList) {
+                                assertTrue(false);
+                            }
 
-                    @Override
-                    public void onError(ANError anError) {
-                        errorBodyRef.set(anError.getErrorBody());
-                        errorDetailRef.set(anError.getErrorDetail());
-                        errorCodeRef.set(anError.getErrorCode());
-                        latch.countDown();
-                    }
-                });
+                            @Override
+                            public void onError(ANError anError) {
+                                errorBodyRef.set(anError.getErrorBody());
+                                errorDetailRef.set(anError.getErrorDetail());
+                                errorCodeRef.set(anError.getErrorCode());
+                                latch.countDown();
+                            }
+                        });
 
         assertTrue(latch.await(2, SECONDS));
 
@@ -438,25 +422,22 @@ public class GetJSONApiTest extends ApplicationTestCase<Application> {
                 .addHeaders("headerKey", "headerValue")
                 .setExecutor(Executors.newSingleThreadExecutor())
                 .build()
-                .getAsOkHttpResponseAndJSONObject(new OkHttpResponseAndJSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(Response okHttpResponse, JSONObject response) {
-                        try {
-                            firstNameRef.set(response.getString("firstName"));
-                            lastNameRef.set(response.getString("lastName"));
-                            responseBodySuccess.set(okHttpResponse.isSuccessful());
-                            headerRef.set(okHttpResponse.request().header("headerKey"));
-                            latch.countDown();
-                        } catch (JSONException e) {
-                            assertTrue(false);
-                        }
-                    }
+                .getAsOkHttpResponseAndObject(User.class,
+                        new OkHttpResponseAndParsedRequestListener<User>() {
+                            @Override
+                            public void onResponse(Response okHttpResponse, User user) {
+                                firstNameRef.set(user.firstName);
+                                lastNameRef.set(user.lastName);
+                                responseBodySuccess.set(okHttpResponse.isSuccessful());
+                                headerRef.set(okHttpResponse.request().header("headerKey"));
+                                latch.countDown();
+                            }
 
-                    @Override
-                    public void onError(ANError anError) {
-                        assertTrue(false);
-                    }
-                });
+                            @Override
+                            public void onError(ANError anError) {
+                                assertTrue(false);
+                            }
+                        });
 
         assertTrue(latch.await(2, SECONDS));
 

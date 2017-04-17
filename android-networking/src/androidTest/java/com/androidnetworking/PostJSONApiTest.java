@@ -47,15 +47,15 @@ import okhttp3.mockwebserver.MockWebServer;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
- * Created by amitshekhar on 03/04/17.
+ * Created by amitshekhar on 06/04/17.
  */
 
-public class GetJSONApiTest extends ApplicationTestCase<Application> {
+public class PostJSONApiTest extends ApplicationTestCase<Application> {
 
     @Rule
     public final MockWebServer server = new MockWebServer();
 
-    public GetJSONApiTest() {
+    public PostJSONApiTest() {
         super(Application.class);
     }
 
@@ -65,7 +65,7 @@ public class GetJSONApiTest extends ApplicationTestCase<Application> {
         createApplication();
     }
 
-    public void testJSONObjectGetRequest() throws InterruptedException {
+    public void testJSONObjectPostRequest() throws InterruptedException {
 
         server.enqueue(new MockResponse().setBody("{\"firstName\":\"Amit\", \"lastName\":\"Shekhar\"}"));
 
@@ -73,7 +73,9 @@ public class GetJSONApiTest extends ApplicationTestCase<Application> {
         final AtomicReference<String> lastNameRef = new AtomicReference<>();
         final CountDownLatch latch = new CountDownLatch(1);
 
-        AndroidNetworking.get(server.url("/").toString())
+        AndroidNetworking.post(server.url("/").toString())
+                .addBodyParameter("fistName", "Amit")
+                .addBodyParameter("lastName", "Shekhar")
                 .build()
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
@@ -99,7 +101,7 @@ public class GetJSONApiTest extends ApplicationTestCase<Application> {
         assertEquals("Shekhar", lastNameRef.get());
     }
 
-    public void testJSONObjectGetRequest404() throws InterruptedException {
+    public void testJSONObjectPostRequest404() throws InterruptedException {
 
         server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
 
@@ -108,7 +110,9 @@ public class GetJSONApiTest extends ApplicationTestCase<Application> {
         final AtomicReference<Integer> errorCodeRef = new AtomicReference<>();
         final CountDownLatch latch = new CountDownLatch(1);
 
-        AndroidNetworking.get(server.url("/").toString())
+        AndroidNetworking.post(server.url("/").toString())
+                .addBodyParameter("fistName", "Amit")
+                .addBodyParameter("lastName", "Shekhar")
                 .build()
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
@@ -135,7 +139,7 @@ public class GetJSONApiTest extends ApplicationTestCase<Application> {
 
     }
 
-    public void testJSONArrayGetRequest() throws InterruptedException {
+    public void testJSONArrayPostRequest() throws InterruptedException {
 
         server.enqueue(new MockResponse().setBody("[{\"firstName\":\"Amit\", \"lastName\":\"Shekhar\"}]"));
 
@@ -143,7 +147,9 @@ public class GetJSONApiTest extends ApplicationTestCase<Application> {
         final AtomicReference<String> lastNameRef = new AtomicReference<>();
         final CountDownLatch latch = new CountDownLatch(1);
 
-        AndroidNetworking.get(server.url("/").toString())
+        AndroidNetworking.post(server.url("/").toString())
+                .addBodyParameter("fistName", "Amit")
+                .addBodyParameter("lastName", "Shekhar")
                 .build()
                 .getAsJSONArray(new JSONArrayRequestListener() {
                     @Override
@@ -170,7 +176,7 @@ public class GetJSONApiTest extends ApplicationTestCase<Application> {
         assertEquals("Shekhar", lastNameRef.get());
     }
 
-    public void testJSONArrayGetRequest404() throws InterruptedException {
+    public void testJSONArrayPostRequest404() throws InterruptedException {
 
         server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
 
@@ -179,7 +185,9 @@ public class GetJSONApiTest extends ApplicationTestCase<Application> {
         final AtomicReference<Integer> errorCodeRef = new AtomicReference<>();
         final CountDownLatch latch = new CountDownLatch(1);
 
-        AndroidNetworking.get(server.url("/").toString())
+        AndroidNetworking.post(server.url("/").toString())
+                .addBodyParameter("fistName", "Amit")
+                .addBodyParameter("lastName", "Shekhar")
                 .build()
                 .getAsJSONArray(new JSONArrayRequestListener() {
                     @Override
@@ -207,11 +215,14 @@ public class GetJSONApiTest extends ApplicationTestCase<Application> {
     }
 
     @SuppressWarnings("unchecked")
-    public void testSynchronousJSONObjectGetRequest() throws InterruptedException, JSONException {
+    public void testSynchronousJSONObjectPostRequest() throws InterruptedException, JSONException {
 
         server.enqueue(new MockResponse().setBody("{\"firstName\":\"Amit\", \"lastName\":\"Shekhar\"}"));
 
-        ANRequest request = AndroidNetworking.get(server.url("/").toString()).build();
+        ANRequest request = AndroidNetworking.post(server.url("/").toString())
+                .addBodyParameter("fistName", "Amit")
+                .addBodyParameter("lastName", "Shekhar")
+                .build();
 
         ANResponse<JSONObject> response = request.executeForJSONObject();
 
@@ -221,11 +232,14 @@ public class GetJSONApiTest extends ApplicationTestCase<Application> {
     }
 
     @SuppressWarnings("unchecked")
-    public void testSynchronousJSONObjectGetRequest404() throws InterruptedException {
+    public void testSynchronousJSONObjectPostRequest404() throws InterruptedException {
 
         server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
 
-        ANRequest request = AndroidNetworking.get(server.url("/").toString()).build();
+        ANRequest request = AndroidNetworking.post(server.url("/").toString())
+                .addBodyParameter("fistName", "Amit")
+                .addBodyParameter("lastName", "Shekhar")
+                .build();
 
         ANResponse<JSONObject> response = request.executeForJSONObject();
 
@@ -240,11 +254,14 @@ public class GetJSONApiTest extends ApplicationTestCase<Application> {
     }
 
     @SuppressWarnings("unchecked")
-    public void testSynchronousJSONArrayGetRequest() throws InterruptedException, JSONException {
+    public void testSynchronousJSONArrayPostRequest() throws InterruptedException, JSONException {
 
         server.enqueue(new MockResponse().setBody("[{\"firstName\":\"Amit\", \"lastName\":\"Shekhar\"}]"));
 
-        ANRequest request = AndroidNetworking.get(server.url("/").toString()).build();
+        ANRequest request = AndroidNetworking.post(server.url("/").toString())
+                .addBodyParameter("fistName", "Amit")
+                .addBodyParameter("lastName", "Shekhar")
+                .build();
 
         ANResponse<JSONArray> response = request.executeForJSONArray();
 
@@ -257,11 +274,14 @@ public class GetJSONApiTest extends ApplicationTestCase<Application> {
     }
 
     @SuppressWarnings("unchecked")
-    public void testSynchronousJSONArrayGetRequest404() throws InterruptedException {
+    public void testSynchronousJSONArrayPostRequest404() throws InterruptedException {
 
         server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
 
-        ANRequest request = AndroidNetworking.get(server.url("/").toString()).build();
+        ANRequest request = AndroidNetworking.post(server.url("/").toString())
+                .addBodyParameter("fistName", "Amit")
+                .addBodyParameter("lastName", "Shekhar")
+                .build();
 
         ANResponse<JSONObject> response = request.executeForJSONArray();
 
@@ -275,7 +295,7 @@ public class GetJSONApiTest extends ApplicationTestCase<Application> {
 
     }
 
-    public void testResponseBodyAndJSONObjectGet() throws InterruptedException {
+    public void testResponseBodyAndJSONObjectPost() throws InterruptedException {
 
         server.enqueue(new MockResponse().setBody("{\"firstName\":\"Amit\", \"lastName\":\"Shekhar\"}"));
 
@@ -284,7 +304,9 @@ public class GetJSONApiTest extends ApplicationTestCase<Application> {
         final AtomicReference<Boolean> responseBodySuccess = new AtomicReference<>();
         final CountDownLatch latch = new CountDownLatch(1);
 
-        AndroidNetworking.get(server.url("/").toString())
+        AndroidNetworking.post(server.url("/").toString())
+                .addBodyParameter("fistName", "Amit")
+                .addBodyParameter("lastName", "Shekhar")
                 .setExecutor(Executors.newSingleThreadExecutor())
                 .build()
                 .getAsOkHttpResponseAndJSONObject(new OkHttpResponseAndJSONObjectRequestListener() {
@@ -313,7 +335,7 @@ public class GetJSONApiTest extends ApplicationTestCase<Application> {
         assertEquals("Shekhar", lastNameRef.get());
     }
 
-    public void testResponseBodyAndJSONObjectGet404() throws InterruptedException {
+    public void testResponseBodyAndJSONObjectPost404() throws InterruptedException {
 
         server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
 
@@ -322,7 +344,9 @@ public class GetJSONApiTest extends ApplicationTestCase<Application> {
         final AtomicReference<String> errorDetailRef = new AtomicReference<>();
         final CountDownLatch latch = new CountDownLatch(1);
 
-        AndroidNetworking.get(server.url("/").toString())
+        AndroidNetworking.post(server.url("/").toString())
+                .addBodyParameter("fistName", "Amit")
+                .addBodyParameter("lastName", "Shekhar")
                 .setExecutor(Executors.newSingleThreadExecutor())
                 .build()
                 .getAsOkHttpResponseAndJSONObject(new OkHttpResponseAndJSONObjectRequestListener() {
@@ -349,7 +373,7 @@ public class GetJSONApiTest extends ApplicationTestCase<Application> {
         assertEquals(404, errorCodeRef.get().intValue());
     }
 
-    public void testResponseBodyAndJSONArrayGet() throws InterruptedException {
+    public void testResponseBodyAndJSONArrayPost() throws InterruptedException {
 
         server.enqueue(new MockResponse().setBody("[{\"firstName\":\"Amit\", \"lastName\":\"Shekhar\"}]"));
 
@@ -358,7 +382,9 @@ public class GetJSONApiTest extends ApplicationTestCase<Application> {
         final AtomicReference<Boolean> responseBodySuccess = new AtomicReference<>();
         final CountDownLatch latch = new CountDownLatch(1);
 
-        AndroidNetworking.get(server.url("/").toString())
+        AndroidNetworking.post(server.url("/").toString())
+                .addBodyParameter("fistName", "Amit")
+                .addBodyParameter("lastName", "Shekhar")
                 .setExecutor(Executors.newSingleThreadExecutor())
                 .build()
                 .getAsOkHttpResponseAndJSONArray(new OkHttpResponseAndJSONArrayRequestListener() {
@@ -388,7 +414,7 @@ public class GetJSONApiTest extends ApplicationTestCase<Application> {
         assertEquals("Shekhar", lastNameRef.get());
     }
 
-    public void testResponseBodyAndJSONArrayGet404() throws InterruptedException {
+    public void testResponseBodyAndJSONArrayPost404() throws InterruptedException {
 
         server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
 
@@ -397,7 +423,9 @@ public class GetJSONApiTest extends ApplicationTestCase<Application> {
         final AtomicReference<String> errorDetailRef = new AtomicReference<>();
         final CountDownLatch latch = new CountDownLatch(1);
 
-        AndroidNetworking.get(server.url("/").toString())
+        AndroidNetworking.post(server.url("/").toString())
+                .addBodyParameter("fistName", "Amit")
+                .addBodyParameter("lastName", "Shekhar")
                 .setExecutor(Executors.newSingleThreadExecutor())
                 .build()
                 .getAsOkHttpResponseAndJSONArray(new OkHttpResponseAndJSONArrayRequestListener() {
@@ -424,7 +452,7 @@ public class GetJSONApiTest extends ApplicationTestCase<Application> {
         assertEquals(404, errorCodeRef.get().intValue());
     }
 
-    public void testHeaderGet() throws InterruptedException {
+    public void testHeaderPost() throws InterruptedException {
 
         server.enqueue(new MockResponse().setBody("{\"firstName\":\"Amit\", \"lastName\":\"Shekhar\"}"));
 
@@ -434,8 +462,10 @@ public class GetJSONApiTest extends ApplicationTestCase<Application> {
         final AtomicReference<Boolean> responseBodySuccess = new AtomicReference<>();
         final CountDownLatch latch = new CountDownLatch(1);
 
-        AndroidNetworking.get(server.url("/").toString())
+        AndroidNetworking.post(server.url("/").toString())
                 .addHeaders("headerKey", "headerValue")
+                .addBodyParameter("fistName", "Amit")
+                .addBodyParameter("lastName", "Shekhar")
                 .setExecutor(Executors.newSingleThreadExecutor())
                 .build()
                 .getAsOkHttpResponseAndJSONObject(new OkHttpResponseAndJSONObjectRequestListener() {
