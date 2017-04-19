@@ -57,9 +57,9 @@ public final class InternalNetworking {
 
     }
 
-    public static OkHttpClient sHttpClient = getClient();
-
     public static ConnectionPool sConnectionPool = getConnectionPool();
+
+    public static OkHttpClient sHttpClient = getClient();
 
     public static String sUserAgent = null;
 
