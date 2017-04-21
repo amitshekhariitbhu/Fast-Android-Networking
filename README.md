@@ -4,6 +4,7 @@
 
 [![Build Status](https://travis-ci.org/amitshekhariitbhu/Fast-Android-Networking.svg?branch=master)](https://travis-ci.org/amitshekhariitbhu/Fast-Android-Networking)
 [![Mindorks](https://img.shields.io/badge/mindorks-opensource-blue.svg)](https://mindorks.com/open-source-projects)
+[![Mindorks Community](https://img.shields.io/badge/join-community-blue.svg)](https://mindorks.com/join-community)
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Android%20Networking-blue.svg?style=flat)](http://android-arsenal.com/details/1/3695)
 [![API](https://img.shields.io/badge/API-9%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=9)
 [![Download](https://api.bintray.com/packages/amitshekhariitbhu/maven/android-networking/images/download.svg) ](https://bintray.com/amitshekhariitbhu/maven/android-networking/_latestVersion)
