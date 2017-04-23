@@ -22,6 +22,9 @@ package com.rx2androidnetworking;
 import android.app.Application;
 import android.test.ApplicationTestCase;
 
+import com.androidnetworking.common.ANConstants;
+import com.androidnetworking.error.ANError;
+
 import org.junit.Rule;
 
 import java.util.concurrent.CountDownLatch;
@@ -99,6 +102,59 @@ public class Rx2GetStringApiTest extends ApplicationTestCase<Application> {
         assertTrue(isCompletedRef.get());
 
         assertEquals("data", responseRef.get());
+    }
+
+    public void testStringGetRequest404() throws InterruptedException {
+
+        server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
+
+        final AtomicReference<String> errorDetailRef = new AtomicReference<>();
+        final AtomicReference<String> errorBodyRef = new AtomicReference<>();
+        final AtomicReference<Integer> errorCodeRef = new AtomicReference<>();
+        final AtomicReference<Boolean> isSubscribedRef = new AtomicReference<>();
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        Rx2AndroidNetworking.get(server.url("/").toString())
+                .build()
+                .getStringObservable()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<String>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        isSubscribedRef.set(true);
+                    }
+
+                    @Override
+                    public void onNext(String response) {
+                        assertTrue(false);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        ANError anError = (ANError) e;
+                        errorBodyRef.set(anError.getErrorBody());
+                        errorDetailRef.set(anError.getErrorDetail());
+                        errorCodeRef.set(anError.getErrorCode());
+                        latch.countDown();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        assertTrue(false);
+                    }
+                });
+
+        assertTrue(latch.await(2, SECONDS));
+
+        assertTrue(isSubscribedRef.get());
+
+        assertEquals(ANConstants.RESPONSE_FROM_SERVER_ERROR, errorDetailRef.get());
+
+        assertEquals("data", errorBodyRef.get());
+
+        assertEquals(404, errorCodeRef.get().intValue());
+
     }
 
 }
