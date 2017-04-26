@@ -67,7 +67,7 @@ public class RxGetObjectApiTest extends ApplicationTestCase<Application> {
         final AtomicReference<String> lastNameRef = new AtomicReference<>();
         final AtomicReference<Boolean> isSubscribedRef = new AtomicReference<>();
         final AtomicReference<Boolean> isCompletedRef = new AtomicReference<>();
-        final CountDownLatch latch = new CountDownLatch(1);
+        final CountDownLatch latch = new CountDownLatch(2);
 
         Rx2AndroidNetworking.get(server.url("/").toString())
                 .build()
