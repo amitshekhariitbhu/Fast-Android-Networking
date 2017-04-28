@@ -43,12 +43,12 @@ import static java.util.concurrent.TimeUnit.SECONDS;
  * Created by amitshekhar on 25/04/17.
  */
 
-public class RxMultipartStringApiTest extends ApplicationTestCase<Application> {
+public class Rx2MultipartStringApiTest extends ApplicationTestCase<Application> {
 
     @Rule
     public final MockWebServer server = new MockWebServer();
 
-    public RxMultipartStringApiTest() {
+    public Rx2MultipartStringApiTest() {
         super(Application.class);
     }
 

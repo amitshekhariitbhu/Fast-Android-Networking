@@ -45,12 +45,12 @@ import static java.util.concurrent.TimeUnit.SECONDS;
  * Created by amitshekhar on 26/04/17.
  */
 
-public class RxGetObjectApiTest extends ApplicationTestCase<Application> {
+public class Rx2GetObjectApiTest extends ApplicationTestCase<Application> {
 
     @Rule
     public final MockWebServer server = new MockWebServer();
 
-    public RxGetObjectApiTest() {
+    public Rx2GetObjectApiTest() {
         super(Application.class);
     }
 
