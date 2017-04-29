@@ -42,15 +42,15 @@ import okhttp3.mockwebserver.MockWebServer;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
- * Created by amitshekhar on 28/04/17.
+ * Created by amitshekhar on 29/04/17.
  */
 
-public class Rx2PostObjectApiTest extends ApplicationTestCase<Application> {
+public class Rx2MultipartObjectApiTest extends ApplicationTestCase<Application> {
 
     @Rule
     public final MockWebServer server = new MockWebServer();
 
-    public Rx2PostObjectApiTest() {
+    public Rx2MultipartObjectApiTest() {
         super(Application.class);
     }
 
@@ -60,7 +60,7 @@ public class Rx2PostObjectApiTest extends ApplicationTestCase<Application> {
         createApplication();
     }
 
-    public void testObjectPostRequest() throws InterruptedException {
+    public void testObjectMultipartRequest() throws InterruptedException {
 
         server.enqueue(new MockResponse().setBody("{\"firstName\":\"Amit\", \"lastName\":\"Shekhar\"}"));
 
@@ -70,9 +70,8 @@ public class Rx2PostObjectApiTest extends ApplicationTestCase<Application> {
         final AtomicReference<Boolean> isCompletedRef = new AtomicReference<>();
         final CountDownLatch latch = new CountDownLatch(2);
 
-        Rx2AndroidNetworking.post(server.url("/").toString())
-                .addBodyParameter("fistName", "Amit")
-                .addBodyParameter("lastName", "Shekhar")
+        Rx2AndroidNetworking.upload(server.url("/").toString())
+                .addMultipartParameter("key", "value")
                 .build()
                 .getObjectObservable(User.class)
                 .subscribeOn(Schedulers.io())
@@ -112,7 +111,7 @@ public class Rx2PostObjectApiTest extends ApplicationTestCase<Application> {
         assertEquals("Shekhar", lastNameRef.get());
     }
 
-    public void testObjectPostRequest404() throws InterruptedException {
+    public void testObjectMultipartRequest404() throws InterruptedException {
 
         server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
 
@@ -122,9 +121,8 @@ public class Rx2PostObjectApiTest extends ApplicationTestCase<Application> {
         final AtomicReference<Boolean> isSubscribedRef = new AtomicReference<>();
         final CountDownLatch latch = new CountDownLatch(1);
 
-        Rx2AndroidNetworking.post(server.url("/").toString())
-                .addBodyParameter("fistName", "Amit")
-                .addBodyParameter("lastName", "Shekhar")
+        Rx2AndroidNetworking.upload(server.url("/").toString())
+                .addMultipartParameter("key", "value")
                 .build()
                 .getObjectObservable(User.class)
                 .subscribeOn(Schedulers.io())
@@ -167,7 +165,7 @@ public class Rx2PostObjectApiTest extends ApplicationTestCase<Application> {
 
     }
 
-    public void testObjectListPostRequest() throws InterruptedException {
+    public void testObjectListMultipartRequest() throws InterruptedException {
 
         server.enqueue(new MockResponse().setBody("[{\"firstName\":\"Amit\", \"lastName\":\"Shekhar\"}]"));
 
@@ -177,9 +175,8 @@ public class Rx2PostObjectApiTest extends ApplicationTestCase<Application> {
         final AtomicReference<Boolean> isCompletedRef = new AtomicReference<>();
         final CountDownLatch latch = new CountDownLatch(2);
 
-        Rx2AndroidNetworking.post(server.url("/").toString())
-                .addBodyParameter("fistName", "Amit")
-                .addBodyParameter("lastName", "Shekhar")
+        Rx2AndroidNetworking.upload(server.url("/").toString())
+                .addMultipartParameter("key", "value")
                 .build()
                 .getObjectListObservable(User.class)
                 .subscribeOn(Schedulers.io())
@@ -219,7 +216,7 @@ public class Rx2PostObjectApiTest extends ApplicationTestCase<Application> {
         assertEquals("Shekhar", lastNameRef.get());
     }
 
-    public void testObjectListPostRequest404() throws InterruptedException {
+    public void testObjectListMultipartRequest404() throws InterruptedException {
 
         server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
 
@@ -229,9 +226,8 @@ public class Rx2PostObjectApiTest extends ApplicationTestCase<Application> {
         final AtomicReference<Boolean> isSubscribedRef = new AtomicReference<>();
         final CountDownLatch latch = new CountDownLatch(1);
 
-        Rx2AndroidNetworking.post(server.url("/").toString())
-                .addBodyParameter("fistName", "Amit")
-                .addBodyParameter("lastName", "Shekhar")
+        Rx2AndroidNetworking.upload(server.url("/").toString())
+                .addMultipartParameter("key", "value")
                 .build()
                 .getObjectListObservable(User.class)
                 .subscribeOn(Schedulers.io())

@@ -163,7 +163,7 @@ public class Rx2GetObjectApiTest extends ApplicationTestCase<Application> {
 
     }
 
-    public void testObjectGetListRequest() throws InterruptedException {
+    public void testObjectListGetRequest() throws InterruptedException {
 
         server.enqueue(new MockResponse().setBody("[{\"firstName\":\"Amit\", \"lastName\":\"Shekhar\"}]"));
 
