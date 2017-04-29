@@ -436,4 +436,45 @@ public class PostObjectApiTest extends ApplicationTestCase<Application> {
         assertEquals(404, errorCodeRef.get().intValue());
     }
 
+    public void testHeaderPost() throws InterruptedException {
+
+        server.enqueue(new MockResponse().setBody("{\"firstName\":\"Amit\", \"lastName\":\"Shekhar\"}"));
+
+        final AtomicReference<String> firstNameRef = new AtomicReference<>();
+        final AtomicReference<String> lastNameRef = new AtomicReference<>();
+        final AtomicReference<String> headerRef = new AtomicReference<>();
+        final AtomicReference<Boolean> responseBodySuccess = new AtomicReference<>();
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        AndroidNetworking.post(server.url("/").toString())
+                .addHeaders("headerKey", "headerValue")
+                .addBodyParameter("fistName", "Amit")
+                .addBodyParameter("lastName", "Shekhar")
+                .setExecutor(Executors.newSingleThreadExecutor())
+                .build()
+                .getAsOkHttpResponseAndObject(User.class,
+                        new OkHttpResponseAndParsedRequestListener<User>() {
+                            @Override
+                            public void onResponse(Response okHttpResponse, User user) {
+                                firstNameRef.set(user.firstName);
+                                lastNameRef.set(user.lastName);
+                                responseBodySuccess.set(okHttpResponse.isSuccessful());
+                                headerRef.set(okHttpResponse.request().header("headerKey"));
+                                latch.countDown();
+                            }
+
+                            @Override
+                            public void onError(ANError anError) {
+                                assertTrue(false);
+                            }
+                        });
+
+        assertTrue(latch.await(2, SECONDS));
+
+        assertTrue(responseBodySuccess.get());
+        assertEquals("Amit", firstNameRef.get());
+        assertEquals("Shekhar", lastNameRef.get());
+        assertEquals("headerValue", headerRef.get());
+    }
+
 }
