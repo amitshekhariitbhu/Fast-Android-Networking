@@ -424,7 +424,7 @@ public class MultipartObjectApiTest extends ApplicationTestCase<Application> {
         assertEquals(404, errorCodeRef.get().intValue());
     }
 
-    public void testHeaderMultipart() throws InterruptedException {
+    public void testHeaderMultipartRequest() throws InterruptedException {
 
         server.enqueue(new MockResponse().setBody("{\"firstName\":\"Amit\", \"lastName\":\"Shekhar\"}"));
 

@@ -332,7 +332,7 @@ public class MultipartStringApiTest extends ApplicationTestCase<Application> {
         assertEquals(404, errorCodeRef.get().intValue());
     }
 
-    public void testHeaderMultipart() throws InterruptedException {
+    public void testHeaderMultipartRequest() throws InterruptedException {
 
         server.enqueue(new MockResponse().setBody("data"));
 

@@ -311,7 +311,7 @@ public class GetStringApiTest extends ApplicationTestCase<Application> {
         assertEquals(404, errorCodeRef.get().intValue());
     }
 
-    public void testHeaderGet() throws InterruptedException {
+    public void testHeaderGetRequest() throws InterruptedException {
 
         server.enqueue(new MockResponse().setBody("data"));
 
