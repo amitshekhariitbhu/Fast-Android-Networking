@@ -19,9 +19,30 @@
 
 package com.jacksonandroidnetworking;
 
+import android.app.Application;
+import android.test.ApplicationTestCase;
+
+import org.junit.Rule;
+
+import okhttp3.mockwebserver.MockWebServer;
+
 /**
  * Created by amitshekhar on 05/05/17.
  */
 
-public class JacksonGetObjectApiTest {
+public class JacksonGetObjectApiTest extends ApplicationTestCase<Application> {
+
+    @Rule
+    public final MockWebServer server = new MockWebServer();
+
+    public JacksonGetObjectApiTest() {
+        super(Application.class);
+    }
+
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        createApplication();
+    }
+
 }
