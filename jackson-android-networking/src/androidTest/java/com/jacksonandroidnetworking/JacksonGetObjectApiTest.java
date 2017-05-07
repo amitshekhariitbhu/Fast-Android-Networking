@@ -30,6 +30,7 @@ import com.jacksonandroidnetworking.model.User;
 
 import org.junit.Rule;
 
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -102,6 +103,72 @@ public class JacksonGetObjectApiTest extends ApplicationTestCase<Application> {
                 .getAsObject(User.class, new ParsedRequestListener<User>() {
                     @Override
                     public void onResponse(User user) {
+                        assertTrue(false);
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        errorBodyRef.set(anError.getErrorBody());
+                        errorDetailRef.set(anError.getErrorDetail());
+                        errorCodeRef.set(anError.getErrorCode());
+                        latch.countDown();
+                    }
+                });
+
+        assertTrue(latch.await(2, SECONDS));
+
+        assertEquals(ANConstants.RESPONSE_FROM_SERVER_ERROR, errorDetailRef.get());
+
+        assertEquals("data", errorBodyRef.get());
+
+        assertEquals(404, errorCodeRef.get().intValue());
+
+    }
+
+    public void testObjectListGetRequest() throws InterruptedException {
+
+        server.enqueue(new MockResponse().setBody("[{\"firstName\":\"Amit\", \"lastName\":\"Shekhar\"}]"));
+
+        final AtomicReference<String> firstNameRef = new AtomicReference<>();
+        final AtomicReference<String> lastNameRef = new AtomicReference<>();
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        AndroidNetworking.get(server.url("/").toString())
+                .build()
+                .getAsObjectList(User.class, new ParsedRequestListener<List<User>>() {
+                    @Override
+                    public void onResponse(List<User> userList) {
+                        firstNameRef.set(userList.get(0).firstName);
+                        lastNameRef.set(userList.get(0).lastName);
+                        latch.countDown();
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        assertTrue(false);
+                    }
+                });
+
+        assertTrue(latch.await(2, SECONDS));
+
+        assertEquals("Amit", firstNameRef.get());
+        assertEquals("Shekhar", lastNameRef.get());
+    }
+
+    public void testObjectListGetRequest404() throws InterruptedException {
+
+        server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
+
+        final AtomicReference<String> errorDetailRef = new AtomicReference<>();
+        final AtomicReference<String> errorBodyRef = new AtomicReference<>();
+        final AtomicReference<Integer> errorCodeRef = new AtomicReference<>();
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        AndroidNetworking.get(server.url("/").toString())
+                .build()
+                .getAsObjectList(User.class, new ParsedRequestListener<List<User>>() {
+                    @Override
+                    public void onResponse(List<User> userList) {
                         assertTrue(false);
                     }
 
