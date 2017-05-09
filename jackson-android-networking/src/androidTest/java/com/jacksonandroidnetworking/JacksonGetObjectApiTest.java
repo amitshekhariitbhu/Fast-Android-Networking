@@ -227,5 +227,41 @@ public class JacksonGetObjectApiTest extends ApplicationTestCase<Application> {
 
     }
 
+    @SuppressWarnings("unchecked")
+    public void testSynchronousObjectListGetRequest() throws InterruptedException, JSONException {
+
+        server.enqueue(new MockResponse().setBody("[{\"firstName\":\"Amit\", \"lastName\":\"Shekhar\"}]"));
+
+        ANRequest request = AndroidNetworking.get(server.url("/").toString()).build();
+
+        ANResponse<List<User>> response = request.executeForObjectList(User.class);
+
+        User user = response.getResult().get(0);
+
+        assertEquals("Amit", user.firstName);
+
+        assertEquals("Shekhar", user.lastName);
+
+    }
+
+    @SuppressWarnings("unchecked")
+    public void testSynchronousObjectListGetRequest404() throws InterruptedException {
+
+        server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
+
+        ANRequest request = AndroidNetworking.get(server.url("/").toString()).build();
+
+        ANResponse<List<User>> response = request.executeForObjectList(User.class);
+
+        ANError error = response.getError();
+
+        assertEquals("data", error.getErrorBody());
+
+        assertEquals(ANConstants.RESPONSE_FROM_SERVER_ERROR, error.getErrorDetail());
+
+        assertEquals(404, error.getErrorCode());
+
+    }
+
 
 }
