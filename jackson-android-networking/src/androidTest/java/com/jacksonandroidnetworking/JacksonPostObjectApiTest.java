@@ -24,10 +24,13 @@ import android.test.ApplicationTestCase;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.ANConstants;
+import com.androidnetworking.common.ANRequest;
+import com.androidnetworking.common.ANResponse;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.ParsedRequestListener;
 import com.jacksonandroidnetworking.model.User;
 
+import org.json.JSONException;
 import org.junit.Rule;
 
 import java.util.List;
@@ -197,6 +200,45 @@ public class JacksonPostObjectApiTest extends ApplicationTestCase<Application> {
         assertEquals("data", errorBodyRef.get());
 
         assertEquals(404, errorCodeRef.get().intValue());
+
+    }
+
+    @SuppressWarnings("unchecked")
+    public void testSynchronousObjectPostRequest() throws InterruptedException, JSONException {
+
+        server.enqueue(new MockResponse().setBody("{\"firstName\":\"Amit\", \"lastName\":\"Shekhar\"}"));
+
+        ANRequest request = AndroidNetworking.post(server.url("/").toString())
+                .addBodyParameter("fistName", "Amit")
+                .addBodyParameter("lastName", "Shekhar")
+                .build();
+
+        ANResponse<User> response = request.executeForObject(User.class);
+
+        assertEquals("Amit", response.getResult().firstName);
+
+        assertEquals("Shekhar", response.getResult().lastName);
+    }
+
+    @SuppressWarnings("unchecked")
+    public void testSynchronousObjectPostRequest404() throws InterruptedException {
+
+        server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
+
+        ANRequest request = AndroidNetworking.post(server.url("/").toString())
+                .addBodyParameter("fistName", "Amit")
+                .addBodyParameter("lastName", "Shekhar")
+                .build();
+
+        ANResponse<User> response = request.executeForObject(User.class);
+
+        ANError error = response.getError();
+
+        assertEquals("data", error.getErrorBody());
+
+        assertEquals(ANConstants.RESPONSE_FROM_SERVER_ERROR, error.getErrorDetail());
+
+        assertEquals(404, error.getErrorCode());
 
     }
 
