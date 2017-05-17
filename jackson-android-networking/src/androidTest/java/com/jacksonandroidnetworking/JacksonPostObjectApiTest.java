@@ -242,4 +242,47 @@ public class JacksonPostObjectApiTest extends ApplicationTestCase<Application> {
 
     }
 
+    @SuppressWarnings("unchecked")
+    public void testSynchronousObjectListPostRequest() throws InterruptedException, JSONException {
+
+        server.enqueue(new MockResponse().setBody("[{\"firstName\":\"Amit\", \"lastName\":\"Shekhar\"}]"));
+
+        ANRequest request = AndroidNetworking.post(server.url("/").toString())
+                .addBodyParameter("fistName", "Amit")
+                .addBodyParameter("lastName", "Shekhar")
+                .build();
+
+        ANResponse<List<User>> response = request.executeForObjectList(User.class);
+
+        User user = response.getResult().get(0);
+
+        assertEquals("Amit", user.firstName);
+
+        assertEquals("Shekhar", user.lastName);
+
+    }
+
+    @SuppressWarnings("unchecked")
+    public void testSynchronousObjectListPostRequest404() throws InterruptedException {
+
+        server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
+
+        ANRequest request = AndroidNetworking.post(server.url("/").toString())
+                .addBodyParameter("fistName", "Amit")
+                .addBodyParameter("lastName", "Shekhar")
+                .build();
+
+        ANResponse<List<User>> response = request.executeForObjectList(User.class);
+
+        ANError error = response.getError();
+
+        assertEquals("data", error.getErrorBody());
+
+        assertEquals(ANConstants.RESPONSE_FROM_SERVER_ERROR, error.getErrorDetail());
+
+        assertEquals(404, error.getErrorCode());
+
+    }
+
+
 }
