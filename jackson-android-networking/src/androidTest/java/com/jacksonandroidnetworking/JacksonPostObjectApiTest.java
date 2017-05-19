@@ -363,5 +363,80 @@ public class JacksonPostObjectApiTest extends ApplicationTestCase<Application> {
         assertEquals(404, errorCodeRef.get().intValue());
     }
 
+    public void testResponseBodyAndObjectListPost() throws InterruptedException {
+
+        server.enqueue(new MockResponse().setBody("[{\"firstName\":\"Amit\", \"lastName\":\"Shekhar\"}]"));
+
+        final AtomicReference<String> firstNameRef = new AtomicReference<>();
+        final AtomicReference<String> lastNameRef = new AtomicReference<>();
+        final AtomicReference<Boolean> responseBodySuccess = new AtomicReference<>();
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        AndroidNetworking.post(server.url("/").toString())
+                .addBodyParameter("fistName", "Amit")
+                .addBodyParameter("lastName", "Shekhar")
+                .setExecutor(Executors.newSingleThreadExecutor())
+                .build()
+                .getAsOkHttpResponseAndObjectList(User.class,
+                        new OkHttpResponseAndParsedRequestListener<List<User>>() {
+                            @Override
+                            public void onResponse(Response okHttpResponse, List<User> userList) {
+                                firstNameRef.set(userList.get(0).firstName);
+                                lastNameRef.set(userList.get(0).lastName);
+                                responseBodySuccess.set(okHttpResponse.isSuccessful());
+                                latch.countDown();
+                            }
+
+                            @Override
+                            public void onError(ANError anError) {
+                                assertTrue(false);
+                            }
+                        });
+
+        assertTrue(latch.await(2, SECONDS));
+
+        assertTrue(responseBodySuccess.get());
+        assertEquals("Amit", firstNameRef.get());
+        assertEquals("Shekhar", lastNameRef.get());
+    }
+
+    public void testResponseBodyAndObjectListPost404() throws InterruptedException {
+
+        server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
+
+        final AtomicReference<String> errorBodyRef = new AtomicReference<>();
+        final AtomicReference<Integer> errorCodeRef = new AtomicReference<>();
+        final AtomicReference<String> errorDetailRef = new AtomicReference<>();
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        AndroidNetworking.post(server.url("/").toString())
+                .addBodyParameter("fistName", "Amit")
+                .addBodyParameter("lastName", "Shekhar")
+                .setExecutor(Executors.newSingleThreadExecutor())
+                .build()
+                .getAsOkHttpResponseAndObjectList(User.class,
+                        new OkHttpResponseAndParsedRequestListener<List<User>>() {
+                            @Override
+                            public void onResponse(Response okHttpResponse, List<User> userList) {
+                                assertTrue(false);
+                            }
+
+                            @Override
+                            public void onError(ANError anError) {
+                                errorBodyRef.set(anError.getErrorBody());
+                                errorDetailRef.set(anError.getErrorDetail());
+                                errorCodeRef.set(anError.getErrorCode());
+                                latch.countDown();
+                            }
+                        });
+
+        assertTrue(latch.await(2, SECONDS));
+
+        assertEquals(ANConstants.RESPONSE_FROM_SERVER_ERROR, errorDetailRef.get());
+
+        assertEquals("data", errorBodyRef.get());
+
+        assertEquals(404, errorCodeRef.get().intValue());
+    }
 
 }
