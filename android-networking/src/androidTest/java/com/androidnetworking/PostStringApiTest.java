@@ -341,7 +341,7 @@ public class PostStringApiTest extends ApplicationTestCase<Application> {
         assertEquals(404, errorCodeRef.get().intValue());
     }
 
-    public void testHeaderPost() throws InterruptedException {
+    public void testHeaderPostRequest() throws InterruptedException {
 
         server.enqueue(new MockResponse().setBody("data"));
 

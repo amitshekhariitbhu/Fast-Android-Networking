@@ -17,18 +17,19 @@
  *
  */
 
-package com.androidnetworking;
+package com.jacksonandroidnetworking;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
 
+import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.ANConstants;
 import com.androidnetworking.common.ANRequest;
 import com.androidnetworking.common.ANResponse;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.OkHttpResponseAndParsedRequestListener;
 import com.androidnetworking.interfaces.ParsedRequestListener;
-import com.androidnetworking.model.User;
+import com.jacksonandroidnetworking.model.User;
 
 import org.json.JSONException;
 import org.junit.Rule;
@@ -45,15 +46,15 @@ import okhttp3.mockwebserver.MockWebServer;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
- * Created by amitshekhar on 11/04/17.
+ * Created by amitshekhar on 05/05/17.
  */
 
-public class PostObjectApiTest extends ApplicationTestCase<Application> {
+public class JacksonGetObjectApiTest extends ApplicationTestCase<Application> {
 
     @Rule
     public final MockWebServer server = new MockWebServer();
 
-    public PostObjectApiTest() {
+    public JacksonGetObjectApiTest() {
         super(Application.class);
     }
 
@@ -61,9 +62,10 @@ public class PostObjectApiTest extends ApplicationTestCase<Application> {
     public void setUp() throws Exception {
         super.setUp();
         createApplication();
+        AndroidNetworking.setParserFactory(new JacksonParserFactory());
     }
 
-    public void testObjectPostRequest() throws InterruptedException {
+    public void testObjectGetRequest() throws InterruptedException {
 
         server.enqueue(new MockResponse().setBody("{\"firstName\":\"Amit\", \"lastName\":\"Shekhar\"}"));
 
@@ -71,9 +73,7 @@ public class PostObjectApiTest extends ApplicationTestCase<Application> {
         final AtomicReference<String> lastNameRef = new AtomicReference<>();
         final CountDownLatch latch = new CountDownLatch(1);
 
-        AndroidNetworking.post(server.url("/").toString())
-                .addBodyParameter("fistName", "Amit")
-                .addBodyParameter("lastName", "Shekhar")
+        AndroidNetworking.get(server.url("/").toString())
                 .build()
                 .getAsObject(User.class, new ParsedRequestListener<User>() {
                     @Override
@@ -95,7 +95,7 @@ public class PostObjectApiTest extends ApplicationTestCase<Application> {
         assertEquals("Shekhar", lastNameRef.get());
     }
 
-    public void testObjectPostRequest404() throws InterruptedException {
+    public void testObjectGetRequest404() throws InterruptedException {
 
         server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
 
@@ -104,9 +104,7 @@ public class PostObjectApiTest extends ApplicationTestCase<Application> {
         final AtomicReference<Integer> errorCodeRef = new AtomicReference<>();
         final CountDownLatch latch = new CountDownLatch(1);
 
-        AndroidNetworking.post(server.url("/").toString())
-                .addBodyParameter("fistName", "Amit")
-                .addBodyParameter("lastName", "Shekhar")
+        AndroidNetworking.get(server.url("/").toString())
                 .build()
                 .getAsObject(User.class, new ParsedRequestListener<User>() {
                     @Override
@@ -133,7 +131,7 @@ public class PostObjectApiTest extends ApplicationTestCase<Application> {
 
     }
 
-    public void testObjectListPostRequest() throws InterruptedException {
+    public void testObjectListGetRequest() throws InterruptedException {
 
         server.enqueue(new MockResponse().setBody("[{\"firstName\":\"Amit\", \"lastName\":\"Shekhar\"}]"));
 
@@ -141,9 +139,7 @@ public class PostObjectApiTest extends ApplicationTestCase<Application> {
         final AtomicReference<String> lastNameRef = new AtomicReference<>();
         final CountDownLatch latch = new CountDownLatch(1);
 
-        AndroidNetworking.post(server.url("/").toString())
-                .addBodyParameter("fistName", "Amit")
-                .addBodyParameter("lastName", "Shekhar")
+        AndroidNetworking.get(server.url("/").toString())
                 .build()
                 .getAsObjectList(User.class, new ParsedRequestListener<List<User>>() {
                     @Override
@@ -165,7 +161,7 @@ public class PostObjectApiTest extends ApplicationTestCase<Application> {
         assertEquals("Shekhar", lastNameRef.get());
     }
 
-    public void testObjectListPostRequest404() throws InterruptedException {
+    public void testObjectListGetRequest404() throws InterruptedException {
 
         server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
 
@@ -174,9 +170,7 @@ public class PostObjectApiTest extends ApplicationTestCase<Application> {
         final AtomicReference<Integer> errorCodeRef = new AtomicReference<>();
         final CountDownLatch latch = new CountDownLatch(1);
 
-        AndroidNetworking.post(server.url("/").toString())
-                .addBodyParameter("fistName", "Amit")
-                .addBodyParameter("lastName", "Shekhar")
+        AndroidNetworking.get(server.url("/").toString())
                 .build()
                 .getAsObjectList(User.class, new ParsedRequestListener<List<User>>() {
                     @Override
@@ -204,14 +198,11 @@ public class PostObjectApiTest extends ApplicationTestCase<Application> {
     }
 
     @SuppressWarnings("unchecked")
-    public void testSynchronousObjectPostRequest() throws InterruptedException, JSONException {
+    public void testSynchronousObjectGetRequest() throws InterruptedException, JSONException {
 
         server.enqueue(new MockResponse().setBody("{\"firstName\":\"Amit\", \"lastName\":\"Shekhar\"}"));
 
-        ANRequest request = AndroidNetworking.post(server.url("/").toString())
-                .addBodyParameter("fistName", "Amit")
-                .addBodyParameter("lastName", "Shekhar")
-                .build();
+        ANRequest request = AndroidNetworking.get(server.url("/").toString()).build();
 
         ANResponse<User> response = request.executeForObject(User.class);
 
@@ -221,14 +212,11 @@ public class PostObjectApiTest extends ApplicationTestCase<Application> {
     }
 
     @SuppressWarnings("unchecked")
-    public void testSynchronousObjectPostRequest404() throws InterruptedException {
+    public void testSynchronousObjectGetRequest404() throws InterruptedException {
 
         server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
 
-        ANRequest request = AndroidNetworking.post(server.url("/").toString())
-                .addBodyParameter("fistName", "Amit")
-                .addBodyParameter("lastName", "Shekhar")
-                .build();
+        ANRequest request = AndroidNetworking.get(server.url("/").toString()).build();
 
         ANResponse<User> response = request.executeForObject(User.class);
 
@@ -243,14 +231,11 @@ public class PostObjectApiTest extends ApplicationTestCase<Application> {
     }
 
     @SuppressWarnings("unchecked")
-    public void testSynchronousObjectListPostRequest() throws InterruptedException, JSONException {
+    public void testSynchronousObjectListGetRequest() throws InterruptedException, JSONException {
 
         server.enqueue(new MockResponse().setBody("[{\"firstName\":\"Amit\", \"lastName\":\"Shekhar\"}]"));
 
-        ANRequest request = AndroidNetworking.post(server.url("/").toString())
-                .addBodyParameter("fistName", "Amit")
-                .addBodyParameter("lastName", "Shekhar")
-                .build();
+        ANRequest request = AndroidNetworking.get(server.url("/").toString()).build();
 
         ANResponse<List<User>> response = request.executeForObjectList(User.class);
 
@@ -263,14 +248,11 @@ public class PostObjectApiTest extends ApplicationTestCase<Application> {
     }
 
     @SuppressWarnings("unchecked")
-    public void testSynchronousObjectListPostRequest404() throws InterruptedException {
+    public void testSynchronousObjectListGetRequest404() throws InterruptedException {
 
         server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
 
-        ANRequest request = AndroidNetworking.post(server.url("/").toString())
-                .addBodyParameter("fistName", "Amit")
-                .addBodyParameter("lastName", "Shekhar")
-                .build();
+        ANRequest request = AndroidNetworking.get(server.url("/").toString()).build();
 
         ANResponse<List<User>> response = request.executeForObjectList(User.class);
 
@@ -284,7 +266,7 @@ public class PostObjectApiTest extends ApplicationTestCase<Application> {
 
     }
 
-    public void testResponseBodyAndObjectPost() throws InterruptedException {
+    public void testResponseBodyAndObjectGet() throws InterruptedException {
 
         server.enqueue(new MockResponse().setBody("{\"firstName\":\"Amit\", \"lastName\":\"Shekhar\"}"));
 
@@ -293,9 +275,7 @@ public class PostObjectApiTest extends ApplicationTestCase<Application> {
         final AtomicReference<Boolean> responseBodySuccess = new AtomicReference<>();
         final CountDownLatch latch = new CountDownLatch(1);
 
-        AndroidNetworking.post(server.url("/").toString())
-                .addBodyParameter("fistName", "Amit")
-                .addBodyParameter("lastName", "Shekhar")
+        AndroidNetworking.get(server.url("/").toString())
                 .setExecutor(Executors.newSingleThreadExecutor())
                 .build()
                 .getAsOkHttpResponseAndObject(User.class,
@@ -321,7 +301,7 @@ public class PostObjectApiTest extends ApplicationTestCase<Application> {
         assertEquals("Shekhar", lastNameRef.get());
     }
 
-    public void testResponseBodyAndObjectPost404() throws InterruptedException {
+    public void testResponseBodyAndObjectGet404() throws InterruptedException {
 
         server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
 
@@ -330,9 +310,7 @@ public class PostObjectApiTest extends ApplicationTestCase<Application> {
         final AtomicReference<String> errorDetailRef = new AtomicReference<>();
         final CountDownLatch latch = new CountDownLatch(1);
 
-        AndroidNetworking.post(server.url("/").toString())
-                .addBodyParameter("fistName", "Amit")
-                .addBodyParameter("lastName", "Shekhar")
+        AndroidNetworking.get(server.url("/").toString())
                 .setExecutor(Executors.newSingleThreadExecutor())
                 .build()
                 .getAsOkHttpResponseAndObject(User.class,
@@ -360,7 +338,7 @@ public class PostObjectApiTest extends ApplicationTestCase<Application> {
         assertEquals(404, errorCodeRef.get().intValue());
     }
 
-    public void testResponseBodyAndObjectListPost() throws InterruptedException {
+    public void testResponseBodyAndObjectListGet() throws InterruptedException {
 
         server.enqueue(new MockResponse().setBody("[{\"firstName\":\"Amit\", \"lastName\":\"Shekhar\"}]"));
 
@@ -369,9 +347,7 @@ public class PostObjectApiTest extends ApplicationTestCase<Application> {
         final AtomicReference<Boolean> responseBodySuccess = new AtomicReference<>();
         final CountDownLatch latch = new CountDownLatch(1);
 
-        AndroidNetworking.post(server.url("/").toString())
-                .addBodyParameter("fistName", "Amit")
-                .addBodyParameter("lastName", "Shekhar")
+        AndroidNetworking.get(server.url("/").toString())
                 .setExecutor(Executors.newSingleThreadExecutor())
                 .build()
                 .getAsOkHttpResponseAndObjectList(User.class,
@@ -397,7 +373,7 @@ public class PostObjectApiTest extends ApplicationTestCase<Application> {
         assertEquals("Shekhar", lastNameRef.get());
     }
 
-    public void testResponseBodyAndObjectListPost404() throws InterruptedException {
+    public void testResponseBodyAndObjectListGet404() throws InterruptedException {
 
         server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
 
@@ -406,9 +382,7 @@ public class PostObjectApiTest extends ApplicationTestCase<Application> {
         final AtomicReference<String> errorDetailRef = new AtomicReference<>();
         final CountDownLatch latch = new CountDownLatch(1);
 
-        AndroidNetworking.post(server.url("/").toString())
-                .addBodyParameter("fistName", "Amit")
-                .addBodyParameter("lastName", "Shekhar")
+        AndroidNetworking.get(server.url("/").toString())
                 .setExecutor(Executors.newSingleThreadExecutor())
                 .build()
                 .getAsOkHttpResponseAndObjectList(User.class,
@@ -436,7 +410,7 @@ public class PostObjectApiTest extends ApplicationTestCase<Application> {
         assertEquals(404, errorCodeRef.get().intValue());
     }
 
-    public void testHeaderPostRequest() throws InterruptedException {
+    public void testHeaderGetRequest() throws InterruptedException {
 
         server.enqueue(new MockResponse().setBody("{\"firstName\":\"Amit\", \"lastName\":\"Shekhar\"}"));
 
@@ -446,10 +420,8 @@ public class PostObjectApiTest extends ApplicationTestCase<Application> {
         final AtomicReference<Boolean> responseBodySuccess = new AtomicReference<>();
         final CountDownLatch latch = new CountDownLatch(1);
 
-        AndroidNetworking.post(server.url("/").toString())
+        AndroidNetworking.get(server.url("/").toString())
                 .addHeaders("headerKey", "headerValue")
-                .addBodyParameter("fistName", "Amit")
-                .addBodyParameter("lastName", "Shekhar")
                 .setExecutor(Executors.newSingleThreadExecutor())
                 .build()
                 .getAsOkHttpResponseAndObject(User.class,
@@ -476,5 +448,6 @@ public class PostObjectApiTest extends ApplicationTestCase<Application> {
         assertEquals("Shekhar", lastNameRef.get());
         assertEquals("headerValue", headerRef.get());
     }
+
 
 }

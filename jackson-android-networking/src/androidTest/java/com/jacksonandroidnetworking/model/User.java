@@ -17,16 +17,15 @@
  *
  */
 
-package com.jacksonandroidnetworking;
-
-import android.app.Application;
-import android.test.ApplicationTestCase;
+package com.jacksonandroidnetworking.model;
 
 /**
- * <a href="http://d.android.com/tools/testing/testing_android.html">Testing Fundamentals</a>
+ * Created by amitshekhar on 05/05/17.
  */
-public class ApplicationTest extends ApplicationTestCase<Application> {
-    public ApplicationTest() {
-        super(Application.class);
-    }
+
+public class User {
+
+    public String firstName;
+    public String lastName;
+
 }

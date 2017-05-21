@@ -17,18 +17,19 @@
  *
  */
 
-package com.androidnetworking;
+package com.jacksonandroidnetworking;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
 
+import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.ANConstants;
 import com.androidnetworking.common.ANRequest;
 import com.androidnetworking.common.ANResponse;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.OkHttpResponseAndParsedRequestListener;
 import com.androidnetworking.interfaces.ParsedRequestListener;
-import com.androidnetworking.model.User;
+import com.jacksonandroidnetworking.model.User;
 
 import org.json.JSONException;
 import org.junit.Rule;
@@ -45,15 +46,15 @@ import okhttp3.mockwebserver.MockWebServer;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
- * Created by amitshekhar on 11/04/17.
+ * Created by amitshekhar on 13/05/17.
  */
 
-public class PostObjectApiTest extends ApplicationTestCase<Application> {
+public class JacksonPostObjectApiTest extends ApplicationTestCase<Application> {
 
     @Rule
     public final MockWebServer server = new MockWebServer();
 
-    public PostObjectApiTest() {
+    public JacksonPostObjectApiTest() {
         super(Application.class);
     }
 
@@ -61,7 +62,9 @@ public class PostObjectApiTest extends ApplicationTestCase<Application> {
     public void setUp() throws Exception {
         super.setUp();
         createApplication();
+        AndroidNetworking.setParserFactory(new JacksonParserFactory());
     }
+
 
     public void testObjectPostRequest() throws InterruptedException {
 
@@ -476,5 +479,6 @@ public class PostObjectApiTest extends ApplicationTestCase<Application> {
         assertEquals("Shekhar", lastNameRef.get());
         assertEquals("headerValue", headerRef.get());
     }
+
 
 }
