@@ -36,6 +36,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.ConnectionPool;
 import okhttp3.Headers;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -55,6 +56,8 @@ public final class InternalNetworking {
     private InternalNetworking() {
 
     }
+
+    public static ConnectionPool sConnectionPool = getConnectionPool();
 
     public static OkHttpClient sHttpClient = getClient();
 
@@ -285,6 +288,7 @@ public final class InternalNetworking {
                 .connectTimeout(60, TimeUnit.SECONDS)
                 .readTimeout(60, TimeUnit.SECONDS)
                 .writeTimeout(60, TimeUnit.SECONDS)
+                .connectionPool(sConnectionPool)
                 .build();
     }
 
@@ -294,6 +298,7 @@ public final class InternalNetworking {
                 .connectTimeout(60, TimeUnit.SECONDS)
                 .readTimeout(60, TimeUnit.SECONDS)
                 .writeTimeout(60, TimeUnit.SECONDS)
+                .connectionPool(sConnectionPool)
                 .build();
     }
 
@@ -314,4 +319,14 @@ public final class InternalNetworking {
                 .build();
     }
 
+    public static ConnectionPool getConnectionPool() {
+        if (sConnectionPool == null) {
+            return getDefaultConnectionPool();
+        }
+        return sConnectionPool;
+    }
+
+    public static ConnectionPool getDefaultConnectionPool() {
+        return new ConnectionPool();
+    }
 }

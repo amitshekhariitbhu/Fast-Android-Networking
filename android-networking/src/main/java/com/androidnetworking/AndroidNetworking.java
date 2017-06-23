@@ -77,6 +77,7 @@ public class AndroidNetworking {
                     .newBuilder()
                     .cache(Utils.getCache(context.getApplicationContext(),
                             ANConstants.MAX_CACHE_SIZE, ANConstants.CACHE_DIR_NAME))
+                    .connectionPool(InternalNetworking.sConnectionPool)
                     .build();
         }
         InternalNetworking.setClient(okHttpClient);
