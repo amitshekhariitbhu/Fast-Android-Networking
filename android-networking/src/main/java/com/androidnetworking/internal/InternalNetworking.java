@@ -27,9 +27,9 @@ import android.net.TrafficStats;
 import com.androidnetworking.common.ANConstants;
 import com.androidnetworking.common.ANRequest;
 import com.androidnetworking.common.ConnectionClassManager;
+import com.androidnetworking.error.ANError;
 import com.androidnetworking.interceptors.HttpLoggingInterceptor;
 import com.androidnetworking.interceptors.HttpLoggingInterceptor.Level;
-import com.androidnetworking.error.ANError;
 import com.androidnetworking.utils.Utils;
 
 import java.io.File;
@@ -73,12 +73,12 @@ public final class InternalNetworking {
                     break;
                 }
                 case POST: {
-                    requestBody = request.getRequestBody();
+                    requestBody = new RequestProgressBody(request.getRequestBody(), request.getUploadProgressListener());
                     builder = builder.post(requestBody);
                     break;
                 }
                 case PUT: {
-                    requestBody = request.getRequestBody();
+                    requestBody = new RequestProgressBody(request.getRequestBody(), request.getUploadProgressListener());
                     builder = builder.put(requestBody);
                     break;
                 }
@@ -92,7 +92,7 @@ public final class InternalNetworking {
                     break;
                 }
                 case PATCH: {
-                    requestBody = request.getRequestBody();
+                    requestBody = new RequestProgressBody(request.getRequestBody(), request.getUploadProgressListener());
                     builder = builder.patch(requestBody);
                     break;
                 }
