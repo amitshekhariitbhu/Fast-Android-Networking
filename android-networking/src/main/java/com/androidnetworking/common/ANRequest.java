@@ -574,7 +574,7 @@ public class ANRequest<T extends ANRequest> {
 
     public void destroy() {
         mJSONArrayRequestListener = null;
-        mJSONArrayRequestListener = null;
+        mJSONObjectRequestListener = null;
         mStringRequestListener = null;
         mBitmapRequestListener = null;
         mParsedRequestListener = null;
