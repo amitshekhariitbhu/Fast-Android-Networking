@@ -21,7 +21,7 @@ package com.androidnetworking.interfaces;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.HashMap;
+import java.util.Map;
 
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -51,7 +51,7 @@ public interface Parser<F, T> {
             return null;
         }
 
-        public HashMap<String, String> getStringMap(Object object) {
+        public Map<String, String> getStringMap(Object object) {
             return null;
         }
 
