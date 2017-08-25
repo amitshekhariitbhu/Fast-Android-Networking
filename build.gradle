@@ -22,7 +22,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.3'
+        classpath 'com.android.tools.build:gradle:2.3.3'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.4'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
         // NOTE: Do not place your application dependencies here; they belong
@@ -33,7 +33,36 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+        maven {
+            url "https://maven.google.com"
+        }
     }
+}
+
+// This block encapsulates custom properties and makes them available to all
+// modules in the project.
+ext {
+    compileSdkVersion = 26
+    buildToolsVersion = "26.0.1"
+    minSdkVersion = 14
+    targetSdkVersion = 26
+
+    supportLibVersion = "26.0.1"
+    okhttp3Version = "3.6.0"
+    gsonVersion = "2.8.0"
+    jacksonVersion = "2.8.2"
+
+    rxjavaVersion = "1.1.6"
+    rxandroidVersion = "1.2.1"
+    rxjava2Version = "2.0.5"
+    rxandroid2Version = "2.0.1"
+
+    junitVersion = "4.12"
+    espressoVersion = "2.2.2"
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.3' //we want gradle 3.3 to run this project
 }
 
 task clean(type: Delete) {
