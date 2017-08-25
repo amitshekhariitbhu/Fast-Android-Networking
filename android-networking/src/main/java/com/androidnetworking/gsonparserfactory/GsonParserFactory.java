@@ -19,13 +19,15 @@
 
 package com.androidnetworking.gsonparserfactory;
 
+import android.support.v4.util.ArrayMap;
+
 import com.androidnetworking.interfaces.Parser;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
-import java.util.HashMap;
+import java.util.Map;
 
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -78,14 +80,14 @@ public final class GsonParserFactory extends Parser.Factory {
     }
 
     @Override
-    public HashMap<String, String> getStringMap(Object object) {
+    public Map<String, String> getStringMap(Object object) {
         try {
-            Type type = new TypeToken<HashMap<String, String>>() {
+            Type type = new TypeToken<ArrayMap<String, String>>() {
             }.getType();
             return gson.fromJson(gson.toJson(object), type);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return new HashMap<>();
+        return new ArrayMap<>();
     }
 }

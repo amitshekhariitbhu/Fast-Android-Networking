@@ -21,6 +21,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.v4.util.ArrayMap;
 import android.widget.ImageView;
 
 import com.androidnetworking.AndroidNetworking;
@@ -29,8 +30,8 @@ import com.androidnetworking.common.ANRequest;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.BitmapRequestListener;
 
-import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 /**
  * Created by amitshekhar on 23/03/16.
@@ -49,11 +50,11 @@ public class ANImageLoader {
 
     private final ImageCache mCache;
 
-    private final HashMap<String, BatchedImageRequest> mInFlightRequests =
-            new HashMap<String, BatchedImageRequest>();
+    private final Map<String, BatchedImageRequest> mInFlightRequests =
+            new ArrayMap<String, BatchedImageRequest>();
 
-    private final HashMap<String, BatchedImageRequest> mBatchedResponses =
-            new HashMap<String, BatchedImageRequest>();
+    private final Map<String, BatchedImageRequest> mBatchedResponses =
+            new ArrayMap<>();
 
     private final Handler mHandler = new Handler(Looper.getMainLooper());
 

@@ -28,6 +28,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
+import java.util.Map;
 
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -85,7 +86,7 @@ public final class JacksonParserFactory extends Parser.Factory {
     }
 
     @Override
-    public HashMap<String, String> getStringMap(Object object) {
+    public Map<String, String> getStringMap(Object object) {
         try {
             TypeReference<HashMap<String, String>> typeRef
                     = new TypeReference<HashMap<String, String>>() {
