@@ -61,6 +61,10 @@ public class MainActivity extends AppCompatActivity {
         makeJSONObjectRequest();
     }
 
+    public void makeDownloadLargeFileRequests(View v) {
+        startActivity(DownloadLargeFileActivity.callIntent(this));
+    }
+
     private void makeJSONArrayRequest() {
         AndroidNetworking.get(ApiEndPoint.BASE_URL + ApiEndPoint.GET_JSON_ARRAY)
                 .setTag(this)
@@ -141,10 +145,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void makeRequests(View view) {
-        for (int i = 0; i < 10; i++) {
-            makeJSONArrayRequest();
-            makeJSONObjectRequest();
-        }
+//        for (int i = 0; i < 10; i++) {
+        makeJSONArrayRequest();
+        makeJSONObjectRequest();
+//        }
     }
 
     public void cancelAllRequests(View view) {
