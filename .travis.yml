@@ -19,6 +19,11 @@ android:
     - extra-android-m2repository
     - android-23
     - android-19
+    
+ env:
+  matrix:
+    - ANDROID_TARGET=android-19 ANDROID_ABI=armeabi-v7a
+    - ANDROID_TARGET=android-23 ANDROID_ABI=armeabi-v7a   
 
 # Emulator Management: Create, Start and Wait
 before_script:
