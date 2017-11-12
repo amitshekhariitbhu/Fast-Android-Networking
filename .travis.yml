@@ -15,7 +15,7 @@ env:
 android:
   components:
     - build-tools-22.0.1
-    - android-22
+    - android-23
     - extra
     - addon
     - sys-img-armeabi-v7a-android-22
@@ -28,4 +28,4 @@ before_script:
   - adb shell input keyevent 82 &
   
 script:
-    - ./gradlew connectedAndroidTest
+  - ./gradlew connectedAndroidTest
