@@ -15,7 +15,7 @@
  *    limitations under the License.
  */
 
-package com.androidnetworking;
+package com.networking;
 
 import org.junit.Test;
 

@@ -19,6 +19,7 @@ package com.androidnetworking.common;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.v4.util.ArrayMap;
 import android.widget.ImageView;
 
 import com.androidnetworking.core.Core;
@@ -50,7 +51,6 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.lang.reflect.Type;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executor;
@@ -84,13 +84,13 @@ public class ANRequest<T extends ANRequest> {
     private int sequenceNumber;
     private Object mTag;
     private ResponseType mResponseType;
-    private HashMap<String, String> mHeadersMap = new HashMap<>();
-    private HashMap<String, String> mBodyParameterMap = new HashMap<>();
-    private HashMap<String, String> mUrlEncodedFormBodyParameterMap = new HashMap<>();
-    private HashMap<String, String> mMultiPartParameterMap = new HashMap<>();
-    private HashMap<String, String> mQueryParameterMap = new HashMap<>();
-    private HashMap<String, String> mPathParameterMap = new HashMap<>();
-    private HashMap<String, File> mMultiPartFileMap = new HashMap<>();
+    private Map<String, String> mHeadersMap = new ArrayMap<>();
+    private Map<String, String> mBodyParameterMap = new ArrayMap<>();
+    private Map<String, String> mUrlEncodedFormBodyParameterMap = new ArrayMap<>();
+    private Map<String, String> mMultiPartParameterMap = new ArrayMap<>();
+    private Map<String, String> mQueryParameterMap = new ArrayMap<>();
+    private Map<String, String> mPathParameterMap = new ArrayMap<>();
+    private Map<String, File> mMultiPartFileMap = new ArrayMap<>();
     private String mDirPath;
     private String mFileName;
     private String mApplicationJsonString = null;
@@ -401,11 +401,11 @@ public class ANRequest<T extends ANRequest> {
 
     public String getUrl() {
         String tempUrl = mUrl;
-        for (HashMap.Entry<String, String> entry : mPathParameterMap.entrySet()) {
+        for (Map.Entry<String, String> entry : mPathParameterMap.entrySet()) {
             tempUrl = tempUrl.replace("{" + entry.getKey() + "}", String.valueOf(entry.getValue()));
         }
         HttpUrl.Builder urlBuilder = HttpUrl.parse(tempUrl).newBuilder();
-        for (HashMap.Entry<String, String> entry : mQueryParameterMap.entrySet()) {
+        for (Map.Entry<String, String> entry : mQueryParameterMap.entrySet()) {
             urlBuilder.addQueryParameter(entry.getKey(), entry.getValue());
         }
         return urlBuilder.build().toString();
@@ -814,10 +814,10 @@ public class ANRequest<T extends ANRequest> {
         } else {
             FormBody.Builder builder = new FormBody.Builder();
             try {
-                for (HashMap.Entry<String, String> entry : mBodyParameterMap.entrySet()) {
+                for (Map.Entry<String, String> entry : mBodyParameterMap.entrySet()) {
                     builder.add(entry.getKey(), entry.getValue());
                 }
-                for (HashMap.Entry<String, String> entry : mUrlEncodedFormBodyParameterMap.entrySet()) {
+                for (Map.Entry<String, String> entry : mUrlEncodedFormBodyParameterMap.entrySet()) {
                     builder.addEncoded(entry.getKey(), entry.getValue());
                 }
             } catch (Exception e) {
@@ -832,12 +832,12 @@ public class ANRequest<T extends ANRequest> {
                 .Builder()
                 .setType((customMediaType == null) ? MultipartBody.FORM : customMediaType);
         try {
-            for (HashMap.Entry<String, String> entry : mMultiPartParameterMap.entrySet()) {
+            for (Map.Entry<String, String> entry : mMultiPartParameterMap.entrySet()) {
                 builder.addPart(Headers.of("Content-Disposition",
                         "form-data; name=\"" + entry.getKey() + "\""),
                         RequestBody.create(null, entry.getValue()));
             }
-            for (HashMap.Entry<String, File> entry : mMultiPartFileMap.entrySet()) {
+            for (Map.Entry<String, File> entry : mMultiPartFileMap.entrySet()) {
                 String fileName = entry.getValue().getName();
                 RequestBody fileBody = RequestBody.create(MediaType.parse(Utils.getMimeType(fileName)),
                         entry.getValue());
@@ -854,7 +854,7 @@ public class ANRequest<T extends ANRequest> {
     public Headers getHeaders() {
         Headers.Builder builder = new Headers.Builder();
         try {
-            for (HashMap.Entry<String, String> entry : mHeadersMap.entrySet()) {
+            for (Map.Entry<String, String> entry : mHeadersMap.entrySet()) {
                 builder.add(entry.getKey(), entry.getValue());
             }
         } catch (Exception e) {
@@ -880,9 +880,9 @@ public class ANRequest<T extends ANRequest> {
         private int mMaxWidth;
         private int mMaxHeight;
         private ImageView.ScaleType mScaleType;
-        private HashMap<String, String> mHeadersMap = new HashMap<>();
-        private HashMap<String, String> mQueryParameterMap = new HashMap<>();
-        private HashMap<String, String> mPathParameterMap = new HashMap<>();
+        private Map<String, String> mHeadersMap = new ArrayMap<>();
+        private Map<String, String> mQueryParameterMap = new ArrayMap<>();
+        private Map<String, String> mPathParameterMap = new ArrayMap<>();
         private CacheControl mCacheControl;
         private Executor mExecutor;
         private OkHttpClient mOkHttpClient;
@@ -1091,11 +1091,11 @@ public class ANRequest<T extends ANRequest> {
         private String mStringBody = null;
         private byte[] mByte = null;
         private File mFile = null;
-        private HashMap<String, String> mHeadersMap = new HashMap<>();
-        private HashMap<String, String> mBodyParameterMap = new HashMap<>();
-        private HashMap<String, String> mUrlEncodedFormBodyParameterMap = new HashMap<>();
-        private HashMap<String, String> mQueryParameterMap = new HashMap<>();
-        private HashMap<String, String> mPathParameterMap = new HashMap<>();
+        private Map<String, String> mHeadersMap = new ArrayMap<>();
+        private Map<String, String> mBodyParameterMap = new ArrayMap<>();
+        private Map<String, String> mUrlEncodedFormBodyParameterMap = new ArrayMap<>();
+        private Map<String, String> mQueryParameterMap = new ArrayMap<>();
+        private Map<String, String> mPathParameterMap = new ArrayMap<>();
         private CacheControl mCacheControl;
         private Executor mExecutor;
         private OkHttpClient mOkHttpClient;
@@ -1339,9 +1339,9 @@ public class ANRequest<T extends ANRequest> {
         private Priority mPriority = Priority.MEDIUM;
         private String mUrl;
         private Object mTag;
-        private HashMap<String, String> mHeadersMap = new HashMap<>();
-        private HashMap<String, String> mQueryParameterMap = new HashMap<>();
-        private HashMap<String, String> mPathParameterMap = new HashMap<>();
+        private Map<String, String> mHeadersMap = new ArrayMap<>();
+        private Map<String, String> mQueryParameterMap = new ArrayMap<>();
+        private Map<String, String> mPathParameterMap = new ArrayMap<>();
         private String mDirPath;
         private String mFileName;
         private CacheControl mCacheControl;
@@ -1503,11 +1503,11 @@ public class ANRequest<T extends ANRequest> {
         private Priority mPriority = Priority.MEDIUM;
         private String mUrl;
         private Object mTag;
-        private HashMap<String, String> mHeadersMap = new HashMap<>();
-        private HashMap<String, String> mMultiPartParameterMap = new HashMap<>();
-        private HashMap<String, String> mQueryParameterMap = new HashMap<>();
-        private HashMap<String, String> mPathParameterMap = new HashMap<>();
-        private HashMap<String, File> mMultiPartFileMap = new HashMap<>();
+        private Map<String, String> mHeadersMap = new ArrayMap<>();
+        private Map<String, String> mMultiPartParameterMap = new ArrayMap<>();
+        private Map<String, String> mQueryParameterMap = new ArrayMap<>();
+        private Map<String, String> mPathParameterMap = new ArrayMap<>();
+        private Map<String, File> mMultiPartFileMap = new ArrayMap<>();
         private CacheControl mCacheControl;
         private int mPercentageThresholdForCancelling = 0;
         private Executor mExecutor;
