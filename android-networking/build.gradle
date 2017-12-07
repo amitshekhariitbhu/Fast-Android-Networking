@@ -42,5 +42,6 @@ dependencies {
     androidTestCompile "com.squareup.okhttp3:mockwebserver:$rootProject.ext.mockWebServerVersion"
     compile 'com.squareup.okhttp3:okhttp:3.9.1'
     compile "com.google.code.gson:gson:$rootProject.ext.gsonVersion"
+    compile "com.android.support:appcompat-v7:$rootProject.ext.supportAppCompatVersion"
 }
 //apply from: 'upload.gradle'
