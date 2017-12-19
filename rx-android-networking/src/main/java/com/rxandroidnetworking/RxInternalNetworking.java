@@ -262,7 +262,7 @@ public class RxInternalNetworking {
             } catch (Exception e) {
                 Exceptions.throwIfFatal(e);
                 if (!subscriber.isUnsubscribed()) {
-                    subscriber.onError(Utils.getErrorForNetworkOnMainThreadOrConnection(e));
+                    subscriber.onError(Utils.getErrorForConnection(new ANError(e)));
                 }
             } finally {
                 SourceCloseUtil.close(okHttpResponse, request);
@@ -347,7 +347,7 @@ public class RxInternalNetworking {
             } catch (Exception e) {
                 Exceptions.throwIfFatal(e);
                 if (!subscriber.isUnsubscribed()) {
-                    subscriber.onError(Utils.getErrorForNetworkOnMainThreadOrConnection(e));
+                    subscriber.onError(Utils.getErrorForConnection(new ANError(e)));
                 }
             }
         }
@@ -442,7 +442,7 @@ public class RxInternalNetworking {
             } catch (Exception e) {
                 Exceptions.throwIfFatal(e);
                 if (!subscriber.isUnsubscribed()) {
-                    subscriber.onError(Utils.getErrorForNetworkOnMainThreadOrConnection(e));
+                    subscriber.onError(Utils.getErrorForConnection(new ANError(e)));
                 }
             } finally {
                 SourceCloseUtil.close(okHttpResponse, request);

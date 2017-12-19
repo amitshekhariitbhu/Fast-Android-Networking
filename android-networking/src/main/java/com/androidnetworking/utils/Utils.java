@@ -20,8 +20,6 @@ package com.androidnetworking.utils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Build;
-import android.os.NetworkOnMainThreadException;
 import android.widget.ImageView;
 
 import com.androidnetworking.common.ANConstants;
@@ -237,10 +235,4 @@ public class Utils {
         return error;
     }
 
-    public static ANError getErrorForNetworkOnMainThreadOrConnection(Exception e) {
-        ANError error = new ANError(e);
-        error.setErrorDetail(ANConstants.CONNECTION_ERROR);
-        error.setErrorCode(0);
-        return error;
-    }
 }
