@@ -30,20 +30,20 @@ import com.androidnetworking.model.Progress;
  */
 public class UploadProgressHandler extends Handler {
 
-    private final UploadProgressListener mUploadProgressListenerWeakRef;
+    private final UploadProgressListener mUploadProgressListener;
 
     public UploadProgressHandler(UploadProgressListener uploadProgressListener) {
         super(Looper.getMainLooper());
-        mUploadProgressListenerWeakRef = uploadProgressListener;
+        mUploadProgressListener = uploadProgressListener;
     }
 
     @Override
     public void handleMessage(Message msg) {
         switch (msg.what) {
             case ANConstants.UPDATE:
-                if (mUploadProgressListenerWeakRef != null) {
+                if (mUploadProgressListener != null) {
                     final Progress progress = (Progress) msg.obj;
-                    mUploadProgressListenerWeakRef.onProgress(progress.currentBytes, progress.totalBytes);
+                    mUploadProgressListener.onProgress(progress.currentBytes, progress.totalBytes);
                 }
                 break;
             default:

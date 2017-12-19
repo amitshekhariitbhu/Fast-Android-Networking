@@ -73,12 +73,12 @@ public final class InternalNetworking {
                     break;
                 }
                 case POST: {
-                    requestBody = new RequestProgressBody(request.getRequestBody(), request.getUploadProgressListener());
+                    requestBody = request.getRequestBody();
                     builder = builder.post(requestBody);
                     break;
                 }
                 case PUT: {
-                    requestBody = new RequestProgressBody(request.getRequestBody(), request.getUploadProgressListener());
+                    requestBody = request.getRequestBody();
                     builder = builder.put(requestBody);
                     break;
                 }
@@ -92,7 +92,7 @@ public final class InternalNetworking {
                     break;
                 }
                 case PATCH: {
-                    requestBody = new RequestProgressBody(request.getRequestBody(), request.getUploadProgressListener());
+                    requestBody = request.getRequestBody();
                     builder = builder.patch(requestBody);
                     break;
                 }
