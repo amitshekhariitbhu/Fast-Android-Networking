@@ -39,7 +39,10 @@ import java.util.List;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
+import io.reactivex.Single;
+import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Function;
@@ -72,7 +75,7 @@ public class Rx2OperatorExampleActivity extends AppCompatActivity {
 
     private void testApi() {
 
-        Observable<List<User>> observable = Rx2AndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAllUsers/{pageNumber}")
+        Single<List<User>> single = Rx2AndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAllUsers/{pageNumber}")
                 .addPathParameter("pageNumber", "0")
                 .addQueryParameter("limit", "3")
                 .build()
@@ -85,30 +88,19 @@ public class Rx2OperatorExampleActivity extends AppCompatActivity {
                         Log.d(TAG, " isFromCache : " + isFromCache);
                     }
                 })
-                .getObjectListObservable(User.class);
+                .getObjectListSingle(User.class);
 
         // first observer
-        observable.subscribeOn(Schedulers.io())
+        single.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<List<User>>() {
-
+                .subscribe(new SingleObserver<List<User>>() {
                     @Override
-                    public void onError(Throwable e) {
-                        Utils.logError(TAG + "_1", e);
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        Log.d(TAG + "_1", "onComplete Detail : getAllUsers completed");
-                    }
-
-                    @Override
-                    public void onSubscribe(Disposable d) {
+                    public void onSubscribe(@NonNull Disposable disposable) {
                         Log.d(TAG + "_1", "onSubscribe");
                     }
 
                     @Override
-                    public void onNext(List<User> users) {
+                    public void onSuccess(@NonNull List<User> users) {
                         Log.d(TAG + "_1", "userList size : " + users.size());
                         for (User user : users) {
                             Log.d(TAG, "id : " + user.id);
@@ -116,36 +108,35 @@ public class Rx2OperatorExampleActivity extends AppCompatActivity {
                             Log.d(TAG, "lastname : " + user.lastname);
                         }
                     }
+
+                    @Override
+                    public void onError(@NonNull Throwable throwable) {
+                        Utils.logError(TAG + "_1", throwable);
+                    }
                 });
 
         // second observer
-        observable.subscribeOn(Schedulers.io())
+        single.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<List<User>>() {
-
+                .subscribe(new SingleObserver<List<User>>() {
                     @Override
-                    public void onError(Throwable e) {
-                        Utils.logError(TAG + "_2", e);
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        Log.d(TAG + "_2", "onComplete Detail : getAllUsers completed");
-                    }
-
-                    @Override
-                    public void onSubscribe(Disposable d) {
+                    public void onSubscribe(@NonNull Disposable disposable) {
                         Log.d(TAG + "_2", "onSubscribe");
                     }
 
                     @Override
-                    public void onNext(List<User> users) {
+                    public void onSuccess(@NonNull List<User> users) {
                         Log.d(TAG + "_2", "userList size : " + users.size());
                         for (User user : users) {
                             Log.d(TAG, "id : " + user.id);
                             Log.d(TAG, "firstname : " + user.firstname);
                             Log.d(TAG, "lastname : " + user.lastname);
                         }
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable throwable) {
+                        Utils.logError(TAG + "_2", throwable);
                     }
                 });
     }
@@ -158,7 +149,7 @@ public class Rx2OperatorExampleActivity extends AppCompatActivity {
         Rx2AndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAnUser/{userId}")
                 .addPathParameter("userId", "1")
                 .build()
-                .getObjectObservable(ApiUser.class)
+                .getObjectSingle(ApiUser.class)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(new Function<ApiUser, User>() {
@@ -170,27 +161,22 @@ public class Rx2OperatorExampleActivity extends AppCompatActivity {
                         return user;
                     }
                 })
-                .subscribe(new Observer<User>() {
+                .subscribe(new SingleObserver<User>() {
                     @Override
-                    public void onSubscribe(Disposable d) {
+                    public void onSubscribe(@NonNull Disposable disposable) {
 
                     }
 
                     @Override
-                    public void onNext(User user) {
+                    public void onSuccess(@NonNull User user) {
                         Log.d(TAG, "user id : " + user.id);
                         Log.d(TAG, "user firstname : " + user.firstname);
                         Log.d(TAG, "user lastname : " + user.lastname);
                     }
 
                     @Override
-                    public void onError(Throwable e) {
-                        Utils.logError(TAG, e);
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        Log.d(TAG, "onComplete");
+                    public void onError(@NonNull Throwable throwable) {
+                        Utils.logError(TAG, throwable);
                     }
                 });
     }

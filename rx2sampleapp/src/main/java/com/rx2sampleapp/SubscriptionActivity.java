@@ -27,10 +27,11 @@ import android.view.View;
 import com.rx2androidnetworking.Rx2AndroidNetworking;
 import com.rx2sampleapp.utils.Utils;
 
-import io.reactivex.Observable;
+import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.observers.DisposableObserver;
+import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 
@@ -58,35 +59,30 @@ public class SubscriptionActivity extends AppCompatActivity {
         disposables.clear();
     }
 
-    public Observable<String> getObservable() {
+    public Completable getCompletable() {
         return Rx2AndroidNetworking.download(URL, dirPath, fileName)
                 .build()
-                .getDownloadObservable();
+                .getDownloadCompletable();
     }
 
-    private DisposableObserver<String> getDisposableObserver() {
+    private DisposableCompletableObserver getDisposableObserver() {
 
-        return new DisposableObserver<String>() {
-
-            @Override
-            public void onNext(String response) {
-                Log.d(TAG, "onResponse response : " + response);
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Log.d(TAG, "onError " + e.getMessage());
-            }
-
+        return new DisposableCompletableObserver() {
             @Override
             public void onComplete() {
                 Log.d(TAG, "onCompleted");
             }
+
+            @Override
+            public void onError(@NonNull Throwable throwable) {
+                Log.d(TAG, "onError " + throwable.getMessage());
+            }
         };
+
     }
 
     public void downloadFile(View view) {
-        disposables.add(getObservable()
+        disposables.add(getCompletable()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(getDisposableObserver()));
