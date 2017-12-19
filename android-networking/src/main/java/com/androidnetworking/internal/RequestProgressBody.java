@@ -60,7 +60,26 @@ public class RequestProgressBody extends RequestBody {
         if (bufferedSink == null) {
             bufferedSink = Okio.buffer(sink(sink));
         }
-        requestBody.writeTo(bufferedSink);
+
+        if (uploadProgressHandler != null) {
+            Buffer source = new Buffer();
+            requestBody.writeTo(source.emit());
+            long contentLength = contentLength();
+            long bytesWritten = 0;
+            long read;
+            while ((read = source.read(bufferedSink.buffer(), 2048)) != -1) {
+                bytesWritten += read;
+                sink.flush();
+
+                if (uploadProgressHandler != null) {
+                    uploadProgressHandler.obtainMessage(ANConstants.UPDATE,
+                            new Progress(bytesWritten, contentLength)).sendToTarget();
+                }
+            }
+        } else {
+            requestBody.writeTo(bufferedSink);
+        }
+
         bufferedSink.flush();
     }
 
