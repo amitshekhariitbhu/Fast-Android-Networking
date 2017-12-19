@@ -34,6 +34,10 @@ Fast Android Networking Library takes care of each and everything. So you don't 
 
 ### Another awesome library for debugging databases and shared preferences, [Check here](https://github.com/amitshekhariitbhu/Android-Debug-Database)
 
+### RxJava2 + Fast Android Networking + Dagger2 with MVVM Architecture Project, [Check here](https://github.com/MindorksOpenSource/android-mvvm-architecture)
+
+### PRDownloader library for downloading file with pause and resume support, [Check here](https://github.com/MindorksOpenSource/PRDownloader)
+
 ### Find this project useful ? :heart:
 * Support it by clicking the :star: button on the upper right of this page. :v:
 
@@ -601,7 +605,7 @@ As it uses [OkHttp](http://square.github.io/okhttp/) as a networking layer, it s
 * Fast Android Networking Library supports response caching which avoids the network completely for repeat requests
 
 ### Difference over other Networking Library
-* In Fast Android Networking Library, OkHttpClient can be customized for every request easily.
+* In Fast Android Networking Library, OkHttpClient can be customized for every request easily — like timeout customization, etc. for each request.
 * As Fast Android Networking Library uses [OkHttp](http://square.github.io/okhttp/) and [Okio](https://github.com/square/okio), it is faster.
 * Single library for all type of networking.
 * Supports RxJava, RxJava2 -> [Check here](https://amitshekhariitbhu.github.io/Fast-Android-Networking/rxjava2_support.html)
@@ -609,12 +613,12 @@ As it uses [OkHttp](http://square.github.io/okhttp/) as a networking layer, it s
 * Executor can be passed to any request to get response in another thread.
 * Complete analytics of any request can be obtained.
 * All types of customization is possible.
-* Immediate Request is really immediate now.
-* Prefetching of any request can be done so that it gives instant data when required from cache.
-* Proper cancellation of request.
-* Do not cancel a request if completed more than a threshold percentage.
-* Simple interface to make any type of request.
-* Proper Response Caching, hence reducing bandwidth usage.  
+* Immediate Request really is immediate now.
+* Prefetching of any request can be done so that it gives instant data when required from the cache.
+* Proper request canceling.
+* Prevents cancellation of a request if it’s completed more than a specific threshold percentage.
+* A simple interface to make any type of request.
+* Proper Response Caching — which leads to reduced bandwidth usage. 
 
 ### TODO
 * Integration with other library
