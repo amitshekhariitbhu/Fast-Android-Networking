@@ -33,7 +33,12 @@ import org.json.JSONObject;
 
 import java.util.List;
 
+import io.reactivex.BackpressureStrategy;
+import io.reactivex.Completable;
+import io.reactivex.Flowable;
+import io.reactivex.Maybe;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 
 /**
  * Created by Prashant Gupta on 30-01-2017.
@@ -68,6 +73,22 @@ public class Rx2ANRequest extends ANRequest<Rx2ANRequest> {
         }
     }
 
+    public Flowable<JSONObject> getJSONObjectFlowable() {
+        return getJSONObjectObservable().toFlowable(BackpressureStrategy.LATEST);
+    }
+
+    public Single<JSONObject> getJSONObjectSingle() {
+        return getJSONObjectObservable().singleOrError();
+    }
+
+    public Maybe<JSONObject> getJSONObjectMaybe() {
+        return getJSONObjectObservable().singleElement();
+    }
+
+    public Completable getJSONObjectCompletable() {
+        return getJSONObjectObservable().ignoreElements();
+    }
+
     public Observable<JSONArray> getJSONArrayObservable() {
         this.setResponseAs(ResponseType.JSON_ARRAY);
         if (this.getRequestType() == RequestType.SIMPLE) {
@@ -77,6 +98,22 @@ public class Rx2ANRequest extends ANRequest<Rx2ANRequest> {
         } else {
             return null;
         }
+    }
+
+    public Flowable<JSONArray> getJSONArrayFlowable() {
+        return getJSONArrayObservable().toFlowable(BackpressureStrategy.LATEST);
+    }
+
+    public Single<JSONArray> getJSONArraySingle() {
+        return getJSONArrayObservable().singleOrError();
+    }
+
+    public Maybe<JSONArray> getJSONArrayMaybe() {
+        return getJSONArrayObservable().singleElement();
+    }
+
+    public Completable getJSONArrayCompletable() {
+        return getJSONArrayObservable().ignoreElements();
     }
 
     public Observable<Bitmap> getBitmapObservable() {
@@ -90,6 +127,22 @@ public class Rx2ANRequest extends ANRequest<Rx2ANRequest> {
         }
     }
 
+    public Flowable<Bitmap> getBitmapFlowable() {
+        return getBitmapObservable().toFlowable(BackpressureStrategy.LATEST);
+    }
+
+    public Single<Bitmap> getBitmapSingle() {
+        return getBitmapObservable().singleOrError();
+    }
+
+    public Maybe<Bitmap> getBitmapMaybe() {
+        return getBitmapObservable().singleElement();
+    }
+
+    public Completable getBitmapCompletable() {
+        return getBitmapObservable().ignoreElements();
+    }
+
     public Observable<String> getStringObservable() {
         this.setResponseAs(ResponseType.STRING);
         if (this.getRequestType() == RequestType.SIMPLE) {
@@ -101,8 +154,40 @@ public class Rx2ANRequest extends ANRequest<Rx2ANRequest> {
         }
     }
 
+    public Flowable<String> getStringFlowable() {
+        return getStringObservable().toFlowable(BackpressureStrategy.LATEST);
+    }
+
+    public Single<String> getStringSingle() {
+        return getStringObservable().singleOrError();
+    }
+
+    public Maybe<String> getStringMaybe() {
+        return getStringObservable().singleElement();
+    }
+
+    public Completable getStringCompletable() {
+        return getStringObservable().ignoreElements();
+    }
+
     public Observable<String> getDownloadObservable() {
         return Rx2InternalNetworking.generateDownloadObservable(this);
+    }
+
+    public Flowable<String> getDownloadFlowable() {
+        return getDownloadObservable().toFlowable(BackpressureStrategy.LATEST);
+    }
+
+    public Single<String> getDownloadSingle() {
+        return getDownloadObservable().singleOrError();
+    }
+
+    public Maybe<String> getDownloadMaybe() {
+        return getDownloadObservable().singleElement();
+    }
+
+    public Completable getDownloadCompletable() {
+        return getDownloadObservable().ignoreElements();
     }
 
     public <T> Observable<T> getParseObservable(TypeToken<T> typeToken) {
@@ -117,6 +202,22 @@ public class Rx2ANRequest extends ANRequest<Rx2ANRequest> {
         }
     }
 
+    public <T> Flowable<T> getParseFlowable(TypeToken<T> typeToken) {
+        return getParseObservable(typeToken).toFlowable(BackpressureStrategy.LATEST);
+    }
+
+    public <T> Single<T> getParseSingle(TypeToken<T> typeToken) {
+        return getParseObservable(typeToken).singleOrError();
+    }
+
+    public <T> Maybe<T> getParseMaybe(TypeToken<T> typeToken) {
+        return getParseObservable(typeToken).singleElement();
+    }
+
+    public <T> Completable getParseCompletable(TypeToken<T> typeToken) {
+        return getParseObservable(typeToken).ignoreElements();
+    }
+
     public <T> Observable<T> getObjectObservable(Class<T> objectClass) {
         this.setType(objectClass);
         this.setResponseAs(ResponseType.PARSED);
@@ -129,6 +230,22 @@ public class Rx2ANRequest extends ANRequest<Rx2ANRequest> {
         }
     }
 
+    public <T> Flowable<T> getObjectFlowable(Class<T> objectClass) {
+        return getObjectObservable(objectClass).toFlowable(BackpressureStrategy.LATEST);
+    }
+
+    public <T> Single<T> getObjectSingle(Class<T> objectClass) {
+        return getObjectObservable(objectClass).singleOrError();
+    }
+
+    public <T> Maybe<T> getObjectMaybe(Class<T> objectClass) {
+        return getObjectObservable(objectClass).singleElement();
+    }
+
+    public <T> Completable getObjectCompletable(Class<T> objectClass) {
+        return getObjectObservable(objectClass).ignoreElements();
+    }
+
     public <T> Observable<List<T>> getObjectListObservable(Class<T> objectClass) {
         this.setType($Gson$Types.newParameterizedTypeWithOwner(null, List.class, objectClass));
         this.setResponseAs(ResponseType.PARSED);
@@ -139,6 +256,22 @@ public class Rx2ANRequest extends ANRequest<Rx2ANRequest> {
         } else {
             return null;
         }
+    }
+
+    public <T> Flowable<List<T>> getObjectListFlowable(Class<T> objectClass) {
+        return getObjectListObservable(objectClass).toFlowable(BackpressureStrategy.LATEST);
+    }
+
+    public <T> Single<List<T>> getObjectListSingle(Class<T> objectClass) {
+        return getObjectListObservable(objectClass).singleOrError();
+    }
+
+    public <T> Maybe<List<T>> getObjectListMaybe(Class<T> objectClass) {
+        return getObjectListObservable(objectClass).singleElement();
+    }
+
+    public <T> Completable getObjectListCompletable(Class<T> objectClass) {
+        return getObjectListObservable(objectClass).ignoreElements();
     }
 
     public static class GetRequestBuilder extends ANRequest.GetRequestBuilder<GetRequestBuilder> {
