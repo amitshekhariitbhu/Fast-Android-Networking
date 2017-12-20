@@ -49,6 +49,7 @@ public class InternalRunnable implements Runnable {
 
     @Override
     public void run() {
+        request.setRunning(true);
         switch (request.getRequestType()) {
             case SIMPLE:
                 executeSimpleRequest();
@@ -60,6 +61,7 @@ public class InternalRunnable implements Runnable {
                 executeUploadRequest();
                 break;
         }
+        request.setRunning(false);
     }
 
     private void executeSimpleRequest() {

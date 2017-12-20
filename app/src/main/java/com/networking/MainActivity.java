@@ -148,7 +148,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void cancelAllRequests(View view) {
+        Log.d(TAG, "isRequestRunning before cancel : " + AndroidNetworking.isRequestRunning(this));
         AndroidNetworking.cancel(this);
+        Log.d(TAG, "isRequestRunning after cancel : " + AndroidNetworking.isRequestRunning(this));
     }
 
     public void loadImageDirect(View view) {

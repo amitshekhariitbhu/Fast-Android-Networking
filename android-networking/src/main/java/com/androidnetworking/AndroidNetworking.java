@@ -321,6 +321,16 @@ public class AndroidNetworking {
     }
 
     /**
+     * Method to find if the request is running or not
+     *
+     * @param tag The tag with which request running status is to be checked
+     * @return The request is running or not
+     */
+    public static boolean isRequestRunning(Object tag) {
+        return ANRequestQueue.getInstance().isRequestRunning(tag);
+    }
+
+    /**
      * Shuts AndroidNetworking down
      */
     public static void shutDown() {

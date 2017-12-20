@@ -111,6 +111,7 @@ public class ANRequest<T extends ANRequest> {
     private int mProgress;
     private boolean isCancelled;
     private boolean isDelivered;
+    private boolean isRunning;
     private int mPercentageThresholdForCancelling = 0;
     private JSONArrayRequestListener mJSONArrayRequestListener;
     private JSONObjectRequestListener mJSONObjectRequestListener;
@@ -548,6 +549,7 @@ public class ANRequest<T extends ANRequest> {
             if (forceCancel || mPercentageThresholdForCancelling == 0
                     || mProgress < mPercentageThresholdForCancelling) {
                 isCancelled = true;
+                isRunning = false;
                 if (call != null) {
                     call.cancel();
                 }
@@ -565,6 +567,14 @@ public class ANRequest<T extends ANRequest> {
 
     public boolean isCanceled() {
         return isCancelled;
+    }
+
+    public boolean isRunning() {
+        return isRunning;
+    }
+
+    public void setRunning(boolean running) {
+        isRunning = running;
     }
 
     public Call getCall() {
