@@ -55,7 +55,7 @@ Fast Android Networking Library supports Android 2.3 (Gingerbread) and later.
 
 Add this in your build.gradle
 ```groovy
-compile 'com.amitshekhar.android:android-networking:1.0.0'
+compile 'com.amitshekhar.android:android-networking:1.0.1'
 ```
 Do not forget to add internet permission in manifest if already not present
 ```xml
@@ -75,7 +75,7 @@ AndroidNetworking.initialize(getApplicationContext(),okHttpClient);
 ```
 Using the Fast Android Networking with Jackson Parser
 ```groovy
-compile 'com.amitshekhar.android:jackson-android-networking:1.0.0'
+compile 'com.amitshekhar.android:jackson-android-networking:1.0.1'
 ```
 ```java
 // Then set the JacksonParserFactory like below
