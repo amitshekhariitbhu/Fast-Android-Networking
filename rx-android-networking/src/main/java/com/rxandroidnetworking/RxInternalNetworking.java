@@ -48,6 +48,7 @@ import rx.exceptions.Exceptions;
 import static com.androidnetworking.common.Method.DELETE;
 import static com.androidnetworking.common.Method.GET;
 import static com.androidnetworking.common.Method.HEAD;
+import static com.androidnetworking.common.Method.OPTIONS;
 import static com.androidnetworking.common.Method.PATCH;
 import static com.androidnetworking.common.Method.POST;
 import static com.androidnetworking.common.Method.PUT;
@@ -85,6 +86,10 @@ public class RxInternalNetworking {
             }
             case HEAD: {
                 builder = builder.head();
+                break;
+            }
+            case OPTIONS: {
+                builder = builder.method(ANConstants.OPTIONS, null);
                 break;
             }
             case PATCH: {
@@ -262,7 +267,7 @@ public class RxInternalNetworking {
             } catch (Exception e) {
                 Exceptions.throwIfFatal(e);
                 if (!subscriber.isUnsubscribed()) {
-                    subscriber.onError(Utils.getErrorForNetworkOnMainThreadOrConnection(e));
+                    subscriber.onError(Utils.getErrorForConnection(new ANError(e)));
                 }
             } finally {
                 SourceCloseUtil.close(okHttpResponse, request);
@@ -347,7 +352,7 @@ public class RxInternalNetworking {
             } catch (Exception e) {
                 Exceptions.throwIfFatal(e);
                 if (!subscriber.isUnsubscribed()) {
-                    subscriber.onError(Utils.getErrorForNetworkOnMainThreadOrConnection(e));
+                    subscriber.onError(Utils.getErrorForConnection(new ANError(e)));
                 }
             }
         }
@@ -442,7 +447,7 @@ public class RxInternalNetworking {
             } catch (Exception e) {
                 Exceptions.throwIfFatal(e);
                 if (!subscriber.isUnsubscribed()) {
-                    subscriber.onError(Utils.getErrorForNetworkOnMainThreadOrConnection(e));
+                    subscriber.onError(Utils.getErrorForConnection(new ANError(e)));
                 }
             } finally {
                 SourceCloseUtil.close(okHttpResponse, request);

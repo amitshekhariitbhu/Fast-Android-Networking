@@ -27,7 +27,6 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.androidnetworking.AndroidNetworking;
-import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.AnalyticsListener;
 import com.androidnetworking.interfaces.DownloadProgressListener;
 import com.androidnetworking.interfaces.UploadProgressListener;
@@ -42,9 +41,11 @@ import org.json.JSONObject;
 import java.io.File;
 import java.util.List;
 
-import io.reactivex.Observable;
-import io.reactivex.Observer;
+import io.reactivex.CompletableObserver;
+import io.reactivex.Single;
+import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
@@ -75,27 +76,17 @@ public class Rx2ApiTestActivity extends AppCompatActivity {
                         Log.d(TAG, " isFromCache : " + isFromCache);
                     }
                 })
-                .getObjectListObservable(User.class)
+                .getObjectListSingle(User.class)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<List<User>>() {
+                .subscribe(new SingleObserver<List<User>>() {
                     @Override
-                    public void onError(Throwable e) {
-                        Utils.logError(TAG, e);
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        Log.d(TAG, "onComplete Detail : getAllUsers completed");
-                    }
-
-                    @Override
-                    public void onSubscribe(Disposable d) {
+                    public void onSubscribe(@NonNull Disposable disposable) {
 
                     }
 
                     @Override
-                    public void onNext(List<User> users) {
+                    public void onSuccess(@NonNull List<User> users) {
                         Log.d(TAG, "onResponse isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                         Log.d(TAG, "userList size : " + users.size());
                         for (User user : users) {
@@ -103,6 +94,11 @@ public class Rx2ApiTestActivity extends AppCompatActivity {
                             Log.d(TAG, "firstname : " + user.firstname);
                             Log.d(TAG, "lastname : " + user.lastname);
                         }
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable throwable) {
+                        Utils.logError(TAG, throwable);
                     }
                 });
     }
@@ -121,31 +117,26 @@ public class Rx2ApiTestActivity extends AppCompatActivity {
                         Log.d(TAG, " isFromCache : " + isFromCache);
                     }
                 })
-                .getObjectObservable(User.class)
+                .getObjectSingle(User.class)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<User>() {
+                .subscribe(new SingleObserver<User>() {
                     @Override
-                    public void onComplete() {
-                        Log.d(TAG, "onComplete Detail : getAnUser completed");
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Utils.logError(TAG, e);
-                    }
-
-                    @Override
-                    public void onSubscribe(Disposable d) {
+                    public void onSubscribe(@NonNull Disposable disposable) {
 
                     }
 
                     @Override
-                    public void onNext(User user) {
+                    public void onSuccess(@NonNull User user) {
                         Log.d(TAG, "onResponse isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                         Log.d(TAG, "id : " + user.id);
                         Log.d(TAG, "firstname : " + user.firstname);
                         Log.d(TAG, "lastname : " + user.lastname);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable throwable) {
+                        Utils.logError(TAG, throwable);
                     }
                 });
     }
@@ -165,46 +156,24 @@ public class Rx2ApiTestActivity extends AppCompatActivity {
                         Log.d(TAG, " isFromCache : " + isFromCache);
                     }
                 })
-                .getJSONObjectObservable()
+                .getJSONObjectSingle()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<JSONObject>() {
-
+                .subscribe(new SingleObserver<JSONObject>() {
                     @Override
-                    public void onError(Throwable e) {
-                        if (e instanceof ANError) {
-                            ANError anError = (ANError) e;
-                            if (anError.getErrorCode() != 0) {
-                                // received ANError from server
-                                // error.getErrorCode() - the ANError code from server
-                                // error.getErrorBody() - the ANError body from server
-                                // error.getErrorDetail() - just a ANError detail
-                                Log.d(TAG, "onError errorCode : " + anError.getErrorCode());
-                                Log.d(TAG, "onError errorBody : " + anError.getErrorBody());
-                                Log.d(TAG, "onError errorDetail : " + anError.getErrorDetail());
-                            } else {
-                                // error.getErrorDetail() : connectionError, parseError, requestCancelledError
-                                Log.d(TAG, "onError errorDetail : " + anError.getErrorDetail());
-                            }
-                        } else {
-                            Log.d(TAG, "onError errorMessage : " + e.getMessage());
-                        }
+                    public void onSubscribe(@NonNull Disposable disposable) {
+
                     }
 
                     @Override
-                    public void onComplete() {
-                        Log.d(TAG, "onComplete Detail : checkForHeaderGet completed");
-                    }
-
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        Log.d(TAG, "onSubscribe Detail - isDisposed : " + d.isDisposed());
-                    }
-
-                    @Override
-                    public void onNext(JSONObject response) {
-                        Log.d(TAG, "onResponse object : " + response.toString());
+                    public void onSuccess(@NonNull JSONObject jsonObject) {
+                        Log.d(TAG, "onResponse object : " + jsonObject.toString());
                         Log.d(TAG, "onResponse isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable throwable) {
+                        Utils.logError(TAG, throwable);
                     }
                 });
     }
@@ -228,45 +197,24 @@ public class Rx2ApiTestActivity extends AppCompatActivity {
             }
         });
 
-        rxAnRequest.getJSONObjectObservable()
+        rxAnRequest.getJSONObjectSingle()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<JSONObject>() {
+                .subscribe(new SingleObserver<JSONObject>() {
                     @Override
-                    public void onComplete() {
-                        Log.d(TAG, "onComplete Detail : checkForHeaderPost completed");
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        if (e instanceof ANError) {
-                            ANError anError = (ANError) e;
-                            if (anError.getErrorCode() != 0) {
-                                // received ANError from server
-                                // error.getErrorCode() - the ANError code from server
-                                // error.getErrorBody() - the ANError body from server
-                                // error.getErrorDetail() - just a ANError detail
-                                Log.d(TAG, "onError errorCode : " + anError.getErrorCode());
-                                Log.d(TAG, "onError errorBody : " + anError.getErrorBody());
-                                Log.d(TAG, "onError errorDetail : " + anError.getErrorDetail());
-                            } else {
-                                // error.getErrorDetail() : connectionError, parseError, requestCancelledError
-                                Log.d(TAG, "onError errorDetail : " + anError.getErrorDetail());
-                            }
-                        } else {
-                            Log.d(TAG, "onError errorMessage : " + e.getMessage());
-                        }
-                    }
-
-                    @Override
-                    public void onSubscribe(Disposable d) {
+                    public void onSubscribe(@NonNull Disposable disposable) {
 
                     }
 
                     @Override
-                    public void onNext(JSONObject response) {
-                        Log.d(TAG, "onResponse object : " + response.toString());
+                    public void onSuccess(@NonNull JSONObject jsonObject) {
+                        Log.d(TAG, "onResponse object : " + jsonObject.toString());
                         Log.d(TAG, "onResponse isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable throwable) {
+                        Utils.logError(TAG, throwable);
                     }
                 });
     }
@@ -285,45 +233,24 @@ public class Rx2ApiTestActivity extends AppCompatActivity {
                         Log.d(TAG, " isFromCache : " + isFromCache);
                     }
                 })
-                .getJSONObjectObservable()
+                .getJSONObjectSingle()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<JSONObject>() {
+                .subscribe(new SingleObserver<JSONObject>() {
                     @Override
-                    public void onComplete() {
-                        Log.d(TAG, "onComplete Detail : createAnUser completed");
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        if (e instanceof ANError) {
-                            ANError anError = (ANError) e;
-                            if (anError.getErrorCode() != 0) {
-                                // received ANError from server
-                                // error.getErrorCode() - the ANError code from server
-                                // error.getErrorBody() - the ANError body from server
-                                // error.getErrorDetail() - just a ANError detail
-                                Log.d(TAG, "onError errorCode : " + anError.getErrorCode());
-                                Log.d(TAG, "onError errorBody : " + anError.getErrorBody());
-                                Log.d(TAG, "onError errorDetail : " + anError.getErrorDetail());
-                            } else {
-                                // error.getErrorDetail() : connectionError, parseError, requestCancelledError
-                                Log.d(TAG, "onError errorDetail : " + anError.getErrorDetail());
-                            }
-                        } else {
-                            Log.d(TAG, "onError errorMessage : " + e.getMessage());
-                        }
-                    }
-
-                    @Override
-                    public void onSubscribe(Disposable d) {
+                    public void onSubscribe(@NonNull Disposable disposable) {
 
                     }
 
                     @Override
-                    public void onNext(JSONObject response) {
-                        Log.d(TAG, "onResponse object : " + response.toString());
+                    public void onSuccess(@NonNull JSONObject jsonObject) {
+                        Log.d(TAG, "onResponse object : " + jsonObject.toString());
                         Log.d(TAG, "onResponse isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable throwable) {
+                        Utils.logError(TAG, throwable);
                     }
                 });
     }
@@ -348,45 +275,24 @@ public class Rx2ApiTestActivity extends AppCompatActivity {
                         Log.d(TAG, " isFromCache : " + isFromCache);
                     }
                 })
-                .getJSONObjectObservable()
+                .getJSONObjectSingle()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<JSONObject>() {
+                .subscribe(new SingleObserver<JSONObject>() {
                     @Override
-                    public void onComplete() {
-                        Log.d(TAG, "onComplete Detail : createAnUserJSONObject completed");
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        if (e instanceof ANError) {
-                            ANError anError = (ANError) e;
-                            if (anError.getErrorCode() != 0) {
-                                // received ANError from server
-                                // error.getErrorCode() - the ANError code from server
-                                // error.getErrorBody() - the ANError body from server
-                                // error.getErrorDetail() - just a ANError detail
-                                Log.d(TAG, "onError errorCode : " + anError.getErrorCode());
-                                Log.d(TAG, "onError errorBody : " + anError.getErrorBody());
-                                Log.d(TAG, "onError errorDetail : " + anError.getErrorDetail());
-                            } else {
-                                // error.getErrorDetail() : connectionError, parseError, requestCancelledError
-                                Log.d(TAG, "onError errorDetail : " + anError.getErrorDetail());
-                            }
-                        } else {
-                            Log.d(TAG, "onError errorMessage : " + e.getMessage());
-                        }
-                    }
-
-                    @Override
-                    public void onSubscribe(Disposable d) {
+                    public void onSubscribe(@NonNull Disposable disposable) {
 
                     }
 
                     @Override
-                    public void onNext(JSONObject response) {
-                        Log.d(TAG, "onResponse object : " + response.toString());
+                    public void onSuccess(@NonNull JSONObject jsonObject) {
+                        Log.d(TAG, "onResponse object : " + jsonObject.toString());
                         Log.d(TAG, "onResponse isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable throwable) {
+                        Utils.logError(TAG, throwable);
                     }
                 });
     }
@@ -411,10 +317,15 @@ public class Rx2ApiTestActivity extends AppCompatActivity {
                         Log.d(TAG, "setDownloadProgressListener isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }
                 })
-                .getDownloadObservable()
+                .getDownloadCompletable()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<String>() {
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable disposable) {
+
+                    }
+
                     @Override
                     public void onComplete() {
                         Log.d(TAG, "File download Completed");
@@ -422,34 +333,8 @@ public class Rx2ApiTestActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onError(Throwable e) {
-                        if (e instanceof ANError) {
-                            ANError anError = (ANError) e;
-                            if (anError.getErrorCode() != 0) {
-                                // received ANError from server
-                                // error.getErrorCode() - the ANError code from server
-                                // error.getErrorBody() - the ANError body from server
-                                // error.getErrorDetail() - just a ANError detail
-                                Log.d(TAG, "onError errorCode : " + anError.getErrorCode());
-                                Log.d(TAG, "onError errorBody : " + anError.getErrorBody());
-                                Log.d(TAG, "onError errorDetail : " + anError.getErrorDetail());
-                            } else {
-                                // error.getErrorDetail() : connectionError, parseError, requestCancelledError
-                                Log.d(TAG, "onError errorDetail : " + anError.getErrorDetail());
-                            }
-                        } else {
-                            Log.d(TAG, "onError errorMessage : " + e.getMessage());
-                        }
-                    }
-
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onNext(String s) {
-                        Log.d(TAG, "onNext : " + s);
+                    public void onError(@NonNull Throwable throwable) {
+                        Utils.logError(TAG, throwable);
                     }
                 });
     }
@@ -467,10 +352,15 @@ public class Rx2ApiTestActivity extends AppCompatActivity {
                         Log.d(TAG, " isFromCache : " + isFromCache);
                     }
                 })
-                .getDownloadObservable()
+                .getDownloadCompletable()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<String>() {
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable disposable) {
+
+                    }
+
                     @Override
                     public void onComplete() {
                         Log.d(TAG, "File download Completed");
@@ -478,40 +368,14 @@ public class Rx2ApiTestActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onError(Throwable e) {
-                        if (e instanceof ANError) {
-                            ANError anError = (ANError) e;
-                            if (anError.getErrorCode() != 0) {
-                                // received ANError from server
-                                // error.getErrorCode() - the ANError code from server
-                                // error.getErrorBody() - the ANError body from server
-                                // error.getErrorDetail() - just a ANError detail
-                                Log.d(TAG, "onError errorCode : " + anError.getErrorCode());
-                                Log.d(TAG, "onError errorBody : " + anError.getErrorBody());
-                                Log.d(TAG, "onError errorDetail : " + anError.getErrorDetail());
-                            } else {
-                                // error.getErrorDetail() : connectionError, parseError, requestCancelledError
-                                Log.d(TAG, "onError errorDetail : " + anError.getErrorDetail());
-                            }
-                        } else {
-                            Log.d(TAG, "onError errorMessage : " + e.getMessage());
-                        }
-                    }
-
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onNext(String s) {
-                        Log.d(TAG, "onNext : " + s);
+                    public void onError(@NonNull Throwable throwable) {
+                        Utils.logError(TAG, throwable);
                     }
                 });
     }
 
     public void uploadImage(final View view) {
-        Observable<JSONObject> observable = Rx2AndroidNetworking.upload(ApiEndPoint.BASE_URL + ApiEndPoint.UPLOAD_IMAGE)
+        Single<JSONObject> single = Rx2AndroidNetworking.upload(ApiEndPoint.BASE_URL + ApiEndPoint.UPLOAD_IMAGE)
                 .addMultipartFile("image", new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "test.png"))
                 .build()
                 .setAnalyticsListener(new AnalyticsListener() {
@@ -530,87 +394,45 @@ public class Rx2ApiTestActivity extends AppCompatActivity {
                         Log.d(TAG, "setUploadProgressListener isMainThread : " + String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
                     }
                 })
-                .getJSONObjectObservable();
+                .getJSONObjectSingle();
 
-        observable.subscribeOn(Schedulers.io())
+        single.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<JSONObject>() {
+                .subscribe(new SingleObserver<JSONObject>() {
                     @Override
-                    public void onComplete() {
-                        Log.d(TAG + "_1", "onComplete Detail : uploadImage completed");
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        if (e instanceof ANError) {
-                            ANError anError = (ANError) e;
-                            if (anError.getErrorCode() != 0) {
-                                // received ANError from server
-                                // error.getErrorCode() - the ANError code from server
-                                // error.getErrorBody() - the ANError body from server
-                                // error.getErrorDetail() - just a ANError detail
-                                Log.d(TAG + "_1", "onError errorCode : " + anError.getErrorCode());
-                                Log.d(TAG + "_1", "onError errorBody : " + anError.getErrorBody());
-                                Log.d(TAG + "_1", "onError errorDetail : " + anError.getErrorDetail());
-                            } else {
-                                // error.getErrorDetail() : connectionError, parseError, requestCancelledError
-                                Log.d(TAG + "_1", "onError errorDetail : " + anError.getErrorDetail());
-                            }
-                        } else {
-                            Log.d(TAG + "_1", "onError errorMessage : " + e.getMessage());
-                        }
-                    }
-
-                    @Override
-                    public void onSubscribe(Disposable d) {
+                    public void onSubscribe(@NonNull Disposable disposable) {
 
                     }
 
                     @Override
-                    public void onNext(JSONObject response) {
+                    public void onSuccess(@NonNull JSONObject jsonObject) {
                         Log.d(TAG + "_1", "Image upload Completed");
-                        Log.d(TAG + "_1", "onResponse object : " + response.toString());
+                        Log.d(TAG + "_1", "onResponse object : " + jsonObject.toString());
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable throwable) {
+                        Utils.logError(TAG, throwable);
                     }
                 });
 
-        observable.subscribeOn(Schedulers.io())
+        single.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<JSONObject>() {
+                .subscribe(new SingleObserver<JSONObject>() {
                     @Override
-                    public void onComplete() {
-                        Log.d(TAG + "_2", "onComplete Detail : uploadImage completed");
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        if (e instanceof ANError) {
-                            ANError anError = (ANError) e;
-                            if (anError.getErrorCode() != 0) {
-                                // received ANError from server
-                                // error.getErrorCode() - the ANError code from server
-                                // error.getErrorBody() - the ANError body from server
-                                // error.getErrorDetail() - just a ANError detail
-                                Log.d(TAG + "_2", "onError errorCode : " + anError.getErrorCode());
-                                Log.d(TAG + "_2", "onError errorBody : " + anError.getErrorBody());
-                                Log.d(TAG + "_2", "onError errorDetail : " + anError.getErrorDetail());
-                            } else {
-                                // error.getErrorDetail() : connectionError, parseError, requestCancelledError
-                                Log.d(TAG + "_2", "onError errorDetail : " + anError.getErrorDetail());
-                            }
-                        } else {
-                            Log.d(TAG + "_2", "onError errorMessage : " + e.getMessage());
-                        }
-                    }
-
-                    @Override
-                    public void onSubscribe(Disposable d) {
+                    public void onSubscribe(@NonNull Disposable disposable) {
 
                     }
 
                     @Override
-                    public void onNext(JSONObject response) {
+                    public void onSuccess(@NonNull JSONObject jsonObject) {
                         Log.d(TAG + "_2", "Image upload Completed");
-                        Log.d(TAG + "_2", "onResponse object : " + response.toString());
+                        Log.d(TAG + "_2", "onResponse object : " + jsonObject.toString());
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable throwable) {
+                        Utils.logError(TAG, throwable);
                     }
                 });
 
@@ -637,48 +459,25 @@ public class Rx2ApiTestActivity extends AppCompatActivity {
                         Log.d(TAG, " isFromCache : " + isFromCache);
                     }
                 })
-                .getBitmapObservable()
+                .getBitmapSingle()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Bitmap>() {
+                .subscribe(new SingleObserver<Bitmap>() {
                     @Override
-                    public void onComplete() {
-                        Log.d(TAG, "onComplete Bitmap");
-
+                    public void onSubscribe(@NonNull Disposable disposable) {
 
                     }
 
                     @Override
-                    public void onError(Throwable e) {
-                        if (e instanceof ANError) {
-                            ANError anError = (ANError) e;
-                            if (anError.getErrorCode() != 0) {
-                                // received ANError from server
-                                // error.getErrorCode() - the ANError code from server
-                                // error.getErrorBody() - the ANError body from server
-                                // error.getErrorDetail() - just a ANError detail
-                                Log.d(TAG, "onError errorCode : " + anError.getErrorCode());
-                                Log.d(TAG, "onError errorBody : " + anError.getErrorBody());
-                                Log.d(TAG, "onError errorDetail : " + anError.getErrorDetail());
-                            } else {
-                                // error.getErrorDetail() : connectionError, parseError, requestCancelledError
-                                Log.d(TAG, "onError errorDetail : " + anError.getErrorDetail());
-                            }
-                        } else {
-                            Log.d(TAG, "onError errorMessage : " + e.getMessage());
-                        }
-                    }
-
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onNext(Bitmap bitmap) {
+                    public void onSuccess(@NonNull Bitmap bitmap) {
                         Log.d(TAG, "onResponse Bitmap");
-                        ImageView imageView = (ImageView) findViewById(R.id.imageView);
+                        ImageView imageView = findViewById(R.id.imageView);
                         imageView.setImageBitmap(bitmap);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable throwable) {
+                        Utils.logError(TAG, throwable);
                     }
                 });
 

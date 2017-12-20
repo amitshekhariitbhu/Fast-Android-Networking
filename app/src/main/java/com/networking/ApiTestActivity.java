@@ -1107,6 +1107,22 @@ public class ApiTestActivity extends AppCompatActivity {
         }).start();
     }
 
+    public void checkOptionsRequest(View view) {
+        AndroidNetworking.options("https://api.github.com/square/okhttp/issues")
+                .build()
+                .getAsOkHttpResponse(new OkHttpResponseListener() {
+                    @Override
+                    public void onResponse(Response response) {
+                        Log.d(TAG, "response : " + response.headers().toString());
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Utils.logError(TAG, anError);
+                    }
+                });
+    }
+
     public void getCurrentConnectionQuality(View view) {
         Log.d(TAG, "getCurrentConnectionQuality : " + AndroidNetworking.getCurrentConnectionQuality() + " currentBandwidth : " + AndroidNetworking.getCurrentBandwidth());
     }

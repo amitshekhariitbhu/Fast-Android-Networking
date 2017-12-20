@@ -27,9 +27,9 @@ import android.net.TrafficStats;
 import com.androidnetworking.common.ANConstants;
 import com.androidnetworking.common.ANRequest;
 import com.androidnetworking.common.ConnectionClassManager;
+import com.androidnetworking.error.ANError;
 import com.androidnetworking.interceptors.HttpLoggingInterceptor;
 import com.androidnetworking.interceptors.HttpLoggingInterceptor.Level;
-import com.androidnetworking.error.ANError;
 import com.androidnetworking.utils.Utils;
 
 import java.io.File;
@@ -46,6 +46,7 @@ import okhttp3.Response;
 import static com.androidnetworking.common.Method.DELETE;
 import static com.androidnetworking.common.Method.GET;
 import static com.androidnetworking.common.Method.HEAD;
+import static com.androidnetworking.common.Method.OPTIONS;
 import static com.androidnetworking.common.Method.PATCH;
 import static com.androidnetworking.common.Method.POST;
 import static com.androidnetworking.common.Method.PUT;
@@ -89,6 +90,10 @@ public final class InternalNetworking {
                 }
                 case HEAD: {
                     builder = builder.head();
+                    break;
+                }
+                case OPTIONS: {
+                    builder = builder.method(ANConstants.OPTIONS, null);
                     break;
                 }
                 case PATCH: {

@@ -18,6 +18,7 @@
 package com.androidnetworking.widget;
 
 import android.content.Context;
+import android.support.v7.widget.AppCompatImageView;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
@@ -29,7 +30,7 @@ import com.androidnetworking.internal.ANImageLoader;
 /**
  * Created by amitshekhar on 23/03/16.
  */
-public class ANImageView extends ImageView {
+public class ANImageView extends AppCompatImageView {
 
     private String mUrl;
 
@@ -67,7 +68,7 @@ public class ANImageView extends ImageView {
     void loadImageIfNecessary(final boolean isInLayoutPass) {
         int width = getWidth();
         int height = getHeight();
-        ScaleType scaleType = getScaleType();
+        ImageView.ScaleType scaleType = getScaleType();
 
         boolean wrapWidth = false, wrapHeight = false;
         if (getLayoutParams() != null) {

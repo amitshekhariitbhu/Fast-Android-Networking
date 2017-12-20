@@ -20,12 +20,12 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion 9
-        targetSdkVersion 23
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
     }
@@ -39,9 +39,9 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
-    androidTestCompile 'com.squareup.okhttp3:mockwebserver:3.6.0'
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.8.2'
+    testCompile "junit:junit:$rootProject.ext.jUnitVersion"
+    androidTestCompile "com.squareup.okhttp3:mockwebserver:$rootProject.ext.mockWebServerVersion"
+    compile "com.fasterxml.jackson.core:jackson-databind:$rootProject.ext.jacksonVersion"
     compile project(':android-networking')
 }
 

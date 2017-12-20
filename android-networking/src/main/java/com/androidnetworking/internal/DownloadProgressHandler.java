@@ -30,20 +30,20 @@ import com.androidnetworking.model.Progress;
  */
 public class DownloadProgressHandler extends Handler {
 
-    private final DownloadProgressListener mDownloadProgressListenerWeakRef;
+    private final DownloadProgressListener mDownloadProgressListener;
 
     public DownloadProgressHandler(DownloadProgressListener downloadProgressListener) {
         super(Looper.getMainLooper());
-        mDownloadProgressListenerWeakRef = downloadProgressListener;
+        mDownloadProgressListener = downloadProgressListener;
     }
 
     @Override
     public void handleMessage(Message msg) {
         switch (msg.what) {
             case ANConstants.UPDATE:
-                if (mDownloadProgressListenerWeakRef != null) {
+                if (mDownloadProgressListener != null) {
                     final Progress progress = (Progress) msg.obj;
-                    mDownloadProgressListenerWeakRef.onProgress(progress.currentBytes, progress.totalBytes);
+                    mDownloadProgressListener.onProgress(progress.currentBytes, progress.totalBytes);
                 }
                 break;
             default:

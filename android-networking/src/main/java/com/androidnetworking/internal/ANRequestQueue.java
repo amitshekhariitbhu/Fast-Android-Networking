@@ -21,9 +21,10 @@ import com.androidnetworking.common.ANRequest;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.core.Core;
 
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -31,8 +32,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class ANRequestQueue {
 
-    private final static String TAG = ANRequestQueue.class.getSimpleName();
-    private final Set<ANRequest> mCurrentRequests = new HashSet<>();
+    private final Set<ANRequest> mCurrentRequests =
+            Collections.newSetFromMap(new ConcurrentHashMap<ANRequest, Boolean>());
     private AtomicInteger mSequenceGenerator = new AtomicInteger();
     private static ANRequestQueue sInstance = null;
 
@@ -55,40 +56,35 @@ public class ANRequestQueue {
         boolean apply(ANRequest request);
     }
 
-
     private void cancel(RequestFilter filter, boolean forceCancel) {
-        synchronized (mCurrentRequests) {
-            try {
-                for (Iterator<ANRequest> iterator = mCurrentRequests.iterator(); iterator.hasNext(); ) {
-                    ANRequest request = iterator.next();
-                    if (filter.apply(request)) {
-                        request.cancel(forceCancel);
-                        if (request.isCanceled()) {
-                            request.destroy();
-                            iterator.remove();
-                        }
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public void cancelAll(boolean forceCancel) {
-        synchronized (mCurrentRequests) {
-            try {
-                for (Iterator<ANRequest> iterator = mCurrentRequests.iterator(); iterator.hasNext(); ) {
-                    ANRequest request = iterator.next();
+        try {
+            for (Iterator<ANRequest> iterator = mCurrentRequests.iterator(); iterator.hasNext(); ) {
+                ANRequest request = iterator.next();
+                if (filter.apply(request)) {
                     request.cancel(forceCancel);
                     if (request.isCanceled()) {
                         request.destroy();
                         iterator.remove();
                     }
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void cancelAll(boolean forceCancel) {
+        try {
+            for (Iterator<ANRequest> iterator = mCurrentRequests.iterator(); iterator.hasNext(); ) {
+                ANRequest request = iterator.next();
+                request.cancel(forceCancel);
+                if (request.isCanceled()) {
+                    request.destroy();
+                    iterator.remove();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -100,12 +96,7 @@ public class ANRequestQueue {
             cancel(new RequestFilter() {
                 @Override
                 public boolean apply(ANRequest request) {
-                    if (request.getTag() instanceof String && tag instanceof String) {
-                        final String tempRequestTag = (String) request.getTag();
-                        final String tempTag = (String) tag;
-                        return tempRequestTag.equals(tempTag);
-                    }
-                    return request.getTag().equals(tag);
+                    return isRequestWithTheGivenTag(request, tag);
                 }
             }, forceCancel);
         } catch (Exception e) {
@@ -118,12 +109,10 @@ public class ANRequestQueue {
     }
 
     public ANRequest addRequest(ANRequest request) {
-        synchronized (mCurrentRequests) {
-            try {
-                mCurrentRequests.add(request);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        try {
+            mCurrentRequests.add(request);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         try {
             request.setSequenceNumber(getSequenceNumber());
@@ -145,12 +134,36 @@ public class ANRequestQueue {
     }
 
     public void finish(ANRequest request) {
-        synchronized (mCurrentRequests) {
-            try {
-                mCurrentRequests.remove(request);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        try {
+            mCurrentRequests.remove(request);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
+
+    public boolean isRequestRunning(Object tag) {
+        try {
+            for (ANRequest request : mCurrentRequests) {
+                if (isRequestWithTheGivenTag(request, tag) && request.isRunning()) {
+                    return true;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    private boolean isRequestWithTheGivenTag(ANRequest request, Object tag) {
+        if (request.getTag() == null) {
+            return false;
+        }
+        if (request.getTag() instanceof String && tag instanceof String) {
+            final String tempRequestTag = (String) request.getTag();
+            final String tempTag = (String) tag;
+            return tempRequestTag.equals(tempTag);
+        }
+        return request.getTag().equals(tag);
+    }
+
 }

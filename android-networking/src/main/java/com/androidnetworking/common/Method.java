@@ -27,4 +27,5 @@ public interface Method {
     int DELETE = 3;
     int HEAD = 4;
     int PATCH = 5;
+    int OPTIONS = 6;
 }

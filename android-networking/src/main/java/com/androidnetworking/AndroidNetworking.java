@@ -24,8 +24,8 @@ import com.androidnetworking.common.ANConstants;
 import com.androidnetworking.common.ANRequest;
 import com.androidnetworking.common.ConnectionClassManager;
 import com.androidnetworking.common.ConnectionQuality;
-import com.androidnetworking.interceptors.HttpLoggingInterceptor.Level;
 import com.androidnetworking.core.Core;
+import com.androidnetworking.interceptors.HttpLoggingInterceptor.Level;
 import com.androidnetworking.interfaces.ConnectionQualityChangeListener;
 import com.androidnetworking.interfaces.Parser;
 import com.androidnetworking.internal.ANImageLoader;
@@ -132,6 +132,16 @@ public class AndroidNetworking {
     }
 
     /**
+     * Method to make OPTIONS request
+     *
+     * @param url The url on which request is to be made
+     * @return The OptionsRequestBuilder
+     */
+    public static ANRequest.OptionsRequestBuilder options(String url) {
+        return new ANRequest.OptionsRequestBuilder(url);
+    }
+
+    /**
      * Method to make POST request
      *
      * @param url The url on which request is to be made
@@ -191,6 +201,17 @@ public class AndroidNetworking {
      */
     public static ANRequest.MultiPartBuilder upload(String url) {
         return new ANRequest.MultiPartBuilder(url);
+    }
+
+    /**
+     * Method to make Dynamic request
+     *
+     * @param url    The url on which request is to be made
+     * @param method The HTTP METHOD for the request
+     * @return The DynamicRequestBuilder
+     */
+    public static ANRequest.DynamicRequestBuilder request(String url, int method) {
+        return new ANRequest.DynamicRequestBuilder(url, method);
     }
 
     /**
@@ -297,6 +318,16 @@ public class AndroidNetworking {
      */
     public static void setParserFactory(Parser.Factory parserFactory) {
         ParseUtil.setParserFactory(parserFactory);
+    }
+
+    /**
+     * Method to find if the request is running or not
+     *
+     * @param tag The tag with which request running status is to be checked
+     * @return The request is running or not
+     */
+    public static boolean isRequestRunning(Object tag) {
+        return ANRequestQueue.getInstance().isRequestRunning(tag);
     }
 
     /**

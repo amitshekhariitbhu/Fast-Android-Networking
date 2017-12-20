@@ -20,12 +20,12 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion 9
-        targetSdkVersion 23
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
     }
@@ -39,10 +39,10 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
-    androidTestCompile 'com.squareup.okhttp3:mockwebserver:3.6.0'
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    compile 'io.reactivex.rxjava2:rxjava:2.0.5'
+    testCompile "junit:junit:$rootProject.ext.jUnitVersion"
+    androidTestCompile "com.squareup.okhttp3:mockwebserver:$rootProject.ext.mockWebServerVersion"
+    compile "io.reactivex.rxjava2:rxandroid:$rootProject.ext.rxJava2AndroidVersion"
+    compile "io.reactivex.rxjava2:rxjava:$rootProject.ext.rxJava2Version"
     compile project(':android-networking')
 }
 //apply from: 'rx2-upload.gradle'

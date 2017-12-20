@@ -50,6 +50,7 @@ import okhttp3.Response;
 import static com.androidnetworking.common.Method.DELETE;
 import static com.androidnetworking.common.Method.GET;
 import static com.androidnetworking.common.Method.HEAD;
+import static com.androidnetworking.common.Method.OPTIONS;
 import static com.androidnetworking.common.Method.PATCH;
 import static com.androidnetworking.common.Method.POST;
 import static com.androidnetworking.common.Method.PUT;
@@ -87,6 +88,10 @@ public class Rx2InternalNetworking {
             }
             case HEAD: {
                 builder = builder.head();
+                break;
+            }
+            case OPTIONS: {
+                builder = builder.method(ANConstants.OPTIONS, null);
                 break;
             }
             case PATCH: {
@@ -235,7 +240,7 @@ public class Rx2InternalNetworking {
                     RxJavaPlugins.onError(e);
                 } else if (!call.isCanceled()) {
                     try {
-                        observer.onError(Utils.getErrorForNetworkOnMainThreadOrConnection(e));
+                        observer.onError(Utils.getErrorForConnection(new ANError(e)));
                     } catch (Exception e1) {
                         Exceptions.throwIfFatal(e1);
                         RxJavaPlugins.onError(new CompositeException(e, e1));
@@ -317,7 +322,7 @@ public class Rx2InternalNetworking {
                     RxJavaPlugins.onError(e);
                 } else if (!call.isCanceled()) {
                     try {
-                        observer.onError(Utils.getErrorForNetworkOnMainThreadOrConnection(e));
+                        observer.onError(Utils.getErrorForConnection(new ANError(e)));
                     } catch (Exception e1) {
                         Exceptions.throwIfFatal(e1);
                         RxJavaPlugins.onError(new CompositeException(e, e1));
@@ -408,7 +413,7 @@ public class Rx2InternalNetworking {
                     RxJavaPlugins.onError(e);
                 } else if (!request.getCall().isCanceled()) {
                     try {
-                        observer.onError(Utils.getErrorForNetworkOnMainThreadOrConnection(e));
+                        observer.onError(Utils.getErrorForConnection(new ANError(e)));
                     } catch (Exception e1) {
                         Exceptions.throwIfFatal(e1);
                         RxJavaPlugins.onError(new CompositeException(e, e1));

@@ -50,9 +50,11 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -84,11 +86,11 @@ public class ANRequest<T extends ANRequest> {
     private int sequenceNumber;
     private Object mTag;
     private ResponseType mResponseType;
-    private HashMap<String, String> mHeadersMap = new HashMap<>();
+    private HashMap<String, List<String>> mHeadersMap = new HashMap<>();
     private HashMap<String, String> mBodyParameterMap = new HashMap<>();
     private HashMap<String, String> mUrlEncodedFormBodyParameterMap = new HashMap<>();
     private HashMap<String, String> mMultiPartParameterMap = new HashMap<>();
-    private HashMap<String, String> mQueryParameterMap = new HashMap<>();
+    private HashMap<String, List<String>> mQueryParameterMap = new HashMap<>();
     private HashMap<String, String> mPathParameterMap = new HashMap<>();
     private HashMap<String, File> mMultiPartFileMap = new HashMap<>();
     private String mDirPath;
@@ -109,6 +111,7 @@ public class ANRequest<T extends ANRequest> {
     private int mProgress;
     private boolean isCancelled;
     private boolean isDelivered;
+    private boolean isRunning;
     private int mPercentageThresholdForCancelling = 0;
     private JSONArrayRequestListener mJSONArrayRequestListener;
     private JSONObjectRequestListener mJSONObjectRequestListener;
@@ -405,8 +408,17 @@ public class ANRequest<T extends ANRequest> {
             tempUrl = tempUrl.replace("{" + entry.getKey() + "}", String.valueOf(entry.getValue()));
         }
         HttpUrl.Builder urlBuilder = HttpUrl.parse(tempUrl).newBuilder();
-        for (HashMap.Entry<String, String> entry : mQueryParameterMap.entrySet()) {
-            urlBuilder.addQueryParameter(entry.getKey(), entry.getValue());
+        if (mQueryParameterMap != null) {
+            Set<Map.Entry<String, List<String>>> entries = mQueryParameterMap.entrySet();
+            for (Map.Entry<String, List<String>> entry : entries) {
+                String name = entry.getKey();
+                List<String> list = entry.getValue();
+                if (list != null) {
+                    for (String value : list) {
+                        urlBuilder.addQueryParameter(name, value);
+                    }
+                }
+            }
         }
         return urlBuilder.build().toString();
     }
@@ -537,6 +549,7 @@ public class ANRequest<T extends ANRequest> {
             if (forceCancel || mPercentageThresholdForCancelling == 0
                     || mProgress < mPercentageThresholdForCancelling) {
                 isCancelled = true;
+                isRunning = false;
                 if (call != null) {
                     call.cancel();
                 }
@@ -554,6 +567,14 @@ public class ANRequest<T extends ANRequest> {
 
     public boolean isCanceled() {
         return isCancelled;
+    }
+
+    public boolean isRunning() {
+        return isRunning;
+    }
+
+    public void setRunning(boolean running) {
+        isRunning = running;
     }
 
     public Call getCall() {
@@ -854,8 +875,17 @@ public class ANRequest<T extends ANRequest> {
     public Headers getHeaders() {
         Headers.Builder builder = new Headers.Builder();
         try {
-            for (HashMap.Entry<String, String> entry : mHeadersMap.entrySet()) {
-                builder.add(entry.getKey(), entry.getValue());
+            if (mHeadersMap != null) {
+                Set<Map.Entry<String, List<String>>> entries = mHeadersMap.entrySet();
+                for (Map.Entry<String, List<String>> entry : entries) {
+                    String name = entry.getKey();
+                    List<String> list = entry.getValue();
+                    if (list != null) {
+                        for (String value : list) {
+                            builder.add(name, value);
+                        }
+                    }
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -870,6 +900,13 @@ public class ANRequest<T extends ANRequest> {
         }
     }
 
+    public static class OptionsRequestBuilder extends GetRequestBuilder {
+
+        public OptionsRequestBuilder(String url) {
+            super(url, Method.OPTIONS);
+        }
+    }
+
     public static class GetRequestBuilder<T extends GetRequestBuilder> implements RequestBuilder {
         private Priority mPriority = Priority.MEDIUM;
         private int mMethod = Method.GET;
@@ -880,8 +917,8 @@ public class ANRequest<T extends ANRequest> {
         private int mMaxWidth;
         private int mMaxHeight;
         private ImageView.ScaleType mScaleType;
-        private HashMap<String, String> mHeadersMap = new HashMap<>();
-        private HashMap<String, String> mQueryParameterMap = new HashMap<>();
+        private HashMap<String, List<String>> mHeadersMap = new HashMap<>();
+        private HashMap<String, List<String>> mQueryParameterMap = new HashMap<>();
         private HashMap<String, String> mPathParameterMap = new HashMap<>();
         private CacheControl mCacheControl;
         private Executor mExecutor;
@@ -912,14 +949,23 @@ public class ANRequest<T extends ANRequest> {
 
         @Override
         public T addQueryParameter(String key, String value) {
-            mQueryParameterMap.put(key, value);
+            List<String> list = mQueryParameterMap.get(key);
+            if (list == null) {
+                list = new ArrayList<>();
+                mQueryParameterMap.put(key, list);
+            }
+            if (!list.contains(value)) {
+                list.add(value);
+            }
             return (T) this;
         }
 
         @Override
         public T addQueryParameter(Map<String, String> queryParameterMap) {
             if (queryParameterMap != null) {
-                mQueryParameterMap.putAll(queryParameterMap);
+                for (HashMap.Entry<String, String> entry : queryParameterMap.entrySet()) {
+                    addQueryParameter(entry.getKey(), entry.getValue());
+                }
             }
             return (T) this;
         }
@@ -927,7 +973,7 @@ public class ANRequest<T extends ANRequest> {
         @Override
         public T addQueryParameter(Object object) {
             if (object != null) {
-                mQueryParameterMap.putAll(ParseUtil
+                return addQueryParameter(ParseUtil
                         .getParserFactory()
                         .getStringMap(object));
             }
@@ -960,14 +1006,23 @@ public class ANRequest<T extends ANRequest> {
 
         @Override
         public T addHeaders(String key, String value) {
-            mHeadersMap.put(key, value);
+            List<String> list = mHeadersMap.get(key);
+            if (list == null) {
+                list = new ArrayList<>();
+                mHeadersMap.put(key, list);
+            }
+            if (!list.contains(value)) {
+                list.add(value);
+            }
             return (T) this;
         }
 
         @Override
         public T addHeaders(Map<String, String> headerMap) {
             if (headerMap != null) {
-                mHeadersMap.putAll(headerMap);
+                for (HashMap.Entry<String, String> entry : headerMap.entrySet()) {
+                    addHeaders(entry.getKey(), entry.getValue());
+                }
             }
             return (T) this;
         }
@@ -975,7 +1030,7 @@ public class ANRequest<T extends ANRequest> {
         @Override
         public T addHeaders(Object object) {
             if (object != null) {
-                mHeadersMap.putAll(ParseUtil
+                return addHeaders(ParseUtil
                         .getParserFactory()
                         .getStringMap(object));
             }
@@ -1081,6 +1136,13 @@ public class ANRequest<T extends ANRequest> {
         }
     }
 
+    public static class DynamicRequestBuilder extends PostRequestBuilder {
+
+        public DynamicRequestBuilder(String url, int method) {
+            super(url, method);
+        }
+    }
+
     public static class PostRequestBuilder<T extends PostRequestBuilder> implements RequestBuilder {
 
         private Priority mPriority = Priority.MEDIUM;
@@ -1091,10 +1153,10 @@ public class ANRequest<T extends ANRequest> {
         private String mStringBody = null;
         private byte[] mByte = null;
         private File mFile = null;
-        private HashMap<String, String> mHeadersMap = new HashMap<>();
+        private HashMap<String, List<String>> mHeadersMap = new HashMap<>();
         private HashMap<String, String> mBodyParameterMap = new HashMap<>();
         private HashMap<String, String> mUrlEncodedFormBodyParameterMap = new HashMap<>();
-        private HashMap<String, String> mQueryParameterMap = new HashMap<>();
+        private HashMap<String, List<String>> mQueryParameterMap = new HashMap<>();
         private HashMap<String, String> mPathParameterMap = new HashMap<>();
         private CacheControl mCacheControl;
         private Executor mExecutor;
@@ -1126,14 +1188,23 @@ public class ANRequest<T extends ANRequest> {
 
         @Override
         public T addQueryParameter(String key, String value) {
-            mQueryParameterMap.put(key, value);
+            List<String> list = mQueryParameterMap.get(key);
+            if (list == null) {
+                list = new ArrayList<>();
+                mQueryParameterMap.put(key, list);
+            }
+            if (!list.contains(value)) {
+                list.add(value);
+            }
             return (T) this;
         }
 
         @Override
         public T addQueryParameter(Map<String, String> queryParameterMap) {
             if (queryParameterMap != null) {
-                mQueryParameterMap.putAll(queryParameterMap);
+                for (HashMap.Entry<String, String> entry : queryParameterMap.entrySet()) {
+                    addQueryParameter(entry.getKey(), entry.getValue());
+                }
             }
             return (T) this;
         }
@@ -1141,7 +1212,7 @@ public class ANRequest<T extends ANRequest> {
         @Override
         public T addQueryParameter(Object object) {
             if (object != null) {
-                mQueryParameterMap.putAll(ParseUtil
+                return addQueryParameter(ParseUtil
                         .getParserFactory()
                         .getStringMap(object));
             }
@@ -1174,14 +1245,23 @@ public class ANRequest<T extends ANRequest> {
 
         @Override
         public T addHeaders(String key, String value) {
-            mHeadersMap.put(key, value);
+            List<String> list = mHeadersMap.get(key);
+            if (list == null) {
+                list = new ArrayList<>();
+                mHeadersMap.put(key, list);
+            }
+            if (!list.contains(value)) {
+                list.add(value);
+            }
             return (T) this;
         }
 
         @Override
         public T addHeaders(Map<String, String> headerMap) {
             if (headerMap != null) {
-                mHeadersMap.putAll(headerMap);
+                for (HashMap.Entry<String, String> entry : headerMap.entrySet()) {
+                    addHeaders(entry.getKey(), entry.getValue());
+                }
             }
             return (T) this;
         }
@@ -1189,7 +1269,7 @@ public class ANRequest<T extends ANRequest> {
         @Override
         public T addHeaders(Object object) {
             if (object != null) {
-                mHeadersMap.putAll(ParseUtil
+                return addHeaders(ParseUtil
                         .getParserFactory()
                         .getStringMap(object));
             }
@@ -1339,8 +1419,8 @@ public class ANRequest<T extends ANRequest> {
         private Priority mPriority = Priority.MEDIUM;
         private String mUrl;
         private Object mTag;
-        private HashMap<String, String> mHeadersMap = new HashMap<>();
-        private HashMap<String, String> mQueryParameterMap = new HashMap<>();
+        private HashMap<String, List<String>> mHeadersMap = new HashMap<>();
+        private HashMap<String, List<String>> mQueryParameterMap = new HashMap<>();
         private HashMap<String, String> mPathParameterMap = new HashMap<>();
         private String mDirPath;
         private String mFileName;
@@ -1370,14 +1450,23 @@ public class ANRequest<T extends ANRequest> {
 
         @Override
         public T addHeaders(String key, String value) {
-            mHeadersMap.put(key, value);
+            List<String> list = mHeadersMap.get(key);
+            if (list == null) {
+                list = new ArrayList<>();
+                mHeadersMap.put(key, list);
+            }
+            if (!list.contains(value)) {
+                list.add(value);
+            }
             return (T) this;
         }
 
         @Override
         public T addHeaders(Map<String, String> headerMap) {
             if (headerMap != null) {
-                mHeadersMap.putAll(headerMap);
+                for (HashMap.Entry<String, String> entry : headerMap.entrySet()) {
+                    addHeaders(entry.getKey(), entry.getValue());
+                }
             }
             return (T) this;
         }
@@ -1385,7 +1474,7 @@ public class ANRequest<T extends ANRequest> {
         @Override
         public T addHeaders(Object object) {
             if (object != null) {
-                mHeadersMap.putAll(ParseUtil
+                return addHeaders(ParseUtil
                         .getParserFactory()
                         .getStringMap(object));
             }
@@ -1394,14 +1483,23 @@ public class ANRequest<T extends ANRequest> {
 
         @Override
         public T addQueryParameter(String key, String value) {
-            mQueryParameterMap.put(key, value);
+            List<String> list = mQueryParameterMap.get(key);
+            if (list == null) {
+                list = new ArrayList<>();
+                mQueryParameterMap.put(key, list);
+            }
+            if (!list.contains(value)) {
+                list.add(value);
+            }
             return (T) this;
         }
 
         @Override
         public T addQueryParameter(Map<String, String> queryParameterMap) {
             if (queryParameterMap != null) {
-                mQueryParameterMap.putAll(queryParameterMap);
+                for (HashMap.Entry<String, String> entry : queryParameterMap.entrySet()) {
+                    addQueryParameter(entry.getKey(), entry.getValue());
+                }
             }
             return (T) this;
         }
@@ -1409,7 +1507,7 @@ public class ANRequest<T extends ANRequest> {
         @Override
         public T addQueryParameter(Object object) {
             if (object != null) {
-                mQueryParameterMap.putAll(ParseUtil
+                return addQueryParameter(ParseUtil
                         .getParserFactory()
                         .getStringMap(object));
             }
@@ -1503,9 +1601,9 @@ public class ANRequest<T extends ANRequest> {
         private Priority mPriority = Priority.MEDIUM;
         private String mUrl;
         private Object mTag;
-        private HashMap<String, String> mHeadersMap = new HashMap<>();
+        private HashMap<String, List<String>> mHeadersMap = new HashMap<>();
         private HashMap<String, String> mMultiPartParameterMap = new HashMap<>();
-        private HashMap<String, String> mQueryParameterMap = new HashMap<>();
+        private HashMap<String, List<String>> mQueryParameterMap = new HashMap<>();
         private HashMap<String, String> mPathParameterMap = new HashMap<>();
         private HashMap<String, File> mMultiPartFileMap = new HashMap<>();
         private CacheControl mCacheControl;
@@ -1533,14 +1631,23 @@ public class ANRequest<T extends ANRequest> {
 
         @Override
         public T addQueryParameter(String key, String value) {
-            mQueryParameterMap.put(key, value);
+            List<String> list = mQueryParameterMap.get(key);
+            if (list == null) {
+                list = new ArrayList<>();
+                mQueryParameterMap.put(key, list);
+            }
+            if (!list.contains(value)) {
+                list.add(value);
+            }
             return (T) this;
         }
 
         @Override
         public T addQueryParameter(Map<String, String> queryParameterMap) {
             if (queryParameterMap != null) {
-                mQueryParameterMap.putAll(queryParameterMap);
+                for (HashMap.Entry<String, String> entry : queryParameterMap.entrySet()) {
+                    addQueryParameter(entry.getKey(), entry.getValue());
+                }
             }
             return (T) this;
         }
@@ -1548,7 +1655,7 @@ public class ANRequest<T extends ANRequest> {
         @Override
         public T addQueryParameter(Object object) {
             if (object != null) {
-                mQueryParameterMap.putAll(ParseUtil
+                return addQueryParameter(ParseUtil
                         .getParserFactory()
                         .getStringMap(object));
             }
@@ -1581,14 +1688,23 @@ public class ANRequest<T extends ANRequest> {
 
         @Override
         public T addHeaders(String key, String value) {
-            mHeadersMap.put(key, value);
+            List<String> list = mHeadersMap.get(key);
+            if (list == null) {
+                list = new ArrayList<>();
+                mHeadersMap.put(key, list);
+            }
+            if (!list.contains(value)) {
+                list.add(value);
+            }
             return (T) this;
         }
 
         @Override
         public T addHeaders(Map<String, String> headerMap) {
             if (headerMap != null) {
-                mHeadersMap.putAll(headerMap);
+                for (HashMap.Entry<String, String> entry : headerMap.entrySet()) {
+                    addHeaders(entry.getKey(), entry.getValue());
+                }
             }
             return (T) this;
         }
@@ -1596,7 +1712,7 @@ public class ANRequest<T extends ANRequest> {
         @Override
         public T addHeaders(Object object) {
             if (object != null) {
-                mHeadersMap.putAll(ParseUtil
+                return addHeaders(ParseUtil
                         .getParserFactory()
                         .getStringMap(object));
             }
