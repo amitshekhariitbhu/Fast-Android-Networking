@@ -1,6 +1,19 @@
 Change Log
 ==========
 
+Version 1.0.1 *(2017-12-20)*
+----------------------------
+
+ * New: Add support for `Single`, `Completable`, `Flowable`, `Maybe` Observable
+ * New: Add support for OPTIONS request
+ * Bump OkHttp Version to 3.9.1
+ * Bump other dependencies
+ * New: Add support for specifying request method dynamically
+ * New: Add API to check isRequestRunning
+ * Fix: Add more than one values for one key in header and query
+ * Merge pull requests
+
+
 Version 1.0.0 *(2017-03-19)*
 ----------------------------
 
