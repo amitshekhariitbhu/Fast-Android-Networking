@@ -57,6 +57,16 @@ public class Rx2AndroidNetworking {
     }
 
     /**
+     * Method to make OPTIONS request
+     *
+     * @param url The url on which request is to be made
+     * @return The OptionsRequestBuilder
+     */
+    public static Rx2ANRequest.OptionsRequestBuilder options(String url) {
+        return new Rx2ANRequest.OptionsRequestBuilder(url);
+    }
+
+    /**
      * Method to make POST request
      *
      * @param url The url on which request is to be made

@@ -890,6 +890,13 @@ public class ANRequest<T extends ANRequest> {
         }
     }
 
+    public static class OptionsRequestBuilder extends GetRequestBuilder {
+
+        public OptionsRequestBuilder(String url) {
+            super(url, Method.OPTIONS);
+        }
+    }
+
     public static class GetRequestBuilder<T extends GetRequestBuilder> implements RequestBuilder {
         private Priority mPriority = Priority.MEDIUM;
         private int mMethod = Method.GET;

@@ -227,6 +227,13 @@ public class RxANRequest extends ANRequest<RxANRequest> {
         }
     }
 
+    public static class OptionsRequestBuilder extends GetRequestBuilder {
+
+        public OptionsRequestBuilder(String url) {
+            super(url, Method.OPTIONS);
+        }
+    }
+
     public static class PostRequestBuilder extends ANRequest.PostRequestBuilder<PostRequestBuilder> {
 
         public PostRequestBuilder(String url) {

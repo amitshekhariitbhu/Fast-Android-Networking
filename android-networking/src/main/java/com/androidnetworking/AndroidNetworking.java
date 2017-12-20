@@ -24,8 +24,8 @@ import com.androidnetworking.common.ANConstants;
 import com.androidnetworking.common.ANRequest;
 import com.androidnetworking.common.ConnectionClassManager;
 import com.androidnetworking.common.ConnectionQuality;
-import com.androidnetworking.interceptors.HttpLoggingInterceptor.Level;
 import com.androidnetworking.core.Core;
+import com.androidnetworking.interceptors.HttpLoggingInterceptor.Level;
 import com.androidnetworking.interfaces.ConnectionQualityChangeListener;
 import com.androidnetworking.interfaces.Parser;
 import com.androidnetworking.internal.ANImageLoader;
@@ -129,6 +129,16 @@ public class AndroidNetworking {
      */
     public static ANRequest.HeadRequestBuilder head(String url) {
         return new ANRequest.HeadRequestBuilder(url);
+    }
+
+    /**
+     * Method to make OPTIONS request
+     *
+     * @param url The url on which request is to be made
+     * @return The OptionsRequestBuilder
+     */
+    public static ANRequest.OptionsRequestBuilder options(String url) {
+        return new ANRequest.OptionsRequestBuilder(url);
     }
 
     /**
