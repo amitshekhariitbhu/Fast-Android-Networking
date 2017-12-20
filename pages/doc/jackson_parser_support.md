@@ -13,7 +13,7 @@ folder: doc
 Add this in your build.gradle
 
 ```groovy
-compile 'com.amitshekhar.android:jackson-android-networking:1.0.0'
+compile 'com.amitshekhar.android:jackson-android-networking:1.0.1'
 ```
 
 Then initialize it in onCreate() Method of application class :
