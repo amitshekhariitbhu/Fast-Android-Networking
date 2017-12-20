@@ -204,6 +204,17 @@ public class AndroidNetworking {
     }
 
     /**
+     * Method to make Dynamic request
+     *
+     * @param url    The url on which request is to be made
+     * @param method The HTTP METHOD for the request
+     * @return The DynamicRequestBuilder
+     */
+    public static ANRequest.DynamicRequestBuilder request(String url, int method) {
+        return new ANRequest.DynamicRequestBuilder(url, method);
+    }
+
+    /**
      * Method to cancel requests with the given tag
      *
      * @param tag The tag with which requests are to be cancelled

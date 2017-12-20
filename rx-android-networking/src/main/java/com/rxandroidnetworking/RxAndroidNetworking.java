@@ -125,4 +125,15 @@ public class RxAndroidNetworking {
     public static RxANRequest.MultiPartBuilder upload(String url) {
         return new RxANRequest.MultiPartBuilder(url);
     }
+
+    /**
+     * Method to make Dynamic request
+     *
+     * @param url    The url on which request is to be made
+     * @param method The HTTP METHOD for the request
+     * @return The DynamicRequestBuilder
+     */
+    public static RxANRequest.DynamicRequestBuilder request(String url, int method) {
+        return new RxANRequest.DynamicRequestBuilder(url, method);
+    }
 }

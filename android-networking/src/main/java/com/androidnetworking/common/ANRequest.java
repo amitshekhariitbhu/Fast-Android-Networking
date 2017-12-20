@@ -1126,6 +1126,13 @@ public class ANRequest<T extends ANRequest> {
         }
     }
 
+    public static class DynamicRequestBuilder extends PostRequestBuilder {
+
+        public DynamicRequestBuilder(String url, int method) {
+            super(url, method);
+        }
+    }
+
     public static class PostRequestBuilder<T extends PostRequestBuilder> implements RequestBuilder {
 
         private Priority mPriority = Priority.MEDIUM;

@@ -270,6 +270,13 @@ public class RxANRequest extends ANRequest<RxANRequest> {
         }
     }
 
+    public static class DynamicRequestBuilder extends PostRequestBuilder {
+
+        public DynamicRequestBuilder(String url, int method) {
+            super(url, method);
+        }
+    }
+
     public static class DownloadBuilder extends ANRequest.DownloadBuilder<DownloadBuilder> {
 
         public DownloadBuilder(String url, String dirPath, String fileName) {
