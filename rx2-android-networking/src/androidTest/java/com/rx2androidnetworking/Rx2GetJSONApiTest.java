@@ -34,7 +34,9 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
 
 import io.reactivex.Observer;
+import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.mockwebserver.MockResponse;
@@ -114,6 +116,51 @@ public class Rx2GetJSONApiTest extends ApplicationTestCase<Application> {
         assertEquals("Shekhar", lastNameRef.get());
     }
 
+    public void testJSONObjectSingleGetRequest() throws InterruptedException {
+
+        server.enqueue(new MockResponse().setBody("{\"firstName\":\"Amit\", \"lastName\":\"Shekhar\"}"));
+
+        final AtomicReference<String> firstNameRef = new AtomicReference<>();
+        final AtomicReference<String> lastNameRef = new AtomicReference<>();
+        final AtomicReference<Boolean> isSubscribedRef = new AtomicReference<>();
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        Rx2AndroidNetworking.get(server.url("/").toString())
+                .build()
+                .getJSONObjectSingle()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<JSONObject>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable disposable) {
+                        isSubscribedRef.set(true);
+                    }
+
+                    @Override
+                    public void onSuccess(@NonNull JSONObject response) {
+                        try {
+                            firstNameRef.set(response.getString("firstName"));
+                            lastNameRef.set(response.getString("lastName"));
+                            latch.countDown();
+                        } catch (JSONException e) {
+                            assertTrue(false);
+                        }
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable throwable) {
+                        assertTrue(false);
+                    }
+                });
+
+        assertTrue(latch.await(2, SECONDS));
+
+        assertTrue(isSubscribedRef.get());
+
+        assertEquals("Amit", firstNameRef.get());
+        assertEquals("Shekhar", lastNameRef.get());
+    }
+
     public void testJSONObjectGetRequest404() throws InterruptedException {
 
         server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
@@ -152,6 +199,54 @@ public class Rx2GetJSONApiTest extends ApplicationTestCase<Application> {
                     @Override
                     public void onComplete() {
                         assertTrue(false);
+                    }
+                });
+
+        assertTrue(latch.await(2, SECONDS));
+
+        assertTrue(isSubscribedRef.get());
+
+        assertEquals(ANConstants.RESPONSE_FROM_SERVER_ERROR, errorDetailRef.get());
+
+        assertEquals("data", errorBodyRef.get());
+
+        assertEquals(404, errorCodeRef.get().intValue());
+
+    }
+
+    public void testJSONObjectSingleGetRequest404() throws InterruptedException {
+
+        server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
+
+        final AtomicReference<String> errorDetailRef = new AtomicReference<>();
+        final AtomicReference<String> errorBodyRef = new AtomicReference<>();
+        final AtomicReference<Integer> errorCodeRef = new AtomicReference<>();
+        final AtomicReference<Boolean> isSubscribedRef = new AtomicReference<>();
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        Rx2AndroidNetworking.get(server.url("/").toString())
+                .build()
+                .getJSONObjectSingle()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<JSONObject>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable disposable) {
+                        isSubscribedRef.set(true);
+                    }
+
+                    @Override
+                    public void onSuccess(@NonNull JSONObject response) {
+                        assertTrue(false);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        ANError anError = (ANError) e;
+                        errorBodyRef.set(anError.getErrorBody());
+                        errorDetailRef.set(anError.getErrorDetail());
+                        errorCodeRef.set(anError.getErrorCode());
+                        latch.countDown();
                     }
                 });
 
