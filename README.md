@@ -657,5 +657,6 @@ As it uses [OkHttp](http://square.github.io/okhttp/) as a networking layer, it s
 ```
 
 ### Contributing to Fast Android Networking
-Just make pull request. You are in!
+All pull requests are welcome, make sure to follow the [contribution guidelines](CONTRIBUTING.md)
+when you submit pull request.
 
