@@ -31,7 +31,9 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
 
 import io.reactivex.Observer;
+import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.mockwebserver.MockResponse;
@@ -104,6 +106,44 @@ public class Rx2GetStringApiTest extends ApplicationTestCase<Application> {
         assertEquals("data", responseRef.get());
     }
 
+    public void testStringSingleGetRequest() throws InterruptedException {
+
+        server.enqueue(new MockResponse().setBody("data"));
+
+        final AtomicReference<String> responseRef = new AtomicReference<>();
+        final AtomicReference<Boolean> isSubscribedRef = new AtomicReference<>();
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        Rx2AndroidNetworking.get(server.url("/").toString())
+                .build()
+                .getStringSingle()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<String>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable disposable) {
+                        isSubscribedRef.set(true);
+                    }
+
+                    @Override
+                    public void onSuccess(@NonNull String response) {
+                        responseRef.set(response);
+                        latch.countDown();
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable throwable) {
+                        assertTrue(false);
+                    }
+                });
+
+        assertTrue(latch.await(2, SECONDS));
+
+        assertTrue(isSubscribedRef.get());
+
+        assertEquals("data", responseRef.get());
+    }
+
     public void testStringGetRequest404() throws InterruptedException {
 
         server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
@@ -142,6 +182,54 @@ public class Rx2GetStringApiTest extends ApplicationTestCase<Application> {
                     @Override
                     public void onComplete() {
                         assertTrue(false);
+                    }
+                });
+
+        assertTrue(latch.await(2, SECONDS));
+
+        assertTrue(isSubscribedRef.get());
+
+        assertEquals(ANConstants.RESPONSE_FROM_SERVER_ERROR, errorDetailRef.get());
+
+        assertEquals("data", errorBodyRef.get());
+
+        assertEquals(404, errorCodeRef.get().intValue());
+
+    }
+
+    public void testStringGetSingleRequest404() throws InterruptedException {
+
+        server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
+
+        final AtomicReference<String> errorDetailRef = new AtomicReference<>();
+        final AtomicReference<String> errorBodyRef = new AtomicReference<>();
+        final AtomicReference<Integer> errorCodeRef = new AtomicReference<>();
+        final AtomicReference<Boolean> isSubscribedRef = new AtomicReference<>();
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        Rx2AndroidNetworking.get(server.url("/").toString())
+                .build()
+                .getStringSingle()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<String>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable disposable) {
+                        isSubscribedRef.set(true);
+                    }
+
+                    @Override
+                    public void onSuccess(@NonNull String s) {
+                        assertTrue(false);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        ANError anError = (ANError) e;
+                        errorBodyRef.set(anError.getErrorBody());
+                        errorDetailRef.set(anError.getErrorDetail());
+                        errorCodeRef.set(anError.getErrorCode());
+                        latch.countDown();
                     }
                 });
 
