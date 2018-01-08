@@ -321,6 +321,53 @@ public class Rx2MultipartJSONApiTest extends ApplicationTestCase<Application> {
         assertEquals("Shekhar", lastNameRef.get());
     }
 
+    public void testJSONArraySingleMultipartRequest() throws InterruptedException {
+
+        server.enqueue(new MockResponse().setBody("[{\"firstName\":\"Amit\", \"lastName\":\"Shekhar\"}]"));
+
+        final AtomicReference<String> firstNameRef = new AtomicReference<>();
+        final AtomicReference<String> lastNameRef = new AtomicReference<>();
+        final AtomicReference<Boolean> isSubscribedRef = new AtomicReference<>();
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        Rx2AndroidNetworking.upload(server.url("/").toString())
+                .addMultipartParameter("key", "value")
+                .build()
+                .getJSONArraySingle()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<JSONArray>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable disposable) {
+                        isSubscribedRef.set(true);
+                    }
+
+                    @Override
+                    public void onSuccess(@NonNull JSONArray response) {
+                        try {
+                            JSONObject jsonObject = response.getJSONObject(0);
+                            firstNameRef.set(jsonObject.getString("firstName"));
+                            lastNameRef.set(jsonObject.getString("lastName"));
+                            latch.countDown();
+                        } catch (JSONException e) {
+                            assertTrue(false);
+                        }
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable throwable) {
+                        assertTrue(false);
+                    }
+                });
+
+        assertTrue(latch.await(2, SECONDS));
+
+        assertTrue(isSubscribedRef.get());
+
+        assertEquals("Amit", firstNameRef.get());
+        assertEquals("Shekhar", lastNameRef.get());
+    }
+
     public void testJSONArrayMultipartRequest404() throws InterruptedException {
 
         server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
@@ -360,6 +407,55 @@ public class Rx2MultipartJSONApiTest extends ApplicationTestCase<Application> {
                     @Override
                     public void onComplete() {
                         assertTrue(false);
+                    }
+                });
+
+        assertTrue(latch.await(2, SECONDS));
+
+        assertTrue(isSubscribedRef.get());
+
+        assertEquals(ANConstants.RESPONSE_FROM_SERVER_ERROR, errorDetailRef.get());
+
+        assertEquals("data", errorBodyRef.get());
+
+        assertEquals(404, errorCodeRef.get().intValue());
+
+    }
+
+    public void testJSONArraySingleMultipartRequest404() throws InterruptedException {
+
+        server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
+
+        final AtomicReference<String> errorDetailRef = new AtomicReference<>();
+        final AtomicReference<String> errorBodyRef = new AtomicReference<>();
+        final AtomicReference<Integer> errorCodeRef = new AtomicReference<>();
+        final AtomicReference<Boolean> isSubscribedRef = new AtomicReference<>();
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        Rx2AndroidNetworking.upload(server.url("/").toString())
+                .addMultipartParameter("key", "value")
+                .build()
+                .getJSONArraySingle()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<JSONArray>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable disposable) {
+                        isSubscribedRef.set(true);
+                    }
+
+                    @Override
+                    public void onSuccess(@NonNull JSONArray jsonArray) {
+                        assertTrue(false);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        ANError anError = (ANError) e;
+                        errorBodyRef.set(anError.getErrorBody());
+                        errorDetailRef.set(anError.getErrorDetail());
+                        errorCodeRef.set(anError.getErrorCode());
+                        latch.countDown();
                     }
                 });
 
