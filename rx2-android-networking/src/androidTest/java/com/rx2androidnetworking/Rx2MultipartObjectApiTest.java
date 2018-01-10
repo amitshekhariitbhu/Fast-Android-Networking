@@ -310,6 +310,48 @@ public class Rx2MultipartObjectApiTest extends ApplicationTestCase<Application> 
         assertEquals("Shekhar", lastNameRef.get());
     }
 
+    public void testObjectListSingleMultipartRequest() throws InterruptedException {
+
+        server.enqueue(new MockResponse().setBody("[{\"firstName\":\"Amit\", \"lastName\":\"Shekhar\"}]"));
+
+        final AtomicReference<String> firstNameRef = new AtomicReference<>();
+        final AtomicReference<String> lastNameRef = new AtomicReference<>();
+        final AtomicReference<Boolean> isSubscribedRef = new AtomicReference<>();
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        Rx2AndroidNetworking.upload(server.url("/").toString())
+                .addMultipartParameter("key", "value")
+                .build()
+                .getObjectListSingle(User.class)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<List<User>>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable disposable) {
+                        isSubscribedRef.set(true);
+                    }
+
+                    @Override
+                    public void onSuccess(@NonNull List<User> userList) {
+                        firstNameRef.set(userList.get(0).firstName);
+                        lastNameRef.set(userList.get(0).lastName);
+                        latch.countDown();
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable throwable) {
+                        assertTrue(false);
+                    }
+                });
+
+        assertTrue(latch.await(2, SECONDS));
+
+        assertTrue(isSubscribedRef.get());
+
+        assertEquals("Amit", firstNameRef.get());
+        assertEquals("Shekhar", lastNameRef.get());
+    }
+
     public void testObjectListMultipartRequest404() throws InterruptedException {
 
         server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
@@ -349,6 +391,55 @@ public class Rx2MultipartObjectApiTest extends ApplicationTestCase<Application> 
                     @Override
                     public void onComplete() {
                         assertTrue(false);
+                    }
+                });
+
+        assertTrue(latch.await(2, SECONDS));
+
+        assertTrue(isSubscribedRef.get());
+
+        assertEquals(ANConstants.RESPONSE_FROM_SERVER_ERROR, errorDetailRef.get());
+
+        assertEquals("data", errorBodyRef.get());
+
+        assertEquals(404, errorCodeRef.get().intValue());
+
+    }
+
+    public void testObjectListSingleMultipartRequest404() throws InterruptedException {
+
+        server.enqueue(new MockResponse().setResponseCode(404).setBody("data"));
+
+        final AtomicReference<String> errorDetailRef = new AtomicReference<>();
+        final AtomicReference<String> errorBodyRef = new AtomicReference<>();
+        final AtomicReference<Integer> errorCodeRef = new AtomicReference<>();
+        final AtomicReference<Boolean> isSubscribedRef = new AtomicReference<>();
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        Rx2AndroidNetworking.upload(server.url("/").toString())
+                .addMultipartParameter("key", "value")
+                .build()
+                .getObjectListSingle(User.class)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<List<User>>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable disposable) {
+                        isSubscribedRef.set(true);
+                    }
+
+                    @Override
+                    public void onSuccess(@NonNull List<User> users) {
+                        assertTrue(false);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        ANError anError = (ANError) e;
+                        errorBodyRef.set(anError.getErrorBody());
+                        errorDetailRef.set(anError.getErrorDetail());
+                        errorCodeRef.set(anError.getErrorCode());
+                        latch.countDown();
                     }
                 });
 
