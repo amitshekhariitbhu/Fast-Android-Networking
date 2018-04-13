@@ -50,7 +50,7 @@ ext {
     buildToolsVersion = "27.0.3"
 
     // App dependencies versions
-    okHttp3Version = "3.9.1"
+    okHttp3Version = "3.10.0"
     gsonVersion = "2.8.2"
     jacksonVersion = "2.8.2"
     rxJavaVersion = "1.3.8"
@@ -58,6 +58,6 @@ ext {
     rxJava2Version = "2.1.12"
     rxJava2AndroidVersion = "2.0.2"
     jUnitVersion = "4.12"
-    mockWebServerVersion = "3.9.1"
+    mockWebServerVersion = "3.10.0"
     supportAppCompatVersion = "27.1.1"
 }
