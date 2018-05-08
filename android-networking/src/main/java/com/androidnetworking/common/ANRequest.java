@@ -92,7 +92,7 @@ public class ANRequest<T extends ANRequest> {
     private HashMap<String, String> mMultiPartParameterMap = new HashMap<>();
     private HashMap<String, List<String>> mQueryParameterMap = new HashMap<>();
     private HashMap<String, String> mPathParameterMap = new HashMap<>();
-    private HashMap<String, File> mMultiPartFileMap = new HashMap<>();
+    private HashMap<String, MultiPartFile> mMultiPartFileMap = new HashMap<>();
     private String mDirPath;
     private String mFileName;
     private String mApplicationJsonString = null;
@@ -858,10 +858,10 @@ public class ANRequest<T extends ANRequest> {
                         "form-data; name=\"" + entry.getKey() + "\""),
                         RequestBody.create(null, entry.getValue()));
             }
-            for (HashMap.Entry<String, File> entry : mMultiPartFileMap.entrySet()) {
-                String fileName = entry.getValue().getName();
-                RequestBody fileBody = RequestBody.create(MediaType.parse(Utils.getMimeType(fileName)),
-                        entry.getValue());
+            for (HashMap.Entry<String, MultiPartFile> entry : mMultiPartFileMap.entrySet()) {
+                String fileName = entry.getValue().getFileName();
+                RequestBody fileBody = RequestBody.create(MediaType.parse(entry.getValue().getMimeType() != null ? entry.getValue().getMimeType() : Utils.getMimeType(fileName)),
+                        entry.getValue().getFile());
                 builder.addPart(Headers.of("Content-Disposition",
                         "form-data; name=\"" + entry.getKey() + "\"; filename=\"" + fileName + "\""),
                         fileBody);
@@ -1596,6 +1596,35 @@ public class ANRequest<T extends ANRequest> {
         }
     }
 
+    public static class MultiPartFile
+    {
+        private File mFile;
+        private String mMimeType;
+        private String mFileName;
+
+        public MultiPartFile(File file, String mimeType, String fileName)
+        {
+            mFile = file;
+            mMimeType = mimeType;
+            mFileName = fileName;
+        }
+
+        public File getFile()
+        {
+            return mFile;
+        }
+
+        public String getMimeType()
+        {
+            return mMimeType;
+        }
+
+        public String getFileName()
+        {
+            return mFileName == null ? mFile.getName() : mFileName;
+        }
+    }
+
     public static class MultiPartBuilder<T extends MultiPartBuilder> implements RequestBuilder {
 
         private Priority mPriority = Priority.MEDIUM;
@@ -1605,7 +1634,7 @@ public class ANRequest<T extends ANRequest> {
         private HashMap<String, String> mMultiPartParameterMap = new HashMap<>();
         private HashMap<String, List<String>> mQueryParameterMap = new HashMap<>();
         private HashMap<String, String> mPathParameterMap = new HashMap<>();
-        private HashMap<String, File> mMultiPartFileMap = new HashMap<>();
+        private HashMap<String, MultiPartFile> mMultiPartFileMap = new HashMap<>();
         private CacheControl mCacheControl;
         private int mPercentageThresholdForCancelling = 0;
         private Executor mExecutor;
@@ -1789,11 +1818,16 @@ public class ANRequest<T extends ANRequest> {
         }
 
         public T addMultipartFile(String key, File file) {
-            mMultiPartFileMap.put(key, file);
+            mMultiPartFileMap.put(key, new MultiPartFile(file, null, null));
             return (T) this;
         }
 
-        public T addMultipartFile(Map<String, File> multiPartFileMap) {
+        public T addMultipartFile(String key, File file, String mimeType, String fileName) {
+            mMultiPartFileMap.put(key, new MultiPartFile(file, mimeType, fileName));
+            return (T) this;
+        }
+
+        public T addMultipartFile(Map<String, MultiPartFile> multiPartFileMap) {
             if (multiPartFileMap != null) {
                 mMultiPartFileMap.putAll(multiPartFileMap);
             }
