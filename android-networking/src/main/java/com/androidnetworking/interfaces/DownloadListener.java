@@ -19,12 +19,14 @@ package com.androidnetworking.interfaces;
 
 import com.androidnetworking.error.ANError;
 
+import okhttp3.Response;
+
 /**
  * Created by amitshekhar on 29/04/16.
  */
 public interface DownloadListener {
 
-    void onDownloadComplete();
+    void onDownloadComplete(Response response, String filePath);
 
     void onError(ANError anError);
 }

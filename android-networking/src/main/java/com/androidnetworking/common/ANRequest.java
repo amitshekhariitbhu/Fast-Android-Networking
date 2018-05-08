@@ -482,7 +482,7 @@ public class ANRequest<T extends ANRequest> {
         };
     }
 
-    public void updateDownloadCompletion() {
+    public void updateDownloadCompletion(final Response response, final String filePath) {
         isDelivered = true;
         if (mDownloadListener != null) {
             if (!isCancelled) {
@@ -491,7 +491,7 @@ public class ANRequest<T extends ANRequest> {
                         @Override
                         public void run() {
                             if (mDownloadListener != null) {
-                                mDownloadListener.onDownloadComplete();
+                                mDownloadListener.onDownloadComplete(response, filePath);
                             }
                             finish();
                         }
@@ -501,14 +501,14 @@ public class ANRequest<T extends ANRequest> {
                         @Override
                         public void run() {
                             if (mDownloadListener != null) {
-                                mDownloadListener.onDownloadComplete();
+                                mDownloadListener.onDownloadComplete(response, filePath);
                             }
                             finish();
                         }
                     });
                 }
             } else {
-                deliverError(new ANError());
+                deliverError(new ANError(response));
                 finish();
             }
         } else {

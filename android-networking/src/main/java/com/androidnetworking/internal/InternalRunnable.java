@@ -36,7 +36,6 @@ import static com.androidnetworking.common.RequestType.SIMPLE;
  * Created by amitshekhar on 22/03/16.
  */
 public class InternalRunnable implements Runnable {
-
     private final Priority priority;
     public final int sequence;
     public final ANRequest request;
@@ -101,7 +100,8 @@ public class InternalRunnable implements Runnable {
     private void executeDownloadRequest() {
         Response okHttpResponse;
         try {
-            okHttpResponse = InternalNetworking.performDownloadRequest(request);
+            DownloadReturnValue returnValue = InternalNetworking.performDownloadRequest(request);
+            okHttpResponse = returnValue.getResponse();
             if (okHttpResponse == null) {
                 deliverError(request, Utils.getErrorForConnection(new ANError()));
                 return;
@@ -111,7 +111,7 @@ public class InternalRunnable implements Runnable {
                         request, okHttpResponse.code()));
                 return;
             }
-            request.updateDownloadCompletion();
+            request.updateDownloadCompletion(okHttpResponse, returnValue.getFilePath());
         } catch (Exception e) {
             deliverError(request, Utils.getErrorForConnection(new ANError(e)));
         }

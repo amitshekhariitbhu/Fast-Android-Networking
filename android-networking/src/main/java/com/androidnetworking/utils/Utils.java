@@ -169,13 +169,26 @@ public class Utils {
         return (int) n;
     }
 
-    public static void saveFile(Response response, String dirPath,
+    public static String saveFile(Response response, String dirPath,
                                 String fileName) throws IOException {
         InputStream is = null;
         byte[] buf = new byte[2048];
         int len;
         FileOutputStream fos = null;
         try {
+            if (fileName == null) {
+                String disposition = response.header("Content-Disposition");
+                if (disposition != null) {
+                    int index = disposition.indexOf("filename=");
+                    if (index > 0) {
+                        fileName = disposition.substring(index + 10, disposition.length() - 1);
+                    }
+                } else {
+                    String requestUrl = response.request().url().toString();
+                    fileName = requestUrl.substring(requestUrl.lastIndexOf("/") + 1, requestUrl.length());
+                }
+            }
+
             is = response.body().byteStream();
             File dir = new File(dirPath);
             if (!dir.exists()) {
@@ -199,6 +212,8 @@ public class Utils {
                 e.printStackTrace();
             }
         }
+
+        return dirPath.trim().replaceAll("/+$","") + "/" + fileName;
     }
 
     public static void sendAnalytics(final AnalyticsListener analyticsListener,
