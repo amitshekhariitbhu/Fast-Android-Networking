@@ -40,6 +40,8 @@ public class ANResponse<T> {
         return new ANResponse<>(anError);
     }
 
+    private String mFilePath;
+
     public ANResponse(T result) {
         this.mResult = result;
         this.mANError = null;
@@ -68,6 +70,14 @@ public class ANResponse<T> {
 
     public Response getOkHttpResponse() {
         return response;
+    }
+
+    public void setFilePath(String filePath) {
+        mFilePath = filePath;
+    }
+
+    public String getFilePath() {
+        return mFilePath;
     }
 
 }

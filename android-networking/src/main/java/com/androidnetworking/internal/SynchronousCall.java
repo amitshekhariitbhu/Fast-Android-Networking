@@ -89,7 +89,8 @@ public final class SynchronousCall {
     private static <T> ANResponse<T> executeDownloadRequest(ANRequest request) {
         Response okHttpResponse;
         try {
-            okHttpResponse = InternalNetworking.performDownloadRequest(request);
+            DownloadReturnValue returnValue = InternalNetworking.performDownloadRequest(request);
+            okHttpResponse = returnValue.getResponse();
             if (okHttpResponse == null) {
                 return new ANResponse<>(Utils.getErrorForConnection(new ANError()));
             }
@@ -101,6 +102,7 @@ public final class SynchronousCall {
             }
             ANResponse response = new ANResponse(ANConstants.SUCCESS);
             response.setOkHttpResponse(okHttpResponse);
+            response.setFilePath(returnValue.getFilePath());
             return response;
         } catch (ANError se) {
             return new ANResponse<>(Utils.getErrorForConnection(new ANError(se)));

@@ -144,9 +144,10 @@ public final class InternalNetworking {
         return okHttpResponse;
     }
 
-    public static Response performDownloadRequest(final ANRequest request) throws ANError {
+    public static DownloadReturnValue performDownloadRequest(final ANRequest request) throws ANError {
         Request okHttpRequest;
         Response okHttpResponse;
+        String filePath;
         try {
             Request.Builder builder = new Request.Builder().url(request.getUrl());
             addHeadersToRequestBuilder(builder, request);
@@ -187,7 +188,8 @@ public final class InternalNetworking {
             final long startTime = System.currentTimeMillis();
             final long startBytes = TrafficStats.getTotalRxBytes();
             okHttpResponse = request.getCall().execute();
-            Utils.saveFile(okHttpResponse, request.getDirPath(), request.getFileName());
+            filePath = Utils.saveFile(okHttpResponse, request.getDirPath(), request.getFileName());
+
             final long timeTaken = System.currentTimeMillis() - startTime;
             if (okHttpResponse.cacheResponse() == null) {
                 final long finalBytes = TrafficStats.getTotalRxBytes();
@@ -214,7 +216,7 @@ public final class InternalNetworking {
             }
             throw new ANError(ioe);
         }
-        return okHttpResponse;
+        return new DownloadReturnValue(okHttpResponse, filePath);
     }
 
 
