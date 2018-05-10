@@ -75,17 +75,26 @@ public final class InternalNetworking {
                 }
                 case POST: {
                     requestBody = request.getRequestBody();
-                    builder = builder.post(requestBody);
+                    if (request.getUploadProgressListener() != null)
+                        builder = builder.post(new RequestProgressBody(requestBody, request.getUploadProgressListener()));
+                    else
+                        builder = builder.post(requestBody);
                     break;
                 }
                 case PUT: {
                     requestBody = request.getRequestBody();
-                    builder = builder.put(requestBody);
+                    if (request.getUploadProgressListener() != null)
+                        builder = builder.put(new RequestProgressBody(requestBody, request.getUploadProgressListener()));
+                    else
+                        builder = builder.put(requestBody);
                     break;
                 }
                 case DELETE: {
                     requestBody = request.getRequestBody();
-                    builder = builder.delete(requestBody);
+                    if (request.getUploadProgressListener() != null)
+                        builder = builder.delete(new RequestProgressBody(requestBody, request.getUploadProgressListener()));
+                    else
+                        builder = builder.delete(requestBody);
                     break;
                 }
                 case HEAD: {
@@ -98,7 +107,10 @@ public final class InternalNetworking {
                 }
                 case PATCH: {
                     requestBody = request.getRequestBody();
-                    builder = builder.patch(requestBody);
+                    if (request.getUploadProgressListener() != null)
+                        builder = builder.patch(new RequestProgressBody(requestBody, request.getUploadProgressListener()));
+                    else
+                        builder = builder.patch(requestBody);
                     break;
                 }
             }
