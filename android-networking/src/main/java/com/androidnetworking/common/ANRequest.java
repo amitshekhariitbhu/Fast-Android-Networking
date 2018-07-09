@@ -92,7 +92,7 @@ public class ANRequest<T extends ANRequest> {
     private HashMap<String, String> mMultiPartParameterMap = new HashMap<>();
     private HashMap<String, List<String>> mQueryParameterMap = new HashMap<>();
     private HashMap<String, String> mPathParameterMap = new HashMap<>();
-    private HashMap<String, File> mMultiPartFileMap = new HashMap<>();
+    private HashMap<String, List<File>> mMultiPartFileMap = new HashMap<>();
     private String mDirPath;
     private String mFileName;
     private String mApplicationJsonString = null;
@@ -858,13 +858,16 @@ public class ANRequest<T extends ANRequest> {
                         "form-data; name=\"" + entry.getKey() + "\""),
                         RequestBody.create(null, entry.getValue()));
             }
-            for (HashMap.Entry<String, File> entry : mMultiPartFileMap.entrySet()) {
-                String fileName = entry.getValue().getName();
-                RequestBody fileBody = RequestBody.create(MediaType.parse(Utils.getMimeType(fileName)),
-                        entry.getValue());
-                builder.addPart(Headers.of("Content-Disposition",
-                        "form-data; name=\"" + entry.getKey() + "\"; filename=\"" + fileName + "\""),
-                        fileBody);
+            for (HashMap.Entry<String, List<File>> entry : mMultiPartFileMap.entrySet()) {
+                List<File> files = entry.getValue();
+                for (File file : files) {
+                    String fileName = file.getName();
+                    RequestBody fileBody = RequestBody.create(MediaType.parse(Utils.getMimeType(fileName)),
+                            file);
+                    builder.addPart(Headers.of("Content-Disposition",
+                            "form-data; name=\"" + entry.getKey() + "\"; filename=\"" + fileName + "\""),
+                            fileBody);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -1605,7 +1608,7 @@ public class ANRequest<T extends ANRequest> {
         private HashMap<String, String> mMultiPartParameterMap = new HashMap<>();
         private HashMap<String, List<String>> mQueryParameterMap = new HashMap<>();
         private HashMap<String, String> mPathParameterMap = new HashMap<>();
-        private HashMap<String, File> mMultiPartFileMap = new HashMap<>();
+        private HashMap<String, List<File>> mMultiPartFileMap = new HashMap<>();
         private CacheControl mCacheControl;
         private int mPercentageThresholdForCancelling = 0;
         private Executor mExecutor;
@@ -1789,13 +1792,24 @@ public class ANRequest<T extends ANRequest> {
         }
 
         public T addMultipartFile(String key, File file) {
-            mMultiPartFileMap.put(key, file);
+            addMultipartFileWithKey(key, file);
             return (T) this;
         }
 
         public T addMultipartFile(Map<String, File> multiPartFileMap) {
             if (multiPartFileMap != null) {
-                mMultiPartFileMap.putAll(multiPartFileMap);
+                for (HashMap.Entry<String, File> entry : multiPartFileMap.entrySet()) {
+                    addMultipartFile(entry.getKey(), entry.getValue());
+                }
+            }
+            return (T) this;
+        }
+
+        public T addMultipartFile(String key, List<File> files) {
+            if (files != null) {
+                for (File file : files) {
+                    addMultipartFileWithKey(key, file);
+                }
             }
             return (T) this;
         }
@@ -1808,6 +1822,15 @@ public class ANRequest<T extends ANRequest> {
         public T setContentType(String contentType) {
             mCustomContentType = contentType;
             return (T) this;
+        }
+
+        private void addMultipartFileWithKey(String key, File file) {
+            List<File> files = mMultiPartFileMap.get(key);
+            if (files == null) {
+                files = new ArrayList<>();
+            }
+            files.add(file);
+            mMultiPartFileMap.put(key, files);
         }
 
         public ANRequest build() {
