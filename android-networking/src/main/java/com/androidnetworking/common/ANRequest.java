@@ -1805,11 +1805,18 @@ public class ANRequest<T extends ANRequest> {
             return (T) this;
         }
 
-        public T addMultipartFile(String key, List<File> files) {
+        public T addMultipartFileList(String key, List<File> files) {
             if (files != null) {
                 for (File file : files) {
                     addMultipartFileWithKey(key, file);
                 }
+            }
+            return (T) this;
+        }
+
+        public T addMultipartFileList(Map<String, List<File>> multiPartFileMap) {
+            if (multiPartFileMap != null) {
+                mMultiPartFileMap.putAll(multiPartFileMap);
             }
             return (T) this;
         }
