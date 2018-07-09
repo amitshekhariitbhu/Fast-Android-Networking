@@ -1799,7 +1799,7 @@ public class ANRequest<T extends ANRequest> {
         public T addMultipartFile(Map<String, File> multiPartFileMap) {
             if (multiPartFileMap != null) {
                 for (HashMap.Entry<String, File> entry : multiPartFileMap.entrySet()) {
-                    addMultipartFile(entry.getKey(), entry.getValue());
+                    addMultipartFileWithKey(entry.getKey(), entry.getValue());
                 }
             }
             return (T) this;
