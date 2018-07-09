@@ -38,6 +38,8 @@ Fast Android Networking Library takes care of each and everything. So you don't 
 
 ### PRDownloader library for downloading file with pause and resume support, [Check here](https://github.com/MindorksOpenSource/PRDownloader)
 
+### RxPS - A RxJava Priority Scheduler library for Android, [Check here](https://github.com/MindorksOpenSource/RxJavaPriorityScheduler)
+
 ### Find this project useful ? :heart:
 * Support it by clicking the :star: button on the upper right of this page. :v:
 
