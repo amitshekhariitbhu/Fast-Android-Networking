@@ -1,6 +1,15 @@
 Change Log
 ==========
 
+Version 1.0.2 *(2018-07-10)*
+----------------------------
+
+ * New: Add support for multiple file upload with same key
+ * New: Add support for multi contentType in multipart
+ * Bump OkHttp Version to 3.10.0
+ * Bump other dependencies
+
+
 Version 1.0.1 *(2017-12-20)*
 ----------------------------
 
