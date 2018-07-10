@@ -40,6 +40,8 @@ import com.androidnetworking.interfaces.StringRequestListener;
 import com.androidnetworking.interfaces.UploadProgressListener;
 import com.androidnetworking.internal.ANRequestQueue;
 import com.androidnetworking.internal.SynchronousCall;
+import com.androidnetworking.model.MultipartFileBody;
+import com.androidnetworking.model.MultipartStringBody;
 import com.androidnetworking.utils.ParseUtil;
 import com.androidnetworking.utils.Utils;
 import com.google.gson.internal.$Gson$Types;
@@ -89,10 +91,10 @@ public class ANRequest<T extends ANRequest> {
     private HashMap<String, List<String>> mHeadersMap = new HashMap<>();
     private HashMap<String, String> mBodyParameterMap = new HashMap<>();
     private HashMap<String, String> mUrlEncodedFormBodyParameterMap = new HashMap<>();
-    private HashMap<String, String> mMultiPartParameterMap = new HashMap<>();
+    private HashMap<String, MultipartStringBody> mMultiPartParameterMap = new HashMap<>();
     private HashMap<String, List<String>> mQueryParameterMap = new HashMap<>();
     private HashMap<String, String> mPathParameterMap = new HashMap<>();
-    private HashMap<String, List<File>> mMultiPartFileMap = new HashMap<>();
+    private HashMap<String, List<MultipartFileBody>> mMultiPartFileMap = new HashMap<>();
     private String mDirPath;
     private String mFileName;
     private String mApplicationJsonString = null;
@@ -849,24 +851,33 @@ public class ANRequest<T extends ANRequest> {
     }
 
     public RequestBody getMultiPartRequestBody() {
-        MultipartBody.Builder builder = new MultipartBody
-                .Builder()
+        MultipartBody.Builder builder = new MultipartBody.Builder()
                 .setType((customMediaType == null) ? MultipartBody.FORM : customMediaType);
         try {
-            for (HashMap.Entry<String, String> entry : mMultiPartParameterMap.entrySet()) {
+            for (HashMap.Entry<String, MultipartStringBody> entry : mMultiPartParameterMap.entrySet()) {
+                MultipartStringBody stringBody = entry.getValue();
+                MediaType mediaType = null;
+                if (stringBody.contentType != null) {
+                    mediaType = MediaType.parse(stringBody.contentType);
+                }
                 builder.addPart(Headers.of("Content-Disposition",
                         "form-data; name=\"" + entry.getKey() + "\""),
-                        RequestBody.create(null, entry.getValue()));
+                        RequestBody.create(mediaType, stringBody.value));
             }
-            for (HashMap.Entry<String, List<File>> entry : mMultiPartFileMap.entrySet()) {
-                List<File> files = entry.getValue();
-                for (File file : files) {
-                    String fileName = file.getName();
-                    RequestBody fileBody = RequestBody.create(MediaType.parse(Utils.getMimeType(fileName)),
-                            file);
+            for (HashMap.Entry<String, List<MultipartFileBody>> entry : mMultiPartFileMap.entrySet()) {
+                List<MultipartFileBody> fileBodies = entry.getValue();
+                for (MultipartFileBody fileBody : fileBodies) {
+                    String fileName = fileBody.file.getName();
+                    MediaType mediaType;
+                    if (fileBody.contentType != null) {
+                        mediaType = MediaType.parse(fileBody.contentType);
+                    } else {
+                        mediaType = MediaType.parse(Utils.getMimeType(fileName));
+                    }
+                    RequestBody requestBody = RequestBody.create(mediaType, fileBody.file);
                     builder.addPart(Headers.of("Content-Disposition",
                             "form-data; name=\"" + entry.getKey() + "\"; filename=\"" + fileName + "\""),
-                            fileBody);
+                            requestBody);
                 }
             }
         } catch (Exception e) {
@@ -1605,10 +1616,10 @@ public class ANRequest<T extends ANRequest> {
         private String mUrl;
         private Object mTag;
         private HashMap<String, List<String>> mHeadersMap = new HashMap<>();
-        private HashMap<String, String> mMultiPartParameterMap = new HashMap<>();
         private HashMap<String, List<String>> mQueryParameterMap = new HashMap<>();
         private HashMap<String, String> mPathParameterMap = new HashMap<>();
-        private HashMap<String, List<File>> mMultiPartFileMap = new HashMap<>();
+        private HashMap<String, MultipartStringBody> mMultiPartParameterMap = new HashMap<>();
+        private HashMap<String, List<MultipartFileBody>> mMultiPartFileMap = new HashMap<>();
         private CacheControl mCacheControl;
         private int mPercentageThresholdForCancelling = 0;
         private Executor mExecutor;
@@ -1771,52 +1782,100 @@ public class ANRequest<T extends ANRequest> {
         }
 
         public T addMultipartParameter(String key, String value) {
-            mMultiPartParameterMap.put(key, value);
+            return addMultipartParameter(key, value, null);
+        }
+
+        public T addMultipartParameter(String key, String value, String contentType) {
+            MultipartStringBody stringBody = new MultipartStringBody(value, contentType);
+            mMultiPartParameterMap.put(key, stringBody);
             return (T) this;
         }
 
         public T addMultipartParameter(Map<String, String> multiPartParameterMap) {
+            return addMultipartParameter(multiPartParameterMap, null);
+        }
+
+        public T addMultipartParameter(Map<String, String> multiPartParameterMap, String contentType) {
             if (multiPartParameterMap != null) {
-                mMultiPartParameterMap.putAll(multiPartParameterMap);
+                Map<String, MultipartStringBody> parameterMap = new HashMap<>();
+                for (HashMap.Entry<String, String> entry : multiPartParameterMap.entrySet()) {
+                    MultipartStringBody stringBody = new MultipartStringBody(entry.getValue(), contentType);
+                    parameterMap.put(entry.getKey(), stringBody);
+                }
+                mMultiPartParameterMap.putAll(parameterMap);
             }
             return (T) this;
         }
 
         public T addMultipartParameter(Object object) {
+            return addMultipartParameter(object, null);
+        }
+
+        public T addMultipartParameter(Object object, String contentType) {
             if (object != null) {
-                mMultiPartParameterMap.putAll(ParseUtil
+                Map<String, String> parameterMap = ParseUtil
                         .getParserFactory()
-                        .getStringMap(object));
+                        .getStringMap(object);
+                addMultipartParameter(parameterMap, contentType);
             }
             return (T) this;
         }
 
         public T addMultipartFile(String key, File file) {
-            addMultipartFileWithKey(key, file);
+            return addMultipartFile(key, file, null);
+        }
+
+        public T addMultipartFile(String key, File file, String contentType) {
+            MultipartFileBody fileBody = new MultipartFileBody(file, contentType);
+            addMultipartFileWithKey(key, fileBody);
             return (T) this;
         }
 
         public T addMultipartFile(Map<String, File> multiPartFileMap) {
+            return addMultipartFile(multiPartFileMap, null);
+        }
+
+        public T addMultipartFile(Map<String, File> multiPartFileMap, String contentType) {
             if (multiPartFileMap != null) {
                 for (HashMap.Entry<String, File> entry : multiPartFileMap.entrySet()) {
-                    addMultipartFileWithKey(entry.getKey(), entry.getValue());
+                    MultipartFileBody fileBody = new MultipartFileBody(entry.getValue(), contentType);
+                    addMultipartFileWithKey(entry.getKey(), fileBody);
                 }
             }
             return (T) this;
         }
 
         public T addMultipartFileList(String key, List<File> files) {
+            return addMultipartFileList(key, files, null);
+        }
+
+        public T addMultipartFileList(String key, List<File> files, String contentType) {
             if (files != null) {
                 for (File file : files) {
-                    addMultipartFileWithKey(key, file);
+                    MultipartFileBody fileBody = new MultipartFileBody(file, contentType);
+                    addMultipartFileWithKey(key, fileBody);
                 }
             }
             return (T) this;
         }
 
         public T addMultipartFileList(Map<String, List<File>> multiPartFileMap) {
+            return addMultipartFileList(multiPartFileMap, null);
+        }
+
+        public T addMultipartFileList(Map<String, List<File>> multiPartFileMap, String contentType) {
             if (multiPartFileMap != null) {
-                mMultiPartFileMap.putAll(multiPartFileMap);
+                Map<String, List<MultipartFileBody>> parameterMap = new HashMap<>();
+                for (HashMap.Entry<String, List<File>> entry : multiPartFileMap.entrySet()) {
+                    List<File> files = entry.getValue();
+                    List<MultipartFileBody> fileBodies = new ArrayList<>();
+                    for (File file : files) {
+                        MultipartFileBody fileBody = new MultipartFileBody(file, contentType);
+                        fileBodies.add(fileBody);
+                    }
+                    parameterMap.put(entry.getKey(), fileBodies);
+                }
+                mMultiPartFileMap.putAll(parameterMap);
             }
             return (T) this;
         }
@@ -1831,13 +1890,13 @@ public class ANRequest<T extends ANRequest> {
             return (T) this;
         }
 
-        private void addMultipartFileWithKey(String key, File file) {
-            List<File> files = mMultiPartFileMap.get(key);
-            if (files == null) {
-                files = new ArrayList<>();
+        private void addMultipartFileWithKey(String key, MultipartFileBody fileBody) {
+            List<MultipartFileBody> fileBodies = mMultiPartFileMap.get(key);
+            if (fileBodies == null) {
+                fileBodies = new ArrayList<>();
             }
-            files.add(file);
-            mMultiPartFileMap.put(key, files);
+            fileBodies.add(fileBody);
+            mMultiPartFileMap.put(key, fileBodies);
         }
 
         public ANRequest build() {
