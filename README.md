@@ -27,18 +27,11 @@ Fast Android Networking Library takes care of each and everything. So you don't 
   [Okio](https://github.com/square/okio) do some clever things to save CPU and memory.
 * As it uses [OkHttp](http://square.github.io/okhttp/) , most important it supports HTTP/2.  
 
-
 ### RxJava2 Support, [check here](https://amitshekhariitbhu.github.io/Fast-Android-Networking/rxjava2_support.html).
 
 ### RxJava2 + Fast Android Networking + Dagger2 with MVP Architecture Project, [Check here](https://github.com/MindorksOpenSource/android-mvp-architecture)
 
 ### Another awesome library for debugging databases and shared preferences, [Check here](https://github.com/amitshekhariitbhu/Android-Debug-Database)
-
-### RxJava2 + Fast Android Networking + Dagger2 with MVVM Architecture Project, [Check here](https://github.com/MindorksOpenSource/android-mvvm-architecture)
-
-### PRDownloader library for downloading file with pause and resume support, [Check here](https://github.com/MindorksOpenSource/PRDownloader)
-
-### RxPS - A RxJava Priority Scheduler library for Android, [Check here](https://github.com/MindorksOpenSource/RxJavaPriorityScheduler)
 
 ### Find this project useful ? :heart:
 * Support it by clicking the :star: button on the upper right of this page. :v:
