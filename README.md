@@ -18,14 +18,14 @@ Fast Android Networking Library is a powerful library for doing any type of netw
 Fast Android Networking Library takes care of each and everything. So you don't have to do anything, just make request and listen for the response.
 
 ### Why use Fast Android Networking ?
-* Recent removal of HttpClient in Android Marshmallow(Android M) made other networking library obsolete.
-* No other single library do each and everything like making request, downloading any type of file, uploading file, loading
-  image from network in ImageView, etc. There are libraries but they are outdated.
-* No other library provided simple interface for doing all types of things in networking like setting priority, cancelling, etc.
-* As it uses [Okio](https://github.com/square/okio) , No more GC overhead in android application.
+* Recent removal of HttpClient in Android Marshmallow(Android M) made other networking libraries obsolete.
+* No other single library does each and everything like making request, downloading any type of file, uploading file, loading
+  image from network in ImageView, etc. There are some libraries but they are outdated.
+* No other library provides simple interface for doing all types of things in networking like setting priority, cancelling, etc.
+* As it uses [Okio](https://github.com/square/okio) , No more GC overhead in android applications.
   [Okio](https://github.com/square/okio) is made to handle GC overhead while allocating memory.
-  [Okio](https://github.com/square/okio) do some clever things to save CPU and memory.
-* As it uses [OkHttp](http://square.github.io/okhttp/) , most important it supports HTTP/2.  
+  [Okio](https://github.com/square/okio) does some clever things to save CPU and memory.
+* It uses [OkHttp](http://square.github.io/okhttp/) , more importantly it supports HTTP/2.  
 
 ### RxJava2 Support, [check here](https://amitshekhariitbhu.github.io/Fast-Android-Networking/rxjava2_support.html).
 
@@ -605,9 +605,9 @@ As it uses [OkHttp](http://square.github.io/okhttp/) as a networking layer, it s
 * Single library for all type of networking.
 * Supports RxJava, RxJava2 -> [Check here](https://amitshekhariitbhu.github.io/Fast-Android-Networking/rxjava2_support.html)
 * Current bandwidth and connection quality can be obtained to decide logic of code.
-* Executor can be passed to any request to get response in another thread.
+* Executor can be passed to any request to get the response in another thread.
 * Complete analytics of any request can be obtained.
-* All types of customization is possible.
+* All types of customization are possible.
 * Immediate Request really is immediate now.
 * Prefetching of any request can be done so that it gives instant data when required from the cache.
 * Proper request canceling.
