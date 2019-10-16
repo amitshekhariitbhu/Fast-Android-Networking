@@ -271,7 +271,7 @@ public class Rx2InternalNetworking {
             try {
                 final long startTime = System.currentTimeMillis();
                 final long startBytes = TrafficStats.getTotalRxBytes();
-                okHttpResponse = request.getCall().execute();
+                okHttpResponse = call.execute();
                 Utils.saveFile(okHttpResponse, request.getDirPath(), request.getFileName());
                 final long timeTaken = System.currentTimeMillis() - startTime;
                 if (okHttpResponse.cacheResponse() == null) {
