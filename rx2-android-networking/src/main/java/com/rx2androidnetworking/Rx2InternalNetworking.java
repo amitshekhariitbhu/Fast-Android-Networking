@@ -272,7 +272,6 @@ public class Rx2InternalNetworking {
                 final long startTime = System.currentTimeMillis();
                 final long startBytes = TrafficStats.getTotalRxBytes();
                 okHttpResponse = call.execute();
-                Utils.saveFile(okHttpResponse, request.getDirPath(), request.getFileName());
                 final long timeTaken = System.currentTimeMillis() - startTime;
                 if (okHttpResponse.cacheResponse() == null) {
                     final long finalBytes = TrafficStats.getTotalRxBytes();
@@ -296,6 +295,7 @@ public class Rx2InternalNetworking {
                     }
                 } else {
                     if (!call.isCanceled()) {
+                        Utils.saveFile(okHttpResponse, request.getDirPath(), request.getFileName());
                         ANResponse<T> response = (ANResponse<T>) ANResponse.success(ANConstants.SUCCESS);
                         observer.onNext(response.getResult());
                     }
