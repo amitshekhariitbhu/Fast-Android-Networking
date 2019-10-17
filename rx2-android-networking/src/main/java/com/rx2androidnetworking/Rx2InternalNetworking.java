@@ -295,7 +295,9 @@ public class Rx2InternalNetworking {
                     }
                 } else {
                     if (!call.isCanceled()) {
-                        Utils.saveFile(okHttpResponse, request.getDirPath(), request.getFileName());
+                        if(!TextUtils.isEmpty(request.getDirPath())) {
+                            Utils.saveFile(okHttpResponse, request.getDirPath(), request.getFileName());
+                        }
                         ANResponse<T> response = (ANResponse<T>) ANResponse.success(ANConstants.SUCCESS);
                         observer.onNext(response.getResult());
                     }
