@@ -20,6 +20,7 @@
 package com.rx2androidnetworking;
 
 import android.net.TrafficStats;
+import android.text.TextUtils;
 
 import com.androidnetworking.common.ANConstants;
 import com.androidnetworking.common.ANResponse;
