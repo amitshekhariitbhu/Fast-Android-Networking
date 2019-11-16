@@ -23,6 +23,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.ImageView;
 
 import com.androidnetworking.AndroidNetworking;
@@ -48,14 +50,24 @@ public class MainActivity extends AppCompatActivity {
     private ImageView imageView;
     private ANImageView ANImageView;
 
+    private AlphaAnimation responseAnimation = new AlphaAnimation(0.0f, 1.0f);
+    private AlphaAnimation errorAnimation = new AlphaAnimation(1.0f, 0.0f);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        responseAnimation.setDuration(1000);
+        errorAnimation.setDuration(1000);
+
         imageView = (ImageView) findViewById(R.id.imageView);
+
         ANImageView = (ANImageView) findViewById(R.id.greatImageView);
+        //ANImageView.setAlpha(0);
         ANImageView.setDefaultImageResId(R.drawable.ic_toys_black_24dp);
         ANImageView.setErrorImageResId(R.drawable.ic_error_outline_black_24dp);
+        ANImageView.setAnimations(responseAnimation,errorAnimation);
         ANImageView.setImageUrl(Images.imageThumbUrls[0]);
         makeJSONArrayRequest();
         makeJSONObjectRequest();

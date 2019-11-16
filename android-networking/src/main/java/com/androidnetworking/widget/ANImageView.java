@@ -22,6 +22,7 @@ import android.support.v7.widget.AppCompatImageView;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.ImageView;
 
 import com.androidnetworking.error.ANError;
@@ -40,6 +41,10 @@ public class ANImageView extends AppCompatImageView {
 
     private ANImageLoader.ImageContainer mImageContainer;
 
+    private Animation responseAnimation;
+
+    private Animation errorAnimation;
+
     public ANImageView(Context context) {
         this(context, null);
     }
@@ -55,6 +60,11 @@ public class ANImageView extends AppCompatImageView {
     public void setImageUrl(String url) {
         mUrl = url;
         loadImageIfNecessary(false);
+    }
+
+    public void setAnimations(Animation onResponseAnimation, Animation onErrorAnimation){
+        responseAnimation = onResponseAnimation;
+        errorAnimation    = onErrorAnimation;
     }
 
     public void setDefaultImageResId(int defaultImage) {
@@ -122,13 +132,23 @@ public class ANImageView extends AppCompatImageView {
                         } else if (mDefaultImageId != 0) {
                             setImageResource(mDefaultImageId);
                         }
+
+                        if (responseAnimation!=null){
+                            startAnimation(responseAnimation);
+                        }
                     }
 
                     @Override
                     public void onError(ANError error) {
+
                         if (mErrorImageId != 0) {
                             setImageResource(mErrorImageId);
                         }
+
+                        if (errorAnimation!=null){
+                            startAnimation(errorAnimation);
+                        }
+
                     }
                 }, maxWidth, maxHeight, scaleType);
 
@@ -155,6 +175,8 @@ public class ANImageView extends AppCompatImageView {
             mImageContainer.cancelRequest();
             setImageBitmap(null);
             mImageContainer = null;
+
+            clearAnimation();
         }
         super.onDetachedFromWindow();
     }
