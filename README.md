@@ -33,6 +33,8 @@ Fast Android Networking Library takes care of each and everything. So you don't 
 
 ### Another awesome library for debugging databases and shared preferences, [Check here](https://github.com/amitshekhariitbhu/Android-Debug-Database)
 
+### Learn to build a ride-sharing Android app like Uber, Lyft, [Check here](https://github.com/MindorksOpenSource/ridesharing-uber-lyft-app)
+
 ### Find this project useful ? :heart:
 * Support it by clicking the :star: button on the upper right of this page. :v:
 
