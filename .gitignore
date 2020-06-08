@@ -7,3 +7,17 @@
 /build
 /captures
 /.idea
+
+android-networking/local.properties
+
+android-networking/gradle/wrapper/
+
+android-networking/gradlew
+
+android-networking/gradlew.bat
+
+gradle/wrapper/gradle-wrapper.properties
+.externalNativeBuild/
+.cxx/
+.idea/
+.gradle/wrapper/
