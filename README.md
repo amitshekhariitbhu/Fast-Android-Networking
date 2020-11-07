@@ -10,6 +10,8 @@
 [![Download](https://api.bintray.com/packages/amitshekhariitbhu/maven/android-networking/images/download.svg) ](https://bintray.com/amitshekhariitbhu/maven/android-networking/_latestVersion)
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=102)](https://opensource.org/licenses/Apache-2.0)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/amitshekhariitbhu/Fast-Android-Networking/blob/master/LICENSE)
+[![QualityGate](https://quality-gate.com/backend/api/timeline?branchName=master&projectName=amitshekhariitbhu_Fast-Android-Networking)](https://quality-gate.com/dashboard/branches/287131#overview)
+
 
 ### About Fast Android Networking Library
 
