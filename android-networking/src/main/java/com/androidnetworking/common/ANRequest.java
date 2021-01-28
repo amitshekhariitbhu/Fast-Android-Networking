@@ -869,6 +869,10 @@ public class ANRequest<T extends ANRequest> {
                 List<MultipartFileBody> fileBodies = entry.getValue();
                 for (MultipartFileBody fileBody : fileBodies) {
                     String fileName = fileBody.file.getName();
+                    String nameNoSuffix = fileName.substring(0, fileName.lastIndexOf("."));
+                    String suffixName = fileName.substring(fileName.lastIndexOf("."));
+                    fileName = URLEncoder.encode(nameNoSuffix, "utf-8");
+                    fileName += suffixName;
                     MediaType mediaType;
                     if (fileBody.contentType != null) {
                         mediaType = MediaType.parse(fileBody.contentType);
@@ -877,7 +881,7 @@ public class ANRequest<T extends ANRequest> {
                     }
                     RequestBody requestBody = RequestBody.create(mediaType, fileBody.file);
                     builder.addPart(Headers.of("Content-Disposition",
-                            "form-data; name=\"" + entry.getKey() + "\"; filename=\"" + URLEncoder.encode(fileName, "UTF-8") + "\""),
+                            "form-data; name=\"" + entry.getKey() + "\"; filename=\"" + fileName + "\""),
                             requestBody);
                 }
             }
