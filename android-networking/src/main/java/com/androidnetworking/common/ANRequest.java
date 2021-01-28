@@ -52,6 +52,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.lang.reflect.Type;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -876,7 +877,7 @@ public class ANRequest<T extends ANRequest> {
                     }
                     RequestBody requestBody = RequestBody.create(mediaType, fileBody.file);
                     builder.addPart(Headers.of("Content-Disposition",
-                            "form-data; name=\"" + entry.getKey() + "\"; filename=\"" + fileName + "\""),
+                            "form-data; name=\"" + entry.getKey() + "\"; filename=\"" + URLEncoder.encode(fileName, "UTF-8") + "\""),
                             requestBody);
                 }
             }
