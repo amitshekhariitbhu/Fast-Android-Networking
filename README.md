@@ -38,6 +38,8 @@ Fast Android Networking Library takes care of each and everything. So you don't 
 
 ### PRDownloader library for downloading file with pause and resume support, [Check here](https://github.com/MindorksOpenSource/PRDownloader)
 
+### RxPS - A RxJava Priority Scheduler library for Android, [Check here](https://github.com/MindorksOpenSource/RxJavaPriorityScheduler)
+
 ### Find this project useful ? :heart:
 * Support it by clicking the :star: button on the upper right of this page. :v:
 
@@ -55,7 +57,7 @@ Fast Android Networking Library supports Android 2.3 (Gingerbread) and later.
 
 Add this in your build.gradle
 ```groovy
-compile 'com.amitshekhar.android:android-networking:1.0.1'
+compile 'com.amitshekhar.android:android-networking:1.0.2'
 ```
 Do not forget to add internet permission in manifest if already not present
 ```xml
@@ -75,7 +77,7 @@ AndroidNetworking.initialize(getApplicationContext(),okHttpClient);
 ```
 Using the Fast Android Networking with Jackson Parser
 ```groovy
-compile 'com.amitshekhar.android:jackson-android-networking:1.0.1'
+compile 'com.amitshekhar.android:jackson-android-networking:1.0.2'
 ```
 ```java
 // Then set the JacksonParserFactory like below
