@@ -19,6 +19,7 @@ package com.androidnetworking.common;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.androidnetworking.core.Core;
@@ -838,13 +839,16 @@ public class ANRequest<T extends ANRequest> {
             FormBody.Builder builder = new FormBody.Builder();
             try {
                 for (HashMap.Entry<String, String> entry : mBodyParameterMap.entrySet()) {
-                    builder.add(entry.getKey(), entry.getValue());
+                    if (entry.getKey() != null && entry.getValue() != null)
+                        builder.add(entry.getKey(), entry.getValue());
                 }
                 for (HashMap.Entry<String, String> entry : mUrlEncodedFormBodyParameterMap.entrySet()) {
-                    builder.addEncoded(entry.getKey(), entry.getValue());
+                    if (entry.getKey() != null && entry.getValue() != null)
+                        builder.addEncoded(entry.getKey(), entry.getValue());
                 }
             } catch (Exception e) {
                 e.printStackTrace();
+                Log.e("Network error", e.getMessage());
             }
             return builder.build();
         }
