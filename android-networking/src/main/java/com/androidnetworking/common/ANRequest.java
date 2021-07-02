@@ -52,6 +52,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.lang.reflect.Type;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -875,6 +876,7 @@ public class ANRequest<T extends ANRequest> {
                         mediaType = MediaType.parse(Utils.getMimeType(fileName));
                     }
                     RequestBody requestBody = RequestBody.create(mediaType, fileBody.file);
+                    fileName = fileBody.encoding == null ? fileName : URLEncoder.encode(fileName, fileBody.encoding);
                     builder.addPart(Headers.of("Content-Disposition",
                             "form-data; name=\"" + entry.getKey() + "\"; filename=\"" + fileName + "\""),
                             requestBody);
@@ -1827,6 +1829,12 @@ public class ANRequest<T extends ANRequest> {
 
         public T addMultipartFile(String key, File file, String contentType) {
             MultipartFileBody fileBody = new MultipartFileBody(file, contentType);
+            addMultipartFileWithKey(key, fileBody);
+            return (T) this;
+        }
+
+        public T addMultipartFile(String key, File file, String contentType, String encoding) {
+            MultipartFileBody fileBody = new MultipartFileBody(file, contentType, encoding);
             addMultipartFileWithKey(key, fileBody);
             return (T) this;
         }
