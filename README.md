@@ -50,7 +50,7 @@ Fast Android Networking Library supports Android 2.3 (Gingerbread) and later.
 
 ## Using Fast Android Networking Library in your application
 
-Add this in your top lavel build.gradle file
+Add this in your top level build.gradle file
 ```groovy
 maven { url "https://jitpack.io" }
 ```
