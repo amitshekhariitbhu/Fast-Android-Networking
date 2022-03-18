@@ -50,11 +50,11 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile "junit:junit:$rootProject.ext.jUnitVersion"
-    androidTestCompile "com.squareup.okhttp3:mockwebserver:$rootProject.ext.mockWebServerVersion"
-    compile "com.fasterxml.jackson.core:jackson-databind:$rootProject.ext.jacksonVersion"
-    compile project(':android-networking')
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "junit:junit:$rootProject.ext.jUnitVersion"
+    androidTestImplementation "com.squareup.okhttp3:mockwebserver:$rootProject.ext.mockWebServerVersion"
+    implementation "com.fasterxml.jackson.core:jackson-databind:$rootProject.ext.jacksonVersion"
+    implementation project(':android-networking')
 }
 
 //apply from: 'jackson-upload.gradle'
