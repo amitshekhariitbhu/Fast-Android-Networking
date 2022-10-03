@@ -5,6 +5,11 @@ topnav:
   items:
     - title: Github Project
       external_url: https://github.com/amitshekhariitbhu/Fast-Android-Networking
+      
+- title: Topnav
+  items:
+    - title: Created by Amit Shekhar
+      external_url: https://amitshekhar.me   
 
 #Topnav dropdowns
 topnav_dropdowns:
@@ -22,10 +27,10 @@ topnav_dropdowns:
           external_url: https://twitter.com/amitiitbhu
         - title: Github
           external_url: https://github.com/amitshekhariitbhu
-        - title: Medium
-          external_url: https://medium.com/@amitshekhar
         - title: Facebook
           external_url: https://www.facebook.com/amit.shekhar.iitbhu
-        - title: Email us
-          external_url: mailto:amit.shekhar.iitbhu@gmail.com?subject=Fast Android Networking
+        - title: LinkedIn
+          external_url: https://www.linkedin.com/in/amit-shekhar-iitbhu
+        - title: Blog
+          external_url: https://amitshekhar.me/blog     
 
