@@ -52,6 +52,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.lang.reflect.Type;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -868,6 +869,10 @@ public class ANRequest<T extends ANRequest> {
                 List<MultipartFileBody> fileBodies = entry.getValue();
                 for (MultipartFileBody fileBody : fileBodies) {
                     String fileName = fileBody.file.getName();
+                    String nameNoSuffix = fileName.substring(0, fileName.lastIndexOf("."));
+                    String suffixName = fileName.substring(fileName.lastIndexOf("."));
+                    fileName = URLEncoder.encode(nameNoSuffix, "utf-8");
+                    fileName += suffixName;
                     MediaType mediaType;
                     if (fileBody.contentType != null) {
                         mediaType = MediaType.parse(fileBody.contentType);
