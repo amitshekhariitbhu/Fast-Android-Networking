@@ -1,0 +1,72 @@
+name: PullRequest
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  buildTest:
+    name: Build & Test JDK ${{ matrix.java_version }}
+    runs-on: macOS-latest
+    strategy:
+      matrix:
+        java_version: [1.8]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.1
+        with:
+          fetch-depth: 0
+      - name: Install JDK ${{ matrix.java_version }}
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ matrix.java_version }}
+      - name: Install Android SDK
+        uses: malinskiy/action-android/install-sdk@release/0.0.7
+      - name: Build project
+        run: ./gradlew assembleDebug
+      - name: Run tests
+        run: ./gradlew test
+      - name: Run instrumentation tests
+        uses: malinskiy/action-android/emulator-run-cmd@release/0.0.7
+        with:
+          cmd: ./gradlew cAT
+          api: 28
+          tag: default
+          abi: x86
+      - name: Archive Espresso results
+        uses: actions/upload-artifact@v2.0.1
+        with:
+          name: Fast-Android-Networking-Espresso-report
+          path: app/build/reports/androidTests/connected
+      - name: Save logcat output
+        uses: actions/upload-artifact@master
+        if: failure()
+        with:
+          name: Fast-Android-Networking-logcat
+          path: artifacts/logcat.log
+  Check:
+    name: Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.1
+        with:
+          fetch-depth: 0
+      - name: Install JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: Install Android SDK
+        uses: malinskiy/action-android/install-sdk@release/0.0.7
+      - name: Code checks
+        run: ./gradlew check
+      - name: Archive Lint report
+        uses: actions/upload-artifact@v2.0.1
+        if: ${{ always() }}
+        with:
+          name: Fast-Android-Networking-Lint-report
+          path: app/build/reports/lint-results.html
