@@ -867,7 +867,14 @@ public class ANRequest<T extends ANRequest> {
             for (HashMap.Entry<String, List<MultipartFileBody>> entry : mMultiPartFileMap.entrySet()) {
                 List<MultipartFileBody> fileBodies = entry.getValue();
                 for (MultipartFileBody fileBody : fileBodies) {
-                    String fileName = fileBody.file.getName();
+
+                    String fileName = "";
+                    if (fileBody.fileName == null || fileBody.fileName.trim().equals("")) {
+                        fileName = fileBody.file.getName();
+                    }else{
+                        fileName = fileBody.fileName;
+                    }
+
                     MediaType mediaType;
                     if (fileBody.contentType != null) {
                         mediaType = MediaType.parse(fileBody.contentType);
@@ -1842,6 +1849,12 @@ public class ANRequest<T extends ANRequest> {
                     addMultipartFileWithKey(entry.getKey(), fileBody);
                 }
             }
+            return (T) this;
+        }
+
+        public T addMultipartFile(String key,String fileName, File file, String contentType) {
+            MultipartFileBody fileBody = new MultipartFileBody(file, contentType,fileName);
+            addMultipartFileWithKey(key, fileBody);
             return (T) this;
         }
 
