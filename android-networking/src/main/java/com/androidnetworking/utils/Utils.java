@@ -182,7 +182,11 @@ public class Utils {
                 dir.mkdirs();
             }
             File file = new File(dir, fileName);
-            fos = new FileOutputStream(file);
+            if (response.code() == 206 && file.exists()) {
+                fos = new FileOutputStream(file, true);
+            } else {
+                fos = new FileOutputStream(file);
+            }
             while ((len = is.read(buf)) != -1) {
                 fos.write(buf, 0, len);
             }
