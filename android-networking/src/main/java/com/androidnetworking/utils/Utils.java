@@ -187,10 +187,12 @@ public class Utils {
             } else {
                 fos = new FileOutputStream(file);
             }
-            while ((len = is.read(buf)) != -1) {
-                fos.write(buf, 0, len);
+            if(is.available() > 0) {
+                while ((len = is.read(buf)) != -1) {
+                    fos.write(buf, 0, len);
+                }
+                fos.flush();
             }
-            fos.flush();
         } finally {
             try {
                 if (is != null) is.close();
