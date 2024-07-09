@@ -172,7 +172,7 @@ public class Utils {
     public static void saveFile(Response response, String dirPath,
                                 String fileName) throws IOException {
         InputStream is = null;
-        byte[] buf = new byte[2048];
+        byte[] buf = new byte[8192];
         int len;
         FileOutputStream fos = null;
         try {
@@ -182,11 +182,15 @@ public class Utils {
                 dir.mkdirs();
             }
             File file = new File(dir, fileName);
-            fos = new FileOutputStream(file);
+            int code = response.code();
+            if ((code == 206 || code == 416) && file.exists()) {
+                fos = new FileOutputStream(file, true);
+            } else {
+                fos = new FileOutputStream(file);
+            }
             while ((len = is.read(buf)) != -1) {
                 fos.write(buf, 0, len);
             }
-            fos.flush();
         } finally {
             try {
                 if (is != null) is.close();
