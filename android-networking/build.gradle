@@ -40,11 +40,10 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile "junit:junit:$rootProject.ext.jUnitVersion"
-    androidTestCompile "com.squareup.okhttp3:mockwebserver:$rootProject.ext.mockWebServerVersion"
-    compile "com.squareup.okhttp3:okhttp:$rootProject.ext.okHttp3Version"
-    compile "com.google.code.gson:gson:$rootProject.ext.gsonVersion"
-    compile "com.android.support:appcompat-v7:$rootProject.ext.supportAppCompatVersion"
+    api fileTree(dir: 'libs', include: ['*.jar'])
+    testImplementation "junit:junit:$rootProject.ext.jUnitVersion"
+    androidTestImplementation "com.squareup.okhttp3:mockwebserver:$rootProject.ext.mockWebServerVersion"
+    api "com.squareup.okhttp3:okhttp:$rootProject.ext.okHttp3Version"
+    api "com.google.code.gson:gson:$rootProject.ext.gsonVersion"
+    implementation "com.android.support:appcompat-v7:$rootProject.ext.supportAppCompatVersion"
 }
-//apply from: 'upload.gradle'

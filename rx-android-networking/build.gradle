@@ -36,10 +36,9 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile "junit:junit:$rootProject.ext.jUnitVersion"
-    compile "io.reactivex:rxandroid:$rootProject.ext.rxJavaAndroidVersion"
-    compile "io.reactivex:rxjava:$rootProject.ext.rxJavaVersion"
-    compile project(':android-networking')
+    api fileTree(dir: 'libs', include: ['*.jar'])
+    testImplementation "junit:junit:$rootProject.ext.jUnitVersion"
+    api "io.reactivex:rxandroid:$rootProject.ext.rxJavaAndroidVersion"
+    api "io.reactivex:rxjava:$rootProject.ext.rxJavaVersion"
+    api project(':android-networking')
 }
-//apply from: 'rx-upload.gradle'

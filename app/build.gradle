@@ -37,8 +37,8 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile "junit:junit:$rootProject.ext.jUnitVersion"
-    compile "com.android.support:appcompat-v7:$rootProject.ext.supportAppCompatVersion"
-    compile project(':android-networking')
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    testImplementation "junit:junit:$rootProject.ext.jUnitVersion"
+    implementation "com.android.support:appcompat-v7:$rootProject.ext.supportAppCompatVersion"
+    implementation project(':android-networking')
 }

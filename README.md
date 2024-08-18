@@ -60,12 +60,12 @@ maven { setUrl("https://jitpack.io") }
 
 Add this in your `build.gradle`
 ```groovy
-implementation 'com.github.amitshekhariitbhu.Fast-Android-Networking:android-networking:1.0.3'
+implementation 'com.github.amitshekhariitbhu.Fast-Android-Networking:android-networking:1.0.4'
 ```
 
 If you are using `build.gradle.kts`, add the following:
 ```kotlin
-implementation("com.github.amitshekhariitbhu.Fast-Android-Networking:android-networking:1.0.3")
+implementation("com.github.amitshekhariitbhu.Fast-Android-Networking:android-networking:1.0.4")
 ```
 
 Do not forget to add internet permission in manifest if already not present
@@ -89,12 +89,12 @@ Using the Fast Android Networking with Jackson Parser
 
 Add this in your `build.gradle`
 ```groovy
-implementation 'com.github.amitshekhariitbhu.Fast-Android-Networking:jackson-android-networking:1.0.3'
+implementation 'com.github.amitshekhariitbhu.Fast-Android-Networking:jackson-android-networking:1.0.4'
 ```
 
 If you are using `build.gradle.kts`, add the following:
 ```kotlin
-implementation("com.github.amitshekhariitbhu.Fast-Android-Networking:jackson-android-networking:1.0.3")
+implementation("com.github.amitshekhariitbhu.Fast-Android-Networking:jackson-android-networking:1.0.4")
 ```
 
 ```java

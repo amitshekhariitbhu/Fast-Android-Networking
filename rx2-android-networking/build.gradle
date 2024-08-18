@@ -38,11 +38,10 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile "junit:junit:$rootProject.ext.jUnitVersion"
-    androidTestCompile "com.squareup.okhttp3:mockwebserver:$rootProject.ext.mockWebServerVersion"
-    compile "io.reactivex.rxjava2:rxandroid:$rootProject.ext.rxJava2AndroidVersion"
-    compile "io.reactivex.rxjava2:rxjava:$rootProject.ext.rxJava2Version"
-    compile project(':android-networking')
+    api fileTree(dir: 'libs', include: ['*.jar'])
+    testImplementation "junit:junit:$rootProject.ext.jUnitVersion"
+    androidTestImplementation "com.squareup.okhttp3:mockwebserver:$rootProject.ext.mockWebServerVersion"
+    api "io.reactivex.rxjava2:rxandroid:$rootProject.ext.rxJava2AndroidVersion"
+    api "io.reactivex.rxjava2:rxjava:$rootProject.ext.rxJava2Version"
+    api project(':android-networking')
 }
-//apply from: 'rx2-upload.gradle'
