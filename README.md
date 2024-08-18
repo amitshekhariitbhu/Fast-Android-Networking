@@ -102,6 +102,30 @@ implementation("com.github.amitshekhariitbhu.Fast-Android-Networking:jackson-and
 AndroidNetworking.setParserFactory(new JacksonParserFactory());
 ```
 
+Using the Fast Android Networking with RxJava2
+
+Add this in your `build.gradle`
+```groovy
+implementation 'com.github.amitshekhariitbhu.Fast-Android-Networking:rx2-android-networking:1.0.4'
+```
+
+If you are using `build.gradle.kts`, add the following:
+```kotlin
+implementation("com.github.amitshekhariitbhu.Fast-Android-Networking:rx2-android-networking:1.0.4")
+```
+
+Using the Fast Android Networking with RxJava
+
+Add this in your `build.gradle`
+```groovy
+implementation 'com.github.amitshekhariitbhu.Fast-Android-Networking:rx-android-networking:1.0.4'
+```
+
+If you are using `build.gradle.kts`, add the following:
+```kotlin
+implementation("com.github.amitshekhariitbhu.Fast-Android-Networking:rx-android-networking:1.0.4")
+```
+
 ### Making a GET Request
 ```java
 AndroidNetworking.get("https://fierce-cove-29863.herokuapp.com/getAllUsers/{pageNumber}")
