@@ -20,6 +20,7 @@
 package com.rx2androidnetworking;
 
 import android.net.TrafficStats;
+import android.text.TextUtils;
 
 import com.androidnetworking.common.ANConstants;
 import com.androidnetworking.common.ANResponse;
@@ -271,8 +272,7 @@ public class Rx2InternalNetworking {
             try {
                 final long startTime = System.currentTimeMillis();
                 final long startBytes = TrafficStats.getTotalRxBytes();
-                okHttpResponse = request.getCall().execute();
-                Utils.saveFile(okHttpResponse, request.getDirPath(), request.getFileName());
+                okHttpResponse = call.execute();
                 final long timeTaken = System.currentTimeMillis() - startTime;
                 if (okHttpResponse.cacheResponse() == null) {
                     final long finalBytes = TrafficStats.getTotalRxBytes();
@@ -296,6 +296,9 @@ public class Rx2InternalNetworking {
                     }
                 } else {
                     if (!call.isCanceled()) {
+                        if(!TextUtils.isEmpty(request.getDirPath())) {
+                            Utils.saveFile(okHttpResponse, request.getDirPath(), request.getFileName());
+                        }
                         ANResponse<T> response = (ANResponse<T>) ANResponse.success(ANConstants.SUCCESS);
                         observer.onNext(response.getResult());
                     }

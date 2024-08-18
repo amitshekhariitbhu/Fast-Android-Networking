@@ -42,11 +42,11 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile "com.android.support:appcompat-v7:$rootProject.ext.supportAppCompatVersion"
-    testCompile "junit:junit:$rootProject.ext.jUnitVersion"
-    compile project(':rx2-android-networking')
+    implementation "com.android.support:appcompat-v7:$rootProject.ext.supportAppCompatVersion"
+    testImplementation "junit:junit:$rootProject.ext.jUnitVersion"
+    implementation project(':rx2-android-networking')
 }
