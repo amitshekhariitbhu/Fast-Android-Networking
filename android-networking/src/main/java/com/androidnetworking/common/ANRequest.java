@@ -1359,6 +1359,24 @@ public class ANRequest<T extends ANRequest> {
             return (T) this;
         }
 
+        public T addBodyParameter(List<Object> objects) {
+            if (objects != null) {
+                int i = 0;
+                for (Object object : objects) {
+                    if (object != null) {
+                        HashMap<String, String> objectMap = ParseUtil
+                                .getParserFactory()
+                                .getStringMap(object);
+                        for (String key : objectMap.keySet()) {
+                            mBodyParameterMap.put(key + "-" + i, objectMap.get(key));
+                        }
+                        i += 1;
+                    }
+                }
+            }
+            return (T) this;
+        }
+
         public T addUrlEncodeFormBodyParameter(String key, String value) {
             mUrlEncodedFormBodyParameterMap.put(key, value);
             return (T) this;
