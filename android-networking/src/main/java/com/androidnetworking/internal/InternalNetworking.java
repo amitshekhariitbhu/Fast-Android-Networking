@@ -205,9 +205,11 @@ public final class InternalNetworking {
             }
         } catch (IOException ioe) {
             try {
-                File destinationFile = new File(request.getDirPath() + File.separator + request.getFileName());
-                if (destinationFile.exists()) {
-                    destinationFile.delete();
+                if (!request.getResumeAllowed()) {
+                    File destinationFile = new File(request.getDirPath() + File.separator + request.getFileName());
+                    if (destinationFile.exists()) {
+                        destinationFile.delete();
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -276,11 +278,27 @@ public final class InternalNetworking {
             request.setUserAgent(sUserAgent);
             builder.addHeader(ANConstants.USER_AGENT, sUserAgent);
         }
+        if (request.getResumeAllowed()) {
+            File destinationFile = new File(request.getDirPath() + File.separator + request.getFileName());
+            if (destinationFile.exists()) {
+                long fileLength = destinationFile.length();
+                builder.addHeader(ANConstants.ACCEPT_ENCODING, "identity");
+                builder.addHeader(ANConstants.RANGE, "bytes=" + fileLength + "-");
+            }
+        }
         Headers requestHeaders = request.getHeaders();
         if (requestHeaders != null) {
             builder.headers(requestHeaders);
             if (request.getUserAgent() != null && !requestHeaders.names().contains(ANConstants.USER_AGENT)) {
                 builder.addHeader(ANConstants.USER_AGENT, request.getUserAgent());
+            }
+            if (request.getResumeAllowed() && !requestHeaders.names().contains(ANConstants.RANGE)) {
+                File destinationFile = new File(request.getDirPath() + File.separator + request.getFileName());
+                if (destinationFile.exists()) {
+                    long fileLength = destinationFile.length();
+                    builder.addHeader(ANConstants.ACCEPT_ENCODING, "identity");
+                    builder.addHeader(ANConstants.RANGE, "bytes=" + fileLength + "-");
+                }
             }
         }
     }

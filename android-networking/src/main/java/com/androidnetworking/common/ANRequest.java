@@ -139,6 +139,7 @@ public class ANRequest<T extends ANRequest> {
     private Executor mExecutor = null;
     private OkHttpClient mOkHttpClient = null;
     private String mUserAgent = null;
+    private boolean mResumeAllowed = false;
     private Type mType = null;
 
     public ANRequest(GetRequestBuilder builder) {
@@ -200,6 +201,7 @@ public class ANRequest<T extends ANRequest> {
         this.mExecutor = builder.mExecutor;
         this.mOkHttpClient = builder.mOkHttpClient;
         this.mUserAgent = builder.mUserAgent;
+        this.mResumeAllowed = builder.mResumeAllowed;
     }
 
     public ANRequest(MultiPartBuilder builder) {
@@ -463,6 +465,10 @@ public class ANRequest<T extends ANRequest> {
 
     public String getUserAgent() {
         return mUserAgent;
+    }
+
+    public boolean getResumeAllowed() {
+        return mResumeAllowed;
     }
 
     public Type getType() {
@@ -1443,6 +1449,7 @@ public class ANRequest<T extends ANRequest> {
         private Executor mExecutor;
         private OkHttpClient mOkHttpClient;
         private String mUserAgent;
+        private boolean mResumeAllowed;
 
         public DownloadBuilder(String url, String dirPath, String fileName) {
             this.mUrl = url;
@@ -1597,6 +1604,11 @@ public class ANRequest<T extends ANRequest> {
         @Override
         public T setUserAgent(String userAgent) {
             mUserAgent = userAgent;
+            return (T) this;
+        }
+
+        public T allowResume(boolean resumeAllowed) {
+            mResumeAllowed = resumeAllowed;
             return (T) this;
         }
 
