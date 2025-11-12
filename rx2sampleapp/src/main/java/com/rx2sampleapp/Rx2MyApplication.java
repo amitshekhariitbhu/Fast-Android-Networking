@@ -23,10 +23,15 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.ConnectionQuality;
 import com.androidnetworking.interfaces.ConnectionQualityChangeListener;
 
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.OkHttpClient;
+
 public class Rx2MyApplication extends Application {
 
     private static final String TAG = Rx2MyApplication.class.getSimpleName();
     private static Rx2MyApplication appInstance = null;
+    private OkHttpClient okHttpClient;
 
     public static Rx2MyApplication getInstance() {
         return appInstance;
@@ -36,7 +41,13 @@ public class Rx2MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         appInstance = this;
-        AndroidNetworking.initialize(getApplicationContext());
+        okHttpClient = new OkHttpClient.Builder()
+                .connectTimeout(120, TimeUnit.SECONDS)
+                .readTimeout(120, TimeUnit.SECONDS)
+                .writeTimeout(120, TimeUnit.SECONDS)
+                .retryOnConnectionFailure(true)
+                .build();
+        AndroidNetworking.initialize(getApplicationContext(), okHttpClient);
         AndroidNetworking.enableLogging();
         AndroidNetworking.setConnectionQualityChangeListener(new ConnectionQualityChangeListener() {
             @Override
