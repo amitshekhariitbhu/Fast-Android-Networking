@@ -25,6 +25,10 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.ConnectionQuality;
 import com.androidnetworking.interfaces.ConnectionQualityChangeListener;
 
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.OkHttpClient;
+
 /**
  * Created by amitshekhar on 22/03/16.
  */
@@ -32,16 +36,27 @@ public class MyApplication extends Application {
 
     private static final String TAG = MyApplication.class.getSimpleName();
     private static MyApplication appInstance = null;
+    private OkHttpClient okHttpClient;
 
     public static MyApplication getInstance() {
         return appInstance;
+    }
+
+    public OkHttpClient getOkHttpClient() {
+        return okHttpClient;
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
         appInstance = this;
-        AndroidNetworking.initialize(getApplicationContext());
+        okHttpClient = new OkHttpClient.Builder()
+                .connectTimeout(120, TimeUnit.SECONDS)
+                .readTimeout(120, TimeUnit.SECONDS)
+                .writeTimeout(120, TimeUnit.SECONDS)
+                .retryOnConnectionFailure(true)
+                .build();
+        AndroidNetworking.initialize(getApplicationContext(), okHttpClient);
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inPurgeable = true;
         AndroidNetworking.setBitmapDecodeOptions(options);

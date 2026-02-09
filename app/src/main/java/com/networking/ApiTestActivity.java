@@ -747,7 +747,7 @@ public class ApiTestActivity extends AppCompatActivity {
                 .addBodyParameter("firstname", "Amit")
                 .addBodyParameter("lastname", "Shekhar")
                 .setTag(this)
-                .setOkHttpClient(new OkHttpClient())
+                .setOkHttpClient(MyApplication.getInstance().getOkHttpClient())
                 .setPriority(Priority.LOW)
                 .build()
                 .setAnalyticsListener(new AnalyticsListener() {
@@ -789,7 +789,7 @@ public class ApiTestActivity extends AppCompatActivity {
         AndroidNetworking.download(url, Utils.getRootDirPath(getApplicationContext()), "file1.zip")
                 .setPriority(Priority.HIGH)
                 .setTag(this)
-                .setOkHttpClient(new OkHttpClient())
+                .setOkHttpClient(MyApplication.getInstance().getOkHttpClient())
                 .build()
                 .setAnalyticsListener(new AnalyticsListener() {
                     @Override
