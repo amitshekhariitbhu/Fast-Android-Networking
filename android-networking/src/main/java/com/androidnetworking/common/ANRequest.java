@@ -867,7 +867,7 @@ public class ANRequest<T extends ANRequest> {
             for (HashMap.Entry<String, List<MultipartFileBody>> entry : mMultiPartFileMap.entrySet()) {
                 List<MultipartFileBody> fileBodies = entry.getValue();
                 for (MultipartFileBody fileBody : fileBodies) {
-                    String fileName = fileBody.file.getName();
+                    String fileName = fileBody.file.getName().substring(fileBody.file.getName().lastIndexOf("/") + 1);
                     MediaType mediaType;
                     if (fileBody.contentType != null) {
                         mediaType = MediaType.parse(fileBody.contentType);
