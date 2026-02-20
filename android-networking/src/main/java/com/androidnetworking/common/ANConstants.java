@@ -33,4 +33,6 @@ public final class ANConstants {
     public static final String USER_AGENT = "User-Agent";
     public static final String SUCCESS = "success";
     public static final String OPTIONS = "OPTIONS";
+    public static final String RANGE = "Range";
+    public static final String ACCEPT_ENCODING = "Accept-Encoding";
 }
